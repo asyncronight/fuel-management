@@ -10,7 +10,8 @@ import javax.persistence.Entity;
 
 @Entity
 @Data
-public class Groupe extends AbstractDomain {
+public class Fournisseur extends AbstractDomain {
 
     private String nom;
+
 }

@@ -4,7 +4,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  * @author kadarH
@@ -13,19 +15,20 @@ import javax.persistence.*;
 @Entity
 @Data
 @ToString(exclude = {"sousFamille","groupe"})
-@EqualsAndHashCode(exclude = {"sousFamille","groupe"})
-public class Engin {
-
-    @Id
-    @GeneratedValue
-    private Long id;
+@EqualsAndHashCode(callSuper = true, exclude = {"sousFamille", "groupe"})
+public class Engin extends AbstractDomain {
 
     @Column(unique = true)
     private String code;
+
     private String numeroSerie;
+
+    private TypeCompteur typeCompteur;
+
     private int compteurInitial;
+
     private int consommationMax;
-    private boolean typeCompteur;
+
     private int capaciteReservoir;
 
     @ManyToOne

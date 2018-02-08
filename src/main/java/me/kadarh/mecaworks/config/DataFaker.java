@@ -1,14 +1,16 @@
 package me.kadarh.mecaworks.config;
 
 import lombok.extern.slf4j.Slf4j;
+import me.kadarh.mecaworks.domain.Bons.BonEngin;
 import me.kadarh.mecaworks.domain.*;
 import me.kadarh.mecaworks.repo.*;
+import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 /**
  * @author kadarH
@@ -18,25 +20,19 @@ import java.util.List;
 @Slf4j
 public class DataFaker implements CommandLineRunner {
 
+    @Autowired
     private ChantierRepo chantierRepo;
+    @Autowired
     private GroupeRepo groupeRepo;
+    @Autowired
     private FamilleRepo familleRepo;
+    @Autowired
     private SousFamilleRepo sousFamilleRepo;
-    private BonRepo bonRepo;
+    @Autowired
+    private BonEnginRepo bonEnginRepo;
+    @Autowired
     private EnginRepo enginRepo;
-    private AlerteRepo alerteRepo;
-    private TypeAlerteRepo typeAlerteRepo;
 
-    public DataFaker(ChantierRepo chantierRepo, GroupeRepo groupeRepo, FamilleRepo familleRepo, SousFamilleRepo sousFamilleRepo, BonRepo bonRepo, EnginRepo enginRepo, AlerteRepo alerteRepo, TypeAlerteRepo typeAlerteRepo) {
-        this.chantierRepo = chantierRepo;
-        this.groupeRepo = groupeRepo;
-        this.familleRepo = familleRepo;
-        this.sousFamilleRepo = sousFamilleRepo;
-        this.bonRepo = bonRepo;
-        this.enginRepo = enginRepo;
-        this.alerteRepo = alerteRepo;
-        this.typeAlerteRepo = typeAlerteRepo;
-    }
 
     @Override
     public void run(String... strings) throws Exception {
@@ -46,17 +42,7 @@ public class DataFaker implements CommandLineRunner {
         loadSousFamilles(10);
         loadEngins(20);
         loadBons(80);
-        write();
     }
-
-    private void write() {
-        DateTimeFormatter d = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate date = LocalDate.parse(LocalDate.now().format(d),d);
-        List<Bon> list = bonRepo.findAllByBetween(enginRepo.findOne(1L),null,
-                null,date,date);
-        list.forEach(bon -> System.out.println(bon));
-    }
-
 
     // Loading Groupes
     private void loadGroupe(int n){
@@ -111,11 +97,6 @@ public class DataFaker implements CommandLineRunner {
             //Setting attributes
             Engin engin = new Engin();
             engin.setCode("Pelle"+(i+1));
-            if (i % 2 == 1) {
-                engin.setTypeCompteur(true);
-            } else {
-                engin.setTypeCompteur(false);
-            }
             engin.setConsommationMax(200+i*10);
             engin.setCapaciteReservoir(100+i*10);
             engin.setCompteurInitial(1000+(i*10));
@@ -130,25 +111,23 @@ public class DataFaker implements CommandLineRunner {
 
     private void loadBons(int n){
         for (int i=0;i<n;i++) {
-            Bon bon = new Bon();
-            bon.setCode("3297" + (i * 10));
-            bon.setCompteur(100L+i*5);
-            bon.setCompteurAbsolu(100L+i*10);
-            bon.setQuantite(20+i*10);
+            BonEngin bonEngin = new BonEngin();
+            bonEngin.setCode("3297" + (i * 10));
+            bonEngin.setCompteur(100L + i * 5);
+            bonEngin.setCompteurAbsolu(100L + i * 10);
+            bonEngin.setQuantite(20 + i * 10);
             DateTimeFormatter d = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate date = LocalDate.parse(LocalDate.now().format(d),d);
-            bon.setDate(date);
-            if (i % 2 == 1) bon.setEnPanne(true);
-            else bon.setEnPanne(false);
-            if (i % 2 == 1) bon.setPlein(true);
-            else bon.setPlein(false);
+            bonEngin.setDate(date);
+            if (i % 2 == 1) bonEngin.setEnPanne(true);
+            else bonEngin.setEnPanne(false);
+            if (i % 2 == 1) bonEngin.setPlein(true);
+            else bonEngin.setPlein(false);
             //Getting chantier + engin +
             Engin engin = enginRepo.getOne(i/4 +1L);
-            Chantier chantier = chantierRepo.findOne(i/16 +1L);
-            bon.setEngin(engin);
-            bon.setChantier(chantier);
-            bonRepo.save(bon);
+            bonEngin.setEngin(engin);
+            bonEnginRepo.save(bonEngin);
         }
-        log.info("**** "+n+" Bon Loaded *****");
+        log.info("**** " + n + " BonEngin Loaded *****");
     }
 }
