@@ -1,9 +1,11 @@
-package me.kadarh.mecaworks.domain;
+package me.kadarh.mecaworks.domain.alertes;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import me.kadarh.mecaworks.domain.Bons.BonEngin;
+import me.kadarh.mecaworks.domain.AbstractDomain;
+import me.kadarh.mecaworks.domain.bons.BonFournisseur;
+import me.kadarh.mecaworks.domain.others.TypeAlerte;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -16,21 +18,15 @@ import java.time.LocalDate;
 
 @Entity
 @Data
-@ToString(exclude = {"bonEngin", "chantierDepart"})
-@EqualsAndHashCode(callSuper = true, exclude = {"bonEngin", "chantierDepart"})
-public class Alerte extends AbstractDomain {
+@ToString(exclude = {"bon"})
+@EqualsAndHashCode(callSuper = true, exclude = {"bon"})
+public class AlerteFournissseur extends AbstractDomain {
 
     @ManyToOne
     private TypeAlerte typeAlerte;
 
     @OneToOne
-    private BonEngin bonEngin;
-
-    @OneToOne
-    private Chantier chantierDepart;
-
-    @OneToOne
-    private Chantier chantierArrivee;
+    private BonFournisseur bon;
 
     private boolean etat;
     private LocalDate date;

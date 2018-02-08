@@ -1,16 +1,12 @@
-package me.kadarh.mecaworks.config;
+package me.kadarh.mecaworks.repo.others;
 
 import lombok.extern.slf4j.Slf4j;
-import me.kadarh.mecaworks.domain.Bons.BonEngin;
-import me.kadarh.mecaworks.domain.*;
-import me.kadarh.mecaworks.repo.*;
-import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
+import me.kadarh.mecaworks.domain.others.*;
+import me.kadarh.mecaworks.repo.alertes.DataFakerA;
+import me.kadarh.mecaworks.repo.bons.DataFakerB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Repository;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 /**
  * @author kadarH
@@ -18,7 +14,8 @@ import java.time.format.DateTimeFormatter;
 
 @Repository
 @Slf4j
-public class DataFaker implements CommandLineRunner {
+public class DataFakerO implements CommandLineRunner {
+
 
     @Autowired
     private ChantierRepo chantierRepo;
@@ -29,19 +26,28 @@ public class DataFaker implements CommandLineRunner {
     @Autowired
     private SousFamilleRepo sousFamilleRepo;
     @Autowired
-    private BonEnginRepo bonEnginRepo;
-    @Autowired
     private EnginRepo enginRepo;
+    @Autowired
+    private FournisseurRepo fournisseurRepo;
+
+    @Autowired
+    private DataFakerA dataFakerA;
+
+    @Autowired
+    private DataFakerB dataFakerB;
 
 
     @Override
     public void run(String... strings) throws Exception {
+        log.info("This is the DataFaker Of Other Domains");
         loadGroupe(5);
         loadChantiers(5);
         loadFamille(5);
         loadSousFamilles(10);
         loadEngins(20);
-        loadBons(80);
+        loadFournisseur(20);
+        dataFakerA.run();
+        dataFakerB.run();
     }
 
     // Loading Groupes
@@ -66,14 +72,24 @@ public class DataFaker implements CommandLineRunner {
         log.info("**** "+n+" Chantier Loaded *****");
     }
 
-    // Loading Familles
-    private void loadFamille(int n){
+    // Loading Fournisseur
+    private void loadFournisseur(int n) {
         for (int i=0;i<n;i++){
+            Fournisseur fournisseur = new Fournisseur();
+            fournisseur.setNom("fournisseur" + (i + 1));
+            fournisseurRepo.save(fournisseur);
+        }
+        log.info("**** " + n + " Fournisseur Loaded *****");
+    }
+
+    // Loading Familles
+    private void loadFamille(int n) {
+        for (int i = 0; i < n; i++) {
             Famille famille = new Famille();
-            famille.setNom("famille"+(i+1));
+            famille.setNom("famille" + (i + 1));
             familleRepo.save(famille);
         }
-        log.info("**** "+n+" Famille Loaded *****");
+        log.info("**** " + n + " Famille Loaded *****");
     }
 
     // Loading SousFamilles
@@ -94,40 +110,33 @@ public class DataFaker implements CommandLineRunner {
             //Getting groupe and sous-famille
             Groupe groupe = groupeRepo.findOne(i/4 +1L);
             SousFamille sousFamille = sousFamilleRepo.findOne(i/2 +1L);
-            //Setting attributes
+            //Creation the object
             Engin engin = new Engin();
             engin.setCode("Pelle"+(i+1));
-            engin.setConsommationMax(200+i*10);
-            engin.setCapaciteReservoir(100+i*10);
-            engin.setCompteurInitial(1000+(i*10));
+            engin.setCapaciteReservoir(10 + i * 10);
             engin.setNumeroSerie("TPF"+i+"zz"+i);
             engin.setGroupe(groupe);
             engin.setSousFamille(sousFamille);
+            if (i % 3 == 0) {
+                engin.setTypeCompteur(TypeCompteur.km_l);
+                engin.setCompteurInitialL(1000 + (i * 10));
+                engin.setCompteurInitialKm(1000 + (i * 10));
+                engin.setConsommationKmMax(20 + i * 10);
+                engin.setConsommationLMax(20 + i * 10);
+            } else if (i % 3 == 1) {
+                engin.setTypeCompteur(TypeCompteur.l);
+                engin.setConsommationLMax(20 + i * 10);
+                engin.setCompteurInitialL(1000 + (i * 10));
+            } else if (i % 3 == 2) {
+                engin.setTypeCompteur(TypeCompteur.km);
+                engin.setConsommationKmMax(20 + i * 10);
+                engin.setCompteurInitialKm(1000 + (i * 10));
+            }
             //Persisting
             enginRepo.save(engin);
         }
         log.info("**** "+n+" Engin Loaded *****");
     }
 
-    private void loadBons(int n){
-        for (int i=0;i<n;i++) {
-            BonEngin bonEngin = new BonEngin();
-            bonEngin.setCode("3297" + (i * 10));
-            bonEngin.setCompteur(100L + i * 5);
-            bonEngin.setCompteurAbsolu(100L + i * 10);
-            bonEngin.setQuantite(20 + i * 10);
-            DateTimeFormatter d = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate date = LocalDate.parse(LocalDate.now().format(d),d);
-            bonEngin.setDate(date);
-            if (i % 2 == 1) bonEngin.setEnPanne(true);
-            else bonEngin.setEnPanne(false);
-            if (i % 2 == 1) bonEngin.setPlein(true);
-            else bonEngin.setPlein(false);
-            //Getting chantier + engin +
-            Engin engin = enginRepo.getOne(i/4 +1L);
-            bonEngin.setEngin(engin);
-            bonEnginRepo.save(bonEngin);
-        }
-        log.info("**** " + n + " BonEngin Loaded *****");
-    }
+
 }

@@ -1,6 +1,6 @@
 package me.kadarh.mecaworks.repo.bons;
 
-import me.kadarh.mecaworks.domain.Bons.BonCamion;
+import me.kadarh.mecaworks.domain.bons.BonCamion;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,11 +1,11 @@
-package me.kadarh.mecaworks.domain.Bons;
+package me.kadarh.mecaworks.domain.bons;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import me.kadarh.mecaworks.config.LocalDateConverter;
 import me.kadarh.mecaworks.domain.AbstractDomain;
-import me.kadarh.mecaworks.domain.Chantier;
+import me.kadarh.mecaworks.domain.others.Chantier;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -37,5 +37,7 @@ public class BonLivraison extends AbstractDomain {
 
     private int quantite;
     private float consommation;
+    private String livreur;
+    private String pompiste;
 
 }

@@ -1,6 +1,7 @@
-package me.kadarh.mecaworks.domain;
+package me.kadarh.mecaworks.domain.others;
 
 import lombok.Data;
+import me.kadarh.mecaworks.domain.AbstractDomain;
 
 import javax.persistence.Entity;
 

@@ -1,4 +1,4 @@
-package me.kadarh.mecaworks.domain;
+package me.kadarh.mecaworks.domain.others;
 
 /**
  * @author kadarH

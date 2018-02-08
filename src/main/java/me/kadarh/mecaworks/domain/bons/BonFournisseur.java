@@ -1,12 +1,12 @@
-package me.kadarh.mecaworks.domain.Bons;
+package me.kadarh.mecaworks.domain.bons;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import me.kadarh.mecaworks.config.LocalDateConverter;
 import me.kadarh.mecaworks.domain.AbstractDomain;
-import me.kadarh.mecaworks.domain.Chantier;
-import me.kadarh.mecaworks.domain.Fournisseur;
+import me.kadarh.mecaworks.domain.others.Chantier;
+import me.kadarh.mecaworks.domain.others.Fournisseur;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;

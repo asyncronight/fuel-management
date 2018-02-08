@@ -1,8 +1,9 @@
-package me.kadarh.mecaworks.domain;
+package me.kadarh.mecaworks.domain.others;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import me.kadarh.mecaworks.domain.AbstractDomain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,9 +26,11 @@ public class Engin extends AbstractDomain {
 
     private TypeCompteur typeCompteur;
 
-    private int compteurInitial;
+    private int compteurInitialL;
+    private int compteurInitialKm;
 
-    private int consommationMax;
+    private int consommationLMax;
+    private int consommationKmMax;
 
     private int capaciteReservoir;
 
