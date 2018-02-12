@@ -1,4 +1,4 @@
-package me.kadarh.mecaworks.gazoil.service;
+package me.kadarh.mecaworks.gazoil.service.interfaces;
 
 import me.kadarh.mecaworks.gazoil.domain.others.Employee;
 

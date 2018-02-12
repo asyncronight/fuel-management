@@ -1,4 +1,4 @@
-package me.kadarh.mecaworks.gazoil.service.bons;
+package me.kadarh.mecaworks.gazoil.service.interfaces.bons;
 
 import me.kadarh.mecaworks.gazoil.domain.bons.BonLivraison;
 import me.kadarh.mecaworks.gazoil.domain.others.Chantier;
