@@ -1,17 +1,16 @@
 package me.kadarh.mecaworks.gazoil.service.interfaces;
 
-import me.kadarh.mecaworks.gazoil.domain.others.Employee;
-
-import java.util.List;
+import me.kadarh.mecaworks.gazoil.domain.others.Employe;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface EmployeService {
 
-    Employee add(Employee employee);
+    Employe add(Employe employe);
 
-    Employee update(Employee employee);
+    Employe update(Employe employe);
 
-    List<Employee> employeeList();
+    Page<Employe> employesList(Pageable pageable, String search);
 
     void delete(Long id);
-
 }

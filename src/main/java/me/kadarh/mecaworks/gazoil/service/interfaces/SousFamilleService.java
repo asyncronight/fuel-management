@@ -1,17 +1,16 @@
 package me.kadarh.mecaworks.gazoil.service.interfaces;
 
-import me.kadarh.mecaworks.gazoil.domain.others.Famille;
 import me.kadarh.mecaworks.gazoil.domain.others.SousFamille;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface SousFamilleService {
 
    SousFamille add(SousFamille sousFamille);
 
    SousFamille update(SousFamille sousFamille);
-   List<SousFamille> sousFamilleList();
-   List<SousFamille> sousFamilleList(Famille famille);
+
+    Page<SousFamille> sousFamilleList(Pageable pageable, String search);
 
    void delete(Long id);
 
