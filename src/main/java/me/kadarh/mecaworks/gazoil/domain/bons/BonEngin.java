@@ -6,7 +6,7 @@ import lombok.ToString;
 import me.kadarh.mecaworks.gazoil.config.LocalDateConverter;
 import me.kadarh.mecaworks.gazoil.domain.AbstractDomain;
 import me.kadarh.mecaworks.gazoil.domain.others.Chantier;
-import me.kadarh.mecaworks.gazoil.domain.others.Employee;
+import me.kadarh.mecaworks.gazoil.domain.others.Employe;
 import me.kadarh.mecaworks.gazoil.domain.others.Engin;
 
 import javax.persistence.*;
@@ -38,10 +38,10 @@ public class BonEngin extends AbstractDomain {
     private Engin engin;
 
     @ManyToOne
-    private Employee pompiste;
+    private Employe pompiste;
 
     @ManyToOne
-    private Employee chauffeur;
+    private Employe chauffeur;
 
     private int quantite;
     private long compteurKm;

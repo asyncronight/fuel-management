@@ -6,7 +6,7 @@ import lombok.ToString;
 import me.kadarh.mecaworks.gazoil.config.LocalDateConverter;
 import me.kadarh.mecaworks.gazoil.domain.AbstractDomain;
 import me.kadarh.mecaworks.gazoil.domain.others.Chantier;
-import me.kadarh.mecaworks.gazoil.domain.others.Employee;
+import me.kadarh.mecaworks.gazoil.domain.others.Employe;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -35,8 +35,8 @@ public class BonLivraison extends AbstractDomain {
 
     private int quantite;
     @ManyToOne
-    private Employee transporteur;
+    private Employe transporteur;
     @ManyToOne
-    private Employee pompiste;
+    private Employe pompiste;
 
 }

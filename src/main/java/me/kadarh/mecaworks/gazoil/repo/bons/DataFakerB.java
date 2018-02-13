@@ -5,7 +5,7 @@ import me.kadarh.mecaworks.gazoil.domain.bons.BonEngin;
 import me.kadarh.mecaworks.gazoil.domain.bons.BonFournisseur;
 import me.kadarh.mecaworks.gazoil.domain.bons.BonLivraison;
 import me.kadarh.mecaworks.gazoil.domain.others.Chantier;
-import me.kadarh.mecaworks.gazoil.domain.others.Employee;
+import me.kadarh.mecaworks.gazoil.domain.others.Employe;
 import me.kadarh.mecaworks.gazoil.domain.others.Engin;
 import me.kadarh.mecaworks.gazoil.domain.others.Fournisseur;
 import me.kadarh.mecaworks.gazoil.repo.others.ChantierRepo;
@@ -69,9 +69,9 @@ public class DataFakerB {
             bonEngin.setQuantite(20 + i * 10);
             bonEngin.setChantierGazoil(chantierGazoil);
             bonEngin.setChantierTravail(chantierTravail);
-            Employee chauffeur = employeRepo.save(new Employee("Chauffeur" + i));
+            Employe chauffeur = employeRepo.save(new Employe("Chauffeur" + i));
             bonEngin.setChauffeur(chauffeur);
-            Employee pompiste = employeRepo.save(new Employee("Pompiste" + i));
+            Employe pompiste = employeRepo.save(new Employe("Pompiste" + i));
             bonEngin.setPompiste(pompiste);
             DateTimeFormatter d = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate date = LocalDate.parse(LocalDate.now().format(d), d);
@@ -118,9 +118,9 @@ public class DataFakerB {
             bonLivraison.setChantierArrivee(chantierTravail);
             bonLivraison.setQuantite(20 + i * 10);
             bonLivraison.setDate(LocalDate.now());
-            Employee transporteur = employeRepo.save(new Employee("Transporteur" + i));
+            Employe transporteur = employeRepo.save(new Employe("Transporteur" + i));
             bonLivraison.setTransporteur(transporteur);
-            Employee pompiste = employeRepo.save(new Employee("Pompiste" + i));
+            Employe pompiste = employeRepo.save(new Employe("Pompiste" + i));
             bonLivraison.setPompiste(pompiste);
             bonLivraisonRepo.save(bonLivraison);
         }

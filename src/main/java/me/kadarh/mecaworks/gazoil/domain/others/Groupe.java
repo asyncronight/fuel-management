@@ -14,6 +14,6 @@ import javax.persistence.Entity;
 public class Groupe extends AbstractDomain {
 
     private String nom;
-    private boolean locataire;
+    private Boolean locataire;
 
 }

@@ -10,15 +10,15 @@ import javax.persistence.Entity;
  */
 @Data
 @Entity
-public class Employee extends AbstractDomain {
+public class Employe extends AbstractDomain {
 
 
     private String nom;
 
-    public Employee(String nom) {
+    public Employe(String nom) {
         this.nom = nom;
     }
 
-    public Employee() {
+    public Employe() {
     }
 }

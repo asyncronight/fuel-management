@@ -22,6 +22,8 @@ public class DataFakerO implements CommandLineRunner {
     @Autowired
     private ChantierRepo chantierRepo;
     @Autowired
+    private EmployeRepo employeRepo;
+    @Autowired
     private GroupeRepo groupeRepo;
     @Autowired
     private FamilleRepo familleRepo;
@@ -46,6 +48,7 @@ public class DataFakerO implements CommandLineRunner {
         loadEngins(20);
         loadFournisseur(20);
         loadAlerte(10);
+        loadEmploye(20);
         dataFakerB.run();
     }
 
@@ -67,9 +70,21 @@ public class DataFakerO implements CommandLineRunner {
         for (int i=0;i<n;i++){
             Groupe groupe = new Groupe();
             groupe.setNom("groupe"+(i+1));
+            if (i % 3 == 0) groupe.setLocataire(true);
+            else groupe.setLocataire(false);
             groupeRepo.save(groupe);
         }
         log.info(n + " Groupe Loaded *****");
+    }
+
+    // Loading Employees
+    private void loadEmploye(int n) {
+        for (int i = 0; i < n; i++) {
+            Employe employe = new Employe();
+            employe.setNom("employe" + (i + 1));
+            employeRepo.save(employe);
+        }
+        log.info(n + " Employe Loaded *****");
     }
 
     // Loading Chantiers
