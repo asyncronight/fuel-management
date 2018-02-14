@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head th:fragment="head">
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Mecaworks</title>
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/4.7.0/css/font-awesome.min.css}"/>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-alpha.6-1/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<div th:fragment="menu(active)" id="menu1">
+    <nav class="navbar py-3 navbar-toggleable-md navbar-inverse bg-inverse">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${active} eq 'admin'?'active':''" th:href="@{'/admin'}"
+                       th:text="#{admin}"></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${active} eq 'gazoil'?'active':''" th:href="@{'/gazoil'}"
+                       th:text="#{gazoil}"></a>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+</div>
+<div th:fragment="footer">
+    <script th:src="@{/webjars/jquery/3.2.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.0.0-alpha.6-1/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+</div>
+</body>
+</html>

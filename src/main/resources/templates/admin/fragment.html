@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="fragments :: head"></head>
+<body>
+<div th:fragment="menu">
+    <div id="sidebar-container" class="sidebar-expanded d-none d-md-block">
+
+
+        <ul class="list-group">
+            <li><a th:href="@{'/admin'}" aria-expanded="false"
+                   class="list-group-item list-group-item-action bg-warning text-black flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-center align-items-center ">
+                    <span class="menu-collapsed">ADMINISTRATION</span>
+                </div>
+            </a></li>
+            <li><a th:href="@{'/admin/addEngin'}" aria-expanded="false"
+                   class="list-group-item list-group-item-action bg-inverse text-white flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <span class="fa fa-plus fa-fw mr-3"></span>
+                    <span class="menu-collapsed" th:text="#{engin.add}"></span>
+                </div>
+            </a></li>
+            <li><a th:href="@{'/admin/famille/add'}" aria-expanded="false"
+                   class="list-group-item list-group-item-action bg-inverse text-white flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <span class="fa fa-plus fa-fw mr-3"></span>
+                    <span class="menu-collapsed" th:text="#{famille.add}"></span>
+                </div>
+            </a></li>
+            <li><a th:href="@{'/admin/sousFamille/add'}" aria-expanded="false"
+                   class="list-group-item list-group-item-action bg-info bg-inverse text-white flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-start align-items-center">
+                    <span class="fa fa-plus fa-fw mr-3"></span>
+                    <span class="menu-collapsed" th:text="#{sousFamille.add}"></span>
+                </div>
+            </a></li>
+
+        </ul>
+    </div>
+</div>
+</body>
+</html>
