@@ -9,7 +9,7 @@
 	<packaging>jar</packaging>
 
 	<name>mecaworks</name>
-    <description>Gérer tous ce qui est mécanique</description>
+    <description>Gérer tous ce qui est mécanique.</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
