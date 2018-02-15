@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="fragments :: head"></head>
+<body>
+<div th:fragment="menu">
+	<div id="sidebar-container" class="sidebar-expanded d-none d-md-block">
+		<ul class="list-group">
+			<li><a th:href="@{'/saisi/engins/add'}" aria-expanded="false"
+				   class="list-group-item list-group-item-action bg-warning text-black flex-column align-items-start">
+				<div class="d-flex w-100 justify-content-center align-items-center ">
+					<span class="menu-collapsed" th:text="#{saisie.engin.add}"></span>
+				</div>
+			</a></li>
+			<li><a th:href="@{'/saisi/engins'}" aria-expanded="false"
+				   class="list-group-item list-group-item-action bg-warning text-black flex-column align-items-start">
+				<div class="d-flex w-100 justify-content-center align-items-center ">
+					<span class="menu-collapsed" th:text="#{saisie.engin.list}"></span>
+				</div>
+			</a></li>
+			<li><a th:href="@{'/saisi/livraisons/add'}" aria-expanded="false"
+				   class="list-group-item list-group-item-action bg-warning text-black flex-column align-items-start">
+				<div class="d-flex w-100 justify-content-center align-items-center ">
+					<span class="menu-collapsed" th:text="#{saisie.livraison.add}"></span>
+				</div>
+			</a></li>
+			<li><a th:href="@{'/saisi/livraisons'}" aria-expanded="false"
+				   class="list-group-item list-group-item-action bg-warning text-black flex-column align-items-start">
+				<div class="d-flex w-100 justify-content-center align-items-center ">
+					<span class="menu-collapsed" th:text="#{saisie.livraison.list}"></span>
+				</div>
+			</a></li>
+			<li><a th:href="@{'/saisi/fournisseurs/add'}" aria-expanded="false"
+				   class="list-group-item list-group-item-action bg-warning text-black flex-column align-items-start">
+				<div class="d-flex w-100 justify-content-center align-items-center ">
+					<span class="menu-collapsed" th:text="#{saisie.fournisseur.add}"></span>
+				</div>
+			</a></li>
+			<li><a th:href="@{'/saisi/fournisseurs'}" aria-expanded="false"
+				   class="list-group-item list-group-item-action bg-warning text-black flex-column align-items-start">
+				<div class="d-flex w-100 justify-content-center align-items-center ">
+					<span class="menu-collapsed" th:text="#{saisie.fournisseur.list}"></span>
+				</div>
+			</a></li>
+
+		</ul>
+	</div>
+</div>
+</body>
+</html>

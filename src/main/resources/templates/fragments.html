@@ -14,18 +14,6 @@
     <nav class="navbar py-3 navbar-toggleable-md navbar-inverse bg-inverse">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-					<a class="nav-link" th:classappend="${active} eq 'gazoil'?'active':''" th:href="@{'/gazoil'}"
-					   th:text="#{gazoil}"></a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" th:classappend="${active} eq 'panne'?'active':''" th:href="@{'/panne'}"
-					   th:text="#{panne}"></a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" th:classappend="${active} eq 'preventif'?'active':''" th:href="@{'/preventif'}"
-					   th:text="#{preventif}"></a>
-				</li>
 				<li class="nav-item">
 					<a class="nav-link" th:classappend="${active} eq 'admin'?'active':''" th:href="@{'/admin'}"
 					   th:text="#{admin}"></a>
@@ -33,6 +21,10 @@
 				<li class="nav-item">
 					<a class="nav-link" th:classappend="${active} eq 'user'?'active':''" th:href="@{'/user'}"
 					   th:text="#{user}"></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" th:classappend="${active} eq 'saisi'?'active':''" th:href="@{'/saisi'}"
+					   th:text="#{saisie}"></a>
 				</li>
 
             </ul>

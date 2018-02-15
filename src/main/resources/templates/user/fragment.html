@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="fragments :: head"></head>
+<body>
+<div th:fragment="menu">
+	<div id="sidebar-container" class="sidebar-expanded d-none d-md-block">
+		<ul class="list-group">
+			<li><a th:href="@{'/user/gazoil'}" aria-expanded="false"
+				   class="list-group-item list-group-item-action bg-warning text-black flex-column align-items-start">
+				<div class="d-flex w-100 justify-content-center align-items-center ">
+					<span class="menu-collapsed" th:text="#{gazoil}"></span>
+				</div>
+			</a></li>
+			<li><a th:href="@{'/user/panne'}" aria-expanded="false"
+				   class="list-group-item list-group-item-action bg-warning text-black flex-column align-items-start">
+				<div class="d-flex w-100 justify-content-center align-items-center ">
+					<span class="menu-collapsed" th:text="#{panne}"></span>
+				</div>
+			</a></li>
+			<li><a th:href="@{'/user/preventif'}" aria-expanded="false"
+				   class="list-group-item list-group-item-action bg-warning text-black flex-column align-items-start">
+				<div class="d-flex w-100 justify-content-center align-items-center ">
+					<span class="menu-collapsed" th:text="#{preventif}"></span>
+				</div>
+			</a></li>
+
+		</ul>
+	</div>
+</div>
+</body>
+</html>
