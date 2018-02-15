@@ -1,6 +1,7 @@
 package me.kadarh.mecaworks.gazoil.domain.alertes;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import me.kadarh.mecaworks.gazoil.config.LocalDateConverter;
 import me.kadarh.mecaworks.gazoil.domain.AbstractDomain;
 
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class AlerteEngin extends AbstractDomain {
 
     @Convert(converter = LocalDateConverter.class)

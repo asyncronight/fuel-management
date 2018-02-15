@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="fragments :: head"></head>
+<body>
+<div th:replace="fragments :: menu('')"></div>
+<br>
+<div class="middle-box text-center animated fadeInDown">
+	<h1>Error</h1>
+	<div class="error-desc">
+		<!--/*@thymesVar id="exception" type="benya.service.exceptions.ApplicationException"*/-->
+		<p th:text="'Message: '+${exception.message}"></p>
+		<p th:if="${exception.getCause()}" th:text="'Cause: '+${exception.getCause().message}">
+		<p th:text="${exception.getCause()?.getCause()?.message}"></p>
+		</p>
+		<a th:href="@{'/'}" class="btn btn-secondary" th:text="#{home}"></a>
+	</div>
+</div>
+<div th:replace="fragments :: footer"></div>
+</body>
+</html>

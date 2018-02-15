@@ -3,8 +3,8 @@ package me.kadarh.mecaworks.gazoil.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.gazoil.domain.others.Employe;
 import me.kadarh.mecaworks.gazoil.repo.others.EmployeRepo;
+import me.kadarh.mecaworks.gazoil.service.EmployeService;
 import me.kadarh.mecaworks.gazoil.service.exceptions.OperationFailedException;
-import me.kadarh.mecaworks.gazoil.service.interfaces.EmployeService;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
@@ -50,7 +50,7 @@ public class EmployeServiceImpl implements EmployeService {
     public Employe update(Employe employe) {
         log.info("Service= EmployeServiceImpl - calling methode update");
         try {
-            Employe old = employeRepo.findOne(employe.getId());
+			Employe old = employeRepo.findById(employe.getId()).get();
             if (employe.getNom() != null) {
                 old.setNom(employe.getNom());
             }
@@ -103,7 +103,7 @@ public class EmployeServiceImpl implements EmployeService {
     public void delete(Long id) {
         log.info("Service= employeServiceImpl - calling methode update");
         try {
-            employeRepo.delete(id);
+			employeRepo.deleteById(id);
         } catch (Exception e) {
             log.debug("cannot delete employe , failed operation");
             throw new OperationFailedException("La suppression du employe a echouée ", e);

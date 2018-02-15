@@ -3,7 +3,7 @@ package me.kadarh.mecaworks.gazoil.service.impl.bons;
 import me.kadarh.mecaworks.gazoil.domain.bons.BonFournisseur;
 import me.kadarh.mecaworks.gazoil.domain.others.Chantier;
 import me.kadarh.mecaworks.gazoil.domain.others.Fournisseur;
-import me.kadarh.mecaworks.gazoil.service.interfaces.bons.BonFournisseurService;
+import me.kadarh.mecaworks.gazoil.service.bons.BonFournisseurService;
 
 import java.time.LocalDate;
 import java.util.List;

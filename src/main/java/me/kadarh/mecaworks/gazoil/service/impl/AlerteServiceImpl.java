@@ -1,7 +1,7 @@
 package me.kadarh.mecaworks.gazoil.service.impl;
 
 import me.kadarh.mecaworks.gazoil.domain.alertes.AlerteEngin;
-import me.kadarh.mecaworks.gazoil.service.interfaces.AlerteService;
+import me.kadarh.mecaworks.gazoil.service.AlerteService;
 
 import java.util.List;
 

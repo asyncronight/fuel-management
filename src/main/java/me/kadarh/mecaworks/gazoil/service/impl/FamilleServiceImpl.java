@@ -3,8 +3,8 @@ package me.kadarh.mecaworks.gazoil.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.gazoil.domain.others.Famille;
 import me.kadarh.mecaworks.gazoil.repo.others.FamilleRepo;
+import me.kadarh.mecaworks.gazoil.service.FamilleService;
 import me.kadarh.mecaworks.gazoil.service.exceptions.OperationFailedException;
-import me.kadarh.mecaworks.gazoil.service.interfaces.FamilleService;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
@@ -50,7 +50,7 @@ public class FamilleServiceImpl implements FamilleService {
     public Famille update(Famille famille) {
         log.info("Service= FamilleServiceImpl - calling methode update");
         try {
-            Famille old = familleRepo.findOne(famille.getId());
+			Famille old = familleRepo.findById(famille.getId()).get();
             if (famille.getNom() != null) {
                 old.setNom(famille.getNom());
             }
@@ -103,7 +103,7 @@ public class FamilleServiceImpl implements FamilleService {
     public void delete(Long id) {
         log.info("Service= FamilleServiceImpl - calling methode update");
         try {
-            familleRepo.delete(id);
+			familleRepo.deleteById(id);
         } catch (Exception e) {
             log.debug("cannot delete famille , failed operation");
             throw new OperationFailedException("La suppression de la famille a echouée ", e);

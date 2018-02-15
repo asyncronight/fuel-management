@@ -3,7 +3,7 @@ package me.kadarh.mecaworks.gazoil.service.impl;
 import me.kadarh.mecaworks.gazoil.domain.others.Engin;
 import me.kadarh.mecaworks.gazoil.domain.others.Groupe;
 import me.kadarh.mecaworks.gazoil.domain.others.SousFamille;
-import me.kadarh.mecaworks.gazoil.service.interfaces.EnginService;
+import me.kadarh.mecaworks.gazoil.service.EnginService;
 
 import java.util.List;
 

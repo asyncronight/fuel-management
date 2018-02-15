@@ -3,8 +3,8 @@ package me.kadarh.mecaworks.gazoil.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.gazoil.domain.others.Chantier;
 import me.kadarh.mecaworks.gazoil.repo.others.ChantierRepo;
+import me.kadarh.mecaworks.gazoil.service.ChantierService;
 import me.kadarh.mecaworks.gazoil.service.exceptions.OperationFailedException;
-import me.kadarh.mecaworks.gazoil.service.interfaces.ChantierService;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
@@ -52,7 +52,7 @@ public class ChantierServiceImpl implements ChantierService {
     public Chantier update(Chantier chantier) {
         log.info("Service= ChantierServiceImpl - calling methode update");
         try {
-            Chantier old = chantierRepo.findOne(chantier.getId());
+			Chantier old = chantierRepo.findById(chantier.getId()).get();
             if (chantier.getNom() != null) {
                 old.setNom(chantier.getNom());
             }
@@ -62,6 +62,7 @@ public class ChantierServiceImpl implements ChantierService {
             if (old.getStock() != chantier.getStock()) {
                 old.setStock(chantier.getStock());
                 //Todo : persisting Stock table ( inventaire )
+				//Hint : Autowire chantierService and get by id - old.setStock(chantierService.fbi(chantier.stock.id))
             }
             return chantierRepo.save(old);
 
@@ -113,7 +114,7 @@ public class ChantierServiceImpl implements ChantierService {
     public void delete(Long id) {
         log.info("Service= ChantierServiceImpl - calling methode update");
         try {
-            chantierRepo.delete(id);
+			chantierRepo.deleteById(id);
         } catch (Exception e) {
             log.debug("cannot delete chantier , failed operation");
             throw new OperationFailedException("La suppression du chantier a echouée ", e);

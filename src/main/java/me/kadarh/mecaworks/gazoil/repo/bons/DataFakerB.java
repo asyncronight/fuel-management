@@ -13,7 +13,9 @@ import me.kadarh.mecaworks.gazoil.repo.others.EmployeRepo;
 import me.kadarh.mecaworks.gazoil.repo.others.EnginRepo;
 import me.kadarh.mecaworks.gazoil.repo.others.FournisseurRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -22,8 +24,10 @@ import java.time.format.DateTimeFormatter;
  * @author kadarH
  */
 
-@Repository
+@Component
+@Transactional
 @Slf4j
+@Profile("dev")
 public class DataFakerB {
 
     @Autowired
@@ -55,8 +59,8 @@ public class DataFakerB {
 
     private void loadBonsEngin(int n, int m) {
         for (int i = 0; i < n; i++) {
-            Chantier chantierGazoil = chantierRepo.findOne(i / 20 + 1L);
-            Chantier chantierTravail = chantierRepo.findOne(i / 20 + 2L);
+			Chantier chantierGazoil = chantierRepo.getOne(i / 20 + 1L);
+			Chantier chantierTravail = chantierRepo.getOne(i / 20 + 2L);
             //Getting chantier + engin +
             Engin engin = enginRepo.getOne(i / 4 + 1L);
             //Creating the object
@@ -89,8 +93,8 @@ public class DataFakerB {
         log.info(n + " Bons Engin Loaded *****");
 
         for (int i = 0; i < m; i++) {
-            Chantier chantierGazoil = chantierRepo.findOne(i / 10 + 1L);
-            Chantier chantierTravail = chantierRepo.findOne(i / 10 + 2L);
+			Chantier chantierGazoil = chantierRepo.getOne(i / 10 + 1L);
+			Chantier chantierTravail = chantierRepo.getOne(i / 10 + 2L);
             //Getting chantier + engin +
             Engin engin = enginRepo.getOne(i / 4 + 1L);
             BonEngin bonEngin = new BonEngin();
@@ -130,8 +134,8 @@ public class DataFakerB {
 
     private void loadBonFournisseur(int n) {
         for (int i = 0; i < n; i++) {
-            Fournisseur fournisseur = fournisseurRepo.findOne(i / 4 + 1L);
-            Chantier chantier = chantierRepo.findOne(i / 10 + 1L);
+			Fournisseur fournisseur = fournisseurRepo.getOne(i / 4 + 1L);
+			Chantier chantier = chantierRepo.getOne(i / 10 + 1L);
 
             BonFournisseur bonFournisseur = new BonFournisseur();
             bonFournisseur.setFournisseur(fournisseur);

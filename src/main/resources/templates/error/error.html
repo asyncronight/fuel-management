@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="fragments :: head"></head>
+<body>
+<div th:replace="fragments :: menu('')"></div>
+<br>
+<div class="middle-box text-center animated fadeInDown">
+	<h1>Error</h1>
+	<h3>Server error</h3>
+	<div class="error-desc">
+		<!--/*@thymesVar id="exception" type="java.lang.Exception"*/-->
+		<p th:text="'Message: '+${exception.message}"></p>
+		<a th:href="@{'/'}" class="btn btn-danger" th:text="#{home}"></a>
+	</div>
+</div>
+<div th:replace="fragments :: footer"></div>
+</body>
+</html>

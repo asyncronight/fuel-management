@@ -9,6 +9,5 @@ import java.util.Optional;
 @Repository
 public interface FamilleRepo extends JpaRepository<Famille,Long> {
 
-
     Optional<Famille> findByNom(String name);
 }

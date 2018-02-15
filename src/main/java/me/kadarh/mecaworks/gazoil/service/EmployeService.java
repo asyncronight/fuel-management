@@ -1,4 +1,4 @@
-package me.kadarh.mecaworks.gazoil.service.interfaces;
+package me.kadarh.mecaworks.gazoil.service;
 
 import me.kadarh.mecaworks.gazoil.domain.others.Employe;
 import org.springframework.data.domain.Page;

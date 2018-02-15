@@ -1,6 +1,7 @@
 package me.kadarh.mecaworks.gazoil.domain.others;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import me.kadarh.mecaworks.gazoil.domain.AbstractDomain;
 
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.Entity;
  */
 @Data
 @Entity
+@EqualsAndHashCode(callSuper = true)
 public class Employe extends AbstractDomain {
 
 

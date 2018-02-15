@@ -2,7 +2,6 @@ package me.kadarh.mecaworks.gazoil.domain.others;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import me.kadarh.mecaworks.gazoil.domain.AbstractDomain;
 
 import javax.persistence.Entity;
@@ -15,7 +14,6 @@ import java.time.LocalDate;
 
 @Entity
 @Data
-@ToString(exclude = {"chantier"})
 @EqualsAndHashCode(callSuper = true, exclude = {"chantier"})
 public class Stock extends AbstractDomain {
 

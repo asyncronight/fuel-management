@@ -3,8 +3,8 @@ package me.kadarh.mecaworks.gazoil.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.gazoil.domain.others.Groupe;
 import me.kadarh.mecaworks.gazoil.repo.others.GroupeRepo;
+import me.kadarh.mecaworks.gazoil.service.GroupeService;
 import me.kadarh.mecaworks.gazoil.service.exceptions.OperationFailedException;
-import me.kadarh.mecaworks.gazoil.service.interfaces.GroupeService;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
@@ -50,7 +50,7 @@ public class GroupeServiceImpl implements GroupeService {
     public Groupe update(Groupe groupe) {
         log.info("Service = GroupeServiceImpl - calling methode update");
         try {
-            Groupe old = groupeRepo.findOne(groupe.getId());
+			Groupe old = groupeRepo.findById(groupe.getId()).get();
             if (groupe.getNom() != null) {
                 old.setNom(groupe.getNom());
             }
@@ -106,7 +106,7 @@ public class GroupeServiceImpl implements GroupeService {
     public void delete(Long id) {
         log.info("Service= GroupeServiceImpl - calling methode update");
         try {
-            groupeRepo.delete(id);
+			groupeRepo.deleteById(id);
         } catch (Exception e) {
             log.debug("cannot delete Groupe , failed operation");
             throw new OperationFailedException("La suppression du groupe a echouée ", e);

@@ -6,7 +6,9 @@ import me.kadarh.mecaworks.gazoil.domain.others.*;
 import me.kadarh.mecaworks.gazoil.repo.bons.DataFakerB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Repository;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
@@ -14,8 +16,10 @@ import java.time.LocalDate;
  * @author kadarH
  */
 
-@Repository
+@Component
+@Transactional
 @Slf4j
+@Profile("dev")
 public class DataFakerO implements CommandLineRunner {
 
 
@@ -39,7 +43,7 @@ public class DataFakerO implements CommandLineRunner {
     private AlerteRepo alerteRepo;
 
     @Override
-    public void run(String... strings) throws Exception {
+	public void run(String... strings) {
         log.info("This is the DataFaker Of Other Domains");
         loadGroupe(5);
         loadChantiers(5);
@@ -148,8 +152,8 @@ public class DataFakerO implements CommandLineRunner {
     private void loadEngins(int n){
         for (int i=0;i<n;i++){
             //Getting groupe and sous-famille
-            Groupe groupe = groupeRepo.findOne(i/4 +1L);
-            SousFamille sousFamille = sousFamilleRepo.findOne(i/2 +1L);
+			Groupe groupe = groupeRepo.getOne(i / 4 + 1L);
+			SousFamille sousFamille = sousFamilleRepo.getOne(i / 2 + 1L);
             //Creation the object
             Engin engin = new Engin();
             engin.setCode("Pelle"+(i+1));

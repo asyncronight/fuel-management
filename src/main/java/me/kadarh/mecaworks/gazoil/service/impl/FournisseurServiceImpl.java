@@ -3,8 +3,8 @@ package me.kadarh.mecaworks.gazoil.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.gazoil.domain.others.Fournisseur;
 import me.kadarh.mecaworks.gazoil.repo.others.FournisseurRepo;
+import me.kadarh.mecaworks.gazoil.service.FournisseurService;
 import me.kadarh.mecaworks.gazoil.service.exceptions.OperationFailedException;
-import me.kadarh.mecaworks.gazoil.service.interfaces.FournisseurService;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
@@ -50,7 +50,7 @@ public class FournisseurServiceImpl implements FournisseurService {
     public Fournisseur update(Fournisseur fournisseur) {
         log.info("Service= FournisseurServiceImpl - calling methode update");
         try {
-            Fournisseur old = fournisseurRepo.findOne(fournisseur.getId());
+			Fournisseur old = fournisseurRepo.findById(fournisseur.getId()).get();
             if (fournisseur.getNom() != null) {
                 old.setNom(fournisseur.getNom());
             }
@@ -103,7 +103,7 @@ public class FournisseurServiceImpl implements FournisseurService {
     public void delete(Long id) {
         log.info("Service= FournisseurServiceImpl - calling methode update");
         try {
-            fournisseurRepo.delete(id);
+			fournisseurRepo.deleteById(id);
         } catch (Exception e) {
             log.debug("cannot delete Fournisseur , failed operation");
             throw new OperationFailedException("La suppression du Fournisseur a echouée ", e);

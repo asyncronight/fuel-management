@@ -2,7 +2,6 @@ package me.kadarh.mecaworks.gazoil.domain.bons;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import me.kadarh.mecaworks.gazoil.config.LocalDateConverter;
 import me.kadarh.mecaworks.gazoil.domain.AbstractDomain;
 import me.kadarh.mecaworks.gazoil.domain.others.Chantier;
@@ -20,7 +19,6 @@ import java.time.LocalDate;
 
 @Entity
 @Data
-@ToString(exclude = {"fournisseur", "chantier"})
 @EqualsAndHashCode(callSuper = true, exclude = {"fournisseur", "chantier"})
 public class BonFournisseur extends AbstractDomain {
 

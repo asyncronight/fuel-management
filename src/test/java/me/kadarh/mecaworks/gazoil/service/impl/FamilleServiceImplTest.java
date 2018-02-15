@@ -2,8 +2,8 @@ package me.kadarh.mecaworks.gazoil.service.impl;
 
 import me.kadarh.mecaworks.gazoil.domain.others.Famille;
 import me.kadarh.mecaworks.gazoil.repo.others.FamilleRepo;
+import me.kadarh.mecaworks.gazoil.service.FamilleService;
 import me.kadarh.mecaworks.gazoil.service.exceptions.OperationFailedException;
-import me.kadarh.mecaworks.gazoil.service.interfaces.FamilleService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -30,7 +30,7 @@ public class FamilleServiceImplTest {
     }
 
     @Test
-    public void add() throws Exception {
+	public void add() {
         //given
         Famille famille = new Famille();
         famille.setNom("FamilleEE");
@@ -45,7 +45,7 @@ public class FamilleServiceImplTest {
     }
 
     @Test
-    public void update() throws Exception {
+	public void update() {
         //given
         Famille famille = new Famille();
         famille.setId(77L);
@@ -54,18 +54,18 @@ public class FamilleServiceImplTest {
         //when
         when(familleRepo.save(famille)).thenReturn(famille);
         famille.setNom("F2");
-        when(familleRepo.findOne(77L)).thenReturn(Optional.of(famille).get());
+		when(familleRepo.findById(77L)).thenReturn(Optional.of(famille));
 
 
         //then
         assertEquals(famille.getId(), familleService.update(famille).getId());
         assertEquals(famille.getNom(), familleService.update(famille).getNom());
         verify(familleRepo, times(2)).save(any(Famille.class));
-        verify(familleRepo, times(2)).findOne(anyLong());
+		verify(familleRepo, times(2)).findById(anyLong());
     }
 
     @Test(expected = OperationFailedException.class)
-    public void updateError() throws Exception {
+	public void updateError() {
         //given
         Famille famille = new Famille();
         famille.setId(77L);
@@ -74,17 +74,17 @@ public class FamilleServiceImplTest {
 
         //when
         famille.setNom("Famille2");
-        when(familleRepo.findOne(88L)).thenReturn(Optional.of(famille).get());
+		when(familleRepo.findById(88L)).thenReturn(Optional.of(famille));
         when(familleRepo.save(famille)).thenReturn(famille);
 
         //then
         assertEquals(famille.getId(), familleService.update(famille).getId());
         verify(familleRepo, times(2)).save(any(Famille.class));
-        verify(familleRepo, times(1)).findOne(anyLong());
+		verify(familleRepo, times(1)).findById(anyLong());
     }
 
     @Test
-    public void familleList() throws Exception {
+	public void familleList() {
 
     }
 

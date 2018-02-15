@@ -2,7 +2,7 @@ package me.kadarh.mecaworks.gazoil.service.impl.bons;
 
 import me.kadarh.mecaworks.gazoil.domain.bons.BonEngin;
 import me.kadarh.mecaworks.gazoil.domain.others.*;
-import me.kadarh.mecaworks.gazoil.service.interfaces.bons.BonEnginService;
+import me.kadarh.mecaworks.gazoil.service.bons.BonEnginService;
 
 import java.time.LocalDate;
 import java.util.List;
