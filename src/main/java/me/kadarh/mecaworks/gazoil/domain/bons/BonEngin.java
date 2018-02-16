@@ -2,13 +2,15 @@ package me.kadarh.mecaworks.gazoil.domain.bons;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import me.kadarh.mecaworks.gazoil.config.LocalDateConverter;
 import me.kadarh.mecaworks.gazoil.domain.AbstractDomain;
 import me.kadarh.mecaworks.gazoil.domain.others.Chantier;
 import me.kadarh.mecaworks.gazoil.domain.others.Employe;
 import me.kadarh.mecaworks.gazoil.domain.others.Engin;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import java.time.LocalDate;
 
 /**
@@ -20,7 +22,6 @@ import java.time.LocalDate;
 @EqualsAndHashCode(callSuper = true, exclude = {"chantierGazoil", "chantierTravail", "engin", "pompiste", "chauffeur"})
 public class BonEngin extends AbstractDomain {
 
-    @Convert(converter = LocalDateConverter.class)
     private LocalDate date;
 
     @Column(unique = true)
