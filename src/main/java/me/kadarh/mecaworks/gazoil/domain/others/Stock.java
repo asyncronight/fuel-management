@@ -18,12 +18,12 @@ import java.time.LocalDate;
 public class Stock extends AbstractDomain {
 
     private LocalDate date;
-    private int entreeF;
-    private int entreeL;
-    private int sortieL;
-    private int sortieE;
-    private int stockC;
-    private int stockReel;
+    private Integer entreeF;
+    private Integer entreeL;
+    private Integer sortieL;
+    private Integer sortieE;
+    private Integer stockC;
+    private Integer stockReel;
 
     @ManyToOne
     private Chantier chantier;

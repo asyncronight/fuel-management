@@ -42,14 +42,14 @@ public class BonEngin extends AbstractDomain {
     @ManyToOne
     private Employe chauffeur;
 
-    private int quantite;
-    private long compteurKm;
-    private long compteurH;
-    private boolean enPanne;
-    private boolean plein;
-    private long compteurAbsoluKm;
-    private long compteurAbsoluH;
-    private float consommationKm;
-    private float consommationH;
+    private Integer quantite;
+    private Long compteurKm;
+    private Long compteurH;
+    private Boolean enPanne;
+    private Boolean plein;
+    private Long compteurAbsoluKm;
+    private Long compteurAbsoluH;
+    private Float consommationKm;
+    private Float consommationH;
 
 }

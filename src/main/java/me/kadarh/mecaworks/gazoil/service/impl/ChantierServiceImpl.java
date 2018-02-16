@@ -59,7 +59,7 @@ public class ChantierServiceImpl implements ChantierService {
             if (chantier.getAdresse() != null) {
                 old.setAdresse(chantier.getAdresse());
             }
-            if (old.getStock() != chantier.getStock()) {
+            if (chantier.getStock() != null) {
                 old.setStock(chantier.getStock());
                 //Todo : persisting Stock table ( inventaire )
 				//Hint : Autowire chantierService and get by id - old.setStock(chantierService.fbi(chantier.stock.id))

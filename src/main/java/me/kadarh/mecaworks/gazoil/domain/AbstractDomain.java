@@ -2,7 +2,6 @@ package me.kadarh.mecaworks.gazoil.domain;
 
 import lombok.Getter;
 import lombok.Setter;
-import me.kadarh.mecaworks.gazoil.config.LocalDateTimeConverter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -23,10 +22,8 @@ public abstract class AbstractDomain {
     @Version
     protected int version;
 
-    @Convert(converter = LocalDateTimeConverter.class)
     protected LocalDateTime createdAt;
 
-    @Convert(converter = LocalDateTimeConverter.class)
     protected LocalDateTime updatedAt;
 
     @PrePersist

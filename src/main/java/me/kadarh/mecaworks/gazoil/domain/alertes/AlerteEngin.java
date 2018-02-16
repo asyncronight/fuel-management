@@ -19,9 +19,9 @@ public class AlerteEngin extends AbstractDomain {
     private LocalDate date;
     private TypeAlerte typeAlerte;
     private String message;
-    private boolean etat;
-    private float consommationKm;
-    private float consommationH;
+    private Boolean etat;
+    private Float consommationKm;
+    private Float consommationH;
 
     private Long idBon;
 

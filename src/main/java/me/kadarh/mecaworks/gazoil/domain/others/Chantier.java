@@ -17,6 +17,6 @@ public class Chantier extends AbstractDomain {
 
     private String nom;
     private String adresse;
-    private int stock;
+    private Integer stock;
 
 }

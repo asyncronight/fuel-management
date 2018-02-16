@@ -54,9 +54,9 @@ public class EnginServiceImpl implements EnginService {
         log.info("Service = EnginServiceImpl - calling methode update");
         try {
             Engin old = enginRepo.findById(engin.getId()).get();
-            if (old.getCompteurInitialKm() != engin.getCompteurInitialKm())
+            if (engin.getCompteurInitialKm() != null)
                 old.setCompteurInitialKm(engin.getCompteurInitialKm());
-            if (old.getCompteurInitialL() != engin.getCompteurInitialL())
+            if (engin.getCompteurInitialL() != null)
                 old.setCompteurInitialL(engin.getCompteurInitialL());
             if (engin.getNumeroSerie() != null)
                 old.setNumeroSerie(engin.getNumeroSerie());

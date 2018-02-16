@@ -31,7 +31,7 @@ public class BonFournisseur extends AbstractDomain {
     @OneToOne
     private Chantier chantier;
 
-    private int quantite;
-    private float prixUnitaire;
+    private Integer quantite;
+    private Integer prixUnitaire;
 
 }

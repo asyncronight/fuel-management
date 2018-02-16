@@ -18,9 +18,9 @@ public class SousFamille extends AbstractDomain {
 
     private String nom;
     private TypeCompteur typeCompteur;
-    private int consommationLMax;
-    private int consommationKmMax;
-    private int capaciteReservoir;
+    private Integer consommationLMax;
+    private Integer consommationKmMax;
+    private Integer capaciteReservoir;
 
     @ManyToOne
     private Famille famille;

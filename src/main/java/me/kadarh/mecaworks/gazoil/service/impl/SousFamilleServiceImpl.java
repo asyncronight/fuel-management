@@ -56,13 +56,13 @@ public class SousFamilleServiceImpl implements SousFamilleService {
             if (sousFamille.getNom() != null) {
                 old.setNom(sousFamille.getNom());
             }
-            if (old.getCapaciteReservoir() != sousFamille.getCapaciteReservoir()) {
+            if (sousFamille.getCapaciteReservoir() != null) {
                 old.setCapaciteReservoir(sousFamille.getCapaciteReservoir());
             }
-            if (old.getConsommationKmMax() != sousFamille.getConsommationKmMax()) {
+            if (sousFamille.getConsommationKmMax() != null) {
                 old.setConsommationKmMax(sousFamille.getConsommationKmMax());
             }
-            if (old.getConsommationLMax() != sousFamille.getConsommationLMax()) {
+            if (sousFamille.getConsommationLMax() != null) {
                 old.setConsommationLMax(sousFamille.getConsommationLMax());
             }
             if (sousFamille.getTypeCompteur() != null) {

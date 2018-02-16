@@ -32,7 +32,7 @@ public class BonLivraison extends AbstractDomain {
     @OneToOne
     private Chantier chantierArrivee;
 
-    private int quantite;
+    private Integer quantite;
     @ManyToOne
     private Employe transporteur;
     @ManyToOne
