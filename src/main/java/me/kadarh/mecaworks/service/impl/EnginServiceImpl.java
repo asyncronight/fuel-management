@@ -3,6 +3,7 @@ package me.kadarh.mecaworks.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.others.Engin;
 import me.kadarh.mecaworks.domain.others.Groupe;
+import me.kadarh.mecaworks.domain.others.Marque;
 import me.kadarh.mecaworks.domain.others.SousFamille;
 import me.kadarh.mecaworks.repo.others.EnginRepo;
 import me.kadarh.mecaworks.repo.others.GroupeRepo;
@@ -113,10 +114,18 @@ public class EnginServiceImpl implements EnginService {
                 Engin engin = new Engin();
                 engin.setNumeroSerie(search);
                 engin.setCode(search);
+                //sousfamille
                 SousFamille sousFamille = new SousFamille();
                 sousFamille.setNom(search);
+                //groupe
                 Groupe groupe = new Groupe();
                 groupe.setNom(search);
+                //marque
+                Marque marque = new Marque();
+                marque.setNom(search);
+                //setting groupe , marque , soufamille to engin
+                engin.setGroupe(groupe);
+                engin.setMarque(marque);
                 engin.setSousFamille(sousFamille);
                 //creating matcher
                 ExampleMatcher matcher = ExampleMatcher.matchingAny()
