@@ -34,7 +34,9 @@ public class DataFakerO implements CommandLineRunner {
 	@Autowired
 	private SousFamilleRepo sousFamilleRepo;
 	@Autowired
-	private EnginRepo enginRepo;
+    private MarqueRepo marqueRepo;
+    @Autowired
+    private EnginRepo enginRepo;
 	@Autowired
 	private FournisseurRepo fournisseurRepo;
 	@Autowired
@@ -49,7 +51,8 @@ public class DataFakerO implements CommandLineRunner {
 		loadChantiers(5);
 		loadFamille(5);
 		loadSousFamilles(10);
-		loadEngins(20);
+        loadMarques(5);
+        loadEngins(20);
 		loadFournisseur(20);
 		loadAlerte(10);
 		loadEmploye(20);
@@ -90,6 +93,16 @@ public class DataFakerO implements CommandLineRunner {
 		}
 		log.info(n + " Employe Loaded *****");
 	}
+
+    // Loading Marques
+    private void loadMarques(int n) {
+        for (int i = 0; i < n; i++) {
+            Marque marque = new Marque();
+            marque.setNom("marque" + (i + 1));
+            marqueRepo.save(marque);
+        }
+        log.info(n + " Marque Loaded *****");
+    }
 
 	// Loading Chantiers
 	private void loadChantiers(int n) {
@@ -154,12 +167,14 @@ public class DataFakerO implements CommandLineRunner {
 			//Getting groupe and sous-famille
 			Groupe groupe = groupeRepo.getOne(i / 4 + 1L);
 			SousFamille sousFamille = sousFamilleRepo.getOne(i / 2 + 1L);
-			//Creation the object
+            Marque marque = marqueRepo.getOne(i / 4 + 1L);
+            //Creation the object
 			Engin engin = new Engin();
 			engin.setCode("Pelle" + (i + 1));
 			engin.setNumeroSerie("TPF" + i + "zz" + i);
 			engin.setGroupe(groupe);
-			engin.setSousFamille(sousFamille);
+            engin.setMarque(marque);
+            engin.setSousFamille(sousFamille);
 			if (i % 3 == 0) {
 				engin.setCompteurInitialL(1000 + (i * 10));
 				engin.setCompteurInitialKm(1000 + (i * 10));

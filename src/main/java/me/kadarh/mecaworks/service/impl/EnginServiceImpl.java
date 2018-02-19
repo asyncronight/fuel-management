@@ -6,13 +6,19 @@ import me.kadarh.mecaworks.domain.others.Groupe;
 import me.kadarh.mecaworks.domain.others.SousFamille;
 import me.kadarh.mecaworks.repo.others.EnginRepo;
 import me.kadarh.mecaworks.repo.others.GroupeRepo;
+import me.kadarh.mecaworks.repo.others.MarqueRepo;
 import me.kadarh.mecaworks.repo.others.SousFamilleRepo;
 import me.kadarh.mecaworks.service.EnginService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
+import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * @author kadarH
@@ -26,6 +32,14 @@ public class EnginServiceImpl implements EnginService {
 	private EnginRepo enginRepo;
 	private SousFamilleRepo sousFamilleRepo;
 	private GroupeRepo groupeRepo;
+    private MarqueRepo marqueRepo;
+
+    public EnginServiceImpl(EnginRepo enginRepo, SousFamilleRepo sousFamilleRepo, GroupeRepo groupeRepo, MarqueRepo marqueRepo) {
+        this.enginRepo = enginRepo;
+        this.sousFamilleRepo = sousFamilleRepo;
+        this.groupeRepo = groupeRepo;
+        this.marqueRepo = marqueRepo;
+    }
 
 	/**
 	 * @param engin to add
@@ -35,10 +49,10 @@ public class EnginServiceImpl implements EnginService {
 	public Engin add(Engin engin) {
 		log.info("Service = EnginServiceImpl - calling methode add");
 		try {
-			Groupe groupe = groupeRepo.findByNom(engin.getGroupe().getNom()).get();
-			engin.setGroupe(groupe);
-			engin.setSousFamille(sousFamilleRepo.findByNom(engin.getSousFamille().getNom()).get());
-			return enginRepo.save(engin);
+            engin.setGroupe(groupeRepo.findByNom(engin.getGroupe().getNom()).get());
+            engin.setSousFamille(sousFamilleRepo.findByNom(engin.getSousFamille().getNom()).get());
+            engin.setMarque(marqueRepo.findByNom(engin.getMarque().getNom()).get());
+            return enginRepo.save(engin);
 		} catch (Exception e) {
 			log.debug("cannot add engin , failed operation");
 			throw new OperationFailedException("L'ajout de l'engin a echouée ", e);
@@ -64,7 +78,9 @@ public class EnginServiceImpl implements EnginService {
 				old.setCode(engin.getCode());
 			if (engin.getGroupe().getNom() != null)
 				old.setGroupe(groupeRepo.findByNom(engin.getGroupe().getNom()).get());
-			if (engin.getSousFamille().getNom() != null)
+            if (engin.getMarque() != null)
+                old.setMarque(marqueRepo.findByNom(engin.getMarque().getNom()).get());
+            if (engin.getSousFamille().getNom() != null)
 				old.setSousFamille(sousFamilleRepo.findByNom(engin.getSousFamille().getNom()).get());
 			return enginRepo.save(engin);
 		} catch (Exception e) {
@@ -74,17 +90,57 @@ public class EnginServiceImpl implements EnginService {
 	}
 
 	@Override
-	public List<Engin> enginList() {
-		return null;
-	}
+    public Engin get(Long id) {
+        try {
+            return enginRepo.findById(id).get();
+        } catch (NoSuchElementException e) {
+            throw new ResourceNotFoundException("Engin introuvable", e);
+        } catch (Exception e) {
+            throw new OperationFailedException("Problème lors de la recherche de l'engin", e);
+        }
+    }
 
 	@Override
-	public List<Engin> enginList(SousFamille sousFamille, Groupe groupe) {
-		return null;
-	}
+    public Page<Engin> enginList(Pageable pageable, String search) {
+        log.info("Service- EnginServiceImpl Calling enginList with params :" + pageable + ", " + search);
+        try {
+            if (search.isEmpty()) {
+                log.debug("fetching engin page");
+                return enginRepo.findAll(pageable);
+            } else {
+                log.debug("Searching by :" + search);
+                //creating example
+                Engin engin = new Engin();
+                engin.setNumeroSerie(search);
+                engin.setCode(search);
+                SousFamille sousFamille = new SousFamille();
+                sousFamille.setNom(search);
+                Groupe groupe = new Groupe();
+                groupe.setNom(search);
+                engin.setSousFamille(sousFamille);
+                //creating matcher
+                ExampleMatcher matcher = ExampleMatcher.matchingAny()
+                        .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                        .withIgnoreCase()
+                        .withIgnoreNullValues();
+                Example<Engin> example = Example.of(engin, matcher);
+                log.debug("getting search results");
+                return enginRepo.findAll(example, pageable);
+            }
+        } catch (Exception e) {
+            log.debug("Failed retrieving list of engins");
+            throw new OperationFailedException("Operation échouée, problème de saisi", e);
+        }
+    }
 
 	@Override
 	public void delete(Long id) {
-
-	}
+        log.info("Service- EnginServiceImpl Calling delete with params id =" + id);
+        try {
+            enginRepo.delete(enginRepo.findById(id).get());
+        } catch (Exception e) {
+            log.debug("Failed retrieving list of engins");
+            throw new OperationFailedException("Operation de suppression de l'engin (id=" + id + ") a echouée", e);
+        }
+    }
 }

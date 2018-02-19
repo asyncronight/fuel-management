@@ -30,4 +30,7 @@ public class Engin extends AbstractDomain {
 	@ManyToOne
 	private Groupe groupe;
 
+    @ManyToOne
+    private Marque marque;
+
 }

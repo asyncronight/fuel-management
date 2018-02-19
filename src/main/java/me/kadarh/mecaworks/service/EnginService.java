@@ -1,10 +1,8 @@
 package me.kadarh.mecaworks.service;
 
 import me.kadarh.mecaworks.domain.others.Engin;
-import me.kadarh.mecaworks.domain.others.Groupe;
-import me.kadarh.mecaworks.domain.others.SousFamille;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface EnginService {
 
@@ -12,9 +10,9 @@ public interface EnginService {
 
 	Engin update(Engin engin);
 
-	List<Engin> enginList();
+    Engin get(Long id);
 
-	List<Engin> enginList(SousFamille sousFamille, Groupe groupe);
+    Page<Engin> enginList(Pageable pageable, String search);
 
 	void delete(Long id);
 

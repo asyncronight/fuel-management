@@ -3,141 +3,168 @@
 <head th:replace="fragments :: head"></head>
 <body>
 <div th:replace="fragments :: menu('admin')"></div>
-<div class="row" id="body-row">
+<div class="wrapper">
+
 	<div th:replace="admin/fragment :: menu"></div>
-	<div class="col">
-		<br/>
-		<ul class="breadcrumb py-3">
-			<li class="breadcrumb-item"><a th:href="@{'/admin'}"><i class="fa fa-arrow-circle-left fa-lg"></i></a></li>
-			<li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
-			<li class="breadcrumb-item"><a th:href="@{'/admin'}" th:text="#{admin}"></a></li>
-			<li class="breadcrumb-item" th:text="#{admin.engins}"></li>
-		</ul>
-		<div class="container-fluid">
-			<a th:href="@{'/admin/engins/add'}" class="btn btn-success col-4 pull-right">
-				<span class="fa fa-plus"></span> [[#{add}]]
-			</a>
-			<div class="container-fluid text-center bg-faded py-3" th:if="${#lists.isEmpty(page.content)}">
-				<div class="text-warning "><h3 th:text="#{empty}"></h3></div>
-			</div>
-			<div th:if="!${#lists.isEmpty(page.content)}">
-				<div class="row col-12">
-					<div class="col-3"></div>
-					<form class="form-inline col-6" method="get" th:action="@{'/admin/engins'}">
-						<input class="form-control col-6" type="text" th:name="search" th:value="${search}">
-						<button class="btn btn-secondary col-3" type="submit" th:text="#{search}"></button>
-					</form>
+
+	<!--/*@thymesVar id="engin" type="me.kadarh.mecaworks.domain.others.Engin"*/-->
+	<!--/*@thymesVar id="search" type="java.lang.String"*/-->
+	<!--/*@thymesVar id="page" type="org.springframework.data.domain.Page"*/-->
+
+	<!-- Page Content -->
+	<div id="content">
+		<button type="button" id="sidebarCollapse" class="btn btn-inverse navbar-btn">
+			<i class="glyphicon glyphicon-align-left fa fa-undo"></i>
+
+		</button>
+		<div class="col-12">
+			<br/>
+			<ul class="breadcrumb py-3">
+				<li class="breadcrumb-item"><a th:href="@{'/admin'}"><i class="fa fa-arrow-circle-left fa-lg"></i></a>
+				</li>
+				<li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
+				<li class="breadcrumb-item"><a th:href="@{'/admin'}" th:text="#{admin}"></a></li>
+				<li class="breadcrumb-item" th:text="#{admin.engins}"></li>
+			</ul>
+			<div class="">
+
+				<div class="container-fluid text-center bg-faded py-3" th:if="${#lists.isEmpty(page.content)}">
+					<div class="text-warning "><h3 th:text="#{empty}"></h3></div>
 				</div>
-				<table class="table table-hover table-striped">
-					<tr>
-						<th>
-							<a th:href="'?page=0&sort=code'+(${page.getSort().getOrderFor('code')?.descending}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})"
-							   th:title="!${page.getSort().getOrderFor('code')?.descending}? #{sort.desc}: #{sort.asc}">
-								Code
-								<span th:if="${page.getSort().getOrderFor('code')?.ascending}"
-									  class="fa fa-sort-up"></span>
-								<span th:if="!${page.getSort().getOrderFor('code')?.ascending}"
-									  class="fa fa-sort-down"></span>
-							</a>
-						</th>
-						<th>
-							<a th:href="'?page=0&sort=numeroSerie'+(${page.getSort().getOrderFor('numeroSerie')?.descending}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})"
-							   th:title="!${page.getSort().getOrderFor('numeroSerie')?.descending}? #{sort.desc}: #{sort.asc}">
-								N° serie
-								<span th:if="${page.getSort().getOrderFor('numeroSerie')?.ascending}"
-									  class="fa fa-sort-up"></span>
-								<span th:if="!${page.getSort().getOrderFor('numeroSerie')?.ascending}"
-									  class="fa fa-sort-down"></span>
-							</a>
-						</th>
-						<th>
-							<a th:href="'?page=0&sort=compteurInitialL'+(${page.getSort().getOrderFor('compteurInitialL')?.descending}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})"
-							   th:title="!${page.getSort().getOrderFor('compteurInitialL')?.descending}? #{sort.desc}: #{sort.asc}">
-								Compteur initial (L)
-								<span th:if="${page.getSort().getOrderFor('compteurInitialL')?.ascending}"
-									  class="fa fa-sort-up"></span>
-								<span th:if="!${page.getSort().getOrderFor('compteurInitialL')?.ascending}"
-									  class="fa fa-sort-down"></span>
-							</a>
-						</th>
-						<th>
-							<a th:href="'?page=0&sort=compteurInitialKm'+(${page.getSort().getOrderFor('compteurInitialKm')?.descending}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})"
-							   th:title="!${page.getSort().getOrderFor('compteurInitialKm')?.descending}? #{sort.desc}: #{sort.asc}">
-								Compteur initial (Km)
-								<span th:if="${page.getSort().getOrderFor('compteurInitialKm')?.ascending}"
-									  class="fa fa-sort-up"></span>
-								<span th:if="!${page.getSort().getOrderFor('compteurInitialKm')?.ascending}"
-									  class="fa fa-sort-down"></span>
-							</a>
-						</th>
-						<th>
-							<a th:href="'?page=0&sort=sousFamille.nom'+(${page.getSort().getOrderFor('sousFamille.nom')?.descending}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})"
-							   th:title="!${page.getSort().getOrderFor('sousFamille.nom')?.descending}? #{sort.desc}: #{sort.asc}">
-								Sous famille
-								<span th:if="${page.getSort().getOrderFor('sousFamille.nom')?.ascending}"
-									  class="fa fa-sort-up"></span>
-								<span th:if="!${page.getSort().getOrderFor('sousFamille.nom')?.ascending}"
-									  class="fa fa-sort-down"></span>
-							</a>
-						</th>
-						<th>
-							<a th:href="'?page=0&sort=groupe.nom'+(${page.getSort().getOrderFor('groupe.nom')?.descending}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})"
-							   th:title="!${page.getSort().getOrderFor('groupe.nom')?.descending}? #{sort.desc}: #{sort.asc}">
-								Groupe
-								<span th:if="${page.getSort().getOrderFor('groupe.nom')?.ascending}"
-									  class="fa fa-sort-up"></span>
-								<span th:if="!${page.getSort().getOrderFor('groupe.nom')?.ascending}"
-									  class="fa fa-sort-down"></span>
-							</a>
-						</th>
-						<th></th>
-					</tr>
-					<tr th:each="engin : ${page.content}">
-						<td th:text="${engin.code}"></td>
-						<td th:text="${engin.numeroSerie}"></td>
-						<td th:text="${engin.compteurInitialL}"></td>
-						<td th:text="${engin.compteurInitialKm}"></td>
-						<td th:text="${engin.sousFamille.nom}"></td>
-						<td th:text="${engin.groupe.nom}"></td>
-						<td class="btn-group">
-							<a th:href="@{'/admin/engins/' + ${engin.id} +'/edit'}" class="btn btn-info"
-							   th:title="#{edit}">
-								<span class="fa fa-edit"></span>
-							</a>
-							<form th:action="@{'/admin/engins/' + ${engin.id} +'/delete'}" method="post">
-								<button type="submit" class="btn btn-danger" th:title="#{delete}">
-									<span class="fa fa-trash"></span>
-								</button>
-							</form>
-						</td>
-					</tr>
-				</table>
-				<div class="row justify-content-center">
-					<nav aria-label="Page navigation example ">
-						<ul class="pagination ">
-							<li class="page-item">
-								<a class="page-link" th:unless="${page.number} eq 0"
-								   th:href="'?page='+${(page.number)-1}+(${search.isEmpty()}?'':'&search='+${search})
+				<div th:if="!${#lists.isEmpty(page.content)}">
+					<div class="row col-12 p-2">
+						<form class="form-inline col-9" method="get" th:action="@{'/admin/engins'}">
+							<input class="form-control col-9" th:placeholder="#{admin.engin.searchPlaceHolder}"
+								   type="text" th:name="search" th:value="${search}">
+							<button class="btn btn-secondary col-3" type="submit" th:text="#{search}"></button>
+						</form>
+						<a th:href="@{'/admin/engins/add'}" class="btn btn-success col-3 pull-right">
+							<span class="fa fa-plus"></span> [[#{admin.engin.add}]]
+						</a>
+					</div>
+					<hr class="m-1">
+					<table class="table table-hover table-bordered">
+						<tr class="bg-inverse text-white">
+							<th>
+								<a th:href="'?page=0&sort=code'+(${page.getSort().getOrderFor('code')?.descending}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})"
+								   th:title="!${page.getSort().getOrderFor('code')?.descending}? #{sort.desc}: #{sort.asc}">
+									Code
+									<span th:if="${page.getSort().getOrderFor('code')?.ascending}"
+										  class="fa fa-sort-up"></span>
+									<span th:if="!${page.getSort().getOrderFor('code')?.ascending}"
+										  class="fa fa-sort-down"></span>
+								</a>
+							</th>
+							<th>
+								<a th:href="'?page=0&sort=numeroSerie'+(${page.getSort().getOrderFor('numeroSerie')?.descending}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})"
+								   th:title="!${page.getSort().getOrderFor('numeroSerie')?.descending}? #{sort.desc}: #{sort.asc}">
+									N° serie
+									<span th:if="${page.getSort().getOrderFor('numeroSerie')?.ascending}"
+										  class="fa fa-sort-up"></span>
+									<span th:if="!${page.getSort().getOrderFor('numeroSerie')?.ascending}"
+										  class="fa fa-sort-down"></span>
+								</a>
+							</th>
+							<th>
+								<a th:href="'?page=0&sort=compteurInitialL'+(${page.getSort().getOrderFor('compteurInitialL')?.descending}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})"
+								   th:title="!${page.getSort().getOrderFor('compteurInitialL')?.descending}? #{sort.desc}: #{sort.asc}">
+									Compteur initial (L)
+									<span th:if="${page.getSort().getOrderFor('compteurInitialL')?.ascending}"
+										  class="fa fa-sort-up"></span>
+									<span th:if="!${page.getSort().getOrderFor('compteurInitialL')?.ascending}"
+										  class="fa fa-sort-down"></span>
+								</a>
+							</th>
+							<th>
+								<a th:href="'?page=0&sort=compteurInitialKm'+(${page.getSort().getOrderFor('compteurInitialKm')?.descending}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})"
+								   th:title="!${page.getSort().getOrderFor('compteurInitialKm')?.descending}? #{sort.desc}: #{sort.asc}">
+									Compteur initial (Km)
+									<span th:if="${page.getSort().getOrderFor('compteurInitialKm')?.ascending}"
+										  class="fa fa-sort-up"></span>
+									<span th:if="!${page.getSort().getOrderFor('compteurInitialKm')?.ascending}"
+										  class="fa fa-sort-down"></span>
+								</a>
+							</th>
+							<th>
+								<a th:href="'?page=0&sort=sousFamille.nom'+(${page.getSort().getOrderFor('sousFamille.nom')?.descending}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})"
+								   th:title="!${page.getSort().getOrderFor('sousFamille.nom')?.descending}? #{sort.desc}: #{sort.asc}">
+									Sous famille
+									<span th:if="${page.getSort().getOrderFor('sousFamille.nom')?.ascending}"
+										  class="fa fa-sort-up"></span>
+									<span th:if="!${page.getSort().getOrderFor('sousFamille.nom')?.ascending}"
+										  class="fa fa-sort-down"></span>
+								</a>
+							</th>
+							<th>
+								<a th:href="'?page=0&sort=groupe.nom'+(${page.getSort().getOrderFor('groupe.nom')?.descending}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})"
+								   th:title="!${page.getSort().getOrderFor('groupe.nom')?.descending}? #{sort.desc}: #{sort.asc}">
+									Groupe
+									<span th:if="${page.getSort().getOrderFor('groupe.nom')?.ascending}"
+										  class="fa fa-sort-up"></span>
+									<span th:if="!${page.getSort().getOrderFor('groupe.nom')?.ascending}"
+										  class="fa fa-sort-down"></span>
+								</a>
+							</th>
+							<th>
+								<a th:href="'?page=0&sort=marque.nom'+(${page.getSort().getOrderFor('marque.nom')?.descending}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})"
+								   th:title="!${page.getSort().getOrderFor('marque.nom')?.descending}? #{sort.desc}: #{sort.asc}">
+									Marque
+									<span th:if="${page.getSort().getOrderFor('marque.nom')?.ascending}"
+										  class="fa fa-sort-up"></span>
+									<span th:if="!${page.getSort().getOrderFor('marque.nom')?.ascending}"
+										  class="fa fa-sort-down"></span>
+								</a>
+							</th>
+							<th></th>
+						</tr>
+						<tr th:each="engin : ${page.content}">
+							<td th:text="${engin.code}"></td>
+							<td th:text="${engin.numeroSerie}"></td>
+							<td th:text="${engin.compteurInitialL}"></td>
+							<td th:text="${engin.compteurInitialKm}"></td>
+							<td th:text="${engin.sousFamille.nom}"></td>
+							<td th:text="${engin.groupe?.nom}"></td>
+							<td th:text="${engin.marque?.nom}"></td>
+							<td class="btn-group">
+								<a th:href="@{'/admin/engins/' + ${engin.id} +'/edit'}" class="btn btn-info"
+								   th:title="#{edit}">
+									<span class="fa fa-edit"></span>
+								</a>
+								<form th:action="@{'/admin/engins/' + ${engin.id} +'/delete'}" method="post">
+									<button type="submit" class="btn btn-danger" th:title="#{delete}">
+										<span class="fa fa-trash"></span>
+									</button>
+								</form>
+							</td>
+						</tr>
+					</table>
+					<div class="row justify-content-center">
+						<nav aria-label="Page navigation example ">
+							<ul class="pagination ">
+								<li class="page-item">
+									<a class="page-link" th:unless="${page.number} eq 0"
+									   th:href="'?page='+${(page.number)-1}+(${search.isEmpty()}?'':'&search='+${search})
                                +(${page.getSort().sorted? '&sort='+page.getSort().iterator().next().property+','+page.getSort().iterator().next().direction:''})"
 
-								   aria-label="Previous">
-									<span aria-hidden="true">&laquo;</span>
-									<span class="sr-only">Previous</span>
-								</a>
-							</li>
-							<li class="page-item"><a class="page-link" href="#">
-								<span th:text="${page.number+1}+'/'+${page.totalPages}"></span></a></li>
-							<li class="page-item">
-								<a class="page-link" th:unless="${page.number+1} ge ${page.totalPages}"
-								   th:href="'?page='+${page.number+1}+(${search.isEmpty()}?'':'&search='+${search})
+									   aria-label="Previous">
+										<span aria-hidden="true">&laquo;</span>
+										<span class="sr-only">Previous</span>
+									</a>
+								</li>
+								<li class="page-item"><a class="page-link" href="#">
+									<span th:text="${page.number+1}+'/'+${page.totalPages}"></span></a></li>
+								<li class="page-item">
+									<a class="page-link" th:unless="${page.number+1} ge ${page.totalPages}"
+									   th:href="'?page='+${page.number+1}+(${search.isEmpty()}?'':'&search='+${search})
                                +(${page.getSort().sorted? '&sort='+page.getSort().iterator().next().property+','+page.getSort().iterator().next().direction:''})"
-								   aria-label="Next">
-									<span aria-hidden="true">&raquo;</span>
-									<span class="sr-only">Next</span>
-								</a>
-							</li>
-						</ul>
-					</nav>
+									   aria-label="Next">
+										<span aria-hidden="true">&raquo;</span>
+										<span class="sr-only">Next</span>
+									</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
 				</div>
 			</div>
 		</div>

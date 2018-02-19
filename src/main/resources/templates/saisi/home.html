@@ -2,17 +2,26 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
 <body>
-<div th:replace="fragments :: menu('saisi')"></div>
-<div class="row" id="body-row">
+<div th:replace="fragments :: menu('saisie')"></div>
+<div class="wrapper">
+
 	<div th:replace="saisi/fragment :: menu"></div>
-	<div class="col-9">
-		<br/>
-		<ul class="breadcrumb py-3">
-			<li class="breadcrumb-item"><a th:href="@{'/'}"><i class="fa fa-arrow-circle-left fa-lg"></i></a></li>
-			<li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
-			<li class="breadcrumb-item" th:text="#{saisie}"></li>
-		</ul>
-		<p>Saisi Dashboard description (under construction) <!--todo add description with links --></p>
+
+	<div id="content">
+		<button type="button" id="sidebarCollapse" class="btn btn-inverse navbar-btn">
+			<i class="glyphicon glyphicon-align-left fa fa-undo"></i>
+
+		</button>
+		<div class="col-12">
+			<br/>
+			<ul class="breadcrumb py-3">
+				<li class="breadcrumb-item"><a th:href="@{'/'}"><i class="fa fa-arrow-circle-left fa-lg"></i></a></li>
+				<li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
+				<li class="breadcrumb-item" th:text="#{saisie}"></li>
+			</ul>
+			<p>Saisi Dashboard description (under construction) <!--todo add description with links --></p>
+
+		</div>
 	</div>
 </div>
 </body>

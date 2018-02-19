@@ -1,9 +1,7 @@
 package me.kadarh.mecaworks.controller.admin;
 
 import me.kadarh.mecaworks.domain.others.Engin;
-import me.kadarh.mecaworks.repo.others.EnginRepo;
 import me.kadarh.mecaworks.service.EnginService;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,18 +18,14 @@ import javax.validation.Valid;
 public class EnginController {
 
 	private final EnginService enginService;
-	private final EnginRepo enginRepo;
 
-	public EnginController(EnginService enginService, EnginRepo enginRepo) {
+	public EnginController(EnginService enginService) {
 		this.enginService = enginService;
-		this.enginRepo = enginRepo;
 	}
 
 	@GetMapping("")
 	public String list(Model model, Pageable pageable, @RequestParam(defaultValue = "") String search) {
-		//todo : remove line 32
-		//model.addAttribute("page", enginService.enginList(pageable, search));
-		model.addAttribute("page", new PageImpl<Engin>(enginRepo.findAll()));
+		model.addAttribute("page", enginService.enginList(pageable, search));
 		model.addAttribute("search", search);
 		return "admin/engins/list";
 	}
@@ -52,8 +46,7 @@ public class EnginController {
 
 	@GetMapping("/{id}/edit")
 	public String edit(Model model, @PathVariable Long id) {
-		//todo add service founction
-		//model.addAttribute("engin", enginService.getEngin(id));
+		model.addAttribute("engin", enginService.get(id));
 		model.addAttribute("edit", true);
 		return "admin/engins/add";
 	}

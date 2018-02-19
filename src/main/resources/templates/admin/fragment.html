@@ -3,35 +3,28 @@
 <head th:replace="fragments :: head"></head>
 <body>
 <div th:fragment="menu">
-    <div id="sidebar-container" class="sidebar-expanded d-none d-md-block">
-        <ul class="list-group">
-			<li><a th:href="@{'/admin/chantiers'}" aria-expanded="false"
-				   class="list-group-item list-group-item-action bg-warning text-black flex-column align-items-start">
-                <div class="d-flex w-100 justify-content-center align-items-center ">
-					<span class="menu-collapsed" th:text="#{admin.chantiers}"></span>
-                </div>
-            </a></li>
-			<li><a th:href="@{'/admin/engins'}" aria-expanded="false"
-				   class="list-group-item list-group-item-action bg-warning text-black flex-column align-items-start">
-				<div class="d-flex w-100 justify-content-center align-items-center ">
-					<span class="menu-collapsed" th:text="#{admin.engins}"></span>
-                </div>
-            </a></li>
-			<li><a th:href="@{'/admin/employes'}" aria-expanded="false"
-				   class="list-group-item list-group-item-action bg-warning text-black flex-column align-items-start">
-				<div class="d-flex w-100 justify-content-center align-items-center ">
-					<span class="menu-collapsed" th:text="#{admin.employes}"></span>
-				</div>
-			</a></li>
-			<li><a th:href="@{'/admin/fournisseurs'}" aria-expanded="false"
-				   class="list-group-item list-group-item-action bg-warning text-black flex-column align-items-start">
-				<div class="d-flex w-100 justify-content-center align-items-center ">
-					<span class="menu-collapsed" th:text="#{admin.fournisseurs}"></span>
-				</div>
-			</a></li>
 
-        </ul>
-    </div>
+	<nav id="sidebar">
+		<div class="sidebar-header">
+			<h3>Menu Admin</h3>
+		</div>
+
+		<!-- Sidebar Links -->
+		<ul class="list-unstyled components">
+			<li class="active"><a th:href="@{'/admin/chantiers'}" th:text="#{admin.chantiers}">Home</a></li>
+			<li class="active"><a th:href="@{'/admin/engins'}" th:text="#{admin.engins}">Home</a></li>
+			<li class="active"><a th:href="@{'/admin/employes'}" th:text="#{admin.employes}">Home</a></li>
+			<li class="active"><a th:href="@{'/admin/fournisseur'}" th:text="#{admin.fournisseurs}">Home</a></li>
+			<!-- <li>Link with dropdown items
+				<a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Pages</a>
+				<ul class="collapse list-unstyled" id="homeSubmenu">
+					<li><a href="#">Page</a></li>
+					<li><a href="#">Page</a></li>
+					<li><a href="#">Page</a></li>
+				</ul>
+			</li> -->
+		</ul>
+	</nav>
 </div>
 </body>
 </html>
