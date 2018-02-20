@@ -42,7 +42,7 @@ jobs:
 
 
       - deploy:
-          name: deploy to test server
+          name: deploy to test server.
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               echo "StrictHostKeyChecking no" > ~/.ssh/config
