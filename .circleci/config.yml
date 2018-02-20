@@ -41,11 +41,11 @@ jobs:
       - run: mvn integration-test
 
 
-#      - deploy:
-#          name: deploy to test server
-#          command: |
-#            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-#              echo "StrictHostKeyChecking no" > ~/.ssh/config
-#              scp -r target/*.jar root@mecaworks.kadarh.me:./
-#              ssh -T root@mecaworks.kadarh.me "systemctl restart springboot"
-#            fi
+      - deploy:
+          name: deploy to test server.
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              echo "StrictHostKeyChecking no" > ~/.ssh/config
+              scp -r target/*.jar root@mecaworks.kadarh.me:./
+              ssh -T root@mecaworks.kadarh.me "systemctl restart springboot"
+            fi
