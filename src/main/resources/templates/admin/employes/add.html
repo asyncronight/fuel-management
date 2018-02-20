@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="fragments :: head"></head>
+<body>
+<div th:replace="fragments :: menu('admin')"></div>
+<div class="wrapper">
+    <div th:replace="admin/fragment :: menu"></div>
+
+    <div id="content">
+        <button type="button" id="sidebarCollapse" class="btn btn-inverse navbar-btn">
+            <i class="glyphicon glyphicon-align-left fa fa-undo"></i>
+
+        </button>
+
+        <div class="col-12">
+            <br/>
+            <ul class="breadcrumb py-3">
+                <li class="breadcrumb-item"><a th:href="@{'/admin/employes'}"><i
+                        class="fa fa-arrow-circle-left fa-lg"></i></a></li>
+                <li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
+                <li class="breadcrumb-item"><a th:href="@{'/admin'}" th:text="#{admin}"></a></li>
+                <li class="breadcrumb-item"><a th:href="@{'/admin/employes'}" th:text="#{admin.employes}"></a></li>
+                <li class="breadcrumb-item" th:text="${edit}? #{edit}: #{add}"></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+</body>
+<div th:replace="fragments :: footer"></div>
+</html>

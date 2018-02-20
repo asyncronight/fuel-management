@@ -54,9 +54,10 @@ public class EmployeServiceImpl implements EmployeService {
 		log.info("Service= EmployeServiceImpl - calling methode update");
 		try {
 			Employe old = employeRepo.findById(employe.getId()).get();
-			if (employe.getNom() != null) {
+			if (employe.getNom() != null)
 				old.setNom(employe.getNom());
-			}
+			if (employe.getMetier() != null)
+				old.setMetier(employe.getMetier());
 			return employeRepo.save(old);
 
 		} catch (Exception e) {
@@ -84,6 +85,7 @@ public class EmployeServiceImpl implements EmployeService {
 				//creating example
 				Employe employe = new Employe();
 				employe.setNom(search);
+				employe.setMetier(search);
 				//creating matcher
 				ExampleMatcher matcher = ExampleMatcher.matchingAny()
 						.withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)

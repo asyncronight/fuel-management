@@ -89,6 +89,7 @@ public class DataFakerO implements CommandLineRunner {
 		for (int i = 0; i < n; i++) {
 			Employe employe = new Employe();
 			employe.setNom("employe" + (i + 1));
+			employe.setMetier("metier" + (i + 1));
 			employeRepo.save(employe);
 		}
 		log.info(n + " Employe Loaded *****");

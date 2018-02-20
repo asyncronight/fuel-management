@@ -16,6 +16,7 @@ public class Employe extends AbstractDomain {
 
 
 	private String nom;
+	private String metier;
 
 	public Employe(String nom) {
 		this.nom = nom;
