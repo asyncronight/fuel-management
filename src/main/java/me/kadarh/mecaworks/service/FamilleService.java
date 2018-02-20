@@ -12,6 +12,8 @@ public interface FamilleService {
 
 	Page<Famille> familleList(Pageable pageable, String search);
 
+	Famille get(Long id);
+
 	void delete(Long id);
 
 }

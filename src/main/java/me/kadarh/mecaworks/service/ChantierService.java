@@ -12,6 +12,8 @@ public interface ChantierService {
 
 	Page<Chantier> chantierList(Pageable pageable, String search);
 
+    Chantier get(Long id);
+
 	void delete(Long id);
 
 

@@ -107,6 +107,21 @@ public class SousFamilleServiceImpl implements SousFamilleService {
 		}
 	}
 
+
+	@Override
+	public SousFamille get(Long id) {
+		log.info("Service-SousFamilleServiceImpl Calling getSousFamille with params :" + id);
+		try {
+			return sousFamilleRepo.findById(id).get();
+		} catch (NoSuchElementException e) {
+			log.info("Problem , cannot find SousFamille with id = :" + id);
+			throw new ResourceNotFoundException("SousFamille introuvable", e);
+		} catch (Exception e) {
+			log.info("Problem , cannot get SousFamille with id = :" + id);
+			throw new OperationFailedException("Problème lors de la recherche de la SousFamille", e);
+		}
+	}
+
 	@Override
 	public void delete(Long id) {
 		log.info("Service= SousFamilleServiceImpl - calling methode update");

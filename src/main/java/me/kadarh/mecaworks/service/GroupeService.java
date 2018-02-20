@@ -12,6 +12,8 @@ public interface GroupeService {
 
 	Page<Groupe> groupesList(Pageable pageable, String search);
 
+	Groupe get(Long id);
+
 	void delete(Long id);
 
 }

@@ -5,12 +5,15 @@ import me.kadarh.mecaworks.domain.others.Employe;
 import me.kadarh.mecaworks.repo.others.EmployeRepo;
 import me.kadarh.mecaworks.service.EmployeService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
+import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.NoSuchElementException;
 
 /**
  * @author kadarH
@@ -96,6 +99,24 @@ public class EmployeServiceImpl implements EmployeService {
 		}
 	}
 
+
+	/**
+	 * @param id
+	 * @return
+	 */
+	@Override
+	public Employe get(Long id) {
+		log.info("Service- EmployeServiceImpl Calling getEmploye with params :" + id);
+		try {
+			return employeRepo.findById(id).get();
+		} catch (NoSuchElementException e) {
+			log.info("Problem , cannot find Employe with id = :" + id);
+			throw new ResourceNotFoundException("Employe introuvable", e);
+		} catch (Exception e) {
+			log.info("Problem , cannot get Employe with id = :" + id);
+			throw new OperationFailedException("Problème lors de la recherche de l'employe", e);
+		}
+	}
 	/**
 	 * @param id of employe to delete
 	 */

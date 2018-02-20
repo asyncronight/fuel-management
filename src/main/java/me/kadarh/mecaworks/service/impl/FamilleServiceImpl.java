@@ -5,12 +5,15 @@ import me.kadarh.mecaworks.domain.others.Famille;
 import me.kadarh.mecaworks.repo.others.FamilleRepo;
 import me.kadarh.mecaworks.service.FamilleService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
+import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.NoSuchElementException;
 
 /**
  * @author kadarH
@@ -93,6 +96,20 @@ public class FamilleServiceImpl implements FamilleService {
 		} catch (Exception e) {
 			log.debug("Failed retrieving list of familles");
 			throw new OperationFailedException("Operation échouée", e);
+		}
+	}
+
+	@Override
+	public Famille get(Long id) {
+		log.info("Service-FamilleServiceImpl Calling getFamille with params :" + id);
+		try {
+			return familleRepo.findById(id).get();
+		} catch (NoSuchElementException e) {
+			log.info("Problem , cannot find Famille with id = :" + id);
+			throw new ResourceNotFoundException("Famille introuvable", e);
+		} catch (Exception e) {
+			log.info("Problem , cannot get Famille with id = :" + id);
+			throw new OperationFailedException("Problème lors de la recherche de la Famille", e);
 		}
 	}
 

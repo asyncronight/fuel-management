@@ -12,6 +12,8 @@ public interface SousFamilleService {
 
 	Page<SousFamille> sousFamilleList(Pageable pageable, String search);
 
+	SousFamille get(Long id);
+
 	void delete(Long id);
 
 }

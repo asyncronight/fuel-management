@@ -5,12 +5,15 @@ import me.kadarh.mecaworks.domain.others.Groupe;
 import me.kadarh.mecaworks.repo.others.GroupeRepo;
 import me.kadarh.mecaworks.service.GroupeService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
+import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.NoSuchElementException;
 
 /**
  * @author kadarH
@@ -96,6 +99,20 @@ public class GroupeServiceImpl implements GroupeService {
 		} catch (Exception e) {
 			log.debug("Failed retrieving list of groupes");
 			throw new OperationFailedException("Operation échouée", e);
+		}
+	}
+
+	@Override
+	public Groupe get(Long id) {
+		log.info("Service-GroupeServiceImpl Calling getGroupe with params :" + id);
+		try {
+			return groupeRepo.findById(id).get();
+		} catch (NoSuchElementException e) {
+			log.info("Problem , cannot find Groupe with id = :" + id);
+			throw new ResourceNotFoundException("Groupe introuvable", e);
+		} catch (Exception e) {
+			log.info("Problem , cannot get Fournisseur with id = :" + id);
+			throw new OperationFailedException("Problème lors de la recherche du Groupe", e);
 		}
 	}
 

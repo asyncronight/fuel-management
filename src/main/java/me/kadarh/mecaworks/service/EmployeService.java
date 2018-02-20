@@ -12,5 +12,7 @@ public interface EmployeService {
 
 	Page<Employe> employesList(Pageable pageable, String search);
 
+    Employe get(Long id);
+
 	void delete(Long id);
 }

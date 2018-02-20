@@ -117,7 +117,7 @@
 							</th>
 							<th></th>
 						</tr>
-						<tr th:each="engin : ${page.content}">
+						<tr th:each="engin : ${page.content}" class="bg-faded">
 							<td th:text="${engin.code}"></td>
 							<td th:text="${engin.numeroSerie}"></td>
 							<td th:text="${engin.compteurInitialL}"></td>
@@ -126,7 +126,7 @@
 							<td th:text="${engin.groupe?.nom}"></td>
 							<td th:text="${engin.marque?.nom}"></td>
 							<td class="btn-group">
-								<a th:href="@{'/admin/engins/' + ${engin.id} +'/edit'}" class="btn btn-info"
+								<a th:href="@{'/admin/engins/' + ${engin.id} +'/edit'}" class="btn btn-primary"
 								   th:title="#{edit}">
 									<span class="fa fa-edit"></span>
 								</a>

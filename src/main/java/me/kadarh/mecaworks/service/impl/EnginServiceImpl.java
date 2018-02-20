@@ -92,11 +92,14 @@ public class EnginServiceImpl implements EnginService {
 
 	@Override
     public Engin get(Long id) {
+        log.info("Service- EnginServiceImpl Calling getEngin with params :" + id);
         try {
             return enginRepo.findById(id).get();
         } catch (NoSuchElementException e) {
+            log.info("Problem , cannot find engin with id = :" + id);
             throw new ResourceNotFoundException("Engin introuvable", e);
         } catch (Exception e) {
+            log.info("Problem , cannot get engin with id = :" + id);
             throw new OperationFailedException("Problème lors de la recherche de l'engin", e);
         }
     }

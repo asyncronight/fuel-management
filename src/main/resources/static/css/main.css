@@ -54,7 +54,7 @@ a[aria-expanded="true"]::before {
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: #fafafa;
+    background: darkslategray;
 }
 
 p {

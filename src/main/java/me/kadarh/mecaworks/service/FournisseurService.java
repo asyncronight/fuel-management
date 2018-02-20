@@ -12,6 +12,8 @@ public interface FournisseurService {
 
 	Page<Fournisseur> fournisseurList(Pageable pageable, String search);
 
+	Fournisseur get(Long id);
+
 	void delete(Long id);
 
 }

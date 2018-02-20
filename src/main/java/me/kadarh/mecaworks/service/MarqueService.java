@@ -12,5 +12,7 @@ public interface MarqueService {
 
     Page<Marque> marqueList(Pageable pageable, String search);
 
+    Marque get(Long id);
+
     void delete(Long id);
 }
