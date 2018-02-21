@@ -126,7 +126,8 @@ public class EmployeServiceImpl implements EmployeService {
 	public void delete(Long id) {
 		log.info("Service= employeServiceImpl - calling methode update");
 		try {
-			employeRepo.deleteById(id);
+			throw new OperationFailedException("La suppression du employe a echouée ");
+			//employeRepo.deleteById(id);
 		} catch (Exception e) {
 			log.debug("cannot delete employe , failed operation");
 			throw new OperationFailedException("La suppression du employe a echouée ", e);

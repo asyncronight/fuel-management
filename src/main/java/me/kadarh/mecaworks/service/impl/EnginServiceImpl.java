@@ -149,7 +149,8 @@ public class EnginServiceImpl implements EnginService {
 	public void delete(Long id) {
         log.info("Service- EnginServiceImpl Calling delete with params id =" + id);
         try {
-            enginRepo.delete(enginRepo.findById(id).get());
+            throw new OperationFailedException("Operation de suppression de l'engin (id=" + id + ") a echouée");
+            //enginRepo.delete(enginRepo.findById(id).get());
         } catch (Exception e) {
             log.debug("Failed retrieving list of engins");
             throw new OperationFailedException("Operation de suppression de l'engin (id=" + id + ") a echouée", e);
