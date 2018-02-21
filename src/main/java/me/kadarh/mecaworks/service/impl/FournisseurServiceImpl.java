@@ -41,7 +41,7 @@ public class FournisseurServiceImpl implements FournisseurService {
 			return fournisseurRepo.save(fournisseur);
 		} catch (Exception e) {
 			log.debug("cannot add Fournisseur , failed operation");
-			throw new OperationFailedException("L'ajout du fournisseur a echouée ", e);
+			throw new OperationFailedException("L'ajout du fournisseurs a echouée ", e);
 		}
 	}
 
@@ -120,7 +120,7 @@ public class FournisseurServiceImpl implements FournisseurService {
 	public void delete(Long id) {
 		log.info("Service= FournisseurServiceImpl - calling methode update");
 		try {
-			fournisseurRepo.deleteById(id);
+			//fournisseurRepo.deleteById(id);
 		} catch (Exception e) {
 			log.debug("cannot delete Fournisseur , failed operation");
 			throw new OperationFailedException("La suppression du Fournisseur a echouée ", e);

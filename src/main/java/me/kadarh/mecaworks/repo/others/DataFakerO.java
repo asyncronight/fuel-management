@@ -110,7 +110,7 @@ public class DataFakerO implements CommandLineRunner {
 		for (int i = 0; i < n; i++) {
 			Chantier chantier = new Chantier();
 			chantier.setNom("chantier" + (i + 1));
-			chantier.setAdresse("Kenitra");
+			chantier.setAdresse("Kenitra" + i);
 			chantier.setStock((i % 2) * 10);
 			chantierRepo.save(chantier);
 		}
@@ -121,7 +121,7 @@ public class DataFakerO implements CommandLineRunner {
 	private void loadFournisseur(int n) {
 		for (int i = 0; i < n; i++) {
 			Fournisseur fournisseur = new Fournisseur();
-			fournisseur.setNom("fournisseur" + (i + 1));
+			fournisseur.setNom("fournisseurs" + (i + 1));
 			fournisseurRepo.save(fournisseur);
 		}
 		log.info(n + " Fournisseur Loaded *****");

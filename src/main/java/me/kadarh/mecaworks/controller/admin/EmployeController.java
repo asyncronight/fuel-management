@@ -1,12 +1,15 @@
 package me.kadarh.mecaworks.controller.admin;
 
+import me.kadarh.mecaworks.domain.others.Employe;
+import me.kadarh.mecaworks.domain.others.Metier;
 import me.kadarh.mecaworks.service.EmployeService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * PROJECT mecaworks
@@ -32,5 +35,46 @@ public class EmployeController {
         return "admin/employes/list";
     }
 
+    @GetMapping("/add")
+    public String add(Model model) {
+        model.addAttribute("employe", new Employe());
+        model.addAttribute("metiers", Metier.values());
+        return "admin/employes/add";
+    }
+
+    @PostMapping("/add")
+    public String addPost(Model model, @Valid Employe employe, BindingResult result) {
+        if (result.hasErrors()) {
+            model.addAttribute("metiers", Metier.values());
+            return "admin/employes/add";
+        }
+        employeService.add(employe);
+        return "redirect:/admin/employes";
+    }
+
+    @GetMapping("/{id}/edit")
+    public String edit(Model model, @PathVariable Long id) {
+        model.addAttribute("employe", employeService.get(id));
+        model.addAttribute("metiers", Metier.values());
+        model.addAttribute("edit", true);
+        return "admin/employes/add";
+    }
+
+    @PostMapping("/{id}/edit")
+    public String editPost(Model model, @Valid Employe employe, BindingResult result) {
+        if (result.hasErrors()) {
+            model.addAttribute("metiers", Metier.values());
+            model.addAttribute("edit", true);
+            return "admin/employes/add";
+        }
+        employeService.update(employe);
+        return "redirect:/admin/employes";
+    }
+
+    @PostMapping("/{id}/delete")
+    public String delete(@PathVariable Long id) {
+        employeService.delete(id);
+        return "redirect:/admin/employes";
+    }
 
 }

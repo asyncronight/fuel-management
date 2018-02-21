@@ -4,10 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.bons.BonEngin;
 import me.kadarh.mecaworks.domain.bons.BonFournisseur;
 import me.kadarh.mecaworks.domain.bons.BonLivraison;
-import me.kadarh.mecaworks.domain.others.Chantier;
-import me.kadarh.mecaworks.domain.others.Employe;
-import me.kadarh.mecaworks.domain.others.Engin;
-import me.kadarh.mecaworks.domain.others.Fournisseur;
+import me.kadarh.mecaworks.domain.others.*;
 import me.kadarh.mecaworks.repo.others.ChantierRepo;
 import me.kadarh.mecaworks.repo.others.EmployeRepo;
 import me.kadarh.mecaworks.repo.others.EnginRepo;
@@ -73,10 +70,15 @@ public class DataFakerB {
 			bonEngin.setQuantite(20 + i * 10);
 			bonEngin.setChantierGazoil(chantierGazoil);
 			bonEngin.setChantierTravail(chantierTravail);
-			Employe chauffeur = employeRepo.save(new Employe("Chauffeur" + i));
-			bonEngin.setChauffeur(chauffeur);
-			Employe pompiste = employeRepo.save(new Employe("Pompiste" + i));
-			bonEngin.setPompiste(pompiste);
+
+			Employe chauffeur = new Employe();
+			chauffeur.setNom("Mr C" + i);
+			chauffeur.setMetier(Metier.CHAUFFEUR.name());
+			bonEngin.setChauffeur(employeRepo.save(chauffeur));
+			Employe pompiste = new Employe();
+			pompiste.setNom("Mr P" + i);
+			pompiste.setMetier(Metier.POMPISTE.name());
+			bonEngin.setPompiste(employeRepo.save(pompiste));
 			DateTimeFormatter d = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			LocalDate date = LocalDate.parse(LocalDate.now().format(d), d);
 			bonEngin.setDate(date);
@@ -122,9 +124,15 @@ public class DataFakerB {
 			bonLivraison.setChantierArrivee(chantierTravail);
 			bonLivraison.setQuantite(20 + i * 10);
 			bonLivraison.setDate(LocalDate.now());
-			Employe transporteur = employeRepo.save(new Employe("Transporteur" + i));
-			bonLivraison.setTransporteur(transporteur);
-			Employe pompiste = employeRepo.save(new Employe("Pompiste" + i));
+			Employe transporteur = new Employe();
+			transporteur.setNom("Mr Tr" + i);
+			transporteur.setMetier(Metier.CHAUFFEUR.name());
+			bonLivraison.setTransporteur(employeRepo.save(transporteur));
+			Employe pompiste = new Employe();
+			pompiste.setNom("Mr Pom" + i);
+			pompiste.setMetier(Metier.POMPISTE.name());
+			bonEngin.setPompiste(employeRepo.save(pompiste));
+
 			bonLivraison.setPompiste(pompiste);
 			bonLivraisonRepo.save(bonLivraison);
 		}

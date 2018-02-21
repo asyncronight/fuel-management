@@ -26,7 +26,7 @@
 				<li class="breadcrumb-item"><a th:href="@{'/admin'}" th:text="#{admin}"></a></li>
 				<li class="breadcrumb-item" th:text="#{admin.engins}"></li>
 			</ul>
-			<div class="">
+			<div class="content-page">
 
 				<div class="container-fluid text-center bg-faded py-3" th:if="${#lists.isEmpty(page.content)}">
 					<div class="text-warning "><h3 th:text="#{empty}"></h3></div>

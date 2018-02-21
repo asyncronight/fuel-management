@@ -5,6 +5,8 @@ import lombok.EqualsAndHashCode;
 import me.kadarh.mecaworks.domain.AbstractDomain;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 
 /**
  * @author kadarH
@@ -15,8 +17,11 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 public class Chantier extends AbstractDomain {
 
-	private String nom;
+    @NotEmpty
+    private String nom;
 	private String adresse;
-	private Integer stock;
+
+    @Min(0)
+    private Integer stock;
 
 }

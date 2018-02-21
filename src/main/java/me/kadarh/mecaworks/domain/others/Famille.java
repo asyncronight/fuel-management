@@ -4,7 +4,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import me.kadarh.mecaworks.domain.AbstractDomain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotEmpty;
 
 /**
  * @author kadarH
@@ -15,6 +17,8 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 public class Famille extends AbstractDomain {
 
+	@NotEmpty
+	@Column(unique = true)
 	private String nom;
 
 }

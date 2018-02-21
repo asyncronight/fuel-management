@@ -132,7 +132,8 @@ public class ChantierServiceImpl implements ChantierService {
 	public void delete(Long id) {
 		log.info("Service= ChantierServiceImpl - calling methode update");
 		try {
-			chantierRepo.deleteById(id);
+			throw new OperationFailedException("La suppression du chantier a echouée ");
+			//chantierRepo.deleteById(id);
 		} catch (Exception e) {
 			log.debug("cannot delete chantier , failed operation");
 			throw new OperationFailedException("La suppression du chantier a echouée ", e);

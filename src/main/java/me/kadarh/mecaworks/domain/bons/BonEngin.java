@@ -10,7 +10,6 @@ import me.kadarh.mecaworks.domain.others.Engin;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import java.time.LocalDate;
 
 /**
@@ -27,13 +26,13 @@ public class BonEngin extends AbstractDomain {
 	@Column(unique = true)
 	private String code;
 
-	@OneToOne
+	@ManyToOne
 	private Chantier chantierGazoil;
 
-	@OneToOne
+	@ManyToOne
 	private Chantier chantierTravail;
 
-	@OneToOne
+	@ManyToOne
 	private Engin engin;
 
 	@ManyToOne

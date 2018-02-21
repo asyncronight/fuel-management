@@ -7,7 +7,7 @@
 
     <div th:replace="admin/fragment :: menu"></div>
 
-    <!--/*@thymesVar id="employe" type="me.kadarh.mecaworks.domain.others.Employe"*/-->
+    <!--/*@thymesVar id="fournisseurs" type="me.kadarh.mecaworks.domain.others.Fournisseur"*/-->
     <!--/*@thymesVar id="search" type="java.lang.String"*/-->
     <!--/*@thymesVar id="page" type="org.springframework.data.domain.Page"*/-->
 
@@ -24,17 +24,17 @@
                 </li>
                 <li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
                 <li class="breadcrumb-item"><a th:href="@{'/admin'}" th:text="#{admin}"></a></li>
-                <li class="breadcrumb-item" th:text="#{admin.employes}"></li>
+                <li class="breadcrumb-item" th:text="#{admin.fournisseurs}"></li>
             </ul>
             <div class="content-page">
                 <div class="row col-12 p-2">
-                    <form class="form-inline col-9" method="get" th:action="@{'/admin/employes'}">
-                        <input class="form-control col-9" th:placeholder="#{admin.employe.searchPlaceHolder}"
+                    <form class="form-inline col-9" method="get" th:action="@{'/admin/fournisseurs'}">
+                        <input class="form-control col-9" th:placeholder="#{admin.fournisseur.searchPlaceHolder}"
                                type="text" th:name="search" th:value="${search}">
                         <button class="btn btn-secondary col-3" type="submit" th:text="#{search}"></button>
                     </form>
-                    <a th:href="@{'/admin/employes/add'}" class="btn btn-success col-3 pull-right">
-                        <span class="fa fa-plus"></span> [[#{admin.employe.add}]]
+                    <a th:href="@{'/admin/fournisseurs/add'}" class="btn btn-success col-3 pull-right">
+                        <span class="fa fa-plus"></span> [[#{admin.fournisseur.add}]]
                     </a>
                 </div>
                 <div th:if="${#lists.isEmpty(page.content)}">
@@ -60,28 +60,18 @@
                                           class="fa fa-sort-down"></span>
                                 </a>
                             </th>
-                            <th>
-                                <a th:href="'?page=0&sort=metier'+(${page.getSort().getOrderFor('metier')?.descending}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})"
-                                   th:title="!${page.getSort().getOrderFor('metier')?.descending}? #{sort.desc}: #{sort.asc}">
-                                    Metier
-                                    <span th:if="${page.getSort().getOrderFor('metier')?.ascending}"
-                                          class="fa fa-sort-up"></span>
-                                    <span th:if="!${page.getSort().getOrderFor('metier')?.ascending}"
-                                          class="fa fa-sort-down"></span>
-                                </a>
-                            </th>
-
                             <th class="col-2"></th>
                         </tr>
-                        <tr th:each="employe : ${page.content}" class="bg-faded">
-                            <td th:text="${employe.nom}"></td>
-                            <td th:text="${employe.metier}"></td>
+                        <tr th:each="fournisseur : ${page.content}" class="bg-faded">
+                            <td th:text="${fournisseur.nom}"></td>
                             <td class="btn-group">
-                                <a th:href="@{'/admin/employes/' + ${employe.id} +'/edit'}" class="btn btn-primary"
+                                <a th:href="@{'/admin/fournisseurs/' + ${fournisseur.id} +'/edit'}"
+                                   class="btn btn-primary"
                                    th:title="#{edit}">
                                     <span class="fa fa-edit"></span>
                                 </a>
-                                <form th:action="@{'/admin/employes/' + ${employe.id} +'/delete'}" method="post">
+                                <form th:action="@{'/admin/fournisseurs/' + ${fournisseur.id} +'/delete'}"
+                                      method="post">
                                     <button type="submit" class="btn btn-danger" th:title="#{delete}">
                                         <span class="fa fa-trash"></span>
                                     </button>

@@ -5,7 +5,7 @@
 <div th:replace="fragments :: menu('admin')"></div>
 <div class="wrapper">
     <div th:replace="admin/fragment :: menu"></div>
-    <!--/*@thymesVar id="employe" type="me.kadarh.mecaworks.domain.others.Employe"*/-->
+    <!--/*@thymesVar id="fournisseurs" type="me.kadarh.mecaworks.domain.others.Fournisseur"*/-->
 
     <div id="content">
         <button type="button" id="sidebarCollapse" class="btn btn-inverse navbar-btn">
@@ -16,21 +16,23 @@
         <div class="col-12">
             <br/>
             <ul class="breadcrumb py-3">
-                <li class="breadcrumb-item"><a th:href="@{'/admin/employes'}"><i
+                <li class="breadcrumb-item"><a th:href="@{'/admin/fournisseurs'}"><i
                         class="fa fa-arrow-circle-left fa-lg"></i></a></li>
                 <li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
                 <li class="breadcrumb-item"><a th:href="@{'/admin'}" th:text="#{admin}"></a></li>
-                <li class="breadcrumb-item"><a th:href="@{'/admin/employes'}" th:text="#{admin.employes}"></a></li>
-                <li class="breadcrumb-item" th:text="${edit}? #{admin.employe.edit}: #{admin.employe.add}"></li>
+                <li class="breadcrumb-item"><a th:href="@{'/admin/fournisseurs'}" th:text="#{admin.fournisseurs}"></a>
+                </li>
+                <li class="breadcrumb-item"
+                    th:text="${edit}? #{admin.fournisseur.edit}: #{admin.fournisseur.edit}"></li>
             </ul>
             <div class="content-page ">
                 <form class="form-horizontal bg-faded p-4" role="form" method="post"
-                      th:object="${employe}">
+                      th:object="${fournisseur}">
                     <div class="row">
                         <div class="col-md-3"></div>
                         <div class="col-md-6">
                             <hr>
-                            <h3 th:text="${edit}?#{admin.employe.edit}: #{admin.employe.add}"></h3>
+                            <h3 th:text="${edit}?#{admin.fournisseur.edit}: #{admin.fournisseur.add}"></h3>
                             <hr>
                         </div>
                     </div>
@@ -45,17 +47,10 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-12 help-block" th:if="${#fields.hasErrors('metier')}">
-                                <ul>
-                                    <li th:each="err : ${#fields.errors('metier')}" th:text="${err}"></li>
-                                </ul>
-                            </div>
-                        </div>
                     </div>
                     <div class="row">
                         <div class="col-2 field-label-responsive">
-                            <label for="nom" th:text="#{employe.nom}"></label>
+                            <label for="nom" th:text="#{fournisseur.nom}"></label>
                         </div>
                         <div class="col-8">
                             <div class="form-group">
@@ -64,23 +59,6 @@
                                     </div>
                                     <input type="text" id="nom"
                                            class="form-control" th:field="*{nom}"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-2 field-label-responsive">
-                            <label for="metier" th:text="#{employe.metier}"></label>
-                        </div>
-                        <div class="col-8">
-                            <div class="form-group">
-                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-sort"></i>
-                                    </div>
-                                    <select class="col-11" id="metier" th:field="*{metier}">
-                                        <option th:each="metier : ${metiers}" th:value="${metier}"
-                                                th:text="${metier}"></option>
-                                    </select>
                                 </div>
                             </div>
                         </div>

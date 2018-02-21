@@ -8,7 +8,7 @@ import me.kadarh.mecaworks.domain.others.Fournisseur;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 
 /**
@@ -25,10 +25,10 @@ public class BonFournisseur extends AbstractDomain {
 	@Column(unique = true)
 	private String code;
 
-	@OneToOne
+	@ManyToOne
 	private Fournisseur fournisseur;
 
-	@OneToOne
+	@ManyToOne
 	private Chantier chantier;
 
 	private Integer quantite;
