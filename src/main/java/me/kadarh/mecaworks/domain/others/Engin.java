@@ -21,7 +21,7 @@ public class Engin extends AbstractDomain {
 	private String code;
 
 	private String numeroSerie;
-	private Integer compteurInitialL;
+	private Integer compteurInitialH;
 	private Integer compteurInitialKm;
 
 	@ManyToOne
@@ -29,8 +29,5 @@ public class Engin extends AbstractDomain {
 
 	@ManyToOne
 	private Groupe groupe;
-
-    @ManyToOne
-    private Marque marque;
 
 }

@@ -2,6 +2,8 @@ package me.kadarh.mecaworks.controller.admin;
 
 import me.kadarh.mecaworks.domain.others.Engin;
 import me.kadarh.mecaworks.service.EnginService;
+import me.kadarh.mecaworks.service.GroupeService;
+import me.kadarh.mecaworks.service.SousFamilleService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,10 +20,15 @@ import javax.validation.Valid;
 public class EnginController {
 
 	private final EnginService enginService;
+    private final SousFamilleService sousFamilleService;
+    private final GroupeService groupeService;
 
-	public EnginController(EnginService enginService) {
-		this.enginService = enginService;
-	}
+    public EnginController(EnginService enginService, SousFamilleService sousFamilleService, GroupeService groupeService) {
+        this.enginService = enginService;
+        this.sousFamilleService = sousFamilleService;
+        this.groupeService = groupeService;
+    }
+
 
 	@GetMapping("")
 	public String list(Model model, Pageable pageable, @RequestParam(defaultValue = "") String search) {
@@ -32,30 +39,39 @@ public class EnginController {
 
 	@GetMapping("/add")
 	public String add(Model model) {
-		model.addAttribute("engin", new Engin());
+        model.addAttribute("sousFamilles", sousFamilleService.list());
+        model.addAttribute("groupes", groupeService.list());
+        model.addAttribute("engin", new Engin());
 		return "admin/engins/add";
 	}
 
 	@PostMapping("/add")
-	public String addPost(@Valid Engin engin, BindingResult result) {
-		if (result.hasErrors())
-			return "admin/engins/add";
-		enginService.add(engin);
+    public String addPost(Model model, @Valid Engin engin, BindingResult result) {
+        if (result.hasErrors()) {
+            model.addAttribute("sousFamilles", sousFamilleService.list());
+            model.addAttribute("groupes", groupeService.list());
+            return "admin/engins/add";
+        }
+        enginService.add(engin);
 		return "redirect:/admin/engins";
 	}
 
 	@GetMapping("/{id}/edit")
 	public String edit(Model model, @PathVariable Long id) {
 		model.addAttribute("engin", enginService.get(id));
-		model.addAttribute("edit", true);
-		return "admin/engins/add";
+        model.addAttribute("sousFamilles", sousFamilleService.list());
+        model.addAttribute("groupes", groupeService.list());
+        model.addAttribute("edit", true);
+        return "admin/engins/add";
 	}
 
 	@PostMapping("/{id}/edit")
 	public String editPost(Model model, @Valid Engin engin, BindingResult result) {
 		if (result.hasErrors()) {
-			model.addAttribute("edit", true);
-			return "admin/engins/add";
+            model.addAttribute("sousFamilles", sousFamilleService.list());
+            model.addAttribute("groupes", groupeService.list());
+            model.addAttribute("edit", true);
+            return "admin/engins/add";
 		}
 		enginService.update(engin);
 		return "redirect:/admin/engins";

@@ -66,12 +66,12 @@
 								</a>
 							</th>
 							<th>
-								<a th:href="'?page=0&sort=compteurInitialL'+(${page.getSort().getOrderFor('compteurInitialL')?.descending}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})"
-								   th:title="!${page.getSort().getOrderFor('compteurInitialL')?.descending}? #{sort.desc}: #{sort.asc}">
+								<a th:href="'?page=0&sort=compteurInitialH'+(${page.getSort().getOrderFor('compteurInitialH')?.descending}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})"
+								   th:title="!${page.getSort().getOrderFor('compteurInitialH')?.descending}? #{sort.desc}: #{sort.asc}">
 									Compteur initial (L)
-									<span th:if="${page.getSort().getOrderFor('compteurInitialL')?.ascending}"
+									<span th:if="${page.getSort().getOrderFor('compteurInitialH')?.ascending}"
 										  class="fa fa-sort-up"></span>
-									<span th:if="!${page.getSort().getOrderFor('compteurInitialL')?.ascending}"
+									<span th:if="!${page.getSort().getOrderFor('compteurInitialH')?.ascending}"
 										  class="fa fa-sort-down"></span>
 								</a>
 							</th>
@@ -105,26 +105,16 @@
 										  class="fa fa-sort-down"></span>
 								</a>
 							</th>
-							<th>
-								<a th:href="'?page=0&sort=marque.nom'+(${page.getSort().getOrderFor('marque.nom')?.descending}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})"
-								   th:title="!${page.getSort().getOrderFor('marque.nom')?.descending}? #{sort.desc}: #{sort.asc}">
-									Marque
-									<span th:if="${page.getSort().getOrderFor('marque.nom')?.ascending}"
-										  class="fa fa-sort-up"></span>
-									<span th:if="!${page.getSort().getOrderFor('marque.nom')?.ascending}"
-										  class="fa fa-sort-down"></span>
-								</a>
-							</th>
+
 							<th></th>
 						</tr>
 						<tr th:each="engin : ${page.content}" class="bg-faded">
 							<td th:text="${engin.code}"></td>
 							<td th:text="${engin.numeroSerie}"></td>
-							<td th:text="${engin.compteurInitialL}"></td>
+							<td th:text="${engin.compteurInitialH}"></td>
 							<td th:text="${engin.compteurInitialKm}"></td>
 							<td th:text="${engin.sousFamille.nom}"></td>
 							<td th:text="${engin.groupe?.nom}"></td>
-							<td th:text="${engin.marque?.nom}"></td>
 							<td class="btn-group">
 								<a th:href="@{'/admin/engins/' + ${engin.id} +'/edit'}" class="btn btn-primary"
 								   th:title="#{edit}">

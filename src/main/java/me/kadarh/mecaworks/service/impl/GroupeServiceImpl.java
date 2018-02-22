@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -101,6 +102,17 @@ public class GroupeServiceImpl implements GroupeService {
 			throw new OperationFailedException("Operation échouée", e);
 		}
 	}
+
+	@Override
+	public List<Groupe> list() {
+		try {
+			return groupeRepo.findAll();
+		} catch (Exception e) {
+			log.debug("Failed retrieving list of Groupe");
+			throw new OperationFailedException("Operation échouée", e);
+		}
+	}
+
 
 	@Override
 	public Groupe get(Long id) {

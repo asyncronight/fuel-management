@@ -3,6 +3,7 @@ package me.kadarh.mecaworks.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.others.SousFamille;
 import me.kadarh.mecaworks.repo.others.FamilleRepo;
+import me.kadarh.mecaworks.repo.others.MarqueRepo;
 import me.kadarh.mecaworks.repo.others.SousFamilleRepo;
 import me.kadarh.mecaworks.service.SousFamilleService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
@@ -14,30 +15,33 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
  * @author kadarH
  */
-
+@Slf4j
 @Service
 @Transactional
-@Slf4j
 public class SousFamilleServiceImpl implements SousFamilleService {
 
 	private SousFamilleRepo sousFamilleRepo;
 	private FamilleRepo familleRepo;
+	private MarqueRepo marqueRepo;
 
-	public SousFamilleServiceImpl(SousFamilleRepo sousFamilleRepo, FamilleRepo familleRepo) {
+	public SousFamilleServiceImpl(SousFamilleRepo sousFamilleRepo, FamilleRepo familleRepo, MarqueRepo marqueRepo) {
 		this.sousFamilleRepo = sousFamilleRepo;
 		this.familleRepo = familleRepo;
+		this.marqueRepo = marqueRepo;
 	}
 
 	@Override
 	public SousFamille add(SousFamille sousFamille) {
 		log.info("Service= SousFamilleServiceImpl - calling methode add");
 		try {
-			sousFamille.setFamille(familleRepo.findByNom(sousFamille.getFamille().getNom()).get());
+			sousFamille.setFamille(familleRepo.findById(sousFamille.getFamille().getId()).get());
+			sousFamille.setMarque(marqueRepo.findById(sousFamille.getFamille().getId()).get());
 			return sousFamilleRepo.save(sousFamille);
 		} catch (NoSuchElementException e) {
 			log.debug("cannot find famille , failed operation");
@@ -62,16 +66,19 @@ public class SousFamilleServiceImpl implements SousFamilleService {
 			if (sousFamille.getConsommationKmMax() != null) {
 				old.setConsommationKmMax(sousFamille.getConsommationKmMax());
 			}
-			if (sousFamille.getConsommationLMax() != null) {
-				old.setConsommationLMax(sousFamille.getConsommationLMax());
+			if (sousFamille.getConsommationHMax() != null) {
+				old.setConsommationHMax(sousFamille.getConsommationHMax());
 			}
+			if (sousFamille.getMarque() != null)
+				old.setMarque(marqueRepo.findById(sousFamille.getMarque().getId()).get());
+
 			if (sousFamille.getTypeCompteur() != null) {
 				old.setTypeCompteur(sousFamille.getTypeCompteur());
 			}
 			if (sousFamille.getFamille() != null) {
-				old.setFamille(familleRepo.findByNom(sousFamille.getFamille().getNom()).get());
+				old.setFamille(familleRepo.findById(sousFamille.getFamille().getId()).get());
 			}
-			return sousFamilleRepo.save(sousFamille);
+			return sousFamilleRepo.save(old);
 
 		} catch (Exception e) {
 			log.debug("cannot update Sousfamille , failed operation");
@@ -91,7 +98,13 @@ public class SousFamilleServiceImpl implements SousFamilleService {
 				//creating example
 				SousFamille sousFamille = new SousFamille();
 				sousFamille.setNom(search);
-				sousFamille.setFamille(familleRepo.findByNom(search).get());
+				if (marqueRepo.findByNom(search).isPresent()) {
+					sousFamille.setMarque(marqueRepo.findByNom(search).get());
+				}
+				if (familleRepo.findByNom(search).isPresent()) {
+					sousFamille.setFamille(familleRepo.findByNom(search).get());
+
+				}
 				//creating matcher
 				ExampleMatcher matcher = ExampleMatcher.matchingAny()
 						.withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
@@ -107,6 +120,15 @@ public class SousFamilleServiceImpl implements SousFamilleService {
 		}
 	}
 
+	@Override
+	public List<SousFamille> list() {
+		try {
+			return sousFamilleRepo.findAll();
+		} catch (Exception e) {
+			log.debug("Failed retrieving list of SousFamilles");
+			throw new OperationFailedException("Operation échouée", e);
+		}
+	}
 
 	@Override
 	public SousFamille get(Long id) {

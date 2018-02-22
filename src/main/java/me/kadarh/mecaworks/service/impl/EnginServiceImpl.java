@@ -33,13 +33,11 @@ public class EnginServiceImpl implements EnginService {
 	private EnginRepo enginRepo;
 	private SousFamilleRepo sousFamilleRepo;
 	private GroupeRepo groupeRepo;
-    private MarqueRepo marqueRepo;
 
     public EnginServiceImpl(EnginRepo enginRepo, SousFamilleRepo sousFamilleRepo, GroupeRepo groupeRepo, MarqueRepo marqueRepo) {
         this.enginRepo = enginRepo;
         this.sousFamilleRepo = sousFamilleRepo;
         this.groupeRepo = groupeRepo;
-        this.marqueRepo = marqueRepo;
     }
 
 	/**
@@ -50,9 +48,8 @@ public class EnginServiceImpl implements EnginService {
 	public Engin add(Engin engin) {
 		log.info("Service = EnginServiceImpl - calling methode add");
 		try {
-            engin.setGroupe(groupeRepo.findByNom(engin.getGroupe().getNom()).get());
-            engin.setSousFamille(sousFamilleRepo.findByNom(engin.getSousFamille().getNom()).get());
-            engin.setMarque(marqueRepo.findByNom(engin.getMarque().getNom()).get());
+            engin.setGroupe(groupeRepo.findById(engin.getGroupe().getId()).get());
+            engin.setSousFamille(sousFamilleRepo.findById(engin.getSousFamille().getId()).get());
             return enginRepo.save(engin);
 		} catch (Exception e) {
 			log.debug("cannot add engin , failed operation");
@@ -71,20 +68,18 @@ public class EnginServiceImpl implements EnginService {
 			Engin old = enginRepo.findById(engin.getId()).get();
 			if (engin.getCompteurInitialKm() != null)
 				old.setCompteurInitialKm(engin.getCompteurInitialKm());
-			if (engin.getCompteurInitialL() != null)
-				old.setCompteurInitialL(engin.getCompteurInitialL());
-			if (engin.getNumeroSerie() != null)
+            if (engin.getCompteurInitialH() != null)
+                old.setCompteurInitialH(engin.getCompteurInitialH());
+            if (engin.getNumeroSerie() != null)
 				old.setNumeroSerie(engin.getNumeroSerie());
 			if (engin.getCode() != null)
 				old.setCode(engin.getCode());
-			if (engin.getGroupe().getNom() != null)
-				old.setGroupe(groupeRepo.findByNom(engin.getGroupe().getNom()).get());
-            if (engin.getMarque() != null)
-                old.setMarque(marqueRepo.findByNom(engin.getMarque().getNom()).get());
-            if (engin.getSousFamille().getNom() != null)
-				old.setSousFamille(sousFamilleRepo.findByNom(engin.getSousFamille().getNom()).get());
-			return enginRepo.save(engin);
-		} catch (Exception e) {
+            if (engin.getGroupe() != null)
+                old.setGroupe(groupeRepo.findById(engin.getGroupe().getId()).get());
+            if (engin.getSousFamille() != null)
+                old.setSousFamille(sousFamilleRepo.findById(engin.getSousFamille().getId()).get());
+            return enginRepo.save(old);
+        } catch (Exception e) {
 			log.debug("cannot update engin , failed operation");
 			throw new OperationFailedException("La modification de l'engin a echouée ", e);
 		}
@@ -128,7 +123,6 @@ public class EnginServiceImpl implements EnginService {
                 marque.setNom(search);
                 //setting groupe , marque , soufamille to engin
                 engin.setGroupe(groupe);
-                engin.setMarque(marque);
                 engin.setSousFamille(sousFamille);
                 //creating matcher
                 ExampleMatcher matcher = ExampleMatcher.matchingAny()

@@ -50,8 +50,8 @@ public class DataFakerO implements CommandLineRunner {
 		loadGroupe(5);
 		loadChantiers(5);
 		loadFamille(5);
-		loadSousFamilles(10);
         loadMarques(5);
+        loadSousFamilles(10);
         loadEngins(20);
 		loadFournisseur(20);
 		loadAlerte(10);
@@ -141,18 +141,20 @@ public class DataFakerO implements CommandLineRunner {
 	private void loadSousFamilles(int n) {
 		for (int i = 0; i < n; i++) {
 			Famille famille = familleRepo.getOne((i / 2) + 1L);
-			SousFamille sousFamille = new SousFamille();
+            Marque marque = marqueRepo.getOne((i / 2) + 1L);
+            SousFamille sousFamille = new SousFamille();
 			sousFamille.setNom("sousFamille" + (i + 1));
 			sousFamille.setFamille(famille);
-			sousFamille.setCapaciteReservoir(10 + i * 10);
+            sousFamille.setMarque(marque);
+            sousFamille.setCapaciteReservoir(10 + i * 10);
 			if (i % 3 == 0) {
-				sousFamille.setTypeCompteur(TypeCompteur.KM_L);
-				sousFamille.setConsommationKmMax(20 + i * 10);
-				sousFamille.setConsommationLMax(20 + i * 10);
-			} else if (i % 3 == 1) {
-				sousFamille.setTypeCompteur(TypeCompteur.L);
-				sousFamille.setConsommationLMax(20 + i * 10);
-			} else if (i % 3 == 2) {
+                sousFamille.setTypeCompteur(TypeCompteur.KM_H);
+                sousFamille.setConsommationKmMax(20 + i * 10);
+                sousFamille.setConsommationHMax(20 + i * 10);
+            } else if (i % 3 == 1) {
+                sousFamille.setTypeCompteur(TypeCompteur.H);
+                sousFamille.setConsommationHMax(20 + i * 10);
+            } else if (i % 3 == 2) {
 				sousFamille.setTypeCompteur(TypeCompteur.KM);
 				sousFamille.setConsommationKmMax(20 + i * 10);
 			}
@@ -168,20 +170,18 @@ public class DataFakerO implements CommandLineRunner {
 			//Getting groupe and sous-famille
 			Groupe groupe = groupeRepo.getOne(i / 4 + 1L);
 			SousFamille sousFamille = sousFamilleRepo.getOne(i / 2 + 1L);
-            Marque marque = marqueRepo.getOne(i / 4 + 1L);
             //Creation the object
 			Engin engin = new Engin();
 			engin.setCode("Pelle" + (i + 1));
 			engin.setNumeroSerie("TPF" + i + "zz" + i);
 			engin.setGroupe(groupe);
-            engin.setMarque(marque);
             engin.setSousFamille(sousFamille);
 			if (i % 3 == 0) {
-				engin.setCompteurInitialL(1000 + (i * 10));
-				engin.setCompteurInitialKm(1000 + (i * 10));
+                engin.setCompteurInitialH(1000 + (i * 10));
+                engin.setCompteurInitialKm(1000 + (i * 10));
 			} else if (i % 3 == 1) {
-				engin.setCompteurInitialL(1000 + (i * 10));
-			} else if (i % 3 == 2) {
+                engin.setCompteurInitialH(1000 + (i * 10));
+            } else if (i % 3 == 2) {
 				engin.setCompteurInitialKm(1000 + (i * 10));
 			}
 			//Persisting

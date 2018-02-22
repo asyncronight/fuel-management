@@ -13,14 +13,17 @@ import javax.persistence.ManyToOne;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true, exclude = {"famille"})
+@EqualsAndHashCode(callSuper = true, exclude = {"famille", "marque"})
 public class SousFamille extends AbstractDomain {
 
 	private String nom;
 	private TypeCompteur typeCompteur;
-	private Integer consommationLMax;
+	private Integer consommationHMax;
 	private Integer consommationKmMax;
 	private Integer capaciteReservoir;
+
+	@ManyToOne
+	private Marque marque;
 
 	@ManyToOne
 	private Famille famille;
