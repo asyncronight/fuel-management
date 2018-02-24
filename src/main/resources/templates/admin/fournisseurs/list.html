@@ -2,21 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
 <body>
-<div th:replace="fragments :: menu('admin')"></div>
+<div th:replace="fragments :: menu2('admin')"></div>
 <div class="wrapper">
 
-    <div th:replace="admin/fragment :: menu"></div>
+	<div th:replace="admin/fragment :: menu('f')"></div>
 
     <!--/*@thymesVar id="fournisseurs" type="me.kadarh.mecaworks.domain.others.Fournisseur"*/-->
     <!--/*@thymesVar id="search" type="java.lang.String"*/-->
     <!--/*@thymesVar id="page" type="org.springframework.data.domain.Page"*/-->
 
     <!-- Page Content -->
-    <div id="content">
-        <button type="button" id="sidebarCollapse" class="btn btn-inverse navbar-btn">
-            <i class="glyphicon glyphicon-align-left fa fa-undo"></i>
-
-        </button>
+	<div id="content" style="width: 100%">
+		<button type="button" id="sidebarCollapse" class="btn menuButton">
+			<i class="glyphicon glyphicon-align-left fa fa-bars"></i>
+		</button>
         <div class="col-12">
             <br/>
             <ul class="breadcrumb py-3 col-12">
@@ -26,7 +25,7 @@
                 <li class="breadcrumb-item"><a th:href="@{'/admin'}" th:text="#{admin}"></a></li>
                 <li class="breadcrumb-item" th:text="#{admin.fournisseurs}"></li>
             </ul>
-            <div class="content-page">
+			<div>
                 <div class="row col-12 p-2">
                     <form class="form-inline col-9" method="get" th:action="@{'/admin/fournisseurs'}">
                         <input class="form-control col-9" th:placeholder="#{admin.fournisseur.searchPlaceHolder}"

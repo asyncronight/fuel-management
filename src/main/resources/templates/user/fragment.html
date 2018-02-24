@@ -2,18 +2,22 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
 <body>
-<div th:fragment="menu">
+<div th:fragment="menu(active)">
 
 	<nav id="sidebar">
 		<div class="sidebar-header">
-			<h3 class="p-2">Menu Saisi</h3>
+			<h3 class="p-2" th:text="#{user}"></h3>
 		</div>
+		<hr class="bg-info">
 
 		<!-- Sidebar Links -->
 		<ul class="list-unstyled components">
-			<li class="active"><a th:href="@{'/user/gazoil'}" th:text="#{gazoil}"></a></li>
-			<li class="active"><a th:href="@{'/user/panne'}" th:text="#{panne}"></a></li>
-			<li class="active"><a th:href="@{'/user/preventif'}" th:text="#{preventif}"></a></li>
+			<li th:classappend="${active} eq 'g'?'bg-faded text-muted':''"><a th:href="@{'/user/gazoil'}"
+																			  th:text="#{gazoil}"></a></li>
+			<li th:classappend="${active} eq 'pa'?'bg-faded text-muted':''"><a th:href="@{'/user/panne'}"
+																			   th:text="#{panne}"></a></li>
+			<li th:classappend="${active} eq 'pr'?'bg-faded text-muted':''"><a th:href="@{'/user/preventif'}"
+																			   th:text="#{preventif}"></a></li>
 		</ul>
 	</nav>
 

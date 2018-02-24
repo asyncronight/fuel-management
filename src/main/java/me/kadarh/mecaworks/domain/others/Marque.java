@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import me.kadarh.mecaworks.domain.AbstractDomain;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.NotEmpty;
 
 /**
  * @author kadarH
@@ -15,6 +16,7 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 public class Marque extends AbstractDomain {
 
-    private String nom;
+	@NotEmpty
+	private String nom;
 
 }

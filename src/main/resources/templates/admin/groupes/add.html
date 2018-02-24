@@ -2,19 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
 <body>
-<div th:replace="fragments :: menu('admin')"></div>
+<div th:replace="fragments :: menu2('admin')"></div>
 <div class="wrapper">
-    <div th:replace="admin/fragment :: menu"></div>
+	<div th:replace="admin/fragment :: menu('')"></div>
     <!--/*@thymesVar id="groupe" type="me.kadarh.mecaworks.domain.others.Groupe"*/-->
 
     <!--/*@thymesVar id="page" type="org.springframework.data.domain.Page"*/-->
     <!--/*@thymesVar id="search" type="java.lang.String"*/-->
 
-    <div id="content">
-        <button type="button" id="sidebarCollapse" class="btn btn-inverse navbar-btn">
-            <i class="glyphicon glyphicon-align-left fa fa-undo"></i>
-
-        </button>
+	<div id="content" style="width: 100%">
+		<button type="button" id="sidebarCollapse" class="btn menuButton">
+			<i class="glyphicon glyphicon-align-left fa fa-bars"></i>
+		</button>
 
         <div class="col-12">
             <br/>
@@ -23,38 +22,30 @@
                         class="fa fa-arrow-circle-left fa-lg"></i></a></li>
                 <li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
                 <li class="breadcrumb-item"><a th:href="@{'/admin'}" th:text="#{admin}"></a></li>
-                <li class="breadcrumb-item"><a th:href="@{'/admin/groupes'}" th:text="#{admin.groupes}"></a></li>
+				<li class="breadcrumb-item"><a th:href="@{'/admin/groupes/add'}" th:text="#{admin.groupes}"></a></li>
                 <li class="breadcrumb-item" th:text="${edit}? #{admin.groupe.edit}: #{admin.groupe.add}"></li>
             </ul>
-            <div class="content-page ">
+			<div>
                 <form class="form-horizontal bg-faded p-4" role="form" method="post"
                       th:object="${groupe}">
                     <div class="row">
                         <div class="col-md-3"></div>
                         <div class="col-md-6">
                             <hr>
-                            <h3 th:text="${edit}?#{admin.groupe.edit}: #{admin.groupe.add}"></h3>
+							<h3 class="text-center" th:text="${edit}?#{admin.groupe.edit}: #{admin.groupe.add}"></h3>
                             <hr>
                         </div>
                     </div>
-                    <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
-                        <div class="row pl-4">
-                            <p th:text="#{formError}"></p>
-                        </div>
-                        <div class="row">
-                            <div class="col-12 help-block" th:if="${#fields.hasErrors('nom')}">
-                                <ul>
-                                    <li th:each="err : ${#fields.errors('nom')}" th:text="${err}"></li>
-                                </ul>
-                            </div>
-                            <div class="col-12 help-block" th:if="${#fields.hasErrors('locataire')}">
-                                <ul>
-                                    <li th:each="err : ${#fields.errors('locataire')}" th:text="${err}"></li>
-                                </ul>
-                            </div>
-
-                        </div>
-                    </div>
+					<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+						<div class="row pl-4">
+							<p th:text="#{formError}"></p>
+						</div>
+						<div class="row col-12 help-block">
+							<ul>
+								<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+							</ul>
+						</div>
+					</div>
                     <div class="row">
                         <div class="col-3 field-label-responsive">
                             <label for="nom" th:text="#{groupe.nom}"></label>
@@ -71,7 +62,7 @@
                         </div>
                     </div>
 
-                    <div class="row col-12">
+					<div class="row">
                         <div class="col-3 field-label-responsive">
                             <label for="locataire"
                                    th:text="#{groupe.locataire}"></label>
@@ -108,6 +99,9 @@
                             <button type="submit" class="btn btn-success"><i class="fa"></i>
                                 [[${edit}?#{save}: #{add}]]
                             </button>
+							<a th:if="${edit}" href="/admin/groupes/add" class="btn btn-secondary"><i class="fa"></i>
+								[[#{cancel}]]
+							</a>
                         </div>
                     </div>
 
@@ -129,7 +123,7 @@
                             <th>
                                 <a th:href="'?page=0&sort=nom'+(${page.getSort().getOrderFor('nom')?.descending}?'':',desc')+(${search.isEmpty()}?''+'#hrTable':'&search='+${search}+'#hrTable')"
                                    th:title="!${page.getSort().getOrderFor('nom')?.descending}? #{sort.desc}: #{sort.asc}">
-                                    Nom
+									[[#{groupe.locataire}]]
                                     <span th:if="${page.getSort().getOrderFor('nom')?.ascending}"
                                           class="fa fa-sort-up"></span>
                                     <span th:if="!${page.getSort().getOrderFor('nom')?.ascending}"
@@ -139,7 +133,7 @@
                             <th>
                                 <a th:href="'?page=0&sort=locataire'+(${page.getSort().getOrderFor('locataire')?.descending}?'':',desc')+(${search.isEmpty()}?''+'#hrTable':'&search='+${search}+'#hrTable')"
                                    th:title="!${page.getSort().getOrderFor('locataire')?.descending}? #{sort.desc}: #{sort.asc}">
-                                    Locataire ( oui / non )
+									[[#{groupe.locataire}]]
                                     <span th:if="${page.getSort().getOrderFor('locataire')?.ascending}"
                                           class="fa fa-sort-up"></span>
                                     <span th:if="!${page.getSort().getOrderFor('locataire')?.ascending}"

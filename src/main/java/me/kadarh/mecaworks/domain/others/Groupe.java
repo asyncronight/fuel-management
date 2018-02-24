@@ -5,6 +5,8 @@ import lombok.EqualsAndHashCode;
 import me.kadarh.mecaworks.domain.AbstractDomain;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author kadarH
@@ -15,7 +17,10 @@ import javax.persistence.Entity;
 @EqualsAndHashCode(callSuper = true)
 public class Groupe extends AbstractDomain {
 
+	@NotEmpty
 	private String nom;
+
+	@NotNull
 	private Boolean locataire;
 
 }

@@ -38,8 +38,8 @@ public class SousFamilleController {
     public String add(Model model, Pageable pageable, @RequestParam(defaultValue = "") String search) {
         model.addAttribute("sousFamille", new SousFamille());
         model.addAttribute("page", sousFamilleService.sousFamilleList(pageable, search));
-        model.addAttribute("familles", familleService.familleList(pageable, ""));
-        model.addAttribute("marques", marqueService.marqueList(pageable, ""));
+		model.addAttribute("familles", familleService.list());
+		model.addAttribute("marques", marqueService.list());
         model.addAttribute("typesCompteur", TypeCompteur.values());
         model.addAttribute("search", search);
         return "admin/sousFamilles/add";
@@ -49,8 +49,8 @@ public class SousFamilleController {
     public String addPost(Model model, Pageable pageable, @RequestParam(defaultValue = "") String search, @Valid SousFamille sousFamille, BindingResult result) {
         if (result.hasErrors()) {
             model.addAttribute("page", sousFamilleService.sousFamilleList(pageable, search));
-            model.addAttribute("familles", familleService.familleList(pageable, ""));
-            model.addAttribute("marques", marqueService.marqueList(pageable, ""));
+			model.addAttribute("familles", familleService.list());
+			model.addAttribute("marques", marqueService.list());
             model.addAttribute("typesCompteur", TypeCompteur.values());
             model.addAttribute("search", search);
             return "admin/sousFamilles/add";
@@ -63,8 +63,8 @@ public class SousFamilleController {
     public String edit(Model model, @PathVariable Long id, Pageable pageable, @RequestParam(defaultValue = "") String search) {
         model.addAttribute("sousFamille", sousFamilleService.get(id));
         model.addAttribute("page", sousFamilleService.sousFamilleList(pageable, search));
-        model.addAttribute("familles", familleService.familleList(pageable, ""));
-        model.addAttribute("marques", marqueService.marqueList(pageable, ""));
+		model.addAttribute("familles", familleService.list());
+		model.addAttribute("marques", marqueService.list());
         model.addAttribute("typesCompteur", TypeCompteur.values());
         model.addAttribute("edit", true);
         model.addAttribute("search", search);
@@ -76,8 +76,8 @@ public class SousFamilleController {
         if (result.hasErrors()) {
             model.addAttribute("edit", true);
             model.addAttribute("page", sousFamilleService.sousFamilleList(pageable, search));
-            model.addAttribute("familles", familleService.familleList(pageable, ""));
-            model.addAttribute("marques", marqueService.marqueList(pageable, ""));
+			model.addAttribute("familles", familleService.list());
+			model.addAttribute("marques", marqueService.list());
             model.addAttribute("typesCompteur", TypeCompteur.values());
             model.addAttribute("search", search);
             return "admin/sousFamilles/add";

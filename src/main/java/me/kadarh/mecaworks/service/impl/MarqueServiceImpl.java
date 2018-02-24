@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -126,4 +127,9 @@ public class MarqueServiceImpl implements MarqueService {
             throw new OperationFailedException("La suppression de la Marque a echouée ", e);
         }
     }
+
+	@Override
+	public List<Marque> list() {
+		return marqueRepo.findAll();
+	}
 }

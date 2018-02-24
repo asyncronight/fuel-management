@@ -2,12 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
 <body>
-<div class="content col-12 ml-4">
-    <br/>
-	<ul class="breadcrumb py-4 col-11">
-        <li class="breadcrumb-item"><a th:href="@{'/'}"><i class="fa fa-arrow-circle-left fa-lg"></i></a></li>
-        <li class="breadcrumb-item" th:text="#{home}"></li>
-    </ul>
+<div th:replace="fragments :: menu2('')"></div>
+<div class="content col-12 ml-4" style="margin-top: 100px">
     <div class="row mt-2">
 		<div class="col-sm-6 col-md-4 col-lg-3 mt-4 mr-4 ml-4 bg-faded"
 			 style="box-shadow:2px 2px 3px 3px darkseagreen;">
@@ -41,7 +37,7 @@
 			 style="box-shadow:2px 2px 3px 3px darkseagreen;">
 			<div class=" text-center">
 				<div>
-					<h2 class="py-3"><a th:href="@{'/saisi/'}"><i class="fa fa-folder-open"></i> <span
+					<h2 class="py-3"><a th:href="@{'/saisi/'}"><i class="fa fa-edit"></i> <span
 							th:text="#{saisie}"></span></a>
 					</h2>
 				</div>
@@ -52,7 +48,6 @@
 			</div>
 		</div>
     </div>
-
 </div>
 <div th:replace="fragments :: footer"></div>
 </body>

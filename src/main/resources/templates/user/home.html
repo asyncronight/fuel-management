@@ -2,15 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
 <body>
-<div th:replace="fragments :: menu('user')"></div>
+<div th:replace="fragments :: menu2('user')"></div>
 <div class="wrapper">
 
-	<div th:replace="user/fragment :: menu"></div>
+	<div th:replace="user/fragment :: menu('')"></div>
 
 	<div id="content">
-		<button type="button" id="sidebarCollapse" class="btn btn-inverse navbar-btn">
-			<i class="glyphicon glyphicon-align-left fa fa-undo"></i>
-
+		<button type="button" id="sidebarCollapse" class="btn menuButton">
+			<i class="glyphicon glyphicon-align-left fa fa-bars"></i>
 		</button>
 		<div class="col-12">
 			<br/>
@@ -19,7 +18,6 @@
 				<li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
 				<li class="breadcrumb-item" th:text="#{user}"></li>
 			</ul>
-			<p>User Dashboard description (under construction) <!--todo add description with links --></p>
 			<div class="row ml-3">
 				<div class="col-sm-6 col-md-4 col-lg-3 mt-4 mr-4 ml-4 bg-faded"
 					 style="box-shadow:2px 2px 3px 3px darkseagreen;">

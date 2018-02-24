@@ -2,14 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
 <body>
-<div th:replace="fragments :: menu('saisie')"></div>
+<div th:replace="fragments :: menu2('saisi')"></div>
 <div class="wrapper">
 
-	<div th:replace="saisi/fragment :: menu"></div>
+	<div th:replace="saisi/fragment :: menu('')"></div>
 
 	<div id="content">
-		<button type="button" id="sidebarCollapse" class="btn btn-inverse navbar-btn">
-			<i class="glyphicon glyphicon-align-left fa fa-undo"></i>
+		<button type="button" id="sidebarCollapse" class="btn menuButton">
+			<i class="glyphicon glyphicon-align-left fa fa-bars"></i>
 
 		</button>
 		<div class="col-12">
@@ -19,8 +19,69 @@
 				<li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
 				<li class="breadcrumb-item" th:text="#{saisie}"></li>
 			</ul>
-			<p>Saisi Dashboard description (under construction) <!--todo add description with links --></p>
+			<div class="row ml-3">
+				<div class="col-sm-6 col-md-4 col-lg-3 mt-4 mr-4 ml-4 bg-faded"
+					 style="box-shadow:2px 2px 3px 3px darkseagreen;">
+					<div class=" text-center">
+						<div>
+							<h2 class="py-3"><a th:href="@{'/saisi/engins'}"><i class="fa fa-list-alt"></i> <span
+									th:text="#{saisie.engin.list}"></span></a>
+							</h2>
+						</div>
+						<hr/>
+						<blockquote class="card-blockquote p-3">
+							<p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent
+								libero.</p>
+						</blockquote>
+					</div>
+					<div class="card-footer text-center">
+						<a class="btn btn-sm btn-link" th:href="@{'/saisi/engins/add'}">
+							[[#{saisie.engin.add}]] <i class="fa fa-plus"></i>
+						</a>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-4 col-lg-3 mt-4 mr-4 ml-4 bg-faded"
+					 style="box-shadow:2px 2px 3px 3px darkseagreen;">
+					<div class=" text-center">
+						<div>
+							<h2 class="py-3"><a th:href="@{'/saisi/livraisons'}"><i class="fa fa-list-alt"></i> <span
+									th:text="#{saisie.livraison.list}"></span></a>
+							</h2>
+						</div>
+						<hr/>
+						<blockquote class="card-blockquote p-3">
+							<p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent
+								libero.</p>
+						</blockquote>
+					</div>
+					<div class="card-footer text-center">
+						<a class="btn btn-sm btn-link" th:href="@{'/saisi/livraisons/add'}">
+							[[#{saisie.livraison.add}]] <i class="fa fa-plus"></i>
+						</a>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-4 col-lg-3 mt-4 mr-4 ml-4 bg-faded"
+					 style="box-shadow:2px 2px 3px 3px darkseagreen;">
+					<div class=" text-center">
+						<div>
+							<h2 class="py-3"><a th:href="@{'/saisi/fournisseurs'}"><i class="fa fa-list-alt"></i> <span
+									th:text="#{saisie.fournisseur.list}"></span></a>
+							</h2>
+						</div>
+						<hr/>
+						<blockquote class="card-blockquote p-3">
+							<p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent
+								libero.</p>
+						</blockquote>
+					</div>
+					<div class="card-footer text-center">
+						<a class="btn btn-sm btn-link" th:href="@{'/saisi/fournisseurs/add'}">
+							[[#{saisie.fournisseur.add}]] <i class="fa fa-plus"></i>
+						</a>
+					</div>
+				</div>
 
+			</div>
 		</div>
 	</div>
 </div>

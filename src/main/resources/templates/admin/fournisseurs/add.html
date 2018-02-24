@@ -2,16 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
 <body>
-<div th:replace="fragments :: menu('admin')"></div>
+<div th:replace="fragments :: menu2('admin')"></div>
 <div class="wrapper">
-    <div th:replace="admin/fragment :: menu"></div>
+	<div th:replace="admin/fragment :: menu('')"></div>
     <!--/*@thymesVar id="fournisseurs" type="me.kadarh.mecaworks.domain.others.Fournisseur"*/-->
 
-    <div id="content">
-        <button type="button" id="sidebarCollapse" class="btn btn-inverse navbar-btn">
-            <i class="glyphicon glyphicon-align-left fa fa-undo"></i>
-
-        </button>
+	<div id="content" style="width: 100%">
+		<button type="button" id="sidebarCollapse" class="btn menuButton">
+			<i class="glyphicon glyphicon-align-left fa fa-bars"></i>
+		</button>
 
         <div class="col-12">
             <br/>
@@ -23,16 +22,17 @@
                 <li class="breadcrumb-item"><a th:href="@{'/admin/fournisseurs'}" th:text="#{admin.fournisseurs}"></a>
                 </li>
                 <li class="breadcrumb-item"
-                    th:text="${edit}? #{admin.fournisseur.edit}: #{admin.fournisseur.edit}"></li>
+					th:text="${edit}? #{admin.fournisseur.edit}: #{admin.fournisseur.add}"></li>
             </ul>
-            <div class="content-page ">
+			<div>
                 <form class="form-horizontal bg-faded p-4" role="form" method="post"
                       th:object="${fournisseur}">
                     <div class="row">
                         <div class="col-md-3"></div>
                         <div class="col-md-6">
                             <hr>
-                            <h3 th:text="${edit}?#{admin.fournisseur.edit}: #{admin.fournisseur.add}"></h3>
+							<h3 class="text-center"
+								th:text="${edit}?#{admin.fournisseur.edit}: #{admin.fournisseur.add}"></h3>
                             <hr>
                         </div>
                     </div>
@@ -70,6 +70,9 @@
                             <button type="submit" class="btn btn-success"><i class="fa"></i>
                                 [[${edit}?#{save}: #{add}]]
                             </button>
+							<a th:if="${edit}" href="/admin/fournisseurs" class="btn btn-secondary"><i class="fa"></i>
+								[[#{cancel}]]
+							</a>
                         </div>
                     </div>
                     <br>

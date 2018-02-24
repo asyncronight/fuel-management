@@ -7,6 +7,7 @@ import me.kadarh.mecaworks.domain.AbstractDomain;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotEmpty;
 
 /**
  * @author kadarH
@@ -18,8 +19,9 @@ import javax.persistence.ManyToOne;
 public class Engin extends AbstractDomain {
 
 	@Column(unique = true)
+	@NotEmpty
 	private String code;
-
+	@NotEmpty
 	private String numeroSerie;
 	private Integer compteurInitialH;
 	private Integer compteurInitialKm;

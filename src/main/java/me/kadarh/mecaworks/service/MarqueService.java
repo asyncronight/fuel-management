@@ -4,6 +4,8 @@ import me.kadarh.mecaworks.domain.others.Marque;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface MarqueService {
 
     Marque add(Marque marque);
@@ -15,4 +17,6 @@ public interface MarqueService {
     Marque get(Long id);
 
     void delete(Long id);
+
+	List<Marque> list();
 }

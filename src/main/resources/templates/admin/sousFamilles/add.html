@@ -2,89 +2,53 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
 <body>
-<div th:replace="fragments :: menu('admin')"></div>
+<div th:replace="fragments :: menu2('admin')"></div>
 <div class="wrapper">
-    <div th:replace="admin/fragment :: menu"></div>
+	<div th:replace="admin/fragment :: menu('')"></div>
     <!--/*@thymesVar id="sousFamille" type="me.kadarh.mecaworks.domain.others.SousFamille"*/-->
 
     <!--/*@thymesVar id="page" type="org.springframework.data.domain.Page"*/-->
     <!--/*@thymesVar id="search" type="java.lang.String"*/-->
 
-    <div id="content">
-        <button type="button" id="sidebarCollapse" class="btn btn-inverse navbar-btn">
-            <i class="glyphicon glyphicon-align-left fa fa-undo"></i>
+	<div id="content" style="width: 100%">
+		<button type="button" id="sidebarCollapse" class="btn menuButton">
+			<i class="glyphicon glyphicon-align-left fa fa-bars"></i>
+		</button>
 
-        </button>
-
-        <div class="col-12">
+		<div class="col-12" style="width: 100%">
             <br/>
             <ul class="breadcrumb py-3">
                 <li class="breadcrumb-item"><a th:href="@{'/admin/engins/add'}"><i
                         class="fa fa-arrow-circle-left fa-lg"></i></a></li>
                 <li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
                 <li class="breadcrumb-item"><a th:href="@{'/admin'}" th:text="#{admin}"></a></li>
-                <li class="breadcrumb-item"><a th:href="@{'/admin/sousFamilles'}" th:text="#{admin.sousFamilles}"></a>
+				<li class="breadcrumb-item"><a th:href="@{'/admin/sousFamilles/add'}"
+											   th:text="#{admin.sousFamilles}"></a>
                 </li>
                 <li class="breadcrumb-item" th:text="${edit}? #{admin.sousFamille.edit}: #{admin.sousFamille.add}"></li>
             </ul>
-            <div class="content-page ">
+			<div>
                 <form class="form-horizontal bg-faded p-4" role="form" method="post"
                       th:object="${sousFamille}">
                     <div class="row">
                         <div class="col-md-3"></div>
                         <div class="col-md-6">
                             <hr>
-                            <h3 th:text="${edit}?#{admin.sousFamille.edit}: #{admin.sousFamille.add}"></h3>
+							<h3 class="text-center"
+								th:text="${edit}?#{admin.sousFamille.edit}: #{admin.sousFamille.add}"></h3>
                             <hr>
                         </div>
                     </div>
-                    <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
-                        <div class="row pl-4">
-                            <p th:text="#{formError}"></p>
-                        </div>
-                        <div class="row">
-                            <div class="col-12 help-block" th:if="${#fields.hasErrors('nom')}">
-                                <ul>
-                                    <li th:each="err : ${#fields.errors('nom')}" th:text="${err}"></li>
-                                </ul>
-                            </div>
-                            <div class="col-12 help-block" th:if="${#fields.hasErrors('typeCompteur')}">
-                                <ul>
-                                    <li th:each="err : ${#fields.errors('typeCompteur')}" th:text="${err}"></li>
-                                </ul>
-                            </div>
-                            <div class="col-12 help-block" th:if="${#fields.hasErrors('consommationHMax')}">
-                                <ul>
-                                    <li th:each="err : ${#fields.errors('consommationHMax')}" th:text="${err}"></li>
-                                </ul>
-                            </div>
-                            <div class="col-12 help-block" th:if="${#fields.hasErrors('consommationKmMax')}">
-                                <ul>
-                                    <li th:each="err : ${#fields.errors('consommationKmMax')}" th:text="${err}"></li>
-                                </ul>
-                            </div>
-                            <div class="col-12 help-block" th:if="${#fields.hasErrors('capaciteReservoir')}">
-                                <ul>
-                                    <li th:each="err : ${#fields.errors('capaciteReservoir')}" th:text="${err}"></li>
-                                </ul>
-                            </div>
-                            <div class="col-12 help-block" th:if="${#fields.hasErrors('capaciteReservoir')}">
-                                <ul>
-                                    <li th:each="err : ${#fields.errors('capaciteReservoir')}" th:text="${err}"></li>
-                                </ul>
-                            </div>
-                            <div class="col-12 help-block" th:if="${#fields.hasErrors('famille')}">
-                                <ul>
-                                    <li th:each="err : ${#fields.errors('famille')}" th:text="${err}"></li>
-                                </ul>
-                            </div>
-                            <div class="col-12 help-block" th:if="${#fields.hasErrors('marque')}">
-                                <ul>
-                                    <li th:each="err : ${#fields.errors('marque')}" th:text="${err}"></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+					<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+						<div class="row pl-4">
+							<p th:text="#{formError}"></p>
+						</div>
+						<div class="row col-12 help-block">
+							<ul>
+								<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+							</ul>
+						</div>
+					</div>
                     <div class="row">
                         <div class="col-3 field-label-responsive">
                             <label for="nom" th:text="#{sousFamille.nom}"></label>
@@ -175,8 +139,8 @@
                                         <option th:each="famille : ${familles}" th:value="${famille.id}"
                                                 th:text="${famille.nom}"></option>
                                     </select>
-                                    <a target="_blank" role="button" class="ml-2 btn btn-info"
-                                       href="/admin/familles/add" th:text="#{admin.famille.add}"></a>
+									<a target="_blank" role="button" class="ml-2 btn btn-sm btn-link"
+									   href="/admin/familles/add" th:text="#{admin.famille.add}"></a>
                                 </div>
                             </div>
                         </div>
@@ -194,8 +158,9 @@
                                         <option th:each="marque : ${marques}" th:value="${marque.id}"
                                                 th:text="${marque.nom}"></option>
                                     </select>
-                                    <a target="_blank" role="button" class="ml-2 btn btn-info" href="/admin/marques/add"
-                                       th:text="#{admin.marque.add}"></a>
+									<a target="_blank" role="button" class="ml-2 btn btn-sm btn-link"
+									   href="/admin/marques/add"
+									   th:text="#{admin.marque.add}"></a>
                                 </div>
                             </div>
                         </div>
@@ -207,6 +172,10 @@
                             <button type="submit" class="btn btn-success"><i class="fa"></i>
                                 [[${edit}?#{save}: #{add}]]
                             </button>
+							<a th:if="${edit}" href="/admin/sousFamilles/add" class="btn btn-secondary"><i
+									class="fa"></i>
+								[[#{cancel}]]
+							</a>
                         </div>
                     </div>
 
@@ -228,7 +197,7 @@
                             <th>
                                 <a th:href="'?page=0&sort=nom'+(${page.getSort().getOrderFor('nom')?.descending}?'':',desc')+(${search.isEmpty()}?''+'#hrTable':'&search='+${search}+'#hrTable')"
                                    th:title="!${page.getSort().getOrderFor('nom')?.descending}? #{sort.desc}: #{sort.asc}">
-                                    Code
+									[[#{sousFamille.nom}]]
                                     <span th:if="${page.getSort().getOrderFor('nom')?.ascending}"
                                           class="fa fa-sort-up"></span>
                                     <span th:if="!${page.getSort().getOrderFor('nom')?.ascending}"
@@ -238,7 +207,7 @@
                             <th>
                                 <a th:href="'?page=0&sort=typeCompteur'+(${page.getSort().getOrderFor('typeCompteur')?.descending}?'':',desc')+(${search.isEmpty()}?''+'#hrTable':'&search='+${search}+'#hrTable')"
                                    th:title="!${page.getSort().getOrderFor('typeCompteur')?.descending}? #{sort.desc}: #{sort.asc}">
-                                    N° serie
+									[[#{sousFamille.typeCompteur}]]
                                     <span th:if="${page.getSort().getOrderFor('typeCompteur')?.ascending}"
                                           class="fa fa-sort-up"></span>
                                     <span th:if="!${page.getSort().getOrderFor('typeCompteur')?.ascending}"
@@ -248,7 +217,7 @@
                             <th>
                                 <a th:href="'?page=0&sort=consommationHMax'+(${page.getSort().getOrderFor('consommationHMax')?.descending}?'':',desc')+(${search.isEmpty()}?''+'#hrTable':'&search='+${search}+'#hrTable')"
                                    th:title="!${page.getSort().getOrderFor('consommationHMax')?.descending}? #{sort.desc}: #{sort.asc}">
-                                    Compteur initial (L)
+									[[#{sousFamille.consommationHMax}]]
                                     <span th:if="${page.getSort().getOrderFor('consommationHMax')?.ascending}"
                                           class="fa fa-sort-up"></span>
                                     <span th:if="!${page.getSort().getOrderFor('consommationHMax')?.ascending}"
@@ -258,7 +227,7 @@
                             <th>
                                 <a th:href="'?page=0&sort=consommationKmMax'+(${page.getSort().getOrderFor('consommationKmMax')?.descending}?'':',desc')+(${search.isEmpty()}?''+'#hrTable':'&search='+${search}+'#hrTable')"
                                    th:title="!${page.getSort().getOrderFor('consommationKmMax')?.descending}? #{sort.desc}: #{sort.asc}">
-                                    Compteur initial (Km)
+									[[#{sousFamille.consommationKmMax}]]
                                     <span th:if="${page.getSort().getOrderFor('consommationKmMax')?.ascending}"
                                           class="fa fa-sort-up"></span>
                                     <span th:if="!${page.getSort().getOrderFor('consommationKmMax')?.ascending}"
@@ -268,7 +237,7 @@
                             <th>
                                 <a th:href="'?page=0&sort=capaciteReservoir'+(${page.getSort().getOrderFor('capaciteReservoir')?.descending}?'':',desc')+(${search.isEmpty()}?''+'#hrTable':'&search='+${search}+'#hrTable')"
                                    th:title="!${page.getSort().getOrderFor('capaciteReservoir')?.descending}? #{sort.desc}: #{sort.asc}">
-                                    Compteur initial (Km)
+									[[#{sousFamille.capaciteReservoir}]]
                                     <span th:if="${page.getSort().getOrderFor('capaciteReservoir')?.ascending}"
                                           class="fa fa-sort-up"></span>
                                     <span th:if="!${page.getSort().getOrderFor('capaciteReservoir')?.ascending}"
@@ -278,7 +247,7 @@
                             <th>
                                 <a th:href="'?page=0&sort=famille.nom'+(${page.getSort().getOrderFor('famille.nom')?.descending}?'':',desc')+(${search.isEmpty()}?''+'#hrTable':'&search='+${search}+'#hrTable')"
                                    th:title="!${page.getSort().getOrderFor('famille.nom')?.descending}? #{sort.desc}: #{sort.asc}">
-                                    Sous famille
+									[[#{sousFamille.famille}]]
                                     <span th:if="${page.getSort().getOrderFor('famille.nom')?.ascending}"
                                           class="fa fa-sort-up"></span>
                                     <span th:if="!${page.getSort().getOrderFor('famille.nom')?.ascending}"
@@ -288,14 +257,13 @@
                             <th>
                                 <a th:href="'?page=0&sort=marque.nom'+(${page.getSort().getOrderFor('marque.nom')?.descending}?'':',desc')+(${search.isEmpty()}?''+'#hrTable':'&search='+${search}+'#hrTable')"
                                    th:title="!${page.getSort().getOrderFor('marque.nom')?.descending}? #{sort.desc}: #{sort.asc}">
-                                    Groupe
+									[[#{sousFamille.marque}]]
                                     <span th:if="${page.getSort().getOrderFor('marque.nom')?.ascending}"
                                           class="fa fa-sort-up"></span>
                                     <span th:if="!${page.getSort().getOrderFor('marque.nom')?.ascending}"
                                           class="fa fa-sort-down"></span>
                                 </a>
                             </th>
-
                             <th></th>
                         </tr>
                         <tr th:each="sousFamille : ${page.content}" class="bg-faded">

@@ -2,20 +2,19 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
 <body>
-<div th:replace="fragments :: menu('admin')"></div>
+<div th:replace="fragments :: menu2('admin')"></div>
 <div class="wrapper">
 
-	<div th:replace="admin/fragment :: menu"></div>
+	<div th:replace="admin/fragment :: menu('en')"></div>
 
 	<!--/*@thymesVar id="engin" type="me.kadarh.mecaworks.domain.others.Engin"*/-->
 	<!--/*@thymesVar id="search" type="java.lang.String"*/-->
 	<!--/*@thymesVar id="page" type="org.springframework.data.domain.Page"*/-->
 
 	<!-- Page Content -->
-	<div id="content">
-		<button type="button" id="sidebarCollapse" class="btn btn-inverse navbar-btn">
-			<i class="glyphicon glyphicon-align-left fa fa-undo"></i>
-
+	<div id="content" style="width: 100%">
+		<button type="button" id="sidebarCollapse" class="btn menuButton">
+			<i class="glyphicon glyphicon-align-left fa fa-bars"></i>
 		</button>
 		<div class="col-12">
 			<br/>
@@ -26,7 +25,7 @@
 				<li class="breadcrumb-item"><a th:href="@{'/admin'}" th:text="#{admin}"></a></li>
 				<li class="breadcrumb-item" th:text="#{admin.engins}"></li>
 			</ul>
-			<div class="content-page">
+			<div>
 
 				<div class="row col-12 p-2">
 					<form class="form-inline col-9" method="get" th:action="@{'/admin/engins'}">
@@ -68,7 +67,7 @@
 							<th>
 								<a th:href="'?page=0&sort=compteurInitialH'+(${page.getSort().getOrderFor('compteurInitialH')?.descending}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})"
 								   th:title="!${page.getSort().getOrderFor('compteurInitialH')?.descending}? #{sort.desc}: #{sort.asc}">
-									Compteur initial (L)
+									Compteur initial (H)
 									<span th:if="${page.getSort().getOrderFor('compteurInitialH')?.ascending}"
 										  class="fa fa-sort-up"></span>
 									<span th:if="!${page.getSort().getOrderFor('compteurInitialH')?.ascending}"

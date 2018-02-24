@@ -7,6 +7,7 @@ import me.kadarh.mecaworks.domain.AbstractDomain;
 import javax.persistence.Entity;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author kadarH
@@ -22,6 +23,7 @@ public class Chantier extends AbstractDomain {
 	private String adresse;
 
     @Min(0)
+	@NotNull
     private Integer stock;
 
 }

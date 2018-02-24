@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -125,5 +126,10 @@ public class FamilleServiceImpl implements FamilleService {
 			log.debug("cannot delete famille , failed operation");
 			throw new OperationFailedException("La suppression de la famille a echouée ", e);
 		}
+	}
+
+	@Override
+	public List<Famille> list() {
+		return familleRepo.findAll();
 	}
 }

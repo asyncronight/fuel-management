@@ -2,20 +2,32 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
 <body>
-<div th:fragment="menu">
+<div th:fragment="menu(active)">
 	<nav id="sidebar">
 		<div class="sidebar-header">
-			<h3 class="p-2">Menu Saisi</h3>
+			<h3 class="p-2" th:text="#{saisie}"></h3>
 		</div>
+		<hr class="bg-info">
 
 		<!-- Sidebar Links -->
 		<ul class="list-unstyled components">
-			<li class="active"><a th:href="@{'/saisi/engins/add'}" th:text="#{saisie.engin.add}"></a></li>
-			<li class="active"><a th:href="@{'/saisi/livraisons/add'}" th:text="#{saisie.livraison.add}"></a></li>
-			<li class="active"><a th:href="@{'/saisi/fournisseurs/add'}" th:text="#{saisie.livraison.add}"></a></li>
-			<li class="active"><a th:href="@{'/saisi/engins'}" th:text="#{saisie.engin.list}"></a></li>
-			<li class="active"><a th:href="@{'/saisi/livraisons'}" th:text="#{saisie.livraison.list}"></a></li>
-			<li class="active"><a th:href="@{'/saisi/fournisseurs'}" th:text="#{saisie.fournisseur.list}"></a></li>
+			<li th:classappend="${active} eq 'ea'?'bg-faded text-muted':''"><a th:href="@{'/saisi/engins/add'}"
+																			   th:text="#{saisie.engin.add}"></a></li>
+			<li th:classappend="${active} eq 'la'?'bg-faded text-muted':''"><a th:href="@{'/saisi/livraisons/add'}"
+																			   th:text="#{saisie.livraison.add}"></a>
+			</li>
+			<li th:classappend="${active} eq 'fa'?'bg-faded text-muted':''"><a th:href="@{'/saisi/fournisseurs/add'}"
+																			   th:text="#{saisie.fournisseur.add}"></a>
+			</li>
+			<hr class="bg-info">
+			<li th:classappend="${active} eq 'es'?'bg-faded text-muted':''"><a th:href="@{'/saisi/engins'}"
+																			   th:text="#{saisie.engin.list}"></a></li>
+			<li th:classappend="${active} eq 'ls'?'bg-faded text-muted':''"><a th:href="@{'/saisi/livraisons'}"
+																			   th:text="#{saisie.livraison.list}"></a>
+			</li>
+			<li th:classappend="${active} eq 'fs'?'bg-faded text-muted':''"><a th:href="@{'/saisi/fournisseurs'}"
+																			   th:text="#{saisie.fournisseur.list}"></a>
+			</li>
 		</ul>
 	</nav>
 
