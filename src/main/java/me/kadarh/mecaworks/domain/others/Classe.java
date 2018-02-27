@@ -6,7 +6,6 @@ import me.kadarh.mecaworks.domain.AbstractDomain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotEmpty;
 
 /**
@@ -16,13 +15,10 @@ import javax.validation.constraints.NotEmpty;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Famille extends AbstractDomain {
+public class Classe extends AbstractDomain {
 
-	@NotEmpty
-	@Column(unique = true)
-	private String nom;
-
-	@ManyToOne
-	private Classe classe;
+    @NotEmpty
+    @Column(unique = true)
+    private String nom;
 
 }

@@ -1,6 +1,7 @@
 package me.kadarh.mecaworks.controller.admin;
 
 import me.kadarh.mecaworks.domain.others.Famille;
+import me.kadarh.mecaworks.service.ClasseService;
 import me.kadarh.mecaworks.service.FamilleService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -22,9 +23,11 @@ import javax.validation.Valid;
 public class FamilleController {
 
     private final FamilleService familleService;
+    private final ClasseService classeService;
 
-    public FamilleController(FamilleService familleService) {
+    public FamilleController(FamilleService familleService, ClasseService classeService) {
         this.familleService = familleService;
+        this.classeService = classeService;
     }
 
     @GetMapping("")
@@ -34,6 +37,7 @@ public class FamilleController {
 
     @GetMapping("/add")
     public String add(Model model, Pageable pageable, @RequestParam(defaultValue = "") String search) {
+        model.addAttribute("classes", classeService.list());
         model.addAttribute("famille", new Famille());
         model.addAttribute("page", familleService.familleList(pageable, search));
         model.addAttribute("search", search);
@@ -43,6 +47,7 @@ public class FamilleController {
     @PostMapping("/add")
     public String addPost(Model model, Pageable pageable, @RequestParam(defaultValue = "") String search, @Valid Famille famille, BindingResult result) {
         if (result.hasErrors()) {
+            model.addAttribute("classes", classeService.list());
             model.addAttribute("page", familleService.familleList(pageable, search));
             model.addAttribute("search", search);
             return "admin/familles/add";
@@ -53,6 +58,7 @@ public class FamilleController {
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable Long id, Pageable pageable, @RequestParam(defaultValue = "") String search) {
+        model.addAttribute("classes", classeService.list());
         model.addAttribute("famille", familleService.get(id));
         model.addAttribute("page", familleService.familleList(pageable, search));
         model.addAttribute("edit", true);
@@ -63,6 +69,7 @@ public class FamilleController {
     @PostMapping("/{id}/edit")
     public String editPost(Model model, @Valid Famille famille, BindingResult result, Pageable pageable, @RequestParam(defaultValue = "") String search) {
         if (result.hasErrors()) {
+            model.addAttribute("classes", classeService.list());
             model.addAttribute("edit", true);
             model.addAttribute("page", familleService.familleList(pageable, search));
             model.addAttribute("search", search);

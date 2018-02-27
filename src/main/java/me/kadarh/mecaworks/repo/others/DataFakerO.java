@@ -3,7 +3,6 @@ package me.kadarh.mecaworks.repo.others;
 import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.alertes.AlerteEngin;
 import me.kadarh.mecaworks.domain.others.*;
-import me.kadarh.mecaworks.repo.bons.DataFakerB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
@@ -30,6 +29,8 @@ public class DataFakerO implements CommandLineRunner {
 	@Autowired
 	private GroupeRepo groupeRepo;
 	@Autowired
+	private ClasseRepo classeRepo;
+	@Autowired
 	private FamilleRepo familleRepo;
 	@Autowired
 	private SousFamilleRepo sousFamilleRepo;
@@ -39,8 +40,7 @@ public class DataFakerO implements CommandLineRunner {
     private EnginRepo enginRepo;
 	@Autowired
 	private FournisseurRepo fournisseurRepo;
-	@Autowired
-	private DataFakerB dataFakerB;
+
 	@Autowired
 	private AlerteRepo alerteRepo;
 
@@ -49,6 +49,7 @@ public class DataFakerO implements CommandLineRunner {
 		log.info("This is the DataFaker Of Other Domains");
 		loadGroupe(5);
 		loadChantiers(5);
+		loadClasses(2);
 		loadFamille(5);
         loadMarques(5);
         loadSousFamilles(10);
@@ -56,9 +57,18 @@ public class DataFakerO implements CommandLineRunner {
 		loadFournisseur(20);
 		loadAlerte(10);
 		loadEmploye(20);
-		dataFakerB.run();
 	}
 
+	//load classes
+	private void loadClasses(int n) {
+		for (int i = 0; i < n; i++) {
+			Classe classe = new Classe();
+			classe.setNom("Classe" + (i + 1));
+			classeRepo.save(classe);
+		}
+	}
+
+	//load alertes
 	private void loadAlerte(int n) {
 
 		for (int i = 0; i < n; i++) {
@@ -132,6 +142,10 @@ public class DataFakerO implements CommandLineRunner {
 		for (int i = 0; i < n; i++) {
 			Famille famille = new Famille();
 			famille.setNom("famille" + (i + 1));
+			if (i <= 2)
+				famille.setClasse(classeRepo.findById((i / 2) + 1L).get());
+			else
+				famille.setClasse(classeRepo.findById((i / 2) + 0L).get());
 			familleRepo.save(famille);
 		}
 		log.info(n + " Famille Loaded *****");

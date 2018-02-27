@@ -83,10 +83,12 @@ public class DataFakerB {
 			LocalDate date = LocalDate.parse(LocalDate.now().format(d), d);
 			bonEngin.setDate(date);
 			if (i % 2 == 1) {
-				bonEngin.setEnPanne(true);
+				bonEngin.setCompteurKmenPanne(true);
+				bonEngin.setCompteurHenPanne(true);
 				bonEngin.setPlein(true);
 			} else {
-				bonEngin.setEnPanne(false);
+				bonEngin.setCompteurKmenPanne(false);
+				bonEngin.setCompteurHenPanne(false);
 				bonEngin.setPlein(false);
 			}
 			bonEngin.setEngin(engin);
@@ -110,10 +112,12 @@ public class DataFakerB {
 			bonEngin.setChantierTravail(chantierTravail);
 			bonEngin.setDate(LocalDate.now());
 			if (i % 2 == 0) {
-				bonEngin.setEnPanne(true);
+				bonEngin.setCompteurKmenPanne(true);
+				bonEngin.setCompteurHenPanne(false);
 				bonEngin.setPlein(true);
 			} else {
-				bonEngin.setEnPanne(false);
+				bonEngin.setCompteurKmenPanne(false);
+				bonEngin.setCompteurHenPanne(false);
 				bonEngin.setPlein(false);
 			}
 			bonEngin.setEngin(engin);

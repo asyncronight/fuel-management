@@ -44,8 +44,9 @@ public class BonEngin extends AbstractDomain {
 	private Integer quantite;
 	private Long compteurKm;
 	private Long compteurH;
-	private Boolean enPanne;
-	private Boolean plein;
+    private Boolean compteurHenPanne;
+    private Boolean compteurKmenPanne;
+    private Boolean plein;
 	private Long compteurAbsoluKm;
 	private Long compteurAbsoluH;
 	private Float consommationKm;

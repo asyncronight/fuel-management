@@ -1,8 +1,10 @@
 package me.kadarh.mecaworks.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import me.kadarh.mecaworks.domain.others.Classe;
 import me.kadarh.mecaworks.domain.others.Famille;
 import me.kadarh.mecaworks.repo.others.FamilleRepo;
+import me.kadarh.mecaworks.service.ClasseService;
 import me.kadarh.mecaworks.service.FamilleService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
 import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
@@ -27,8 +29,11 @@ public class FamilleServiceImpl implements FamilleService {
 
 	private FamilleRepo familleRepo;
 
-	public FamilleServiceImpl(FamilleRepo familleRepos) {
-		this.familleRepo = familleRepos;
+	private ClasseService classeService;
+
+	public FamilleServiceImpl(FamilleRepo familleRepo, ClasseService classeService) {
+		this.familleRepo = familleRepo;
+		this.classeService = classeService;
 	}
 
 	/**
@@ -58,6 +63,9 @@ public class FamilleServiceImpl implements FamilleService {
 			if (famille.getNom() != null) {
 				old.setNom(famille.getNom());
 			}
+			if (famille.getClasse() != null) {
+				old.setClasse(famille.getClasse());
+			}
 			return familleRepo.save(old);
 
 		} catch (Exception e) {
@@ -85,6 +93,12 @@ public class FamilleServiceImpl implements FamilleService {
 				//creating example
 				Famille famille = new Famille();
 				famille.setNom(search);
+				if (classeService.findByNom(search).isPresent()) {
+					famille.setClasse(classeService.findByNom(search).get());
+				}
+				Classe classe = new Classe();
+				classe.setNom(search);
+				famille.setClasse(classe);
 				//creating matcher
 				ExampleMatcher matcher = ExampleMatcher.matchingAny()
 						.withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
