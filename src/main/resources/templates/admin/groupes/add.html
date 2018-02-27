@@ -4,7 +4,7 @@
 <body>
 <div th:replace="fragments :: menu2('admin')"></div>
 <div class="wrapper">
-	<div th:replace="admin/fragment :: menu('')"></div>
+	<div th:replace="admin/fragment :: menu('g')"></div>
     <!--/*@thymesVar id="groupe" type="me.kadarh.mecaworks.domain.others.Groupe"*/-->
 
     <!--/*@thymesVar id="page" type="org.springframework.data.domain.Page"*/-->
@@ -18,7 +18,7 @@
         <div class="col-12">
             <br/>
             <ul class="breadcrumb py-3">
-                <li class="breadcrumb-item"><a th:href="@{'/admin/groupes/add'}"><i
+				<li class="breadcrumb-item"><a th:href="@{'/admin/'}"><i
                         class="fa fa-arrow-circle-left fa-lg"></i></a></li>
                 <li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
                 <li class="breadcrumb-item"><a th:href="@{'/admin'}" th:text="#{admin}"></a></li>
@@ -193,4 +193,9 @@
 </div>
 </body>
 <div th:replace="fragments :: footer"></div>
+<script>
+    var d = document.getElementById('homeSubmenu');
+    d.classList.add("collapsed");
+    d.classList.remove("collapse");
+</script>
 </html>

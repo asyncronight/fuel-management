@@ -276,3 +276,15 @@ a, a:hover, a:focus {
     border-radius: 0 0 0 0;
 "
 }
+
+.breadcrumb, .btn, .form-control, .input-group-addon {
+    border-radius: 0 0 0 0;
+}
+
+table {
+    font-size: 13px;
+}
+
+#homeSubmenu:before {
+    content: "\f068";
+}

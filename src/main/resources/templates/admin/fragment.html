@@ -24,14 +24,24 @@
 			<li th:classappend="${active} eq 'f'?'bg-faded text-muted':''"><a th:href="@{'/admin/fournisseurs'}"
 																			  th:text="#{admin.fournisseurs}">Home</a>
 			</li>
-			<!-- <li>Link with dropdown items
-				<a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Pages</a>
-				<ul class="collapse list-unstyled" id="homeSubmenu">
-					<li><a href="#">Page</a></li>
-					<li><a href="#">Page</a></li>
-					<li><a href="#">Page</a></li>
+			<hr class="bg-info">
+			<li>
+				<a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Autre</a>
+				<ul class="collapse list-unstyled components" id="homeSubmenu">
+					<li th:classappend="${active} eq 'sf'?'bg-faded text-muted':''">
+						<a href="/admin/sousFamilles/add" th:text="#{admin.sousFamilles}">Page</a>
+					</li>
+					<li th:classappend="${active} eq 'fa'?'bg-faded text-muted':''">
+						<a href="/admin/familles/add" th:text="#{sousFamille.famille}">Page</a>
+					</li>
+					<li th:classappend="${active} eq 'g'?'bg-faded text-muted':''">
+						<a href="/admin/groupes/add" th:text="#{engin.groupe}">Page</a>
+					</li>
+					<li th:classappend="${active} eq 'm'?'bg-faded text-muted':''">
+						<a href="/admin/marques/add" th:text="#{admin.marques}">Page</a>
+					</li>
 				</ul>
-			</li> -->
+			</li>
 		</ul>
 	</nav>
 </div>
