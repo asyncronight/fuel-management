@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 public interface BonEnginRepo extends JpaRepository<BonEngin, Long> {
 
-    @Query("select b from BonEngin b where b.engin=?1 ")
+    @Query("select b from BonEngin b where b.engin=?1 having max (b.createdAt)")
     Optional<BonEngin> findTheLastBonEngin(Engin engin);
 }
