@@ -2,12 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
 <body>
-<div th:replace="fragments :: menu2('')"></div>
+<div th:replace="fragments :: menu('')"></div>
 <br>
 <div class="middle-box text-center animated fadeInDown">
 	<h1 th:text="#{error.400}"></h1>
 	<div class="error-desc">
-		<a th:href="@{'/'}" class="btn btn-warning" th:text="#{home}"></a>
+		<a th:href="@{'/'}" class="btn btn-warning btn-raised" th:text="#{home}"></a>
 	</div>
 </div>
 <div th:replace="fragments :: footer"></div>

@@ -2,8 +2,102 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
 <body>
-<div th:replace="fragments :: menu2('admin')"></div>
-<div class="wrapper">
+<div th:replace="fragments :: menu('admin')"></div>
+<div class="bmd-layout-container bmd-drawer-f-l ">
+	<div th:replace="admin/fragment :: menu('')"></div>
+	<main class="bmd-layout-content">
+		<div class="container-fluid">
+			<button class="btn bmd-btn-fab btn-primary bmd-btn-fab-sm active" type="button" data-toggle="drawer"
+					data-target="#side" style="margin-top: 10px">
+				<i class="material-icons text-light">menu</i>
+			</button>
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
+				<li class="breadcrumb-item" th:text="#{admin}"></li>
+			</ol>
+			<div class="card-deck text-center py-1">
+				<div class="card bg-light">
+					<a th:href="@{'/admin/chantiers'}">
+						<img class="card-img-top"
+							 src="https://valauperche.fr/wp-content/uploads/2017/11/visuel-travaux-domaine-public.jpg"
+							 alt="Card image cap">
+						<div class="card-header">
+							<h2 th:text="#{admin.chantiers}"></h2>
+						</div>
+					</a>
+					<div class="card-body">
+						<p class="card-text">
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent
+							libero.
+						</p>
+					</div>
+					<div class="card-footer">
+						<a href="/admin/chantiers/add" class="btn btn-info" th:text="#{admin.chantier.add}"></a>
+					</div>
+				</div>
+				<div class="card bg-light">
+					<a th:href="@{'/admin/engins'}">
+						<img class="card-img-top"
+							 src="http://www.love-modelisme.com/img/cms/logo-image%20engin%20de%20chantier-lovemodelisme.jpg"
+							 alt="Card image cap">
+						<div class="card-header">
+							<h2 th:text="#{admin.engins}"></h2>
+						</div>
+					</a>
+					<div class="card-body">
+						<p class="card-text">
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent
+							libero.
+						</p>
+					</div>
+					<div class="card-footer">
+						<a href="/admin/engins/add" class="btn btn-info" th:text="#{admin.engin.add}"></a>
+					</div>
+				</div>
+				<div class="card bg-light">
+					<a th:href="@{'/admin/employes'}">
+						<img class="card-img-top"
+							 src="https://www.journaldelagence.com/wp-content/uploads/2017/03/chantier-fnaim-journal-de-lagence.png"
+							 alt="Card image cap">
+						<div class="card-header">
+							<h2 th:text="#{admin.employes}"></h2>
+						</div>
+					</a>
+					<div class="card-body">
+						<p class="card-text">
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent
+							libero.
+						</p>
+					</div>
+					<div class="card-footer">
+						<a href="/admin/employes/add" class="btn btn-info" th:text="#{admin.employe.add}"></a>
+					</div>
+				</div>
+				<div class="card bg-light">
+					<a th:href="@{'/admin/fournisseurs'}">
+						<img class="card-img-top"
+							 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRJJG3i0jgmY91bJti8FZqAzbIAKSP4qiOfHj7gnSXB4KjUKQL"
+							 alt="Card image cap">
+						<div class="card-header">
+							<h2 th:text="#{admin.fournisseurs}"></h2>
+						</div>
+					</a>
+					<div class="card-body">
+						<p class="card-text">
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent
+							libero.
+						</p>
+					</div>
+					<div class="card-footer">
+						<a href="/admin/fournisseurs/add" class="btn btn-info" th:text="#{admin.fournisseur.add}"></a>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</main>
+</div>
+<!--<div class="wrapper">
 
 	<div th:replace="admin/fragment :: menu('')"></div>
 
@@ -104,7 +198,7 @@
 			</div>
 		</div>
 	</div>
-</div>
+</div>-->
 </body>
 <div th:replace="fragments :: footer"></div>
 </html>

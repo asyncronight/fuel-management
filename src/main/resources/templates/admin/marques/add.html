@@ -2,159 +2,118 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
 <body>
-<div th:replace="fragments :: menu2('admin')"></div>
-<div class="wrapper">
+<div th:replace="fragments :: menu('admin')"></div>
+<div class="bmd-layout-container bmd-drawer-f-l">
 	<div th:replace="admin/fragment :: menu('m')"></div>
-    <!--/*@thymesVar id="marque" type="me.kadarh.mecaworks.domain.others.Marque"*/-->
-
-    <!--/*@thymesVar id="page" type="org.springframework.data.domain.Page"*/-->
-    <!--/*@thymesVar id="search" type="java.lang.String"*/-->
-
-	<div id="content" style="width: 100%">
-		<button type="button" id="sidebarCollapse" class="btn menuButton">
-			<i class="glyphicon glyphicon-align-left fa fa-bars"></i>
-		</button>
-
-        <div class="col-12">
-            <br/>
-            <ul class="breadcrumb py-3">
-				<li class="breadcrumb-item"><a th:href="@{'/admin/'}"><i
-                        class="fa fa-arrow-circle-left fa-lg"></i></a></li>
-                <li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
-                <li class="breadcrumb-item"><a th:href="@{'/admin'}" th:text="#{admin}"></a></li>
+	<main class="bmd-layout-content">
+		<div class="container">
+			<button class="btn bmd-btn-fab btn-primary bmd-btn-fab-sm active" type="button" data-toggle="drawer"
+					data-target="#side" style="margin-top: 10px">
+				<i class="material-icons text-light">menu</i>
+			</button>
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
+				<li class="breadcrumb-item"><a th:href="@{'/admin'}" th:text="#{admin}"></a></li>
 				<li class="breadcrumb-item"><a th:href="@{'/admin/marques/add'}" th:text="#{admin.marques}"></a></li>
-                <li class="breadcrumb-item" th:text="${edit}? #{admin.marque.edit}: #{admin.marque.add}"></li>
-            </ul>
-			<div>
-                <form class="form-horizontal bg-faded p-4" role="form" method="post"
-                      th:object="${marque}">
-                    <div class="row">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-6">
-                            <hr>
-                            <h3 th:text="${edit}?#{admin.marque.edit}: #{admin.marque.add}"></h3>
-                            <hr>
-                        </div>
-                    </div>
-					<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
-						<div class="row pl-4">
-							<p th:text="#{formError}"></p>
-						</div>
-						<div class="row col-12 help-block">
-							<ul>
-								<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
-							</ul>
-						</div>
-					</div>
-                    <div class="row">
-                        <div class="col-3 field-label-responsive">
-                            <label for="nom" th:text="#{marque.nom}"></label>
-                        </div>
-                        <div class="col-7">
-                            <div class="form-group">
-                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-sort"></i>
-                                    </div>
-                                    <input type="text" id="nom"
-                                           class="form-control" th:field="*{nom}"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+				<li class="breadcrumb-item" th:text="${edit}? #{admin.marque.edit}: #{admin.marque.add}"></li>
+			</ol>
+			<form class="card p-5" method="post" th:object="${marque}">
+				<h3 class="text-center"
+					th:text="${edit}?#{admin.marque.edit}: #{admin.marque.add}"></h3>
+				<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+					<h4 class="alert-heading" th:text="#{formError}"></h4>
+					<ul>
+						<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+					</ul>
+				</div>
+				<div class="form-group">
+					<label class="bmd-label-floating" for="nom" th:text="#{marque.nom}"></label>
+					<input type="text" id="nom"
+						   class="form-control" th:field="*{nom}"/>
+				</div>
+				<button type="submit" class="btn btn-success btn-raised">
+					[[${edit}?#{save}: #{add}]]
+				</button>
+				<a th:if="${edit}" href="/admin/marques/add" class="btn btn-secondary btn-raised">
+					[[#{cancel}]]
+				</a>
+			</form>
 
-                    <div class="row">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-9">
-                            <button type="submit" class="btn btn-success"><i class="fa"></i>
-                                [[${edit}?#{save}: #{add}]]
-                            </button>
-							<a th:if="${edit}" href="/admin/marques/add" class="btn btn-secondary"><i class="fa"></i>
-								[[#{cancel}]]
+			<hr id="hrTable">
+
+			<form class="form-inline justify-content-center" method="get" th:action="@{'/admin/marques/add#hrTable'}">
+				<div class="form-group">
+					<input class="form-control col-12" type="text" th:name="search" th:value="${search}">
+					<button class="btn btn-secondary col btn-raised" type="submit" th:text="#{search}"></button>
+				</div>
+			</form>
+
+			<div class="jumbotron alert alert-primary" th:if="${#lists.isEmpty(page.content)}">
+				<h1 class="text-center alert-heading" th:text="#{empty}"></h1>
+			</div>
+
+			<div class="table-responsive card" th:if="!${#lists.isEmpty(page.content)}">
+				<table class="table table-sm table-hover table-bordered">
+					<thead class="bg-primary">
+					<tr>
+						<th th:with="desc=${page.getSort().getOrderFor('nom')?.descending}">
+							[[#{marque.nom}]]
+							<a th:href="'?page=0&sort=nom'+(${desc}?'':',desc')+(${search.isEmpty()}?''+'#hrTable':'&search='+${search}+'#hrTable')">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
 							</a>
-                        </div>
-                    </div>
-
-                </form>
-                <hr class="m-1" id="hrTable">
-                <div class="container-fluid text-center bg-faded py-3" th:if="${#lists.isEmpty(page.content)}">
-                    <div class="text-warning "><h3 th:text="#{empty}"></h3></div>
-                </div>
-                <div th:if="!${#lists.isEmpty(page.content)}">
-                    <div class="row col-12 p-2">
-                        <form class="form-inline col-9" method="get" th:action="@{'/admin/marques/add'}">
-                            <input class="form-control col-9"
-                                   type="text" th:name="search" th:value="${search}">
-                            <button class="btn btn-secondary col-3" type="submit" th:text="#{search}"></button>
-                        </form>
-                    </div>
-                    <table class="table table-hover table-bordered">
-                        <tr class="bg-inverse text-white">
-                            <th>
-                                <a th:href="'?page=0&sort=nom'+(${page.getSort().getOrderFor('nom')?.descending}?'':',desc')+(${search.isEmpty()}?''+'#hrTable':'&search='+${search}+'#hrTable')"
-                                   th:title="!${page.getSort().getOrderFor('nom')?.descending}? #{sort.desc}: #{sort.asc}">
-									[[#{marque.nom}]]
-                                    <span th:if="${page.getSort().getOrderFor('nom')?.ascending}"
-                                          class="fa fa-sort-up"></span>
-                                    <span th:if="!${page.getSort().getOrderFor('nom')?.ascending}"
-                                          class="fa fa-sort-down"></span>
-                                </a>
-                            </th>
-
-                            <th></th>
-                        </tr>
-                        <tr th:each="marque : ${page.content}" class="bg-faded">
-                            <td th:text="${marque.nom}"></td>
-                            <td class="btn-group">
-                                <a th:href="@{'/admin/marques/' + ${marque.id} +'/edit'}" class="btn btn-primary"
-                                   th:title="#{edit}">
-                                    <span class="fa fa-edit"></span>
-                                </a>
-                                <form th:action="@{'/admin/marques/' + ${marque.id} +'/delete'}" method="post">
-                                    <button type="submit" class="btn btn-danger" th:title="#{delete}">
-                                        <span class="fa fa-trash"></span>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    </table>
-                    <div class="row justify-content-center">
-                        <nav aria-label="Page navigation example ">
-                            <ul class="pagination ">
-                                <li class="page-item">
-                                    <a class="page-link" th:unless="${page.number} eq 0"
-                                       th:href="'?page='+${(page.number)-1}+(${search.isEmpty()}?'':'&search='+${search})
-                             +(${page.getSort().sorted? '&sort='+page.getSort().iterator().next().property+','+page.getSort().iterator().next().direction:''})"
-
-                                       aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">
-                                    <span th:text="${page.number+1}+'/'+${page.totalPages}"></span></a></li>
-                                <li class="page-item">
-                                    <a class="page-link" th:unless="${page.number+1} ge ${page.totalPages}"
-                                       th:href="'?page='+${page.number+1}+(${search.isEmpty()}?'':'&search='+${search})
-                           +(${page.getSort().sorted? '&sort='+page.getSort().iterator().next().property+','+page.getSort().iterator().next().direction:''})"
-                                       aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-                <br>
-            </div>
-        </div>
-    </div>
+						</th>
+						<th></th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr th:each="marque : ${page.content}">
+						<td th:text="${marque.nom}"></td>
+						<td class="btn-group">
+							<button class="btn bmd-btn-icon dropdown-toggle" type="button" id="ex3"
+									data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="material-icons">more_vert</i>
+							</button>
+							<div class="dropdown-menu  dropdown-menu-left" aria-labelledby="ex3">
+								<form th:action="@{'/admin/marques/' + ${marque.id} +'/delete'}" method="post">
+									<a th:href="@{'/admin/marques/' + ${marque.id} +'/edit'}"
+									   class="dropdown-item">
+										<i class="material-icons">edit</i> [[#{edit}]]
+									</a>
+									<button type="submit" class="dropdown-item">
+										<i class="material-icons">delete</i> [[#{delete}]]
+									</button>
+								</form>
+							</div>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+				<ul class="pagination justify-content-center">
+					<li class="page-item" th:classappend="${page.number} eq 0?'disabled':''">
+						<a class="page-link"
+						   th:href="'?page='+${(page.number)-1}+(${search.isEmpty()}?'':'&search='+${search})
+						 +(${page.getSort().sorted? '&sort='+page.getSort().iterator().next().property
+						 +','+page.getSort().iterator().next().direction:''})">
+							<span aria-hidden="true">&laquo;</span>
+						</a>
+					</li>
+					<li class="page-item active">
+						<a class="page-link" th:text="${page.number+1}+'/'+${page.totalPages} "></a>
+					</li>
+					<li class="page-item" th:classappend="${page.number+1} ge ${page.totalPages}?'disabled':''">
+						<a class="page-link"
+						   th:href="'?page='+${page.number+1}+(${search.isEmpty()}?'':'&search='+${search})
+					   +(${page.getSort().sorted? '&sort='+page.getSort().iterator().next().property
+					   +','+page.getSort().iterator().next().direction:''})">
+							<span aria-hidden="true">&raquo;</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</main>
 </div>
 </body>
 <div th:replace="fragments :: footer"></div>
-<script>
-    var d = document.getElementById('homeSubmenu');
-    d.classList.add("collapsed");
-    d.classList.remove("collapse");
-</script>
 </html>
