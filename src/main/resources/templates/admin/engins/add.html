@@ -3,7 +3,7 @@
 <head th:replace="fragments :: head"></head>
 <body>
 <div th:replace="fragments :: menu('admin')"></div>
-<div class="bmd-layout-container bmd-drawer-f-l">
+<div class="bmd-layout-container bmd-drawer-f-l  bmd-drawer-overlay-md-down">
 	<div th:replace="admin/fragment :: menu('en')"></div>
 	<main class="bmd-layout-content">
 		<div class="container">
@@ -49,30 +49,26 @@
 						   class="form-control" th:field="*{compteurInitialKm}"/>
 				</div>
 				<div class="input-group mb-3">
-					<div class="input-group-prepend">
-						<label class="input-group-text" for="sousFamille" th:text="#{engin.sousFamille}"></label>
-					</div>
-					<select class="custom-select" id="sousFamille" th:field="*{sousFamille.id}">
+					<label class="input-group-text text-muted" for="sousFamille" th:text="#{engin.sousFamille}"></label>
+					<a target="_blank" class="btn active bmd-btn-fab bmd-btn-fab-sm ml-2"
+					   href="/admin/sousFamilles/add" th:title="#{admin.sousFamille.add}">
+						<i class="material-icons mt-2">add</i>
+					</a>
+					<select class="js-example-basic-single" id="sousFamille" th:field="*{sousFamille.id}">
 						<option th:each="sousFamille : ${sousFamilles}" th:value="${sousFamille.id}"
 								th:text="${sousFamille.nom}"></option>
 					</select>
-					<div class="input-group-append">
-						<a target="_blank" class="btn btn-outline-secondary"
-						   href="/admin/sousFamilles/add" th:text="#{admin.sousFamille.add}"></a>
-					</div>
 				</div>
 				<div class="input-group mb-3">
-					<div class="input-group-prepend">
-						<label class="input-group-text" for="groupe" th:text="#{engin.groupe}"></label>
-					</div>
-					<select class="custom-select" id="groupe" th:field="*{groupe.id}">
+					<label class="input-group-text text-muted" for="groupe" th:text="#{engin.groupe}"></label>
+					<a target="_blank" class="btn active bmd-btn-fab bmd-btn-fab-sm ml-2"
+					   href="/admin/groupes/add" th:title="#{admin.groupe.add}">
+						<i class="material-icons mt-2">add</i>
+					</a>
+					<select class="js-example-basic-single" id="groupe" th:field="*{groupe.id}">
 						<option th:each="groupe : ${groupes}" th:value="${groupe.id}"
 								th:text="${groupe.nom}"></option>
 					</select>
-					<div class="input-group-append">
-						<a target="_blank" class="btn btn-outline-secondary"
-						   href="/admin/groupes/add" th:text="#{admin.groupe.add}"></a>
-					</div>
 				</div>
 				<button type="submit" class="btn btn-success btn-raised">
 					[[${edit}?#{save}: #{add}]]

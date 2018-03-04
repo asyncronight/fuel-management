@@ -3,7 +3,7 @@
 <head th:replace="fragments :: head"></head>
 <body>
 <div th:replace="fragments :: menu('admin')"></div>
-<div class="bmd-layout-container bmd-drawer-f-l">
+<div class="bmd-layout-container bmd-drawer-f-l  bmd-drawer-overlay-md-down">
 	<div th:replace="admin/fragment :: menu('fa')"></div>
 	<main class="bmd-layout-content">
 		<div class="container">
@@ -33,17 +33,15 @@
 						   class="form-control" th:field="*{nom}"/>
 				</div>
 				<div class="input-group mb-3">
-					<div class="input-group-prepend">
-						<label class="input-group-text" for="classe" th:text="#{famille.classe}"></label>
-					</div>
-					<select class="custom-select" id="classe" th:field="*{classe.id}">
+					<label class="input-group-text text-muted" for="classe" th:text="#{famille.classe}"></label>
+					<a target="_blank" class="btn active bmd-btn-fab bmd-btn-fab-sm ml-2"
+					   href="/admin/classes/add" th:title="#{admin.famille.add}">
+						<i class="material-icons mt-2">add</i>
+					</a>
+					<select class="js-example-basic-single" id="classe" th:field="*{classe.id}">
 						<option th:each="classe : ${classes}" th:value="${classe.id}"
 								th:text="${classe.nom}"></option>
 					</select>
-					<div class="input-group-append">
-						<a target="_blank" class="btn btn-outline-secondary"
-						   href="/admin/classes/add" th:text="#{admin.classe.add}"></a>
-					</div>
 				</div>
 				<button type="submit" class="btn btn-success btn-raised">
 					[[${edit}?#{save}: #{add}]]

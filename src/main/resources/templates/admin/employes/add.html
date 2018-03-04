@@ -3,7 +3,7 @@
 <head th:replace="fragments :: head"></head>
 <body>
 <div th:replace="fragments :: menu('admin')"></div>
-<div class="bmd-layout-container bmd-drawer-f-l">
+<div class="bmd-layout-container bmd-drawer-f-l  bmd-drawer-overlay-md-down">
 	<div th:replace="admin/fragment :: menu('em')"></div>
 	<main class="bmd-layout-content">
 		<div class="container">
@@ -32,10 +32,8 @@
 						   class="form-control" th:field="*{nom}"/>
 				</div>
 				<div class="input-group mb-3">
-					<div class="input-group-prepend">
-						<label class="input-group-text" for="metier" th:text="#{employe.metier}"></label>
-					</div>
-					<select class="custom-select" id="metier" th:field="*{metier}">
+					<label class="input-group-text text-muted" for="metier" th:text="#{employe.metier}"></label>
+					<select class="js-example-basic-single" id="metier" th:field="*{metier}">
 						<option th:each="metier : ${metiers}" th:value="${metier}"
 								th:text="${metier}"></option>
 					</select>
