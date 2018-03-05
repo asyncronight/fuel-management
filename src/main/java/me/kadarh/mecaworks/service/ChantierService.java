@@ -16,5 +16,6 @@ public interface ChantierService {
 
 	void delete(Long id);
 
-
+	//todo
+	// List<Chantier> getList();
 }

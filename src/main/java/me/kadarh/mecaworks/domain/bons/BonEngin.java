@@ -10,6 +10,7 @@ import me.kadarh.mecaworks.domain.others.Engin;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 
 /**
@@ -24,6 +25,7 @@ public class BonEngin extends AbstractDomain {
 	private LocalDate date;
 
 	@Column(unique = true)
+	@NotEmpty
 	private String code;
 
 	@ManyToOne

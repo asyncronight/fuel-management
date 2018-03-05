@@ -2,9 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
 <body>
-<div th:replace="fragments :: menu('admin')"></div>
+<div th:replace="fragments :: menu('saisi')"></div>
 <div class="bmd-layout-container bmd-drawer-f-l  bmd-drawer-overlay-md-down">
-	<div th:replace="admin/fragment :: menu('fa')"></div>
+	<div th:replace="admin/fragment :: menu('es')"></div>
 	<main class="bmd-layout-content">
 		<div class="container">
 			<button class="btn bmd-btn-fab btn-primary bmd-btn-fab-sm active" type="button" data-toggle="drawer"
@@ -13,53 +13,20 @@
 			</button>
 			<ol class="breadcrumb">
 				<li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
-				<li class="breadcrumb-item"><a th:href="@{'/admin'}" th:text="#{admin}"></a></li>
-				<li class="breadcrumb-item"><a th:href="@{'/admin/familles/add'}" th:text="#{sousFamille.famille}"></a>
-				</li>
-				<li class="breadcrumb-item" th:text="${edit}? #{admin.famille.edit}: #{admin.famille.add}"></li>
+				<li class="breadcrumb-item"><a th:href="@{'/saisi'}" th:text="#{saisie}"></a></li>
+				<li class="breadcrumb-item" th:text="#{saisie.engin.list}"></li>
 			</ol>
-			<form class="card p-5" method="post" th:object="${famille}">
-				<h3 class="text-center"
-					th:text="${edit}?#{admin.famille.edit}: #{admin.famille.add}"></h3>
-				<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
-					<h4 class="alert-heading" th:text="#{formError}"></h4>
-					<ul>
-						<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
-					</ul>
-				</div>
+			<a th:href="@{'/saisi/engins/add'}" class="btn btn-success bmd-btn-fab float-right"
+			   th:title="#{saisie.engin.add}">
+				<i class="material-icons mt-3">add</i>
+			</a>
+			<form class="form-inline justify-content-center" method="get" th:action="@{'/saisi/engins'}">
 				<div class="form-group">
-					<label class="bmd-label-floating" for="nom" th:text="#{famille.nom}"></label>
-					<input type="text" id="nom"
-						   class="form-control" th:field="*{nom}"/>
-				</div>
-				<div class="input-group mb-3">
-					<label class="input-group-text text-muted" for="classe" th:text="#{famille.classe}"></label>
-					<a target="_blank" class="btn active bmd-btn-fab bmd-btn-fab-sm ml-2"
-					   href="/admin/classes/add" th:title="#{admin.famille.add}">
-						<i class="material-icons mt-2">add</i>
-					</a>
-					<select class="js-example-basic-single" id="classe" th:field="*{classe.id}">
-						<option th:each="classe : ${classes}" th:value="${classe.id}"
-								th:text="${classe.nom}"></option>
-					</select>
-				</div>
-				<button type="submit" class="btn btn-success btn-raised">
-					[[${edit}?#{save}: #{add}]]
-				</button>
-				<a href="/admin/familles/add" class="btn btn-secondary btn-raised">
-					[[#{cancel}]]
-				</a>
-			</form>
-
-			<hr id="hrTable">
-
-			<form class="form-inline justify-content-center" method="get" th:action="@{'/admin/familles/add#hrTable'}">
-				<div class="form-group">
-					<input class="form-control col-12" type="text" th:name="search" th:value="${search}">
+					<input class="form-control col-12" type="text" th:name="search" th:value="${search}"
+						   th:placeholder="#{search}">
 					<button class="btn btn-secondary col btn-raised" type="submit" th:text="#{search}"></button>
 				</div>
 			</form>
-
 			<div class="jumbotron alert alert-primary" th:if="${#lists.isEmpty(page.content)}">
 				<h1 class="text-center alert-heading" th:text="#{empty}"></h1>
 			</div>
@@ -68,16 +35,16 @@
 				<table class="table table-sm table-hover table-bordered">
 					<thead class="bg-primary">
 					<tr>
-						<th th:with="desc=${page.getSort().getOrderFor('nom')?.descending}">
-							[[#{famille.nom}]]
-							<a th:href="'?page=0&sort=nom'+(${desc}?'':',desc')+(${search.isEmpty()}?''+'#hrTable':'&search='+${search}+'#hrTable')">
+						<th th:with="desc=${page.getSort().getOrderFor('date')?.descending}">
+							[[#{bonEngin.date}]]
+							<a th:href="'?page=0&sort=date'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
 								<i class="material-icons text-light"
 								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
 							</a>
 						</th>
-						<th th:with="desc=${page.getSort().getOrderFor('classe.nom')?.descending}">
-							[[#{famille.classe}]]
-							<a th:href="'?page=0&sort=classe.nom'+(${desc}?'':',desc')+(${search.isEmpty()}?''+'#hrTable':'&search='+${search}+'#hrTable')">
+						<th th:with="desc=${page.getSort().getOrderFor('code')?.descending}">
+							[[#{bonEngin.code}]]
+							<a th:href="'?page=0&sort=code'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
 								<i class="material-icons text-light"
 								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
 							</a>
@@ -86,17 +53,17 @@
 					</tr>
 					</thead>
 					<tbody>
-					<tr th:each="famille : ${page.content}">
-						<td th:text="${famille.nom}"></td>
-						<td th:text="${famille.classe.nom}"></td>
+					<tr th:each="bon : ${page.content}">
+						<td th:text="${bon.date}"></td>
+						<td th:text="${bon.code}"></td>
 						<td class="btn-group">
 							<button class="btn bmd-btn-icon dropdown-toggle" type="button" id="ex3"
 									data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								<i class="material-icons">more_vert</i>
 							</button>
-							<div class="dropdown-menu  dropdown-menu-left" aria-labelledby="ex3">
-								<form th:action="@{'/admin/familles/' + ${famille.id} +'/delete'}" method="post">
-									<a th:href="@{'/admin/familles/' + ${famille.id} +'/edit'}"
+							<div class="dropdown-menu dropdown-menu-left" aria-labelledby="ex3">
+								<form th:action="@{'/saisi/engins/' + ${bon.id} +'/delete'}" method="post">
+									<a th:href="@{'/saisi/engins/' + ${bon.id} +'/edit'}"
 									   class="dropdown-item">
 										<i class="material-icons">edit</i> [[#{edit}]]
 									</a>
