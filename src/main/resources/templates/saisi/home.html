@@ -2,88 +2,81 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
 <body>
-<div th:replace="fragments :: menu2('saisi')"></div>
-<div class="wrapper">
-
+<div th:replace="fragments :: menu('saisi')"></div>
+<div class="bmd-layout-container bmd-drawer-f-l  bmd-drawer-overlay-md-down">
 	<div th:replace="saisi/fragment :: menu('')"></div>
-
-	<div id="content">
-		<button type="button" id="sidebarCollapse" class="btn menuButton">
-			<i class="glyphicon glyphicon-align-left fa fa-bars"></i>
-
-		</button>
-		<div class="col-12">
-			<br/>
-			<ul class="breadcrumb py-3">
-				<li class="breadcrumb-item"><a th:href="@{'/'}"><i class="fa fa-arrow-circle-left fa-lg"></i></a></li>
+	<main class="bmd-layout-content">
+		<div class="container">
+			<button class="btn bmd-btn-fab btn-primary bmd-btn-fab-sm active" type="button" data-toggle="drawer"
+					data-target="#side" style="margin-top: 10px">
+				<i class="material-icons text-light">menu</i>
+			</button>
+			<ol class="breadcrumb">
 				<li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
 				<li class="breadcrumb-item" th:text="#{saisie}"></li>
-			</ul>
-			<div class="row ml-3">
-				<div class="col-sm-6 col-md-4 col-lg-3 mt-4 mr-4 ml-4 bg-faded"
-					 style="box-shadow:2px 2px 3px 3px darkseagreen;">
-					<div class=" text-center">
-						<div>
-							<h2 class="py-3"><a th:href="@{'/saisi/engins'}"><i class="fa fa-list-alt"></i> <span
-									th:text="#{saisie.engin.list}"></span></a>
-							</h2>
+			</ol>
+			<div class="card-deck text-center py-1">
+				<div class="card bg-light">
+					<a th:href="@{'/saisi/engins/'}">
+						<img class="card-img-top"
+							 src="https://www.informatiquenews.fr/wp-content/uploads/2016/09/6-comptabilit%C3%A9-Une.jpg"
+							 alt="Card image cap">
+						<div class="card-header">
+							<h2 th:text="#{saisie.engin.list}"></h2>
 						</div>
-						<hr/>
-						<blockquote class="card-blockquote p-3">
-							<p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent
-								libero.</p>
-						</blockquote>
+					</a>
+					<div class="card-body">
+						<p class="card-text">
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent
+							libero.
+						</p>
 					</div>
-					<div class="card-footer text-center">
-						<a class="btn btn-sm btn-link" th:href="@{'/saisi/engins/add'}">
-							[[#{saisie.engin.add}]] <i class="fa fa-plus"></i>
-						</a>
+					<div class="card-footer">
+						<a href="/saisi/engins/add" class="btn btn-info" th:text="#{saisie.engin.add}"></a>
 					</div>
 				</div>
-				<div class="col-sm-6 col-md-4 col-lg-3 mt-4 mr-4 ml-4 bg-faded"
-					 style="box-shadow:2px 2px 3px 3px darkseagreen;">
-					<div class=" text-center">
-						<div>
-							<h2 class="py-3"><a th:href="@{'/saisi/livraisons'}"><i class="fa fa-list-alt"></i> <span
-									th:text="#{saisie.livraison.list}"></span></a>
-							</h2>
+				<div class="card bg-light">
+					<a th:href="@{'/saisi/livraisons/'}">
+						<img class="card-img-top"
+							 src="https://www.informatiquenews.fr/wp-content/uploads/2016/09/6-comptabilit%C3%A9-Une.jpg"
+							 alt="Card image cap">
+						<div class="card-header">
+							<h2 th:text="#{saisie.livraison.list}"></h2>
 						</div>
-						<hr/>
-						<blockquote class="card-blockquote p-3">
-							<p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent
-								libero.</p>
-						</blockquote>
+					</a>
+					<div class="card-body">
+						<p class="card-text">
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent
+							libero.
+						</p>
 					</div>
-					<div class="card-footer text-center">
-						<a class="btn btn-sm btn-link" th:href="@{'/saisi/livraisons/add'}">
-							[[#{saisie.livraison.add}]] <i class="fa fa-plus"></i>
-						</a>
+					<div class="card-footer">
+						<a href="/saisi/livraisons/add" class="btn btn-info" th:text="#{saisie.livraison.add}"></a>
 					</div>
 				</div>
-				<div class="col-sm-6 col-md-4 col-lg-3 mt-4 mr-4 ml-4 bg-faded"
-					 style="box-shadow:2px 2px 3px 3px darkseagreen;">
-					<div class=" text-center">
-						<div>
-							<h2 class="py-3"><a th:href="@{'/saisi/fournisseurs'}"><i class="fa fa-list-alt"></i> <span
-									th:text="#{saisie.fournisseur.list}"></span></a>
-							</h2>
+				<div class="card bg-light">
+					<a th:href="@{'/saisi/fournisseurs/'}">
+						<img class="card-img-top"
+							 src="https://www.informatiquenews.fr/wp-content/uploads/2016/09/6-comptabilit%C3%A9-Une.jpg"
+							 alt="Card image cap">
+						<div class="card-header">
+							<h2 th:text="#{saisie.fournisseur.list}"></h2>
 						</div>
-						<hr/>
-						<blockquote class="card-blockquote p-3">
-							<p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent
-								libero.</p>
-						</blockquote>
+					</a>
+					<div class="card-body">
+						<p class="card-text">
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent
+							libero.
+						</p>
 					</div>
-					<div class="card-footer text-center">
-						<a class="btn btn-sm btn-link" th:href="@{'/saisi/fournisseurs/add'}">
-							[[#{saisie.fournisseur.add}]] <i class="fa fa-plus"></i>
-						</a>
+					<div class="card-footer">
+						<a href="/saisi/fournisseurs/add" class="btn btn-info" th:text="#{saisie.fournisseur.add}"></a>
 					</div>
 				</div>
 
 			</div>
 		</div>
-	</div>
+	</main>
 </div>
 </body>
 <div th:replace="fragments :: footer"></div>

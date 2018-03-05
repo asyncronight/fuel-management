@@ -2,48 +2,48 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
 <body>
-<div th:fragment="menu(active)">
+<div th:fragment="menu(active)" id="side" class="bmd-layout-drawer bg-faded">
+	<header>
+		<h4 th:text="#{admin}"></h4>
+	</header>
+	<hr class="bg-primary" style="width: 100%; height: 2px">
+	<ul class="list-group">
+		<a class="list-group-item" th:href="@{'/admin/chantiers'}" th:classappend="${active} eq 'c'?'active':''"
+		   th:text="#{admin.chantiers}"></a>
+		<a class="list-group-item" th:href="@{'/admin/engins'}" th:classappend="${active} eq 'en'?'active':''"
+		   th:text="#{admin.engins}"></a>
+		<a class="list-group-item" th:href="@{'/admin/employes'}" th:classappend="${active} eq 'em'?'active':''"
+		   th:text="#{admin.employes}"></a>
+		<a class="list-group-item" th:href="@{'/admin/fournisseurs'}" th:classappend="${active} eq 'f'?'active':''"
+		   th:text="#{admin.fournisseurs}"></a>
 
-	<nav id="sidebar">
-		<div class="sidebar-header">
-			<h3 class="py-2" th:text="#{admin}"></h3>
+		<div class="dropdown">
+			<a class="list-group-item dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+			   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				Autre
+			</a>
+
+			<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+				<a class="list-group-item" th:href="@{'/admin/sousFamilles/add'}"
+				   th:classappend="${active} eq 'sf'?'active':''"
+				   th:text="#{admin.sousFamilles}"></a>
+				<a class="list-group-item" th:href="@{'/admin/familles/add'}"
+				   th:classappend="${active} eq 'fa'?'active':''"
+				   th:text="#{sousFamille.famille}"></a>
+				<a class="list-group-item" th:href="@{'/admin/groupes/add'}"
+				   th:classappend="${active} eq 'g'?'active':''"
+				   th:text="#{engin.groupe}"></a>
+				<a class="list-group-item" th:href="@{'/admin/marques/add'}"
+				   th:classappend="${active} eq 'm'?'active':''"
+				   th:text="#{admin.marques}"></a>
+				<a class="list-group-item" th:href="@{'/admin/classes/add'}"
+				   th:classappend="${active} eq 'cl'?'active':''"
+				   th:text="#{famille.classe}"></a>
+				<div class="dropdown-divider"></div>
+				<a class="list-group-item" href="#">Gestion des utilisateurs</a>
+			</div>
 		</div>
-		<hr class="bg-info">
-
-		<!-- Sidebar Links -->
-		<ul class="list-unstyled components">
-			<li th:classappend="${active} eq 'c'?'bg-faded text-muted':''"><a th:href="@{'/admin/chantiers'}"
-																			  th:text="#{admin.chantiers}">Home</a></li>
-			<hr class="bg-info">
-			<li th:classappend="${active} eq 'en'?'bg-faded text-muted':''"><a th:href="@{'/admin/engins'}"
-																			   th:text="#{admin.engins}">Home</a></li>
-			<hr class="bg-info">
-			<li th:classappend="${active} eq 'em'?'bg-faded text-muted':''"><a th:href="@{'/admin/employes'}"
-																			   th:text="#{admin.employes}">Home</a></li>
-			<hr class="bg-info">
-			<li th:classappend="${active} eq 'f'?'bg-faded text-muted':''"><a th:href="@{'/admin/fournisseurs'}"
-																			  th:text="#{admin.fournisseurs}">Home</a>
-			</li>
-			<hr class="bg-info">
-			<li>
-				<a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Autre</a>
-				<ul class="collapse list-unstyled components" id="homeSubmenu">
-					<li th:classappend="${active} eq 'sf'?'bg-faded text-muted':''">
-						<a href="/admin/sousFamilles/add" th:text="#{admin.sousFamilles}">Page</a>
-					</li>
-					<li th:classappend="${active} eq 'fa'?'bg-faded text-muted':''">
-						<a href="/admin/familles/add" th:text="#{sousFamille.famille}">Page</a>
-					</li>
-					<li th:classappend="${active} eq 'g'?'bg-faded text-muted':''">
-						<a href="/admin/groupes/add" th:text="#{engin.groupe}">Page</a>
-					</li>
-					<li th:classappend="${active} eq 'm'?'bg-faded text-muted':''">
-						<a href="/admin/marques/add" th:text="#{admin.marques}">Page</a>
-					</li>
-				</ul>
-			</li>
-		</ul>
-	</nav>
+	</ul>
 </div>
 </body>
 </html>

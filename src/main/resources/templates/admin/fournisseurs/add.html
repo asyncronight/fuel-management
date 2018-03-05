@@ -2,87 +2,46 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
 <body>
-<div th:replace="fragments :: menu2('admin')"></div>
-<div class="wrapper">
-	<div th:replace="admin/fragment :: menu('')"></div>
-    <!--/*@thymesVar id="fournisseurs" type="me.kadarh.mecaworks.domain.others.Fournisseur"*/-->
-
-	<div id="content" style="width: 100%">
-		<button type="button" id="sidebarCollapse" class="btn menuButton">
-			<i class="glyphicon glyphicon-align-left fa fa-bars"></i>
-		</button>
-
-        <div class="col-12">
-            <br/>
-            <ul class="breadcrumb py-3">
-                <li class="breadcrumb-item"><a th:href="@{'/admin/fournisseurs'}"><i
-                        class="fa fa-arrow-circle-left fa-lg"></i></a></li>
-                <li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
-                <li class="breadcrumb-item"><a th:href="@{'/admin'}" th:text="#{admin}"></a></li>
-                <li class="breadcrumb-item"><a th:href="@{'/admin/fournisseurs'}" th:text="#{admin.fournisseurs}"></a>
-                </li>
-                <li class="breadcrumb-item"
-					th:text="${edit}? #{admin.fournisseur.edit}: #{admin.fournisseur.add}"></li>
-            </ul>
-			<div>
-                <form class="form-horizontal bg-faded p-4" role="form" method="post"
-                      th:object="${fournisseur}">
-                    <div class="row">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-6">
-                            <hr>
-							<h3 class="text-center"
-								th:text="${edit}?#{admin.fournisseur.edit}: #{admin.fournisseur.add}"></h3>
-                            <hr>
-                        </div>
-                    </div>
-                    <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
-                        <div class="row pl-4">
-                            <p th:text="#{formError}"></p>
-                        </div>
-                        <div class="row">
-                            <div class="col-12 help-block" th:if="${#fields.hasErrors('nom')}">
-                                <ul>
-                                    <li th:each="err : ${#fields.errors('nom')}" th:text="${err}"></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-2 field-label-responsive">
-                            <label for="nom" th:text="#{fournisseur.nom}"></label>
-                        </div>
-                        <div class="col-8">
-                            <div class="form-group">
-                                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                                    <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-sort"></i>
-                                    </div>
-                                    <input type="text" id="nom"
-                                           class="form-control" th:field="*{nom}"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-9">
-                            <button type="submit" class="btn btn-success"><i class="fa"></i>
-                                [[${edit}?#{save}: #{add}]]
-                            </button>
-							<a th:if="${edit}" href="/admin/fournisseurs" class="btn btn-secondary"><i class="fa"></i>
-								[[#{cancel}]]
-							</a>
-                        </div>
-                    </div>
-                    <br>
-                </form>
-            </div>
-            <br>
-        </div>
-    </div>
+<div th:replace="fragments :: menu('admin')"></div>
+<div class="bmd-layout-container bmd-drawer-f-l  bmd-drawer-overlay-md-down">
+	<div th:replace="admin/fragment :: menu('f')"></div>
+	<main class="bmd-layout-content">
+		<div class="container">
+			<button class="btn bmd-btn-fab btn-primary bmd-btn-fab-sm active" type="button" data-toggle="drawer"
+					data-target="#side" style="margin-top: 10px">
+				<i class="material-icons text-light">menu</i>
+			</button>
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
+				<li class="breadcrumb-item"><a th:href="@{'/admin'}" th:text="#{admin}"></a></li>
+				<li class="breadcrumb-item"><a th:href="@{'/admin/fournisseurs'}" th:text="#{admin.fournisseurs}"></a>
+				</li>
+				<li class="breadcrumb-item" th:text="${edit}? #{admin.fournisseur.edit}: #{admin.fournisseur.add}"></li>
+			</ol>
+			<form class="card p-5" method="post" th:object="${fournisseur}">
+				<h3 class="text-center"
+					th:text="${edit}?#{admin.fournisseur.edit}: #{admin.fournisseur.add}"></h3>
+				<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+					<h4 class="alert-heading" th:text="#{formError}"></h4>
+					<ul>
+						<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+					</ul>
+				</div>
+				<div class="form-group">
+					<label class="bmd-label-floating" for="nom" th:text="#{fournisseur.nom}"></label>
+					<input type="text" id="nom"
+						   class="form-control" th:field="*{nom}"/>
+				</div>
+				<button type="submit" class="btn btn-success btn-raised">
+					[[${edit}?#{save}: #{add}]]
+				</button>
+				<a th:if="${edit}" href="/admin/fournisseurs/" class="btn btn-secondary btn-raised">
+					[[#{cancel}]]
+				</a>
+			</form>
+		</div>
+	</main>
 </div>
-
 </body>
 <div th:replace="fragments :: footer"></div>
 </html>

@@ -2,25 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
 <body>
-<div th:fragment="menu(active)">
-
-	<nav id="sidebar">
-		<div class="sidebar-header">
-			<h3 class="p-2" th:text="#{user}"></h3>
-		</div>
-		<hr class="bg-info">
-
-		<!-- Sidebar Links -->
-		<ul class="list-unstyled components">
-			<li th:classappend="${active} eq 'g'?'bg-faded text-muted':''"><a th:href="@{'/user/gazoil'}"
-																			  th:text="#{gazoil}"></a></li>
-			<li th:classappend="${active} eq 'pa'?'bg-faded text-muted':''"><a th:href="@{'/user/panne'}"
-																			   th:text="#{panne}"></a></li>
-			<li th:classappend="${active} eq 'pr'?'bg-faded text-muted':''"><a th:href="@{'/user/preventif'}"
-																			   th:text="#{preventif}"></a></li>
-		</ul>
-	</nav>
-
+<div th:fragment="menu(active)" id="side" class="bmd-layout-drawer bg-faded">
+	<header>
+		<h4 th:text="#{user}"></h4>
+	</header>
+	<hr class="bg-primary" style="width: 100%; height: 2px">
+	<ul class="list-group">
+		<a class="list-group-item" th:href="@{'/user/gazoil'}" th:classappend="${active} eq 'g'?'active':''"
+		   th:text="#{gazoil}"></a>
+		<hr class="bg-primary" style="width: 80%">
+		<a class="list-group-item" th:href="@{'/user/panne'}" th:classappend="${active} eq 'pa'?'active':''"
+		   th:text="#{panne}"></a>
+		<hr class="bg-primary" style="width: 80%">
+		<a class="list-group-item" th:href="@{'/user/preventif'}" th:classappend="${active} eq 'pr'?'active':''"
+		   th:text="#{preventif}"></a>
+	</ul>
 </div>
 </body>
 </html>

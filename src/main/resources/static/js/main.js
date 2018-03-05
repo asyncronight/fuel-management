@@ -1,8 +1,5 @@
 $(document).ready(function () {
-
-    $('#sidebarCollapse').on('click', function () {
-        $('#sidebar').toggleClass('active');
-
+    $('.js-example-basic-single').select2({
+        width: '100%'
     });
-
 });

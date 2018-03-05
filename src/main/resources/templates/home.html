@@ -2,52 +2,48 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
 <body>
-<div th:replace="fragments :: menu2('')"></div>
-<div class="content col-12 ml-4" style="margin-top: 100px">
-    <div class="row mt-2">
-		<div class="col-sm-6 col-md-4 col-lg-3 mt-4 mr-4 ml-4 bg-faded"
-			 style="box-shadow:2px 2px 3px 3px darkseagreen;">
-			<div class=" text-center">
-				<div>
-					<h2 class="py-3"><a th:href="@{'/admin/'}"><i class="fa fa-cogs"></i> <span
-							th:text="#{admin}"></span></a>
-					</h2>
+<div th:replace="fragments :: menu('')"></div>
+<div class="container">
+	<div class="card-deck text-center py-5">
+		<div class="card bg-light">
+			<a th:href="@{'/admin/'}">
+				<img class="card-img-top"
+					 src="https://www.auth.gr/sites/default/files/dioikisi_iStock_000016966586Small.jpg"
+					 alt="Card image cap">
+				<div class="card-header">
+					<h2 th:text="#{admin}"></h2>
 				</div>
-				<hr/>
-				<blockquote class="card-blockquote p-3">
-					<p th:text="#{admin.msg}"></p>
-				</blockquote>
+			</a>
+			<div class="card-body">
+				<p class="card-text" th:text="#{admin.msg}"></p>
 			</div>
 		</div>
-		<div class="col-sm-6 col-md-4 col-lg-4 mt-4 mr-4 ml-4 bg-faded"
-			 style="box-shadow:2px 2px 3px 3px darkseagreen;">
-			<div class=" text-center">
-				<div>
-					<h2 class="py-3"><a th:href="@{'/user/'}"><i class="fa fa-pie-chart"></i> <span
-							th:text="#{user}"></span></a>
-					</h2>
+		<div class="card bg-light">
+			<a th:href="@{'/user/'}">
+				<img class="card-img-top" src="http://www.stratagemiis.co.uk/wp-content/uploads/2015/09/Statistics.jpg"
+					 alt="Card image cap">
+				<div class="card-header">
+					<h2 th:text="#{user}"></h2>
 				</div>
-				<hr/>
-				<blockquote class="card-blockquote p-3">
-					<p th:text="#{user.msg}"></p>
-				</blockquote>
+			</a>
+			<div class="card-body">
+				<p class="card-text" th:text="#{user.msg}"></p>
 			</div>
 		</div>
-		<div class="col-sm-6 col-md-4 col-lg-3 mt-4 mr-4 ml-4 bg-faded"
-			 style="box-shadow:2px 2px 3px 3px darkseagreen;">
-			<div class=" text-center">
-				<div>
-					<h2 class="py-3"><a th:href="@{'/saisi/'}"><i class="fa fa-edit"></i> <span
-							th:text="#{saisie}"></span></a>
-					</h2>
+		<div class="card bg-light">
+			<a th:href="@{'/saisi/'}">
+				<img class="card-img-top"
+					 src="https://www.informatiquenews.fr/wp-content/uploads/2016/09/6-comptabilit%C3%A9-Une.jpg"
+					 alt="Card image cap">
+				<div class="card-header">
+					<h2 th:text="#{saisie}"></h2>
 				</div>
-				<hr/>
-				<blockquote class="card-blockquote p-3">
-					<p th:text="#{saisie.msg}"></p>
-				</blockquote>
+			</a>
+			<div class="card-body">
+				<p class="card-text" th:text="#{saisie.msg}"></p>
 			</div>
 		</div>
-    </div>
+	</div>
 </div>
 <div th:replace="fragments :: footer"></div>
 </body>

@@ -2,134 +2,112 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
 <body>
-<div th:replace="fragments :: menu2('admin')"></div>
-<div class="wrapper">
-
+<div th:replace="fragments :: menu('admin')"></div>
+<div class="bmd-layout-container bmd-drawer-f-l  bmd-drawer-overlay-md-down">
 	<div th:replace="admin/fragment :: menu('c')"></div>
+	<main class="bmd-layout-content">
+		<div class="container">
+			<button class="btn bmd-btn-fab btn-primary bmd-btn-fab-sm active" type="button" data-toggle="drawer"
+					data-target="#side" style="margin-top: 10px">
+				<i class="material-icons text-light">menu</i>
+			</button>
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
+				<li class="breadcrumb-item"><a th:href="@{'/admin'}" th:text="#{admin}"></a></li>
+				<li class="breadcrumb-item" th:text="#{admin.chantiers}"></li>
+			</ol>
+			<a th:href="@{'/admin/chantiers/add'}" class="btn btn-success bmd-btn-fab float-right"
+			   th:title="#{admin.chantier.add}">
+				<i class="material-icons mt-3">add</i>
+			</a>
+			<form class="form-inline justify-content-center" method="get" th:action="@{'/admin/chantiers'}">
+				<div class="form-group">
+					<input class="form-control col-12" type="text" th:name="search" th:value="${search}"
+						   th:placeholder="#{admin.chantier.searchPlaceHolder}">
+					<button class="btn btn-secondary col btn-raised" type="submit" th:text="#{search}"></button>
+				</div>
+			</form>
+			<div class="jumbotron alert alert-primary" th:if="${#lists.isEmpty(page.content)}">
+				<h1 class="text-center alert-heading" th:text="#{empty}"></h1>
+			</div>
 
-    <!--/*@thymesVar id="chantier" type="me.kadarh.mecaworks.domain.others.Chantier"*/-->
-    <!--/*@thymesVar id="search" type="java.lang.String"*/-->
-    <!--/*@thymesVar id="page" type="org.springframework.data.domain.Page"*/-->
-
-    <!-- Page Content -->
-	<div id="content" style="width: 100%">
-		<button type="button" id="sidebarCollapse" class="btn menuButton">
-			<i class="glyphicon glyphicon-align-left fa fa-bars"></i>
-		</button>
-        <div class="col-12">
-            <br/>
-            <ul class="breadcrumb py-3 col-12">
-                <li class="breadcrumb-item"><a th:href="@{'/admin'}"><i class="fa fa-arrow-circle-left fa-lg"></i></a>
-                </li>
-                <li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
-                <li class="breadcrumb-item"><a th:href="@{'/admin'}" th:text="#{admin}"></a></li>
-                <li class="breadcrumb-item" th:text="#{admin.chantiers}"></li>
-            </ul>
-			<div>
-                <div class="row col-12 p-2">
-                    <form class="form-inline col-9" method="get" th:action="@{'/admin/chantiers'}">
-                        <input class="form-control col-9" th:placeholder="#{admin.chantier.searchPlaceHolder}"
-                               type="text" th:name="search" th:value="${search}">
-                        <button class="btn btn-secondary col-3" type="submit" th:text="#{search}"></button>
-                    </form>
-                    <a th:href="@{'/admin/chantiers/add'}" class="btn btn-success col-3 pull-right">
-                        <span class="fa fa-plus"></span> [[#{admin.chantier.add}]]
-                    </a>
-                </div>
-                <div th:if="${#lists.isEmpty(page.content)}">
-                    <hr>
-                    <div class="container-fluid text-center bg-faded py-3">
-
-                        <div class="text-warning "><h3 th:text="#{empty}"></h3></div>
-                    </div>
-                </div>
-                <div th:if="!${#lists.isEmpty(page.content)}">
-
-                    <hr class="m-1">
-                    <table class="table table-hover table-bordered">
-                        <tr class="bg-inverse text-white">
-
-                            <th>
-                                <a th:href="'?page=0&sort=nom'+(${page.getSort().getOrderFor('nom')?.descending}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})"
-                                   th:title="!${page.getSort().getOrderFor('nom')?.descending}? #{sort.desc}: #{sort.asc}">
-                                    Nom
-                                    <span th:if="${page.getSort().getOrderFor('nom')?.ascending}"
-                                          class="fa fa-sort-up"></span>
-                                    <span th:if="!${page.getSort().getOrderFor('nom')?.ascending}"
-                                          class="fa fa-sort-down"></span>
-                                </a>
-                            </th>
-                            <th>
-                                <a th:href="'?page=0&sort=adresse'+(${page.getSort().getOrderFor('adresse')?.descending}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})"
-                                   th:title="!${page.getSort().getOrderFor('adresse')?.descending}? #{sort.desc}: #{sort.asc}">
-                                    Adresse
-                                    <span th:if="${page.getSort().getOrderFor('adresse')?.ascending}"
-                                          class="fa fa-sort-up"></span>
-                                    <span th:if="!${page.getSort().getOrderFor('adresse')?.ascending}"
-                                          class="fa fa-sort-down"></span>
-                                </a>
-                            </th>
-                            <th>
-                                <a th:href="'?page=0&sort=stock'+(${page.getSort().getOrderFor('stock')?.descending}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})"
-                                   th:title="!${page.getSort().getOrderFor('stock')?.descending}? #{sort.desc}: #{sort.asc}">
-                                    Stock
-                                    <span th:if="${page.getSort().getOrderFor('stock')?.ascending}"
-                                          class="fa fa-sort-up"></span>
-                                    <span th:if="!${page.getSort().getOrderFor('stock')?.ascending}"
-                                          class="fa fa-sort-down"></span>
-                                </a>
-                            </th>
-
-                            <th class="col-2"></th>
-                        </tr>
-                        <tr th:each="chantier : ${page.content}" class="bg-faded">
-                            <td th:text="${chantier.nom}"></td>
-                            <td th:text="${chantier.adresse}"></td>
-                            <td th:text="${chantier.stock}"></td>
-                            <td class="btn-group">
-                                <a th:href="@{'/admin/chantiers/' + ${chantier.id} +'/edit'}" class="btn btn-primary"
-                                   th:title="#{edit}">
-                                    <span class="fa fa-edit"></span>
-                                </a>
-                                <form th:action="@{'/admin/chantiers/' + ${chantier.id} +'/delete'}" method="post">
-                                    <button type="submit" class="btn btn-danger" th:title="#{delete}">
-                                        <span class="fa fa-trash"></span>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    </table>
-                    <div class="row justify-content-center">
-                        <nav aria-label="Page navigation example ">
-                            <ul class="pagination ">
-                                <li class="page-item">
-                                    <a class="page-link" th:unless="${page.number} eq 0"
-                                       th:href="'?page='+${(page.number)-1}+(${search.isEmpty()}?'':'&search='+${search})
-                               +(${page.getSort().sorted? '&sort='+page.getSort().iterator().next().property+','+page.getSort().iterator().next().direction:''})"
-
-                                       aria-label="Previous">
-                                        <span aria-hidden="true">&laquo;</span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">
-                                    <span th:text="${page.number+1}+'/'+${page.totalPages}"></span></a></li>
-                                <li class="page-item">
-                                    <a class="page-link" th:unless="${page.number+1} ge ${page.totalPages}"
-                                       th:href="'?page='+${page.number+1}+(${search.isEmpty()}?'':'&search='+${search})
-                               +(${page.getSort().sorted? '&sort='+page.getSort().iterator().next().property+','+page.getSort().iterator().next().direction:''})"
-                                       aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+			<div class="table-responsive card" th:if="!${#lists.isEmpty(page.content)}">
+				<table class="table table-sm table-hover table-bordered">
+					<thead class="bg-primary">
+					<tr>
+						<th th:with="desc=${page.getSort().getOrderFor('nom')?.descending}">
+							[[#{chantier.nom}]]
+							<a th:href="'?page=0&sort=nom'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('adresse')?.descending}">
+							[[#{chantier.adresse}]]
+							<a th:href="'?page=0&sort=adresse'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('stock')?.descending}">
+							[[#{chantier.stock}]]
+							<a th:href="'?page=0&sort=stock'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th></th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr th:each="chantier : ${page.content}">
+						<td th:text="${chantier.nom}"></td>
+						<td th:text="${chantier.adresse}"></td>
+						<td th:text="${chantier.stock}"></td>
+						<td class="btn-group">
+							<button class="btn bmd-btn-icon dropdown-toggle" type="button" id="ex3"
+									data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="material-icons">more_vert</i>
+							</button>
+							<div class="dropdown-menu dropdown-menu-left" aria-labelledby="ex3">
+								<form th:action="@{'/admin/chantiers/' + ${chantier.id} +'/delete'}" method="post">
+									<a th:href="@{'/admin/chantiers/' + ${chantier.id} +'/edit'}"
+									   class="dropdown-item">
+										<i class="material-icons">edit</i> [[#{edit}]]
+									</a>
+									<button type="submit" class="dropdown-item">
+										<i class="material-icons">delete</i> [[#{delete}]]
+									</button>
+								</form>
+							</div>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+				<ul class="pagination justify-content-center">
+					<li class="page-item" th:classappend="${page.number} eq 0?'disabled':''">
+						<a class="page-link"
+						   th:href="'?page='+${(page.number)-1}+(${search.isEmpty()}?'':'&search='+${search})
+						 +(${page.getSort().sorted? '&sort='+page.getSort().iterator().next().property
+						 +','+page.getSort().iterator().next().direction:''})">
+							<span aria-hidden="true">&laquo;</span>
+						</a>
+					</li>
+					<li class="page-item active">
+						<a class="page-link" th:text="${page.number+1}+'/'+${page.totalPages} "></a>
+					</li>
+					<li class="page-item" th:classappend="${page.number+1} ge ${page.totalPages}?'disabled':''">
+						<a class="page-link"
+						   th:href="'?page='+${page.number+1}+(${search.isEmpty()}?'':'&search='+${search})
+					   +(${page.getSort().sorted? '&sort='+page.getSort().iterator().next().property
+					   +','+page.getSort().iterator().next().direction:''})">
+							<span aria-hidden="true">&raquo;</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</main>
 </div>
 </body>
 <div th:replace="fragments :: footer"></div>
