@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="fragments :: head"></head>
+<body>
+<div th:replace="fragments :: menu('saisi')"></div>
+<div class="bmd-layout-container bmd-drawer-f-l  bmd-drawer-overlay-md-down">
+	<div th:replace="admin/fragment :: menu('')"></div>
+	<main class="bmd-layout-content">
+		<div class="container">
+			<button class="btn bmd-btn-fab btn-primary bmd-btn-fab-sm active" type="button" data-toggle="drawer"
+					data-target="#side" style="margin-top: 10px">
+				<i class="material-icons text-light">menu</i>
+			</button>
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
+				<li class="breadcrumb-item"><a th:href="@{'/saisi'}" th:text="#{saisie}"></a></li>
+				<li class="breadcrumb-item"><a th:href="@{'/saisi/engins'}" th:text="#{saisie.engin.list}"></a></li>
+				<li class="breadcrumb-item"><a th:href="@{'/saisi/engins/Add'}" th:text="#{saisie.engin.add}"></a></li>
+				<li class="breadcrumb-item" th:text="#{saisie.engin.confirm}"></li>
+			</ol>
+
+		</div>
+	</main>
+</div>
+</body>
+<div th:replace="fragments :: footer"></div>
+</html>

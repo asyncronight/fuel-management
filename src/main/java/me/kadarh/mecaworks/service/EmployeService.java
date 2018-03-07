@@ -15,4 +15,7 @@ public interface EmployeService {
     Employe get(Long id);
 
 	void delete(Long id);
+
+	//todo
+	// List<Employe> getList();
 }

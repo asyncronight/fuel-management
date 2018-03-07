@@ -83,7 +83,17 @@
             <artifactId>bootstrap-material-design</artifactId>
             <version>4.1.1</version>
         </dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>material-design-icons</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>roboto-fontface</artifactId>
+            <version>0.7.0</version>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>

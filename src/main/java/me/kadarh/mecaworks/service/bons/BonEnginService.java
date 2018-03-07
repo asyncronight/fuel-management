@@ -11,5 +11,10 @@ public interface BonEnginService {
 
     List<BonEngin> bonList(Long idEngin, LocalDate date1, LocalDate date2);
 
+	// todo : ordered by date (ila mal9itich kiddir liha andirha f Pageable, fait signe b chi todo f controller)
+	// Page<BonEngin> getPage(Pageable pageable, String search);
 
+	// void delete(Long id);
+
+	// and make hasLogicQuantite() & hasLogicCompteurH in one public method hasErrors(BonEngin bon)
 }
