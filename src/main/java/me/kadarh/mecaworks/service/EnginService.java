@@ -4,6 +4,8 @@ import me.kadarh.mecaworks.domain.others.Engin;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface EnginService {
 
 	Engin add(Engin engin);
@@ -16,6 +18,5 @@ public interface EnginService {
 
 	void delete(Long id);
 
-	//todo
-	// List<Engin> getList();
+    List<Engin> getList();
 }

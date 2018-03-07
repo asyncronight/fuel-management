@@ -133,17 +133,26 @@ public class FamilleServiceImpl implements FamilleService {
 	 */
 	@Override
 	public void delete(Long id) {
-		log.info("Service= FamilleServiceImpl - calling methode update");
+		log.info("Service= FamilleServiceImpl - calling methode delete with id = " + id);
 		try {
 			familleRepo.deleteById(id);
-		} catch (Exception e) {
+		} catch (NoSuchElementException e) {
 			log.debug("cannot delete famille , failed operation");
-			throw new OperationFailedException("La suppression de la famille a echouée ", e);
+			throw new ResourceNotFoundException("La suppression de la famille a echouée , la famille n'existe pas", e);
 		}
 	}
 
+	/**
+	 * @return List of All Familles in database
+	 */
 	@Override
 	public List<Famille> list() {
-		return familleRepo.findAll();
+		log.info("Service= FamilleServiceImpl - calling methode list()");
+		try {
+			return familleRepo.findAll();
+		} catch (Exception e) {
+			log.debug("cannot fetch list familles , failed operation");
+			throw new OperationFailedException("La recherche des familles a echouée ", e);
+		}
 	}
 }

@@ -2,20 +2,20 @@ package me.kadarh.mecaworks.service.impl.bons;
 
 import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.bons.BonEngin;
+import me.kadarh.mecaworks.domain.others.Employe;
 import me.kadarh.mecaworks.domain.others.Engin;
 import me.kadarh.mecaworks.domain.others.TypeCompteur;
 import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
 import me.kadarh.mecaworks.service.bons.BonEnginService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
 import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 /**
@@ -33,6 +33,10 @@ public class BonEnginServiceImpl implements BonEnginService {
         this.bonEnginRepo = bonEnginRepo;
     }
 
+    /* ------------------------------------------------------------------------------ */
+    /* ------------ CRUD METHODES -------------------------------------------------- */
+    /* ---------------------------------------------------------------------------- */
+
     @Override
     public BonEngin add(BonEngin bonEngin) {
         return null;
@@ -43,43 +47,114 @@ public class BonEnginServiceImpl implements BonEnginService {
         return null;
     }
 
+    @Override
+    public void delete(Long id) {
+
+    }
+
+    @Override
+    public Page<BonEngin> getPage(Pageable pageable, String search) {
+        log.info("Service- employeServiceImpl Calling employeList with params :" + pageable + ", " + search);
+        try {
+            if (search.isEmpty()) {
+                log.debug("fetching bonEngins page");
+                return bonEnginRepo.findAll(pageable);
+            } else {
+                log.debug("Searching by :" + search);
+                //creating example
+                //Searching by nom pompiste and chauffeur , code engin , code bon
+                BonEngin bonEngin = new BonEngin();
+                Employe employe = new Employe();
+                employe.setNom(search);
+                Engin engin = new Engin();
+                engin.setCode(search);
+                bonEngin.setPompiste(employe);
+                bonEngin.setChauffeur(employe);
+                bonEngin.setCode(search);
+                bonEngin.setEngin(engin);
+                //creating matcher
+                ExampleMatcher matcher = ExampleMatcher.matchingAny()
+                        .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                        .withIgnoreCase()
+                        .withIgnoreNullValues();
+                Example<BonEngin> example = Example.of(bonEngin, matcher);
+                Pageable pageable1 = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, bonEngin.getDate().toString()));
+                log.debug("getting search results");
+                return bonEnginRepo.findAll(example, pageable1);
+            }
+        } catch (Exception e) {
+            log.debug("Failed retrieving list of employes");
+            throw new OperationFailedException("Operation échouée", e);
+        }
+    }
+
+    /**
+     * @param engin the Engin of the bon
+     * @return Bon Engin
+     * The last bonEngin having the same Engin
+     */
+    private BonEngin getLastBonEngin(Engin engin) {
+        try {
+            return bonEnginRepo.findLastBonEngin(engin).get(0);
+        } catch (NoSuchElementException e) {
+            log.info("Problem , cannot find last BonEngin with id = :" + engin.getId());
+            throw new ResourceNotFoundException("BonEngin introuvable, c'est le premier bon de cette engin", e);
+        } catch (Exception e) {
+            log.info("Problem , cannot find last BonEngin with id = :" + engin.getId());
+            throw new OperationFailedException("Operation echouée", e);
+        }
+    }
+
+    /* ------------------------------------------------------------------------------ */
+    /* ------------ TRAITEMENT WITHOUT CALLING REPO -------------------------------- */
+    /* ---------------------------------------------------------------------------- */
+
+    /**
+     * @param bon the current BonEngin
+     * @return boolean value
+     * 0 if one of (quantity or meter) hasn't a logic value
+     * 1 else ( if compteur and quantité are logic )
+     */
+    public boolean hasErrors(BonEngin bon) {
+        BonEngin lastBonEngin = getLastBonEngin(bon.getEngin());
+        return (hasLogicQuantite(bon) && hasLogicCompteur(bon, lastBonEngin));
+    }
+
+
+    /**
+     * @param bonEngin
+     * @return int value
+     * 0 if any meter is down ( 2 compteurs en marche )
+     * 1 if the hour meter is down (just compteur H is en panne)
+     * 2 if the Km meter is down (just compteur Km is en panne)
+     * 3 if all meters are down
+     */
+    public int whichCompteurIsDown(BonEngin bonEngin) {
+        boolean cmpHenPanne = bonEngin.getCompteurHenPanne();
+        boolean cmpKmenPanne = bonEngin.getCompteurKmenPanne();
+        if (cmpHenPanne && cmpKmenPanne)
+            return 3;
+        else if (cmpKmenPanne)
+            return 2;
+        else if (cmpHenPanne)
+            return 1;
+        else
+            return 0;
+    }
+
+    /* ------------------------------------------------------------------------------ */
+    /* ------------ PRIVATE METHODES ----------------------------------------------- */
+    /* ---------------------------------------------------------------------------- */
+
     /**
      * @param bonEngin the current bon
-     * @return 0 if quantity isn't logic
+     * @return boolean value
+     * 0 if quantity isn't logic
      * 1 else
      */
     private boolean hasLogicQuantite(BonEngin bonEngin) {
         log.info("Service : Testing if Quantité Logic");
         return bonEngin.getQuantite() < 2 * bonEngin.getEngin().getSousFamille().getCapaciteReservoir();
-    }
-
-    /**
-     * @param bonEngin the current bon
-     * @return boolean value
-     * 0 if the bon contains one or many technical error
-     * Example of technical errors :
-     * - Quantity not logic
-     * - Compteur not logic
-     * -
-     * 1 else
-     */
-    public boolean containTechnicalErrors(BonEngin bonEngin) {
-        BonEngin lastBonEngin = getLastBonEngin(bonEngin.getEngin());
-        if (!hasLogicQuantite(bonEngin)) {
-            return false;
-        }
-        if (!hasLogicCompteur(bonEngin, lastBonEngin)) {
-            return true;
-        }
-        return true;
-    }
-
-    public Map<String, String> getErrors(BonEngin bonEngin) {
-        Map<String, String> map = new HashMap<>();
-        if (!hasLogicQuantite(bonEngin)) {
-            map.put("quantite", "La quantité que vous avez entré n'est pas logique");
-        }
-        return map;
     }
 
     /**
@@ -110,27 +185,6 @@ public class BonEnginServiceImpl implements BonEnginService {
     }
 
     /**
-     * @param bonEngin
-     * @return int value
-     * 0 if any meter is down ( 2 compteurs en marche )
-     * 1 if the hour meter is down (just compteur H is en panne)
-     * 2 if the Km meter is down (just compteur Km is en panne)
-     * 3 if all meters are down
-     */
-    private int whichCompteurIsDown(BonEngin bonEngin) {
-        boolean cmpHenPanne = bonEngin.getCompteurHenPanne();
-        boolean cmpKmenPanne = bonEngin.getCompteurKmenPanne();
-        if (cmpHenPanne && cmpKmenPanne)
-            return 3;
-        else if (cmpKmenPanne)
-            return 2;
-        else if (cmpHenPanne)
-            return 1;
-        else
-            return 0;
-    }
-
-    /**
      * @param bonEngin the current bon
      * @param lastBonEngin the last bon
      * @return
@@ -145,17 +199,6 @@ public class BonEnginServiceImpl implements BonEnginService {
         return bonEngin.getQuantite() < bonEngin.getEngin().getSousFamille().getCapaciteReservoir();
     }
 
-    private BonEngin getLastBonEngin(Engin engin) {
-        try {
-            return bonEnginRepo.findTheLastBonEngin(engin).get();
-        } catch (NoSuchElementException e) {
-            log.info("Problem , cannot find last BonEngin with id = :" + engin.getId());
-            throw new ResourceNotFoundException("BonEngin introuvable, c'est le premier bon de cette engin", e);
-        } catch (Exception e) {
-            log.info("Problem , cannot find last BonEngin with id = :" + engin.getId());
-            throw new OperationFailedException("Operation echouée", e);
-        }
-    }
 
 }
 

@@ -120,7 +120,7 @@ public class ClasseServiceImpl implements ClasseService {
      */
     @Override
     public void delete(Long id) {
-        log.info("Service= ClasseServiceImpl - calling methode update");
+        log.info("Service= ClasseServiceImpl - calling methode delete");
         try {
             classeRepo.deleteById(id);
         } catch (Exception e) {
@@ -129,13 +129,28 @@ public class ClasseServiceImpl implements ClasseService {
         }
     }
 
+    /**
+     * @return List of All Classes in database
+     */
     @Override
     public List<Classe> list() {
-        return classeRepo.findAll();
+        log.info("Service= ClasseServiceImpl - calling methode list()");
+        try {
+            return classeRepo.findAll();
+        } catch (Exception e) {
+            log.debug("cannot fetch list classes , failed operation");
+            throw new OperationFailedException("La recherche des classes a echouée ", e);
+        }
     }
 
+    /**
+     * @param search , String param
+     * @return Optional
+     * the Classe object with Nom like search
+     */
     @Override
     public Optional<Classe> findByNom(String search) {
+        log.info("Service= ClasseServiceImpl - calling methode findByNom()");
         try {
             return classeRepo.findByNom(search);
         } catch (Exception e) {

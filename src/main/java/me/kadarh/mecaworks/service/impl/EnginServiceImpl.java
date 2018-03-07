@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -139,15 +140,28 @@ public class EnginServiceImpl implements EnginService {
         }
     }
 
-	@Override
-	public void delete(Long id) {
-        log.info("Service- EnginServiceImpl Calling delete with params id =" + id);
+    @Override
+    public void delete(Long id) {
+        log.info("Service= EnginServiceImpl - calling methode delete with id = " + id);
         try {
-            throw new OperationFailedException("Operation de suppression de l'engin (id=" + id + ") a echouée");
-            //enginRepo.delete(enginRepo.findById(id).get());
+            enginRepo.deleteById(id);
         } catch (Exception e) {
-            log.debug("Failed retrieving list of engins");
-            throw new OperationFailedException("Operation de suppression de l'engin (id=" + id + ") a echouée", e);
+            log.debug("cannot delete engin , failed operation");
+            throw new OperationFailedException("La suppression de l'engin a echouée ", e);
+        }
+    }
+
+    /**
+     * @return List of All Engins in database
+     */
+    @Override
+    public List<Engin> getList() {
+        log.info("Service= EnginServiceImpl - calling methode getList");
+        try {
+            return enginRepo.findAll();
+        } catch (Exception e) {
+            log.debug("cannot fetch list engins , failed operation");
+            throw new OperationFailedException("La recherche des engins a echouée ", e);
         }
     }
 }

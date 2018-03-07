@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -111,6 +112,10 @@ public class ChantierServiceImpl implements ChantierService {
 	}
 
 
+	/**
+	 * @param id of the chantier
+	 * @return chantier
+	 */
 	@Override
 	public Chantier get(Long id) {
 		log.info("Service- ChantierServiceImpl Calling getChantier with params :" + id);
@@ -130,13 +135,28 @@ public class ChantierServiceImpl implements ChantierService {
 	 */
 	@Override
 	public void delete(Long id) {
-		log.info("Service= ChantierServiceImpl - calling methode update");
+		log.info("Service= ChantierServiceImpl - calling methode delete");
 		try {
 			throw new OperationFailedException("La suppression du chantier a echouée ");
 			//chantierRepo.deleteById(id);
 		} catch (Exception e) {
 			log.debug("cannot delete chantier , failed operation");
 			throw new OperationFailedException("La suppression du chantier a echouée ", e);
+		}
+	}
+
+
+	/**
+	 * @return List of chantiers in database
+	 */
+	@Override
+	public List<Chantier> getList() {
+		log.info("Service= ChantierServiceImpl - calling methode getList");
+		try {
+			return chantierRepo.findAll();
+		} catch (Exception e) {
+			log.debug("cannot fetch list chantiers , failed operation");
+			throw new OperationFailedException("La recherche des chantiers a echouée ", e);
 		}
 	}
 }

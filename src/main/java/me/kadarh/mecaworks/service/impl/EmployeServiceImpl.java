@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -104,33 +105,48 @@ public class EmployeServiceImpl implements EmployeService {
 
 	/**
 	 * @param id
-	 * @return
-	 */
-	@Override
-	public Employe get(Long id) {
-		log.info("Service- EmployeServiceImpl Calling getEmploye with params :" + id);
-		try {
-			return employeRepo.findById(id).get();
-		} catch (NoSuchElementException e) {
-			log.info("Problem , cannot find Employe with id = :" + id);
-			throw new ResourceNotFoundException("Employe introuvable", e);
-		} catch (Exception e) {
-			log.info("Problem , cannot get Employe with id = :" + id);
-			throw new OperationFailedException("Problème lors de la recherche de l'employe", e);
-		}
-	}
-	/**
-	 * @param id of employe to delete
+	 * @return void
 	 */
 	@Override
 	public void delete(Long id) {
-		log.info("Service= employeServiceImpl - calling methode update");
+		log.info("Service= EmployeServiceImpl - calling methode delete with id = " + id);
 		try {
-			throw new OperationFailedException("La suppression du employe a echouée ");
-			//employeRepo.deleteById(id);
+			employeRepo.deleteById(id);
+		} catch (NoSuchElementException e) {
+			log.debug("cannot delete employe with id = " + id + " , failed operation");
+			throw new ResourceNotFoundException("La suppression de l'employe a echouée , l'employe n'existe pas", e);
+		}
+	}
+
+	/**
+	 * @param id of the employe
+	 * @return employe
+	 */
+	@Override
+	public Employe get(Long id) {
+		log.info("Service- EmployeServiceImpl Calling get with params :" + id);
+		try {
+			return employeRepo.findById(id).get();
+		} catch (NoSuchElementException e) {
+			log.info("Problem , cannot find employe with id = :" + id);
+			throw new ResourceNotFoundException("employe introuvable", e);
 		} catch (Exception e) {
-			log.debug("cannot delete employe , failed operation");
-			throw new OperationFailedException("La suppression du employe a echouée ", e);
+			log.info("Problem , cannot get employe with id = :" + id);
+			throw new OperationFailedException("Problème lors de la recherche de l'employe", e);
+		}
+	}
+
+	/**
+	 * @return List of All Employes in database
+	 */
+	@Override
+	public List<Employe> getList() {
+		log.info("Service= EmployeServiceImpl - calling methode getList");
+		try {
+			return employeRepo.findAll();
+		} catch (Exception e) {
+			log.debug("cannot fetch list employes , failed operation");
+			throw new OperationFailedException("La recherche des employes a echouée ", e);
 		}
 	}
 }

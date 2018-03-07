@@ -103,16 +103,6 @@ public class GroupeServiceImpl implements GroupeService {
 		}
 	}
 
-	@Override
-	public List<Groupe> list() {
-		try {
-			return groupeRepo.findAll();
-		} catch (Exception e) {
-			log.debug("Failed retrieving list of Groupe");
-			throw new OperationFailedException("Operation échouée", e);
-		}
-	}
-
 
 	@Override
 	public Groupe get(Long id) {
@@ -133,7 +123,7 @@ public class GroupeServiceImpl implements GroupeService {
 	 */
 	@Override
 	public void delete(Long id) {
-		log.info("Service= GroupeServiceImpl - calling methode update");
+		log.info("Service= GroupeServiceImpl - calling methode delete");
 		try {
 			groupeRepo.deleteById(id);
 		} catch (Exception e) {
@@ -141,4 +131,20 @@ public class GroupeServiceImpl implements GroupeService {
 			throw new OperationFailedException("La suppression du groupe a echouée ", e);
 		}
 	}
+
+	/**
+	 * @return List of groupes in database
+	 */
+	@Override
+	public List<Groupe> list() {
+		log.info("Service= GroupeServiceImpl - calling methode list");
+		try {
+			return groupeRepo.findAll();
+		} catch (Exception e) {
+			log.debug("Failed retrieving list of groupes");
+			throw new OperationFailedException("Operation échouée lors de la recherche de la liste des groupes", e);
+		}
+	}
+
+
 }

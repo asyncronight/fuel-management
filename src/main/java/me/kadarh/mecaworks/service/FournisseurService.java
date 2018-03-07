@@ -4,6 +4,8 @@ import me.kadarh.mecaworks.domain.others.Fournisseur;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface FournisseurService {
 
 	Fournisseur add(Fournisseur fournisseur);
@@ -15,5 +17,7 @@ public interface FournisseurService {
 	Fournisseur get(Long id);
 
 	void delete(Long id);
+
+    List<Fournisseur> getList();
 
 }

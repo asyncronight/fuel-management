@@ -119,7 +119,7 @@ public class MarqueServiceImpl implements MarqueService {
      */
     @Override
     public void delete(Long id) {
-        log.info("Service= MarqueServiceImpl - calling methode update");
+        log.info("Service= MarqueServiceImpl - calling methode delete");
         try {
             marqueRepo.deleteById(id);
         } catch (Exception e) {
@@ -128,8 +128,17 @@ public class MarqueServiceImpl implements MarqueService {
         }
     }
 
-	@Override
-	public List<Marque> list() {
-		return marqueRepo.findAll();
-	}
+    /**
+     * @return List of marques in database
+     */
+    @Override
+    public List<Marque> list() {
+        log.info("Service= MarqueServiceImpl - calling methode list()");
+        try {
+            return marqueRepo.findAll();
+        } catch (Exception e) {
+            log.debug("cannot fetch list marques , failed operation");
+            throw new OperationFailedException("La recherche des marques a echouée ", e);
+        }
+    }
 }

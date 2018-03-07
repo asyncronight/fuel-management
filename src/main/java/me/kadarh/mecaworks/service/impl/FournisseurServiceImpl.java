@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -118,12 +119,26 @@ public class FournisseurServiceImpl implements FournisseurService {
 	 */
 	@Override
 	public void delete(Long id) {
-		log.info("Service= FournisseurServiceImpl - calling methode update");
+		log.info("Service= FournisseurServiceImpl - calling methode delete");
 		try {
 			//fournisseurRepo.deleteById(id);
 		} catch (Exception e) {
 			log.debug("cannot delete Fournisseur , failed operation");
 			throw new OperationFailedException("La suppression du Fournisseur a echouée ", e);
+		}
+	}
+
+	/**
+	 * @return List of All Fournisseurs in database
+	 */
+	@Override
+	public List<Fournisseur> getList() {
+		log.info("Service= FournisseurServiceImpl - calling methode getList()");
+		try {
+			return fournisseurRepo.findAll();
+		} catch (Exception e) {
+			log.debug("cannot fetch list fournisseurs , failed operation");
+			throw new OperationFailedException("La recherche des fournisseurs a echouée ", e);
 		}
 	}
 }

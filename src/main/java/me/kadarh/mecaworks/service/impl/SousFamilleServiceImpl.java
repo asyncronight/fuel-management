@@ -120,15 +120,6 @@ public class SousFamilleServiceImpl implements SousFamilleService {
 		}
 	}
 
-	@Override
-	public List<SousFamille> list() {
-		try {
-			return sousFamilleRepo.findAll();
-		} catch (Exception e) {
-			log.debug("Failed retrieving list of SousFamilles");
-			throw new OperationFailedException("Operation échouée", e);
-		}
-	}
 
 	@Override
 	public SousFamille get(Long id) {
@@ -154,4 +145,19 @@ public class SousFamilleServiceImpl implements SousFamilleService {
 			throw new OperationFailedException("La suppression du SousFamille a echouée ", e);
 		}
 	}
+
+	/**
+	 * @return List of All SousFamilles in database
+	 */
+	@Override
+	public List<SousFamille> list() {
+		log.info("Service= SousFamilleServiceImpl - calling methode list");
+		try {
+			return sousFamilleRepo.findAll();
+		} catch (Exception e) {
+			log.debug("Failed retrieving list of SousFamilles");
+			throw new OperationFailedException("Operation échouée", e);
+		}
+	}
+
 }

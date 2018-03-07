@@ -4,6 +4,8 @@ import me.kadarh.mecaworks.domain.others.Chantier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface ChantierService {
 
 	Chantier add(Chantier chantier);
@@ -16,6 +18,5 @@ public interface ChantierService {
 
 	void delete(Long id);
 
-	//todo
-	// List<Chantier> getList();
+    List<Chantier> getList();
 }
