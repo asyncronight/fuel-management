@@ -1,10 +1,9 @@
 package me.kadarh.mecaworks.service.bons;
 
 import me.kadarh.mecaworks.domain.bons.BonFournisseur;
-import me.kadarh.mecaworks.domain.others.Chantier;
-import me.kadarh.mecaworks.domain.others.Fournisseur;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface BonFournisseurService {
@@ -17,7 +16,7 @@ public interface BonFournisseurService {
 
 	List<BonFournisseur> bonList();
 
-	List<BonFournisseur> bonList(Chantier chantier, Fournisseur fournisseur, LocalDate date1, LocalDate date2);
+	Page<BonFournisseur> bonList(Pageable pageable, String search);
 
 	void delete(Long id);
 
