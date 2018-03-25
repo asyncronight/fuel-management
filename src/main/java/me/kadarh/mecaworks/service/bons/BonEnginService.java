@@ -18,4 +18,6 @@ public interface BonEnginService {
 	void delete(Long id);
 
 	boolean hasErrors(BonEngin bon);
+
+    boolean hasErrorsAttention(BonEngin bonEngin);
 }

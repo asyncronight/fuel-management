@@ -1,15 +1,12 @@
 package me.kadarh.mecaworks.repo.others;
 
 import lombok.extern.slf4j.Slf4j;
-import me.kadarh.mecaworks.domain.alertes.AlerteEngin;
 import me.kadarh.mecaworks.domain.others.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
 
 /**
  * @author kadarH
@@ -55,7 +52,6 @@ public class DataFakerO implements CommandLineRunner {
         loadSousFamilles(10);
         loadEngins(20);
 		loadFournisseur(20);
-		loadAlerte(10);
 		loadEmploye(20);
 	}
 
@@ -68,19 +64,6 @@ public class DataFakerO implements CommandLineRunner {
 		}
 	}
 
-	//load alertes
-	private void loadAlerte(int n) {
-
-		for (int i = 0; i < n; i++) {
-			AlerteEngin alerteEngin = new AlerteEngin();
-			alerteEngin.setDate(LocalDate.now());
-			alerteEngin.setEtat(true);
-			alerteEngin.setConsommationH(345 + (float) i * 3);
-			alerteEngin.setConsommationKm(345000 + (float) i * 3);
-			alerteRepo.save(alerteEngin);
-
-		}
-	}
 
 	// Loading Groupes
 	private void loadGroupe(int n) {

@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface BonEnginRepo extends JpaRepository<BonEngin, Long> {
 
@@ -18,6 +20,9 @@ public interface BonEnginRepo extends JpaRepository<BonEngin, Long> {
     @Query("select b from BonEngin b where b.engin=?1 and b.compteurKmenPanne=false and b.plein=true order by b.compteurAbsoluKm desc")
     BonEngin findLastBonEnginKm_toConsommation(Engin engin);
 
-    // KM and H TODO : Ask Soufiane
+    @Query("select b from BonEngin b where b.compteurAbsoluH > ?1")
+    List<BonEngin> findAllBetweenLastBonAndCurrentBon_H(Long compteurAbsoluH);
 
+    @Query("select b from BonEngin b where b.compteurAbsoluKm > ?1")
+    List<BonEngin> findAllBetweenLastBonAndCurrentBon_Km(Long compteurAbsoluKm);
 }

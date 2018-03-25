@@ -1,16 +1,16 @@
 package me.kadarh.mecaworks.service;
 
-import me.kadarh.mecaworks.domain.alertes.AlerteEngin;
+import me.kadarh.mecaworks.domain.alertes.Alerte;
 
 import java.util.List;
 
 public interface AlerteService {
 
-	AlerteEngin add(AlerteEngin alerteEngin);
+	Alerte add(Alerte alerte);
 
-	AlerteEngin update(AlerteEngin alerteEngin);
+	Alerte update(Alerte alerte);
 
-	List<AlerteEngin> alerteList();
+	List<Alerte> alerteList();
 
 	void delete(Long id);
 

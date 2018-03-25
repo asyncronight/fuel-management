@@ -14,14 +14,12 @@ import java.time.LocalDate;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class AlerteEngin extends AbstractDomain {
+public class Alerte extends AbstractDomain {
 
 	private LocalDate date;
 	private TypeAlerte typeAlerte;
 	private String message;
 	private Boolean etat;
-	private Float consommationKm;
-	private Float consommationH;
 
 	private Long idBon;
 
