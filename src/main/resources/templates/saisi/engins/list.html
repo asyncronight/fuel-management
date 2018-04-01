@@ -20,13 +20,7 @@
 			   th:title="#{saisie.engin.add}">
 				<i class="material-icons mt-3">add</i>
 			</a>
-			<form class="form-inline justify-content-center" method="get" th:action="@{'/saisi/engins'}">
-				<div class="form-group">
-					<input class="form-control col-12" type="text" th:name="search" th:value="${search}"
-						   th:placeholder="#{search}">
-					<button class="btn btn-secondary col btn-raised" type="submit" th:text="#{search}"></button>
-				</div>
-			</form>
+			<form th:replace="fragments :: search(#{saisie.engin.placeHolder})"></form>
 			<div class="jumbotron alert alert-primary" th:if="${#lists.isEmpty(page.content)}">
 				<h1 class="text-center alert-heading" th:text="#{empty}"></h1>
 			</div>
@@ -49,6 +43,111 @@
 								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
 							</a>
 						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('chantierGazoil.nom')?.descending}">
+							[[#{bonEngin.chantierGazoil}]]
+							<a th:href="'?page=0&sort=chantierGazoil.nom'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('chantierTravail.nom')?.descending}">
+							[[#{bonEngin.chantierTravail}]]
+							<a th:href="'?page=0&sort=chantierTravail.nom'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('engin.numeroSerie')?.descending}">
+							[[#{bonEngin.engin}]]
+							<a th:href="'?page=0&sort=engin.numeroSerie'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('pompiste.nom')?.descending}">
+							[[#{bonEngin.pompiste}]]
+							<a th:href="'?page=0&sort=pompiste.nom'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('chauffeur.nom')?.descending}">
+							[[#{bonEngin.chauffeur}]]
+							<a th:href="'?page=0&sort=chauffeur.nom'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('quantite')?.descending}">
+							[[#{bonEngin.quantite}]]
+							<a th:href="'?page=0&sort=quantite'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('compteurKm')?.descending}">
+							[[#{bonEngin.compteurKm}]]
+							<a th:href="'?page=0&sort=compteurKm'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('compteurH')?.descending}">
+							[[#{bonEngin.compteurH}]]
+							<a th:href="'?page=0&sort=compteurH'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('compteurKmenPanne')?.descending}">
+							[[#{bonEngin.compteurKmenPanne}]]
+							<a th:href="'?page=0&sort=compteurKmenPanne'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('compteurHenPanne')?.descending}">
+							[[#{bonEngin.compteurHenPanne}]]
+							<a th:href="'?page=0&sort=compteurHenPanne'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('plein')?.descending}">
+							[[#{bonEngin.plein}]]
+							<a th:href="'?page=0&sort=plein'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('compteurAbsoluKm')?.descending}">
+							[[#{bonEngin.compteurAbsoluKm}]]
+							<a th:href="'?page=0&sort=compteurAbsoluKm'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('compteurAbsoluH')?.descending}">
+							[[#{bonEngin.compteurAbsoluH}]]
+							<a th:href="'?page=0&sort=compteurAbsoluH'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('consommationKm')?.descending}">
+							[[#{bonEngin.consommationKm}]]
+							<a th:href="'?page=0&sort=consommationKm'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('consommationH')?.descending}">
+							[[#{bonEngin.consommationH}]]
+							<a th:href="'?page=0&sort=consommationH'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
 						<th></th>
 					</tr>
 					</thead>
@@ -56,6 +155,21 @@
 					<tr th:each="bon : ${page.content}">
 						<td th:text="${bon.date}"></td>
 						<td th:text="${bon.code}"></td>
+						<td th:text="${bon.chantierGazoil?.nom}"></td>
+						<td th:text="${bon.chantierTravail?.nom}"></td>
+						<td th:text="${bon.engin?.numeroSerie}"></td>
+						<td th:text="${bon.pompiste?.nom}"></td>
+						<td th:text="${bon.chauffeur?.nom}"></td>
+						<td th:text="${bon.quantite}"></td>
+						<td th:text="${bon.compteurKm}"></td>
+						<td th:text="${bon.compteurH}"></td>
+						<td th:text="${bon.compteurKmenPanne}"></td>
+						<td th:text="${bon.compteurHenPanne}"></td>
+						<td th:text="${bon.plein}"></td>
+						<td th:text="${bon.compteurAbsoluKm}"></td>
+						<td th:text="${bon.compteurAbsoluH}"></td>
+						<td th:text="${bon.consommationKm}"></td>
+						<td th:text="${bon.consommationH}"></td>
 						<td class="btn-group">
 							<button class="btn bmd-btn-icon dropdown-toggle" type="button" id="ex3"
 									data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -76,28 +190,8 @@
 					</tr>
 					</tbody>
 				</table>
-				<ul class="pagination justify-content-center">
-					<li class="page-item" th:classappend="${page.number} eq 0?'disabled':''">
-						<a class="page-link"
-						   th:href="'?page='+${(page.number)-1}+(${search.isEmpty()}?'':'&search='+${search})
-						 +(${page.getSort().sorted? '&sort='+page.getSort().iterator().next().property
-						 +','+page.getSort().iterator().next().direction:''})">
-							<span aria-hidden="true">&laquo;</span>
-						</a>
-					</li>
-					<li class="page-item active">
-						<a class="page-link" th:text="${page.number+1}+'/'+${page.totalPages} "></a>
-					</li>
-					<li class="page-item" th:classappend="${page.number+1} ge ${page.totalPages}?'disabled':''">
-						<a class="page-link"
-						   th:href="'?page='+${page.number+1}+(${search.isEmpty()}?'':'&search='+${search})
-					   +(${page.getSort().sorted? '&sort='+page.getSort().iterator().next().property
-					   +','+page.getSort().iterator().next().direction:''})">
-							<span aria-hidden="true">&raquo;</span>
-						</a>
-					</li>
-				</ul>
 			</div>
+			<ul th:replace="fragments :: pagination"></ul>
 		</div>
 	</main>
 </div>

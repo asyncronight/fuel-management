@@ -43,6 +43,10 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -63,35 +67,42 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
             <version>3.3.1-1</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.webjars.npm</groupId>
             <artifactId>popper.js</artifactId>
             <version>1.13.0</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>select2</artifactId>
             <version>4.0.0</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>bootstrap-material-design</artifactId>
             <version>4.1.1</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>material-design-icons</artifactId>
             <version>3.0.1</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>roboto-fontface</artifactId>
             <version>0.7.0</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 

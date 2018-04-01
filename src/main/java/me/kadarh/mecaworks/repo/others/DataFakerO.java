@@ -1,12 +1,16 @@
 package me.kadarh.mecaworks.repo.others;
 
 import lombok.extern.slf4j.Slf4j;
+import me.kadarh.mecaworks.domain.bons.BonEngin;
 import me.kadarh.mecaworks.domain.others.*;
+import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 
 /**
  * @author kadarH
@@ -37,9 +41,8 @@ public class DataFakerO implements CommandLineRunner {
     private EnginRepo enginRepo;
 	@Autowired
 	private FournisseurRepo fournisseurRepo;
-
 	@Autowired
-	private AlerteRepo alerteRepo;
+	BonEnginRepo bonEnginRepo;
 
 	@Override
 	public void run(String... strings) {
@@ -48,11 +51,35 @@ public class DataFakerO implements CommandLineRunner {
 		loadChantiers(5);
 		loadClasses(2);
 		loadFamille(5);
-        loadMarques(5);
-        loadSousFamilles(10);
-        loadEngins(20);
+		loadMarques(5);
+		loadSousFamilles(10);
+		loadEngins(20);
 		loadFournisseur(20);
 		loadEmploye(20);
+		loadBonEngin(30);
+	}
+
+	public void loadBonEngin(int n) {
+		for (int i = 0; i < n; i++) {
+			BonEngin bonEngin = new BonEngin();
+			bonEngin.setDate(LocalDate.now());
+			bonEngin.setCode("code " + i);
+			bonEngin.setCompteurHenPanne(i % 2 == 0);
+			bonEngin.setCompteurH((long) i);
+			bonEngin.setCompteurKmenPanne(i % 2 == 1);
+			bonEngin.setCompteurKm((long) i);
+			bonEngin.setPlein(true);
+			bonEngin.setConsommationKm(i * 100f);
+			bonEngin.setConsommationH(i * 1500f);
+			bonEngin.setCompteurAbsoluH(i + 500L);
+			bonEngin.setCompteurAbsoluKm(i + 600L);
+			bonEngin.setEngin(enginRepo.getOne(1L));
+			bonEngin.setPompiste(employeRepo.getOne(1L));
+			bonEngin.setChauffeur(employeRepo.getOne(2L));
+			bonEngin.setChantierGazoil(chantierRepo.getOne(1L));
+			bonEngin.setChantierTravail(chantierRepo.getOne(2L));
+			bonEnginRepo.save(bonEngin);
+		}
 	}
 
 	//load classes

@@ -46,19 +46,13 @@
 				<button type="submit" class="btn btn-success btn-raised">
 					[[${edit}?#{save}: #{add}]]
 				</button>
-				<a href="/admin/familles/add" class="btn btn-secondary btn-raised">
+				<a href="/admin/" class="btn btn-secondary btn-raised">
 					[[#{cancel}]]
 				</a>
 			</form>
 
 			<hr id="hrTable">
-
-			<form class="form-inline justify-content-center" method="get" th:action="@{'/admin/familles/add#hrTable'}">
-				<div class="form-group">
-					<input class="form-control col-12" type="text" th:name="search" th:value="${search}">
-					<button class="btn btn-secondary col btn-raised" type="submit" th:text="#{search}"></button>
-				</div>
-			</form>
+			<form th:replace="fragments :: search(#{search})"></form>
 
 			<div class="jumbotron alert alert-primary" th:if="${#lists.isEmpty(page.content)}">
 				<h1 class="text-center alert-heading" th:text="#{empty}"></h1>
@@ -109,28 +103,8 @@
 					</tr>
 					</tbody>
 				</table>
-				<ul class="pagination justify-content-center">
-					<li class="page-item" th:classappend="${page.number} eq 0?'disabled':''">
-						<a class="page-link"
-						   th:href="'?page='+${(page.number)-1}+(${search.isEmpty()}?'':'&search='+${search})
-						 +(${page.getSort().sorted? '&sort='+page.getSort().iterator().next().property
-						 +','+page.getSort().iterator().next().direction:''})">
-							<span aria-hidden="true">&laquo;</span>
-						</a>
-					</li>
-					<li class="page-item active">
-						<a class="page-link" th:text="${page.number+1}+'/'+${page.totalPages} "></a>
-					</li>
-					<li class="page-item" th:classappend="${page.number+1} ge ${page.totalPages}?'disabled':''">
-						<a class="page-link"
-						   th:href="'?page='+${page.number+1}+(${search.isEmpty()}?'':'&search='+${search})
-					   +(${page.getSort().sorted? '&sort='+page.getSort().iterator().next().property
-					   +','+page.getSort().iterator().next().direction:''})">
-							<span aria-hidden="true">&raquo;</span>
-						</a>
-					</li>
-				</ul>
 			</div>
+			<ul th:replace="fragments :: pagination"></ul>
 		</div>
 	</main>
 </div>

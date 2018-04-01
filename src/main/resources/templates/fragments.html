@@ -31,20 +31,44 @@
 		</ul>
 	</div>
 </nav>
+<form th:fragment="search(placeHolder)" class="form-inline justify-content-center" method="get" action="#hrTable">
+	<div class="form-group">
+		<input class="form-control col-12" type="text" th:name="search" th:value="${search}"
+			   th:placeholder="${placeHolder}">
+		<button class="btn btn-secondary col btn-raised" type="submit" th:text="#{search}"></button>
+	</div>
+</form>
+<ul th:fragment="pagination" class="pagination justify-content-center p-3">
+	<li class="page-item" th:classappend="${page.number} eq 0?'disabled':''">
+		<a class="page-link"
+		   th:href="'?page='+${(page.number)-1}+(${search.isEmpty()}?'':'&search='+${search})
+						 +(${page.getSort().sorted? '&sort='+page.getSort().iterator().next().property
+						 +','+page.getSort().iterator().next().direction:''})">
+			<span aria-hidden="true">&laquo;</span>
+		</a>
+	</li>
+	<li class="page-item active">
+		<a class="page-link" th:text="${page.number+1}+'/'+${page.totalPages} "></a>
+	</li>
+	<li class="page-item" th:classappend="${page.number+1} ge ${page.totalPages}?'disabled':''">
+		<a class="page-link"
+		   th:href="'?page='+${page.number+1}+(${search.isEmpty()}?'':'&search='+${search})
+					   +(${page.getSort().sorted? '&sort='+page.getSort().iterator().next().property
+					   +','+page.getSort().iterator().next().direction:''})">
+			<span aria-hidden="true">&raquo;</span>
+		</a>
+	</li>
+</ul>
 <div th:fragment="footer">
 	<script th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script>
 	<script th:src="@{/webjars/select2/4.0.0/dist/js/select2.min.js}"></script>
+	<script th:src="@{/webjars/popper.js/1.13.0/dist/umd/popper.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap-material-design/4.1.1/js/bootstrap-material-design.min.js}"></script>
 	<script>
         $(document).ready(function () {
             $('.js-example-basic-single').select2({
                 width: '100%'
             });
-        });
-	</script>
-	<script th:src="@{/webjars/popper.js/1.13.0/dist/umd/popper.min.js}"></script>
-	<script th:src="@{/webjars/bootstrap-material-design/4.1.1/js/bootstrap-material-design.min.js}"></script>
-	<script>
-        $(document).ready(function () {
             $('body').bootstrapMaterialDesign();
         });
 	</script>

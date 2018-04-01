@@ -36,7 +36,7 @@ public class BonEnginController {
 
 	@GetMapping("")
 	public String list(Model model, Pageable pageable, @RequestParam(defaultValue = "") String search) {
-		// model.addAttribute("page", bonEnginService.getPage(pageable, search));
+		model.addAttribute("page", bonEnginService.getPage(pageable, search));
 		model.addAttribute("search", search);
 		return "saisi/engins/list";
 	}
@@ -44,30 +44,41 @@ public class BonEnginController {
 	@GetMapping("/add")
 	public String addGet(Model model) {
 		model.addAttribute("bonEngin", new BonEngin());
-		// model.addAttribute("chantiers", chantierService.getList());
-		// model.addAttribute("engins", enginService.getList());
-		// model.addAttribute("employes", employeService.getList());
+		model.addAttribute("chantiers", chantierService.getList());
+		model.addAttribute("engins", enginService.getList());
+		model.addAttribute("employes", employeService.getList());
 		return "saisi/engins/add";
 	}
 
 	@PostMapping("/add")
 	public String add(Model model, @Valid BonEngin bonEngin, BindingResult result) {
-		if (result.hasErrors()) {
-			// model.addAttribute("chantiers", chantierService.getList());
-			// model.addAttribute("engins", enginService.getList());
-			// model.addAttribute("employes", employeService.getList());
+		boolean error = false;
+		if (result.hasErrors() || (error = bonEnginService.hasErrors(bonEngin))) {
+			model.addAttribute("hasError", error);
+			model.addAttribute("chantiers", chantierService.getList());
+			model.addAttribute("engins", enginService.getList());
+			model.addAttribute("employes", employeService.getList());
 			return "saisi/engins/add";
-		}/*else if (bonEnginService.hasErrors()){
+		} else if (bonEnginService.hasErrorsAttention(bonEngin)) {
 			model.addAttribute("bon", bonEngin);
 			return "saisi/engins/confirm";
-		}*/
+		}
+		bonEnginService.add(bonEngin);
+		return "redirect:/saisi/engins";
+	}
+
+	@PostMapping("/confirm")
+	public String confirm(Model model, @Valid BonEngin bonEngin, BindingResult result) {
+		if (result.hasErrors()) {
+			return "saisi/engins/confirm";
+		}
 		bonEnginService.add(bonEngin);
 		return "redirect:/saisi/engins";
 	}
 
 	@PostMapping("/{id}/delete")
 	public String delete(@PathVariable Long id) {
-		// bonEnginService.delete(id);
+		bonEnginService.delete(id);
 		return "redirect:/saisi/engins";
 	}
 }

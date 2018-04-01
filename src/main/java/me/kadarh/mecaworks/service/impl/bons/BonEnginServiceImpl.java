@@ -5,7 +5,6 @@ import me.kadarh.mecaworks.domain.alertes.Alerte;
 import me.kadarh.mecaworks.domain.alertes.TypeAlerte;
 import me.kadarh.mecaworks.domain.bons.BonEngin;
 import me.kadarh.mecaworks.domain.bons.BonLivraison;
-import me.kadarh.mecaworks.domain.others.Employe;
 import me.kadarh.mecaworks.domain.others.Engin;
 import me.kadarh.mecaworks.domain.others.Stock;
 import me.kadarh.mecaworks.domain.others.TypeCompteur;
@@ -91,16 +90,9 @@ public class BonEnginServiceImpl implements BonEnginService {
             } else {
                 log.debug("Searching by :" + search);
                 //creating example
-                //Searching by nom pompiste and chauffeur , code engin , code bon
+				//todo : Searching by nom pompiste and chauffeur , code engin , code bon
                 BonEngin bonEngin = new BonEngin();
-                Employe employe = new Employe();
-                employe.setNom(search);
-                Engin engin = new Engin();
-                engin.setCode(search);
-                bonEngin.setPompiste(employe);
-                bonEngin.setChauffeur(employe);
                 bonEngin.setCode(search);
-                bonEngin.setEngin(engin);
                 //creating matcher
                 ExampleMatcher matcher = ExampleMatcher.matchingAny()
                         .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
@@ -206,7 +198,7 @@ public class BonEnginServiceImpl implements BonEnginService {
      */
     private boolean hasLogicQuantite(BonEngin bonEngin) {
         log.info("Service : Testing if Quantité Logic");
-        return bonEngin.getQuantite() < 2 * bonEngin.getEngin().getSousFamille().getCapaciteReservoir();
+		return bonEngin.getQuantite() < 2 * bonEngin.getEngin().getSousFamille().getCapaciteReservoir();
     }
 
     /**
