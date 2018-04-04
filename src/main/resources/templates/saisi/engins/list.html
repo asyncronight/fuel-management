@@ -16,9 +16,9 @@
 				<li class="breadcrumb-item"><a th:href="@{'/saisi'}" th:text="#{saisie}"></a></li>
 				<li class="breadcrumb-item" th:text="#{saisie.engin.list}"></li>
 			</ol>
-			<a th:href="@{'/saisi/engins/add'}" class="btn btn-success bmd-btn-fab float-right"
+			<a th:href="@{'/saisi/engins/add'}" class="btn btn-success bmd-btn-fab bmd-btn-fab-sm float-right"
 			   th:title="#{saisie.engin.add}">
-				<i class="material-icons mt-3">add</i>
+				<i class="material-icons mt-2">add</i>
 			</a>
 			<form th:replace="fragments :: search(#{saisie.engin.placeHolder})"></form>
 			<div class="jumbotron alert alert-primary" th:if="${#lists.isEmpty(page.content)}">

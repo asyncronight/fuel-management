@@ -16,9 +16,9 @@
 				<li class="breadcrumb-item"><a th:href="@{'/admin'}" th:text="#{admin}"></a></li>
 				<li class="breadcrumb-item" th:text="#{admin.employes}"></li>
 			</ol>
-			<a th:href="@{'/admin/employes/add'}" class="btn btn-success bmd-btn-fab float-right"
+			<a th:href="@{'/admin/employes/add'}" class="btn btn-success bmd-btn-fab float-right bmd-btn-fab-sm"
 			   th:title="#{admin.employe.add}">
-				<i class="material-icons mt-3">add</i>
+				<i class="material-icons mt-2">add</i>
 			</a>
 			<form th:replace="fragments :: search(#{admin.employe.searchPlaceHolder})"></form>
 			<div class="jumbotron alert alert-primary" th:if="${#lists.isEmpty(page.content)}">

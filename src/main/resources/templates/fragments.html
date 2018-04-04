@@ -33,10 +33,12 @@
 	</div>
 </nav>
 <form th:fragment="search(placeHolder)" class="form-inline justify-content-center" method="get" action="#hrTable">
-	<div class="form-group">
-		<input class="form-control col-12" type="text" th:name="search" th:value="${search}"
+	<div class="bmd-form-group">
+		<input class="form-control" type="text" th:name="search" th:value="${search}"
 			   th:placeholder="${placeHolder}">
-		<button class="btn btn-secondary col btn-raised" type="submit" th:text="#{search}"></button>
+		<button class="btn bmd-btn-icon" type="submit">
+			<i class="material-icons">search</i>
+		</button>
 	</div>
 </form>
 <ul th:fragment="pagination" class="pagination justify-content-center p-3">
