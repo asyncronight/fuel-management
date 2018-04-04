@@ -8,6 +8,7 @@
 	<link rel="stylesheet" th:href="@{/webjars/roboto-fontface/0.7.0/css/roboto/roboto-fontface.css}"/>
 	<link rel="stylesheet" th:href="@{/webjars/select2/4.0.0/dist/css/select2.min.css}"/>
 	<link rel="stylesheet" th:href="@{/webjars/bootstrap-material-design/4.1.1/css/bootstrap-material-design.min.css}"/>
+	<link rel="stylesheet" th:href="@{/webjars/github-com-fengyuanchen-datepicker/0.6.4/datepicker.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
 </head>
 <body>
@@ -64,12 +65,16 @@
 	<script th:src="@{/webjars/select2/4.0.0/dist/js/select2.min.js}"></script>
 	<script th:src="@{/webjars/popper.js/1.13.0/dist/umd/popper.min.js}"></script>
 	<script th:src="@{/webjars/bootstrap-material-design/4.1.1/js/bootstrap-material-design.min.js}"></script>
+	<script th:src="@{/webjars/github-com-fengyuanchen-datepicker/0.6.4/datepicker.min.js}"></script>
 	<script>
         $(document).ready(function () {
             $('.js-example-basic-single').select2({
                 width: '100%'
             });
             $('body').bootstrapMaterialDesign();
+            $('[data-toggle="datepicker"]').datepicker({
+                format: "yyyy-mm-dd"
+            });
         });
 	</script>
 	<script th:src="@{/js/main.js}"></script>

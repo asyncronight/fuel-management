@@ -76,7 +76,9 @@
 					<tbody>
 					<tr th:each="groupe : ${page.content}">
 						<td th:text="${groupe.nom}"></td>
-						<td th:text="${groupe.locataire}"></td>
+						<td>
+							<i class="material-icons" th:text="${groupe.locataire}?'done':'close'"></i>
+						</td>
 						<td class="btn-group">
 							<button class="btn bmd-btn-icon dropdown-toggle" type="button" id="ex3"
 									data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

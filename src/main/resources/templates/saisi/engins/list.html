@@ -163,9 +163,15 @@
 						<td th:text="${bon.quantite}"></td>
 						<td th:text="${bon.compteurKm}"></td>
 						<td th:text="${bon.compteurH}"></td>
-						<td th:text="${bon.compteurKmenPanne}"></td>
-						<td th:text="${bon.compteurHenPanne}"></td>
-						<td th:text="${bon.plein}"></td>
+						<td>
+							<i class="material-icons" th:text="${bon.compteurKmenPanne}?'done':'close'"></i>
+						</td>
+						<td>
+							<i class="material-icons" th:text="${bon.compteurHenPanne}?'done':'close'"></i>
+						</td>
+						<td>
+							<i class="material-icons" th:text="${bon.plein}?'done':'close'"></i>
+						</td>
 						<td th:text="${bon.compteurAbsoluKm}"></td>
 						<td th:text="${bon.compteurAbsoluH}"></td>
 						<td th:text="${bon.consommationKm}"></td>
