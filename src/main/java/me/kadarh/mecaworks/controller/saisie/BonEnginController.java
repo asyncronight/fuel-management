@@ -2,6 +2,7 @@ package me.kadarh.mecaworks.controller.saisie;
 
 import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.bons.BonEngin;
+import me.kadarh.mecaworks.domain.bons.Carburant;
 import me.kadarh.mecaworks.service.ChantierService;
 import me.kadarh.mecaworks.service.EmployeService;
 import me.kadarh.mecaworks.service.EnginService;
@@ -47,6 +48,7 @@ public class BonEnginController {
 		model.addAttribute("chantiers", chantierService.getList());
 		model.addAttribute("engins", enginService.getList());
 		model.addAttribute("employes", employeService.getList());
+		model.addAttribute("carburants", Carburant.values());
 		return "saisi/engins/add";
 	}
 
@@ -58,6 +60,7 @@ public class BonEnginController {
 			model.addAttribute("chantiers", chantierService.getList());
 			model.addAttribute("engins", enginService.getList());
 			model.addAttribute("employes", employeService.getList());
+			model.addAttribute("carburants", Carburant.values());
 			return "saisi/engins/add";
 		} else if (bonEnginService.hasErrorsAttention(bonEngin)) {
 			model.addAttribute("bon", bonEngin);

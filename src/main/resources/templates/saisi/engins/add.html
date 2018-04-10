@@ -38,14 +38,30 @@
 					</ul>
 				</div>
 				<div class="form-group">
+					<label class="bmd-label-floating" for="code" th:text="#{bonEngin.code}"></label>
+					<input type="text" id="code"
+						   class="form-control" th:field="*{code}"/>
+				</div>
+				<div class="form-group">
 					<label class="bmd-label-floating" for="date" th:text="#{bonEngin.date}"></label>
 					<input data-toggle="datepicker" class="form-control" id="date"
 						   th:field="*{date}">
 				</div>
-				<div class="form-group">
-					<label class="bmd-label-floating" for="code" th:text="#{bonEngin.code}"></label>
-					<input type="text" id="code"
-						   class="form-control" th:field="*{code}"/>
+				<div class="input-group mb-3">
+					<label class="input-group-text text-muted" for="engin"
+						   th:text="#{bonEngin.engin}"></label>
+					<select class="js-example-basic-single" id="engin" th:field="*{engin.id}">
+						<option th:each="engin : ${engins}" th:value="${engin.id}"
+								th:text="${engin.code+' - '+engin.numeroSerie+' | '+engin.sousFamille.nom}"></option>
+					</select>
+				</div>
+				<div class="input-group mb-3">
+					<label class="input-group-text text-muted" for="chauffeur"
+						   th:text="#{bonEngin.chauffeur}"></label>
+					<select class="js-example-basic-single" id="chauffeur" th:field="*{chauffeur.id}">
+						<option th:each="chauffeur : ${employes}" th:value="${chauffeur.id}"
+								th:text="${chauffeur.nom}"></option>
+					</select>
 				</div>
 				<div class="input-group mb-3">
 					<label class="input-group-text text-muted" for="chantierGazoil"
@@ -64,14 +80,6 @@
 					</select>
 				</div>
 				<div class="input-group mb-3">
-					<label class="input-group-text text-muted" for="engin"
-						   th:text="#{bonEngin.engin}"></label>
-					<select class="js-example-basic-single" id="engin" th:field="*{engin.id}">
-						<option th:each="engin : ${engins}" th:value="${engin.id}"
-								th:text="${engin.code+' - '+engin.numeroSerie+' | '+engin.sousFamille.nom}"></option>
-					</select>
-				</div>
-				<div class="input-group mb-3">
 					<label class="input-group-text text-muted" for="pompiste"
 						   th:text="#{bonEngin.pompiste}"></label>
 					<select class="js-example-basic-single" id="pompiste" th:field="*{pompiste.id}">
@@ -79,13 +87,11 @@
 								th:text="${pompiste.nom}"></option>
 					</select>
 				</div>
-				<div class="input-group mb-3">
-					<label class="input-group-text text-muted" for="chauffeur"
-						   th:text="#{bonEngin.chauffeur}"></label>
-					<select class="js-example-basic-single" id="chauffeur" th:field="*{chauffeur.id}">
-						<option th:each="chauffeur : ${employes}" th:value="${chauffeur.id}"
-								th:text="${chauffeur.nom}"></option>
-					</select>
+				<div class="input-group row pt-5">
+					<label class="col text-muted" th:text="#{bonEngin.carburant}"></label>
+					<label class="radio-inline col" th:each="i : ${carburants}">
+						<input type="radio" th:field="*{carburant}" th:value="${i}" th:text="${i}">
+					</label>
 				</div>
 				<div class="form-group">
 					<label class="bmd-label-floating" for="quantite" th:text="#{bonEngin.quantite}"></label>
@@ -102,7 +108,17 @@
 					<input type="number" id="compteurH"
 						   class="form-control" th:field="*{compteurH}"/>
 				</div>
-				<div class="row">
+				<div class="form-group">
+					<label class="bmd-label-floating" for="compteurPompe" th:text="#{bonEngin.compteurPompe}"></label>
+					<input type="number" id="compteurPompe"
+						   class="form-control" th:field="*{compteurPompe}"/>
+				</div>
+				<div class="switch pl-5">
+					<label>
+						<input type="checkbox" th:field="*{plein}"> [[#{bonEngin.plein}]]
+					</label>
+				</div>
+				<div class="row pl-5 pb-5">
 					<div class="switch col">
 						<label>
 							<input type="checkbox" th:field="*{compteurHenPanne}"> [[#{bonEngin.compteurHenPanne}]]
@@ -113,33 +129,6 @@
 							<input type="checkbox" th:field="*{compteurKmenPanne}"> [[#{bonEngin.compteurKmenPanne}]]
 						</label>
 					</div>
-					<div class="switch col">
-						<label>
-							<input type="checkbox" th:field="*{plein}"> [[#{bonEngin.plein}]]
-						</label>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="bmd-label-floating" for="compteurAbsoluKm"
-						   th:text="#{bonEngin.compteurAbsoluKm}"></label>
-					<input type="number" id="compteurAbsoluKm"
-						   class="form-control" th:field="*{compteurAbsoluKm}"/>
-				</div>
-				<div class="form-group">
-					<label class="bmd-label-floating" for="compteurAbsoluH"
-						   th:text="#{bonEngin.compteurAbsoluH}"></label>
-					<input type="number" id="compteurAbsoluH"
-						   class="form-control" th:field="*{compteurAbsoluH}"/>
-				</div>
-				<div class="form-group">
-					<label class="bmd-label-floating" for="consommationKm" th:text="#{bonEngin.consommationKm}"></label>
-					<input type="text" id="consommationKm"
-						   class="form-control" th:field="*{consommationKm}"/>
-				</div>
-				<div class="form-group">
-					<label class="bmd-label-floating" for="consommationH" th:text="#{bonEngin.consommationH}"></label>
-					<input type="text" id="consommationH"
-						   class="form-control" th:field="*{consommationH}"/>
 				</div>
 				<button type="submit" class="btn btn-success btn-raised">
 					[[${edit}?#{save}: #{add}]]

@@ -54,11 +54,13 @@ public class BonEngin extends AbstractDomain {
 
 	//todo add constraints
 	private Integer quantite;
+	private Long compteurPompe;
 	private Long compteurKm;
 	private Long compteurH;
 	private Boolean compteurHenPanne = false;
 	private Boolean compteurKmenPanne = false;
 	private Boolean plein;
+	private Carburant carburant;
 	private Long compteurAbsoluKm;
 	private Long compteurAbsoluH;
 	private Float consommationKm;
