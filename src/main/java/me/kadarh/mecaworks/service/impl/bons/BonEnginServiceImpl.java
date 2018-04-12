@@ -181,9 +181,9 @@ public class BonEnginServiceImpl implements BonEnginService {
         fillBon(bon);
         BonEngin lastBonEngin = getLastBonEngin(bon.getEngin());
         if (lastBonEngin != null)
-            return (hasLogicQuantite(bon) && hasLogicCompteur(bon, lastBonEngin));
+            return !(hasLogicQuantite(bon) && hasLogicCompteur(bon, lastBonEngin));
         else
-            return hasLogicQuantite(bon);
+            return !hasLogicQuantite(bon);
     }
 
     private BonEngin fillBon(BonEngin bon) {
@@ -209,6 +209,7 @@ public class BonEnginServiceImpl implements BonEnginService {
     @Override
     public boolean hasErrorsAttention(BonEngin bon) {
         BonEngin bonEngin = getLastBonEngin(bon.getEngin());
+        if (bonEngin == null) return false;
         if (bon.getEngin().getSousFamille().getTypeCompteur().equals(TypeCompteur.H)) {
             return (bon.getCompteurH() < bonEngin.getCompteurH());
         }
@@ -218,7 +219,7 @@ public class BonEnginServiceImpl implements BonEnginService {
         if (bon.getEngin().getSousFamille().getTypeCompteur().equals(TypeCompteur.KM_H)) {
             return (bon.getCompteurH() < bonEngin.getCompteurH()) || (bon.getCompteurKm() < bonEngin.getCompteurKm());
         }
-        return true;
+        return false;
     }
 
     /* ------------------------------------------------------------------------------ */
@@ -276,7 +277,7 @@ public class BonEnginServiceImpl implements BonEnginService {
      */
     private boolean hasLogicQuantite(BonEngin bonEngin) {
         log.info("Service : Testing if Quantité Logic");
-        return bonEngin.getQuantite() < 2 * bonEngin.getEngin().getSousFamille().getCapaciteReservoir();
+        return (bonEngin.getQuantite() < 2 * bonEngin.getEngin().getSousFamille().getCapaciteReservoir());
     }
 
     /**
@@ -361,33 +362,42 @@ public class BonEnginServiceImpl implements BonEnginService {
         long som_Q_2 = 0;
         if (typeCompteur.equals(TypeCompteur.H)) {
             lastBon = bonEnginRepo.findLastBonEnginH_toConsommation(bonEngin.getEngin());
-            for (BonEngin b : bonEnginRepo.findAllBetweenLastBonAndCurrentBon_H(lastBon.getCompteurAbsoluH()))
-                som_Q += b.getQuantite();
-            bonEngin.setConsommationH((float) som_Q / (bonEngin.getCompteurAbsoluH() - lastBon.getCompteurAbsoluH()));
+            if (lastBon != null) {
+                for (BonEngin b : bonEnginRepo.findAllBetweenLastBonAndCurrentBon_H(lastBon.getCompteurAbsoluH()))
+                    som_Q += b.getQuantite();
+                bonEngin.setConsommationH((float) som_Q / (bonEngin.getCompteurAbsoluH() - lastBon.getCompteurAbsoluH()));
+            }
             if (bonEngin.getConsommationH() > bonEngin.getEngin().getSousFamille().getConsommationHMax())
                 insertAlerte(bonEngin, "La consommation H est Annormale", TypeAlerte.CONSOMMATION_H_ANNORMALE);
         }
         if (typeCompteur.equals(TypeCompteur.KM)) {
             lastBon = bonEnginRepo.findLastBonEnginKm_toConsommation(bonEngin.getEngin());
-            for (BonEngin b : bonEnginRepo.findAllBetweenLastBonAndCurrentBon_Km(lastBon.getCompteurAbsoluKm()))
-                som_Q += b.getQuantite();
-            bonEngin.setConsommationKm((float) som_Q * 100 / (bonEngin.getCompteurAbsoluKm() - lastBon.getCompteurAbsoluKm()));
+            if (lastBon != null) {
+                for (BonEngin b : bonEnginRepo.findAllBetweenLastBonAndCurrentBon_Km(lastBon.getCompteurAbsoluKm()))
+                    som_Q += b.getQuantite();
+                bonEngin.setConsommationKm((float) som_Q * 100 / (bonEngin.getCompteurAbsoluKm() - lastBon.getCompteurAbsoluKm()));
+            }
             if (bonEngin.getConsommationKm() > bonEngin.getEngin().getSousFamille().getConsommationKmMax())
                 insertAlerte(bonEngin, "La consommation Km est Annormale", TypeAlerte.CONSOMMATION_KM_ANNORMALE);
+
         }
         if (typeCompteur.equals(TypeCompteur.KM_H)) {
             lastBon = bonEnginRepo.findLastBonEnginKm_toConsommation(bonEngin.getEngin());
             lastBon2 = bonEnginRepo.findLastBonEnginH_toConsommation(bonEngin.getEngin());
-            for (BonEngin b : bonEnginRepo.findAllBetweenLastBonAndCurrentBon_Km(lastBon.getCompteurAbsoluKm())) {
-                if (b.getQuantite() != null)
-                    som_Q += b.getQuantite();
+            if (lastBon != null) {
+                for (BonEngin b : bonEnginRepo.findAllBetweenLastBonAndCurrentBon_Km(lastBon.getCompteurAbsoluKm())) {
+                    if (b.getQuantite() != null)
+                        som_Q += b.getQuantite();
+                }
+                bonEngin.setConsommationKm((float) som_Q * 100 / (bonEngin.getCompteurAbsoluKm() - lastBon.getCompteurAbsoluKm()));
             }
-            for (BonEngin b : bonEnginRepo.findAllBetweenLastBonAndCurrentBon_H(lastBon2.getCompteurAbsoluH())) {
-                if (b.getQuantite() != null)
-                    som_Q_2 += b.getQuantite();
+            if (lastBon2 != null) {
+                for (BonEngin b : bonEnginRepo.findAllBetweenLastBonAndCurrentBon_H(lastBon.getCompteurAbsoluH())) {
+                    if (b.getQuantite() != null)
+                        som_Q_2 += b.getQuantite();
+                }
+                bonEngin.setConsommationH((float) som_Q_2 / (bonEngin.getCompteurAbsoluH() - lastBon2.getCompteurAbsoluH()));
             }
-            bonEngin.setConsommationKm((float) som_Q * 100 / (bonEngin.getCompteurAbsoluKm() - lastBon.getCompteurAbsoluKm()));
-            bonEngin.setConsommationH((float) som_Q_2 / (bonEngin.getCompteurAbsoluH() - lastBon.getCompteurAbsoluH()));
             if (bonEngin.getConsommationKm() > bonEngin.getEngin().getSousFamille().getConsommationKmMax())
                 insertAlerte(bonEngin, "La consommation Km est Annormale", TypeAlerte.CONSOMMATION_KM_ANNORMALE);
             if (bonEngin.getConsommationH() > bonEngin.getEngin().getSousFamille().getConsommationHMax())
