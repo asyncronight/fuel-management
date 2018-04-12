@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface BonEnginRepo extends JpaRepository<BonEngin, Long> {
 
-    @Query(nativeQuery = true, value = "select * from BON_ENGIN  where ENGIN_ID=?1 order by DATE_BON desc limit 1 ")
+    @Query(nativeQuery = true, value = "SELECT * FROM BON_ENGIN where ENGIN_ID=?1  order by CREATED_AT desc limit 1")
     BonEngin findLastBonEngin(Long id);
 
     @Query(nativeQuery = true, value = "select * from BON_ENGIN  where ENGIN_ID=?1 and COMPTEUR_HEN_PANNE=false and PLEIN=true order by COMPTEUR_ABSOLUH desc limit 1")

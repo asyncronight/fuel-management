@@ -1,17 +1,13 @@
 package me.kadarh.mecaworks.service;
 
 import me.kadarh.mecaworks.domain.alertes.Alerte;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface AlerteService {
 
 	Alerte add(Alerte alerte);
 
-	Alerte update(Alerte alerte);
-
-	List<Alerte> alerteList();
-
-	void delete(Long id);
+	Page<Alerte> getPage(Pageable pageable, String search);
 
 }

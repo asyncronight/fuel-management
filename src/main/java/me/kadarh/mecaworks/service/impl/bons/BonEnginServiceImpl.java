@@ -5,6 +5,7 @@ import me.kadarh.mecaworks.domain.alertes.Alerte;
 import me.kadarh.mecaworks.domain.alertes.TypeAlerte;
 import me.kadarh.mecaworks.domain.bons.BonEngin;
 import me.kadarh.mecaworks.domain.bons.BonLivraison;
+import me.kadarh.mecaworks.domain.others.Employe;
 import me.kadarh.mecaworks.domain.others.Engin;
 import me.kadarh.mecaworks.domain.others.Stock;
 import me.kadarh.mecaworks.domain.others.TypeCompteur;
@@ -18,7 +19,10 @@ import me.kadarh.mecaworks.service.bons.BonEnginService;
 import me.kadarh.mecaworks.service.bons.BonLivraisonService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
 import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,13 +69,42 @@ public class BonEnginServiceImpl implements BonEnginService {
                 bonEngin = calculConsommation(bonEngin);
             if (bonEngin.getChantierGazoil() != bonEngin.getChantierTravail())
                 insertBonLivraison(bonEngin);
+            bonEngin = bonEnginRepo.save(bonEngin);
             insertAlertes(bonEngin);
             insertStock(bonEngin);
-            return bonEnginRepo.save(bonEngin);
+
+            return bonEngin;
         } catch (Exception e) {
             log.debug("cannot add bonEngin , failed operation");
             throw new OperationFailedException("L'ajout du bonEngin a echouée ", e);
         }
+    }
+
+    private void calculCompteursAbsolu(BonEngin bonEngin) {
+        log.info("--- > Calcul compteur Absolu");
+        String typeCompteur = bonEngin.getEngin().getSousFamille().getTypeCompteur().name();
+        BonEngin bonEngin1 = getLastBonEngin(bonEngin.getEngin());
+        if (typeCompteur.equals(TypeCompteur.H.name())) {
+            if (bonEngin1 != null)
+                bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH() + bonEngin.getCompteurH());
+            else
+                bonEngin.setCompteurAbsoluH(bonEngin.getCompteurH());
+        } else if (typeCompteur.equals(TypeCompteur.KM.name())) {
+            if (bonEngin1 != null)
+                bonEngin.setCompteurAbsoluKm(bonEngin1.getCompteurAbsoluKm() + bonEngin.getCompteurKm());
+            else
+                bonEngin.setCompteurAbsoluKm(bonEngin.getCompteurKm());
+        } else if (typeCompteur.equals(TypeCompteur.KM_H.name())) {
+            if (bonEngin1 != null) {
+                bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH() + bonEngin.getCompteurH());
+                bonEngin.setCompteurAbsoluKm(bonEngin1.getCompteurAbsoluKm() + bonEngin.getCompteurKm());
+            } else {
+                bonEngin.setCompteurAbsoluH(bonEngin.getCompteurH());
+                bonEngin.setCompteurAbsoluKm(bonEngin.getCompteurKm());
+            }
+        }
+        log.info("--- > Calcul compteur AbsoluKm = " + bonEngin.getCompteurKm());
+        log.info("--- > Calcul compteur AbsoluH = " + bonEngin.getCompteurH());
     }
 
     @Override
@@ -92,17 +125,32 @@ public class BonEnginServiceImpl implements BonEnginService {
     public Page<BonEngin> getPage(Pageable pageable, String search) {
         log.info("Service- BonEnginServiceImpl Calling bonEnginList with params :" + pageable + ", " + search);
         try {
-            Pageable pageable1 = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "date"));
-
             if (search.isEmpty()) {
                 log.debug("fetching bonEngins page");
-                return bonEnginRepo.findAll(pageable1);
+                return bonEnginRepo.findAll(pageable);
             } else {
                 log.debug("Searching by :" + search);
-                //creating example
-				//todo : Searching by nom pompiste and chauffeur , code engin , code bon
+                //creating example by pompiste / chauffeur / code bon / code engin
                 BonEngin bonEngin = new BonEngin();
                 bonEngin.setCode(search);
+                bonEngin.setCompteurAbsoluKm(null);
+                bonEngin.setCompteurAbsoluH(null);
+                bonEngin.setConsommationH(null);
+                bonEngin.setConsommationKm(null);
+                bonEngin.setQuantite(null);
+                bonEngin.setCompteurHenPanne(null);
+                bonEngin.setCompteurKmenPanne(null);
+                Employe employe = null;
+                Engin engin = null;
+                if (employeRepo.findByNom(search).isPresent()) {
+                    employe = employeRepo.findByNom(search).get();
+                }
+                if (enginRepo.findByCode(search).isPresent()) {
+                    engin = enginRepo.findByCode(search).get();
+                }
+                bonEngin.setPompiste(employe);
+                bonEngin.setChauffeur(employe);
+                bonEngin.setEngin(engin);
                 //creating matcher
                 ExampleMatcher matcher = ExampleMatcher.matchingAny()
                         .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
@@ -110,7 +158,7 @@ public class BonEnginServiceImpl implements BonEnginService {
                         .withIgnoreNullValues();
                 Example<BonEngin> example = Example.of(bonEngin, matcher);
                 log.debug("getting search results");
-                return bonEnginRepo.findAll(example, pageable1);
+                return bonEnginRepo.findAll(example, pageable);
             }
         } catch (Exception e) {
             log.debug("Failed retrieving list of bons");
@@ -132,7 +180,10 @@ public class BonEnginServiceImpl implements BonEnginService {
     public boolean hasErrors(BonEngin bon) {
         fillBon(bon);
         BonEngin lastBonEngin = getLastBonEngin(bon.getEngin());
-        return (hasLogicQuantite(bon) && hasLogicCompteur(bon, lastBonEngin));
+        if (lastBonEngin != null)
+            return (hasLogicQuantite(bon) && hasLogicCompteur(bon, lastBonEngin));
+        else
+            return hasLogicQuantite(bon);
     }
 
     private BonEngin fillBon(BonEngin bon) {
@@ -142,6 +193,7 @@ public class BonEnginServiceImpl implements BonEnginService {
             bon.setPompiste(employeRepo.findById(bon.getPompiste().getId()).get());
             bon.setChantierTravail(chantierRepo.findById(bon.getChantierTravail().getId()).get());
             bon.setChantierGazoil(chantierRepo.findById(bon.getChantierGazoil().getId()).get());
+            calculCompteursAbsolu(bon);
             return bon;
         } catch (Exception e) {
             throw new OperationFailedException("Operation echouée", e);
@@ -175,27 +227,29 @@ public class BonEnginServiceImpl implements BonEnginService {
 
     private void insertAlertes(BonEngin bonEngin) {
         BonEngin lastBonEngin = getLastBonEngin(bonEngin.getEngin());
+        boolean okey = false;
+        if (lastBonEngin != null) okey = true;
         // Verify if chauffeur is changed.
-        if (lastBonEngin.getChauffeur() != bonEngin.getChauffeur())
+        if (lastBonEngin.getChauffeur() != bonEngin.getChauffeur() && okey)
             insertAlerte(bonEngin, "Chauffeur changé", TypeAlerte.CHAUFFEUR_CHANGED);
         // Verify if compteur is en panne , and if no verify if compteur last bon was en panne
         if (whichCompteurIsDown(bonEngin) == 1)
             insertAlerte(bonEngin, "Compteur H En Panne", TypeAlerte.COMPTEUR_H_EN_PANNE);
-        else if (whichCompteurIsDown(getLastBonEngin(bonEngin.getEngin())) == 1)
+        else if (whichCompteurIsDown(lastBonEngin) == 1 && okey)
             insertAlerte(bonEngin, "Compteur H Reparé", TypeAlerte.COMPTEUR_H_REPARE);
 
-        if (whichCompteurIsDown(bonEngin) == 2)
+        if (whichCompteurIsDown(bonEngin) == 2 && okey)
             insertAlerte(bonEngin, "Compteur Km En Panne", TypeAlerte.COMPTEUR_KM_EN_PANNE);
-        else if (whichCompteurIsDown(getLastBonEngin(bonEngin.getEngin())) == 2)
+        else if (whichCompteurIsDown(lastBonEngin) == 2)
             insertAlerte(bonEngin, "Compteur Km Reparé", TypeAlerte.COMPTEUR_KM_REPARE);
 
         if (whichCompteurIsDown(bonEngin) == 3) {
             insertAlerte(bonEngin, "Compteur H En Panne", TypeAlerte.COMPTEUR_H_EN_PANNE);
             insertAlerte(bonEngin, "Compteur Km En Panne", TypeAlerte.COMPTEUR_KM_EN_PANNE);
-        } else {
-            if (whichCompteurIsDown(getLastBonEngin(bonEngin.getEngin())) == 1)
+        } else if (okey) {
+            if (whichCompteurIsDown(lastBonEngin) == 1)
                 insertAlerte(bonEngin, "Compteur H Reparé", TypeAlerte.COMPTEUR_H_REPARE);
-            if (whichCompteurIsDown(getLastBonEngin(bonEngin.getEngin())) == 2)
+            if (whichCompteurIsDown(lastBonEngin) == 2)
                 insertAlerte(bonEngin, "Compteur Km Reparé", TypeAlerte.COMPTEUR_KM_REPARE);
         }
 
@@ -209,6 +263,7 @@ public class BonEnginServiceImpl implements BonEnginService {
         alerte.setDate(LocalDate.now());
         alerte.setIdBon(bonEngin.getId());
         alerte.setMessage(msg);
+        alerte.setEtat(true);
         alerte.setTypeAlerte(type);
         alerteService.add(alerte);
     }
@@ -221,7 +276,7 @@ public class BonEnginServiceImpl implements BonEnginService {
      */
     private boolean hasLogicQuantite(BonEngin bonEngin) {
         log.info("Service : Testing if Quantité Logic");
-		return bonEngin.getQuantite() < 2 * bonEngin.getEngin().getSousFamille().getCapaciteReservoir();
+        return bonEngin.getQuantite() < 2 * bonEngin.getEngin().getSousFamille().getCapaciteReservoir();
     }
 
     /**
@@ -233,8 +288,9 @@ public class BonEnginServiceImpl implements BonEnginService {
      */
     private boolean hasLogicCompteur(BonEngin bonEngin, BonEngin lastBonEngin) {
         log.info("Service : Testing if Compteur is Logic");
-        long days = Period.between(lastBonEngin.getDate(), bonEngin.getDate()).getDays();
-        if (days == 0) days = 1;
+        long days;
+        days = Period.between(lastBonEngin.getDate(), bonEngin.getDate()).getDays();
+        if (days <= 0) days = 1;
         long diff, diff1;
         String typeCompteur = bonEngin.getEngin().getSousFamille().getTypeCompteur().name();
         if (typeCompteur.equals(TypeCompteur.H.name())) {
@@ -358,4 +414,3 @@ public class BonEnginServiceImpl implements BonEnginService {
     }
 
 }
-
