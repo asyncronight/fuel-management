@@ -51,7 +51,8 @@ public class DataFakerB {
 	public void run() {
 		log.info("This is DataFaker of Bons");
 		//loadBonsEngin(80, 20);
-		//loadBonFournisseur(20);
+
+        //loadBonFournisseur(20);
 	}
 
 	private void loadBonsEngin(int n, int m) {
