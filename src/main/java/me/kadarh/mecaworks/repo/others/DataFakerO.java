@@ -56,8 +56,8 @@ public class DataFakerO implements CommandLineRunner {
 		loadEngins(20);
 		loadFournisseur(20);
 		loadEmploye(20);
-		loadBonEngin(30);
-	}
+        //loadBonEngin(30);
+    }
 
 	public void loadBonEngin(int n) {
 		for (int i = 0; i < n; i++) {
