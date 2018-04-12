@@ -26,7 +26,8 @@ public class BonEngin extends AbstractDomain {
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@NotNull
-	private LocalDate date;
+    @Column(name = "DATE_BON")
+    private LocalDate date;
 
 	@Column(unique = true)
 	@NotEmpty
@@ -53,17 +54,17 @@ public class BonEngin extends AbstractDomain {
 	private Employe chauffeur;
 
 	//todo add constraints
-	private Integer quantite;
 	private Long compteurPompe;
-	private Long compteurKm;
+    private Integer quantite = 0;
+    private Long compteurKm;
 	private Long compteurH;
 	private Boolean compteurHenPanne = false;
 	private Boolean compteurKmenPanne = false;
 	private Boolean plein;
 	private Carburant carburant;
-	private Long compteurAbsoluKm;
-	private Long compteurAbsoluH;
-	private Float consommationKm;
-	private Float consommationH;
+    private Long compteurAbsoluKm = 0L;
+    private Long compteurAbsoluH = 0L;
+    private Float consommationKm = 0f;
+    private Float consommationH = 0f;
 
 }

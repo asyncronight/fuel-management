@@ -67,7 +67,7 @@ public class DataFakerB {
 			bonEngin.setCompteurAbsoluH(100L + i * 10);
 			bonEngin.setCompteurKm(100L + i * 5);
 			bonEngin.setCompteurAbsoluKm(100L + i * 10);
-			bonEngin.setQuantite(20 + i * 10);
+			bonEngin.setQuantite(20);
 			bonEngin.setChantierGazoil(chantierGazoil);
 			bonEngin.setChantierTravail(chantierTravail);
 

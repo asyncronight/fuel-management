@@ -9,6 +9,9 @@ import me.kadarh.mecaworks.domain.others.Engin;
 import me.kadarh.mecaworks.domain.others.Stock;
 import me.kadarh.mecaworks.domain.others.TypeCompteur;
 import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
+import me.kadarh.mecaworks.repo.others.ChantierRepo;
+import me.kadarh.mecaworks.repo.others.EmployeRepo;
+import me.kadarh.mecaworks.repo.others.EnginRepo;
 import me.kadarh.mecaworks.service.AlerteService;
 import me.kadarh.mecaworks.service.StockService;
 import me.kadarh.mecaworks.service.bons.BonEnginService;
@@ -37,15 +40,20 @@ public class BonEnginServiceImpl implements BonEnginService {
     private final AlerteService alerteService;
     private final BonLivraisonService bonLivraisonService;
     private final StockService stockService;
+    private final EnginRepo enginRepo;
+    private final ChantierRepo chantierRepo;
+    private final EmployeRepo employeRepo;
 
-    public BonEnginServiceImpl(BonEnginRepo bonEnginRepo, AlerteService alerteService, BonLivraisonService bonLivraisonService, StockService stockService) {
+    public BonEnginServiceImpl(BonEnginRepo bonEnginRepo, AlerteService alerteService, BonLivraisonService bonLivraisonService, StockService stockService, EnginRepo enginRepo, ChantierRepo chantierRepo, EmployeRepo employeRepo) {
         this.bonEnginRepo = bonEnginRepo;
         this.alerteService = alerteService;
         this.bonLivraisonService = bonLivraisonService;
         this.stockService = stockService;
+        this.enginRepo = enginRepo;
+        this.chantierRepo = chantierRepo;
+        this.employeRepo = employeRepo;
     }
-
-    /* ------------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------------ */
     /* ------------ CRUD METHODES -------------------------------------------------- */
     /* ---------------------------------------------------------------------------- */
 
@@ -82,11 +90,13 @@ public class BonEnginServiceImpl implements BonEnginService {
 
     @Override
     public Page<BonEngin> getPage(Pageable pageable, String search) {
-        log.info("Service- employeServiceImpl Calling employeList with params :" + pageable + ", " + search);
+        log.info("Service- BonEnginServiceImpl Calling bonEnginList with params :" + pageable + ", " + search);
         try {
+            Pageable pageable1 = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "date"));
+
             if (search.isEmpty()) {
                 log.debug("fetching bonEngins page");
-                return bonEnginRepo.findAll(pageable);
+                return bonEnginRepo.findAll(pageable1);
             } else {
                 log.debug("Searching by :" + search);
                 //creating example
@@ -99,12 +109,11 @@ public class BonEnginServiceImpl implements BonEnginService {
                         .withIgnoreCase()
                         .withIgnoreNullValues();
                 Example<BonEngin> example = Example.of(bonEngin, matcher);
-                Pageable pageable1 = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, bonEngin.getDate().toString()));
                 log.debug("getting search results");
                 return bonEnginRepo.findAll(example, pageable1);
             }
         } catch (Exception e) {
-            log.debug("Failed retrieving list of employes");
+            log.debug("Failed retrieving list of bons");
             throw new OperationFailedException("Operation échouée", e);
         }
     }
@@ -121,8 +130,22 @@ public class BonEnginServiceImpl implements BonEnginService {
      */
     @Override
     public boolean hasErrors(BonEngin bon) {
+        fillBon(bon);
         BonEngin lastBonEngin = getLastBonEngin(bon.getEngin());
         return (hasLogicQuantite(bon) && hasLogicCompteur(bon, lastBonEngin));
+    }
+
+    private BonEngin fillBon(BonEngin bon) {
+        try {
+            bon.setEngin(enginRepo.findById(bon.getEngin().getId()).get());
+            bon.setChauffeur(employeRepo.findById(bon.getChauffeur().getId()).get());
+            bon.setPompiste(employeRepo.findById(bon.getPompiste().getId()).get());
+            bon.setChantierTravail(chantierRepo.findById(bon.getChantierTravail().getId()).get());
+            bon.setChantierGazoil(chantierRepo.findById(bon.getChantierGazoil().getId()).get());
+            return bon;
+        } catch (Exception e) {
+            throw new OperationFailedException("Operation echouée", e);
+        }
     }
 
     /**
@@ -254,7 +277,6 @@ public class BonEnginServiceImpl implements BonEnginService {
         stock.setChantier(bonEngin.getChantierTravail());
         stock.setDate(bonEngin.getDate());
         stock.setSortieE(bonEngin.getQuantite());
-        stock.setStockReel(stockService.getLastStock().getStockReel() + bonEngin.getQuantite());
         stockService.add(stock);
     }
 
@@ -300,10 +322,14 @@ public class BonEnginServiceImpl implements BonEnginService {
         if (typeCompteur.equals(TypeCompteur.KM_H)) {
             lastBon = bonEnginRepo.findLastBonEnginKm_toConsommation(bonEngin.getEngin());
             lastBon2 = bonEnginRepo.findLastBonEnginH_toConsommation(bonEngin.getEngin());
-            for (BonEngin b : bonEnginRepo.findAllBetweenLastBonAndCurrentBon_Km(lastBon.getCompteurAbsoluKm()))
-                som_Q += b.getQuantite();
-            for (BonEngin b : bonEnginRepo.findAllBetweenLastBonAndCurrentBon_H(lastBon2.getCompteurAbsoluH()))
-                som_Q_2 += b.getQuantite();
+            for (BonEngin b : bonEnginRepo.findAllBetweenLastBonAndCurrentBon_Km(lastBon.getCompteurAbsoluKm())) {
+                if (b.getQuantite() != null)
+                    som_Q += b.getQuantite();
+            }
+            for (BonEngin b : bonEnginRepo.findAllBetweenLastBonAndCurrentBon_H(lastBon2.getCompteurAbsoluH())) {
+                if (b.getQuantite() != null)
+                    som_Q_2 += b.getQuantite();
+            }
             bonEngin.setConsommationKm((float) som_Q * 100 / (bonEngin.getCompteurAbsoluKm() - lastBon.getCompteurAbsoluKm()));
             bonEngin.setConsommationH((float) som_Q_2 / (bonEngin.getCompteurAbsoluH() - lastBon.getCompteurAbsoluH()));
             if (bonEngin.getConsommationKm() > bonEngin.getEngin().getSousFamille().getConsommationKmMax())
@@ -321,7 +347,7 @@ public class BonEnginServiceImpl implements BonEnginService {
      */
     private BonEngin getLastBonEngin(Engin engin) {
         try {
-            return bonEnginRepo.findLastBonEngin(engin);
+            return bonEnginRepo.findLastBonEngin(engin.getId());
         } catch (NoSuchElementException e) {
             log.info("Problem , cannot find last BonEngin with id = :" + engin.getId());
             throw new ResourceNotFoundException("BonEngin introuvable, c'est le premier bon de cette engin", e);

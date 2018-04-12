@@ -11,18 +11,18 @@ import java.util.List;
 @Repository
 public interface BonEnginRepo extends JpaRepository<BonEngin, Long> {
 
-    @Query("select b from BonEngin b where b.engin=?1 order by b.date desc ")
-    BonEngin findLastBonEngin(Engin engin);
+    @Query(nativeQuery = true, value = "select * from BON_ENGIN  where ENGIN_ID=?1 order by DATE_BON desc limit 1 ")
+    BonEngin findLastBonEngin(Long id);
 
-    @Query("select b from BonEngin b where b.engin=?1 and b.compteurHenPanne=false and b.plein=true order by b.compteurAbsoluH desc ")
+    @Query(nativeQuery = true, value = "select * from BON_ENGIN  where ENGIN_ID=?1 and COMPTEUR_HEN_PANNE=false and PLEIN=true order by COMPTEUR_ABSOLUH desc limit 1")
     BonEngin findLastBonEnginH_toConsommation(Engin engin);
 
-    @Query("select b from BonEngin b where b.engin=?1 and b.compteurKmenPanne=false and b.plein=true order by b.compteurAbsoluKm desc")
+    @Query(nativeQuery = true, value = "select * from BON_ENGIN  where ENGIN_ID=?1 and COMPTEUR_KMEN_PANNE=false and PLEIN=true order by COMPTEUR_ABSOLU_KM desc limit 1")
     BonEngin findLastBonEnginKm_toConsommation(Engin engin);
 
-    @Query("select b from BonEngin b where b.compteurAbsoluH > ?1")
+    @Query(nativeQuery = true, value = "select * from BON_ENGIN where COMPTEUR_ABSOLUH > ?1")
     List<BonEngin> findAllBetweenLastBonAndCurrentBon_H(Long compteurAbsoluH);
 
-    @Query("select b from BonEngin b where b.compteurAbsoluKm > ?1")
+    @Query(nativeQuery = true, value = "select * from BON_ENGIN where COMPTEUR_ABSOLU_KM > ?1")
     List<BonEngin> findAllBetweenLastBonAndCurrentBon_Km(Long compteurAbsoluKm);
 }
