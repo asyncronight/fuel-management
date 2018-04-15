@@ -2,8 +2,10 @@ package me.kadarh.mecaworks.repo.others;
 
 import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.bons.BonEngin;
+import me.kadarh.mecaworks.domain.bons.BonLivraison;
 import me.kadarh.mecaworks.domain.others.*;
 import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
+import me.kadarh.mecaworks.repo.bons.BonLivraisonRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
@@ -43,6 +45,8 @@ public class DataFakerO implements CommandLineRunner {
 	private FournisseurRepo fournisseurRepo;
 	@Autowired
 	BonEnginRepo bonEnginRepo;
+	@Autowired
+	BonLivraisonRepo bonLivraisonRepo;
 
 	@Override
 	public void run(String... strings) {
@@ -57,7 +61,22 @@ public class DataFakerO implements CommandLineRunner {
 		loadFournisseur(20);
 		loadEmploye(20);
         loadBonEngin(30);
+		loadBonLivraison(30);
     }
+
+	private void loadBonLivraison(int i) {
+		for (int j = 0; j < i; j++) {
+			BonLivraison bonLivraison = new BonLivraison();
+			bonLivraison.setCode("Code " + (j + 1));
+			bonLivraison.setDate(LocalDate.now());
+			bonLivraison.setQuantite(i * (j + 1));
+			bonLivraison.setChantierArrivee(chantierRepo.getOne(j % 3L + 2));
+			bonLivraison.setChantierDepart(chantierRepo.getOne(j % 3L + 1));
+			bonLivraison.setPompiste(employeRepo.getOne(j % 3L + 2));
+			bonLivraison.setTransporteur(employeRepo.getOne(j % 3L + 1));
+			bonLivraisonRepo.save(bonLivraison);
+		}
+	}
 
 	public void loadBonEngin(int n) {
 		for (int i = 0; i < n; i++) {

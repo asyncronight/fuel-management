@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="fragments :: head"></head>
+<body>
+<div th:replace="fragments :: menu('saisi')"></div>
+<div class="bmd-layout-container bmd-drawer-f-l  bmd-drawer-overlay-md-down">
+	<div th:replace="saisi/fragment :: menu('la')"></div>
+	<main class="bmd-layout-content">
+		<div class="container">
+			<button class="btn bmd-btn-fab btn-primary bmd-btn-fab-sm active" type="button" data-toggle="drawer"
+					data-target="#side" style="margin-top: 10px">
+				<i class="material-icons text-light">menu</i>
+			</button>
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
+				<li class="breadcrumb-item"><a th:href="@{'/saisi'}" th:text="#{saisie}"></a></li>
+				<li class="breadcrumb-item"><a th:href="@{'/saisi/livraisons'}" th:text="#{saisie.livraison.list}"></a>
+				</li>
+				<li class="breadcrumb-item" th:text="#{saisie.livraison.add}"></li>
+			</ol>
+			<form class="card p-5" method="post" th:object="${bonLivraison}">
+				<h3 class="text-center"
+					th:text="#{saisie.livraison.add}"></h3>
+				<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+					<h4 class="alert-heading" th:text="#{formError}"></h4>
+					<ul>
+						<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+					</ul>
+				</div>
+				<div class="form-group">
+					<label class="bmd-label-floating" for="code" th:text="#{bonLivraison.code}"></label>
+					<input type="text" id="code"
+						   class="form-control" th:field="*{code}"/>
+				</div>
+				<div class="form-group">
+					<label class="bmd-label-floating" for="date" th:text="#{bonLivraison.date}"></label>
+					<input data-toggle="datepicker" class="form-control" id="date"
+						   th:field="*{date}">
+				</div>
+				<div class="input-group mb-3">
+					<label class="input-group-text text-muted" for="chantierDepart"
+						   th:text="#{bonLivraison.chantierDepart}"></label>
+					<select class="js-example-basic-single" id="chantierDepart" th:field="*{chantierDepart.id}">
+						<option th:each="chantierDepart : ${chantiers}" th:value="${chantierDepart.id}"
+								th:text="${chantierDepart.nom}"></option>
+					</select>
+				</div>
+				<div class="input-group mb-3">
+					<label class="input-group-text text-muted" for="chantierArrivee"
+						   th:text="#{bonLivraison.chantierArrivee}"></label>
+					<select class="js-example-basic-single" id="chantierArrivee" th:field="*{chantierArrivee.id}">
+						<option th:each="chantierArrivee : ${chantiers}" th:value="${chantierArrivee.id}"
+								th:text="${chantierArrivee.nom}"></option>
+					</select>
+				</div>
+				<div class="input-group mb-3">
+					<label class="input-group-text text-muted" for="pompiste"
+						   th:text="#{bonLivraison.pompiste}"></label>
+					<select class="js-example-basic-single" id="pompiste" th:field="*{pompiste.id}">
+						<option th:each="pompiste : ${employes}" th:value="${pompiste.id}"
+								th:text="${pompiste.nom}"></option>
+					</select>
+				</div>
+				<div class="input-group mb-3">
+					<label class="input-group-text text-muted" for="transporteur"
+						   th:text="#{bonLivraison.transporteur}"></label>
+					<select class="js-example-basic-single" id="transporteur" th:field="*{transporteur.id}">
+						<option th:each="transporteur : ${employes}" th:value="${transporteur.id}"
+								th:text="${transporteur.nom}"></option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label class="bmd-label-floating" for="quantite" th:text="#{bonLivraison.quantite}"></label>
+					<input type="number" id="quantite"
+						   class="form-control" th:field="*{quantite}"/>
+				</div>
+				<button type="submit" class="btn btn-success btn-raised">
+					[[${edit}?#{save}: #{add}]]
+				</button>
+				<a href="/saisi/livraisons/" class="btn btn-secondary btn-raised">
+					[[#{cancel}]]
+				</a>
+			</form>
+		</div>
+	</main>
+</div>
+<div th:replace="fragments :: footer"></div>
+</body>
+</html>

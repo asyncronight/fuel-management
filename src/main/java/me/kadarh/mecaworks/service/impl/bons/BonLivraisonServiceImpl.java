@@ -2,6 +2,8 @@ package me.kadarh.mecaworks.service.impl.bons;
 
 import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.bons.BonLivraison;
+import me.kadarh.mecaworks.domain.others.Chantier;
+import me.kadarh.mecaworks.domain.others.Employe;
 import me.kadarh.mecaworks.domain.others.Stock;
 import me.kadarh.mecaworks.repo.bons.BonLivraisonRepo;
 import me.kadarh.mecaworks.repo.others.ChantierRepo;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -109,6 +112,13 @@ public class BonLivraisonServiceImpl implements BonLivraisonService {
 		}
 	}
 
+	/**
+	 * Search by any attribute of BonLivraison if possible
+	 *
+	 * @param pageable
+	 * @param search   keyword
+	 * @return Page of results
+	 */
 	@Override
 	public Page<BonLivraison> bonList(Pageable pageable, String search) {
 		try {
@@ -118,20 +128,29 @@ public class BonLivraisonServiceImpl implements BonLivraisonService {
 			} else {
 				log.debug("Searching by :" + search);
 				//creating example
-				//Searching by code bon , nom chantier, nom fournisseur
+				//Searching by code, date, quantité, nom chantier, nom employe
 
 				BonLivraison bonLivraison = new BonLivraison();
+				Chantier chantier = new Chantier();
+				chantier.setNom(search);
+				bonLivraison.setChantierDepart(chantier);
+				bonLivraison.setChantierArrivee(chantier);
+				Employe employe = new Employe();
+				employe.setNom(search);
+				bonLivraison.setPompiste(employe);
+				bonLivraison.setTransporteur(employe);
 
-				if (chantierRepo.findByNom(search).isPresent()) {
-					bonLivraison.setChantierArrivee(chantierRepo.findByNom(search).get());
-					bonLivraison.setChantierDepart(chantierRepo.findByNom(search).get());
-				}
-				if (employeRepo.findByNom(search).isPresent()) {
-					bonLivraison.setTransporteur(employeRepo.findByNom(search).get());
-					bonLivraison.setPompiste(employeRepo.findByNom(search).get());
-				}
-				bonLivraison.setDate(LocalDate.now());
 				bonLivraison.setCode(search);
+				try {
+					bonLivraison.setDate(LocalDate.parse(search, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+				} catch (Exception e) {
+					log.debug("Cannot search by date : keyword doesn't match date pattern");
+				}
+				try {
+					bonLivraison.setQuantite(Integer.valueOf(search));
+				} catch (Exception e) {
+					log.debug("Cannot search by quantité : keyword is not a number");
+				}
 
 				//creating matcher
 				ExampleMatcher matcher = ExampleMatcher.matchingAny()
