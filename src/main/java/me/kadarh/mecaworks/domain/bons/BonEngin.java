@@ -54,14 +54,15 @@ public class BonEngin extends AbstractDomain {
 	private Employe chauffeur;
 
 	//todo add constraints
-	private Long compteurPompe;
+	private Long compteurPompe = 0L;
     private Integer quantite = 0;
-    private Long compteurKm;
-	private Long compteurH;
+	private Long compteurKm = 0L;
+	private Long compteurH = 0L;
 	private Boolean compteurHenPanne = false;
 	private Boolean compteurKmenPanne = false;
 	private Boolean plein;
-	private Carburant carburant;
+	@NotNull
+	private Carburant carburant = Carburant.Gazoil;
     private Long compteurAbsoluKm = 0L;
     private Long compteurAbsoluH = 0L;
     private Float consommationKm = 0f;

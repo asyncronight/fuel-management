@@ -15,25 +15,22 @@
 				<li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
 				<li class="breadcrumb-item"><a th:href="@{'/saisi'}" th:text="#{saisie}"></a></li>
 				<li class="breadcrumb-item"><a th:href="@{'/saisi/engins'}" th:text="#{saisie.engin.list}"></a></li>
-				<li class="breadcrumb-item"><a th:href="@{'/saisi/engins/Add'}" th:text="#{saisie.engin.add}"></a></li>
-				<li class="breadcrumb-item" th:text="#{saisie.engin.confirm}"></li>
+				<li class="breadcrumb-item" th:text="#{saisie.engin.add}"></li>
 			</ol>
-
-			<div class="alert alert-warning">
-				<!--todo add externalized messages-->
-				<h4 class="alert-heading">Attention</h4>
-				<hr>
-				<p>Attention message 1</p>
-				<p>Attention message 2</p>
-			</div>
-            <!--todo : resolve it
-            <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
-                <h4 class="alert-heading" th:text="#{formError}"></h4>
-                <ul>
-                    <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
-                </ul>
-            </div> -->
-			<form action="/saisi/engins/confirm" class="card p-5" method="post" th:object="${bon}">
+			<form action="/saisi/engins/confirm" class="card p-5" method="post" th:object="${bonEngin}">
+				<div class="alert alert-dark">
+					<!--todo add externalized messages-->
+					<h4 class="alert-heading">Attention</h4>
+					<hr>
+					<p>Attention message 1</p>
+					<p>Attention message 2</p>
+				</div>
+				<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+					<h4 class="alert-heading" th:text="#{formError}"></h4>
+					<ul>
+						<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+					</ul>
+				</div>
 				<input type="hidden" th:field="*{date}">
 				<input type="hidden" th:field="*{code}">
 				<input type="hidden" th:field="*{chantierGazoil.id}">
@@ -41,21 +38,20 @@
 				<input type="hidden" th:field="*{engin.id}">
 				<input type="hidden" th:field="*{pompiste.id}">
 				<input type="hidden" th:field="*{chauffeur.id}">
+				<input type="hidden" th:field="*{carburant}">
 				<input type="hidden" th:field="*{quantite}">
 				<input type="hidden" th:field="*{compteurKm}">
 				<input type="hidden" th:field="*{compteurH}">
+				<input type="hidden" th:field="*{compteurPompe}">
 				<input type="hidden" th:field="*{compteurHenPanne}">
 				<input type="hidden" th:field="*{compteurKmenPanne}">
 				<input type="hidden" th:field="*{plein}">
 				<input type="hidden" th:field="*{compteurAbsoluKm}">
-				<input type="hidden" th:field="*{compteurAbsoluH}">
-				<input type="hidden" th:field="*{consommationKm}">
-				<input type="hidden" th:field="*{consommationH}">
 
-				<button type="submit" class="btn btn-info btn-raised">
+				<button type="submit" class="btn btn-success btn-raised">
 					[[#{saisie.engin.confirm}]]
 				</button>
-				<a href="/saisi/engins/" class="btn btn-dark btn-raised">
+				<a href="/saisi/engins/add" class="btn btn-secondary btn-raised">
 					[[#{cancel}]]
 				</a>
 			</form>

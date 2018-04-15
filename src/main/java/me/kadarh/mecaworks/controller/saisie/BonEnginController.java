@@ -63,17 +63,15 @@ public class BonEnginController {
 			model.addAttribute("carburants", Carburant.values());
 			return "saisi/engins/add";
 		} else if (bonEnginService.hasErrorsAttention(bonEngin)) {
-			model.addAttribute("bon", bonEngin);
+			model.addAttribute("bonEngin", bonEngin);
 			return "saisi/engins/confirm";
-			//todo : lbon kàykhroj 3amr mzyan , mais kàydkhol l confirm ( POST ) khawyin les objects li fih .
-			//todo : dir chi 7el
 		}
 		bonEnginService.add(bonEngin);
 		return "redirect:/saisi/engins";
 	}
 
 	@PostMapping("/confirm")
-	public String confirm(Model model, @Valid BonEngin bonEngin, BindingResult result) {
+	public String confirm(@Valid BonEngin bonEngin, BindingResult result) {
 		if (result.hasErrors()) {
 			return "saisi/engins/confirm";
 		}

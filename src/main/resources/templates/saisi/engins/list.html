@@ -78,6 +78,13 @@
 								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
 							</a>
 						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('carburant')?.descending}">
+							[[#{bonEngin.carburant}]]
+							<a th:href="'?page=0&sort=carburant'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
 						<th th:with="desc=${page.getSort().getOrderFor('quantite')?.descending}">
 							[[#{bonEngin.quantite}]]
 							<a th:href="'?page=0&sort=quantite'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
@@ -95,6 +102,13 @@
 						<th th:with="desc=${page.getSort().getOrderFor('compteurH')?.descending}">
 							[[#{bonEngin.compteurH}]]
 							<a th:href="'?page=0&sort=compteurH'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('compteurPompe')?.descending}">
+							[[#{bonEngin.compteurPompe}]]
+							<a th:href="'?page=0&sort=compteurPompe'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
 								<i class="material-icons text-light"
 								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
 							</a>
@@ -160,9 +174,11 @@
 						<td th:text="${bon.engin?.numeroSerie}"></td>
 						<td th:text="${bon.pompiste?.nom}"></td>
 						<td th:text="${bon.chauffeur?.nom}"></td>
+						<td th:text="${bon.carburant}"></td>
 						<td th:text="${bon.quantite}"></td>
 						<td th:text="${bon.compteurKm}"></td>
 						<td th:text="${bon.compteurH}"></td>
+						<td th:text="${bon.compteurPompe}"></td>
 						<td>
 							<i class="material-icons" th:text="${bon.compteurKmenPanne}?'done':'close'"></i>
 						</td>
@@ -183,10 +199,6 @@
 							</button>
 							<div class="dropdown-menu dropdown-menu-left" aria-labelledby="ex3">
 								<form th:action="@{'/saisi/engins/' + ${bon.id} +'/delete'}" method="post">
-									<a th:href="@{'/saisi/engins/' + ${bon.id} +'/edit'}"
-									   class="dropdown-item">
-										<i class="material-icons">edit</i> [[#{edit}]]
-									</a>
 									<button type="submit" class="dropdown-item">
 										<i class="material-icons">delete</i> [[#{delete}]]
 									</button>
