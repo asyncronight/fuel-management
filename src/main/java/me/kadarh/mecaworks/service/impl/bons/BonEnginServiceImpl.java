@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -121,50 +122,64 @@ public class BonEnginServiceImpl implements BonEnginService {
         }
     }
 
-    @Override
-    public Page<BonEngin> getPage(Pageable pageable, String search) {
-        log.info("Service- BonEnginServiceImpl Calling bonEnginList with params :" + pageable + ", " + search);
-        try {
-            if (search.isEmpty()) {
-                log.debug("fetching bonEngins page");
-                return bonEnginRepo.findAll(pageable);
-            } else {
-                log.debug("Searching by :" + search);
-                //creating example by pompiste / chauffeur / code bon / code engin
-                BonEngin bonEngin = new BonEngin();
-                bonEngin.setCode(search);
-                bonEngin.setCompteurAbsoluKm(null);
-                bonEngin.setCompteurAbsoluH(null);
-                bonEngin.setConsommationH(null);
-                bonEngin.setConsommationKm(null);
-                bonEngin.setQuantite(null);
-                bonEngin.setCompteurHenPanne(null);
-                bonEngin.setCompteurKmenPanne(null);
-                Employe employe = null;
-                Engin engin = null;
-                if (employeRepo.findByNom(search).isPresent()) {
-                    employe = employeRepo.findByNom(search).get();
-                }
-                if (enginRepo.findByCode(search).isPresent()) {
-                    engin = enginRepo.findByCode(search).get();
-                }
-                bonEngin.setPompiste(employe);
-                bonEngin.setChauffeur(employe);
-                bonEngin.setEngin(engin);
-                //creating matcher
-                ExampleMatcher matcher = ExampleMatcher.matchingAny()
-                        .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
-                        .withIgnoreCase()
-                        .withIgnoreNullValues();
-                Example<BonEngin> example = Example.of(bonEngin, matcher);
-                log.debug("getting search results");
-                return bonEnginRepo.findAll(example, pageable);
-            }
-        } catch (Exception e) {
-            log.debug("Failed retrieving list of bons");
-            throw new OperationFailedException("Operation échouée", e);
-        }
-    }
+	/**
+	 * Search by Pompiste, Chauffeur, code, engin and date
+	 *
+	 * @param pageable
+	 * @param search
+	 * @return
+	 */
+	@Override
+	public Page<BonEngin> getPage(Pageable pageable, String search) {
+		log.info("Service- BonEnginServiceImpl Calling bonEnginList with params :" + pageable + ", " + search);
+		try {
+			if (search.isEmpty()) {
+				log.debug("fetching bonEngins page");
+				return bonEnginRepo.findAll(pageable);
+			} else {
+				log.debug("Searching by :" + search);
+				//creating example by pompiste / chauffeur / code bon / code engin
+				BonEngin bonEngin = new BonEngin();
+				bonEngin.setCode(search);
+				bonEngin.setCompteurAbsoluKm(null);
+				bonEngin.setCompteurKm(null);
+				bonEngin.setCompteurH(null);
+				bonEngin.setCompteurAbsoluH(null);
+				bonEngin.setConsommationH(null);
+				bonEngin.setConsommationKm(null);
+				bonEngin.setQuantite(null);
+				bonEngin.setCarburant(null);
+				bonEngin.setCompteurPompe(null);
+				bonEngin.setCompteurHenPanne(null);
+				bonEngin.setCompteurKmenPanne(null);
+				Employe employe = new Employe();
+				employe.setNom(search);
+				Engin engin = new Engin();
+				engin.setNumeroSerie(search);
+
+				bonEngin.setPompiste(employe);
+				bonEngin.setChauffeur(employe);
+				bonEngin.setEngin(engin);
+
+				try {
+					bonEngin.setDate(LocalDate.parse(search, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+				} catch (Exception e) {
+					log.debug("Cannot search by date : keyword doesn't match date pattern");
+				}
+				//creating matcher
+				ExampleMatcher matcher = ExampleMatcher.matchingAny()
+						.withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+						.withIgnoreCase()
+						.withIgnoreNullValues();
+				Example<BonEngin> example = Example.of(bonEngin, matcher);
+				log.debug("getting search results");
+				return bonEnginRepo.findAll(example, pageable);
+			}
+		} catch (Exception e) {
+			log.debug("Failed retrieving list of bons");
+			throw new OperationFailedException("Operation échouée", e);
+		}
+	}
 
     /* ------------------------------------------------------------------------------ */
     /* ------------ TRAITEMENT WITHOUT CALLING REPO -------------------------------- */
