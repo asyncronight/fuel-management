@@ -10,10 +10,15 @@ import me.kadarh.mecaworks.repo.others.StockRepo;
 import me.kadarh.mecaworks.service.bons.BonFournisseurService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
 import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -104,42 +109,53 @@ public class BonFournisseurServiceImpl implements BonFournisseurService {
         }
     }
 
+	/**
+	 * Search by code, date, fournisseur and chantier
+	 *
+	 * @param pageable
+	 * @param search
+	 * @return
+	 */
 	@Override
-    public Page<BonFournisseur> bonList(Pageable pageable, String search) {
-        log.info("Service- BonFournisseurServiceImpl Calling bonList with params :" + pageable + ", " + search);
-        try {
-            if (search.isEmpty()) {
-                log.debug("fetching bonEngins page");
-                return bonFournisseurRepo.findAll(pageable);
-            } else {
-                log.debug("Searching by :" + search);
-                //creating example
-                //Searching by code bon , nom chantier, nom fournisseur
+	public Page<BonFournisseur> bonList(Pageable pageable, String search) {
+		log.info("Service- BonFournisseurServiceImpl Calling bonList with params :" + pageable + ", " + search);
+		try {
+			if (search.isEmpty()) {
+				log.debug("fetching bonEngins page");
+				return bonFournisseurRepo.findAll(pageable);
+			} else {
+				log.debug("Searching by :" + search);
+				//creating example
 
-                BonFournisseur bonFournisseur = new BonFournisseur();
-                Chantier chantier = new Chantier();
-                chantier.setNom(search);
-                Fournisseur fournisseur = new Fournisseur();
-                fournisseur.setNom(search);
-                bonFournisseur.setChantier(chantier);
-                bonFournisseur.setFournisseur(fournisseur);
-                bonFournisseur.setCode(search);
+				BonFournisseur bonFournisseur = new BonFournisseur();
+				Chantier chantier = new Chantier();
+				chantier.setNom(search);
+				Fournisseur fournisseur = new Fournisseur();
+				fournisseur.setNom(search);
+				bonFournisseur.setChantier(chantier);
+				bonFournisseur.setFournisseur(fournisseur);
+				bonFournisseur.setCode(search);
 
-                //creating matcher
-                ExampleMatcher matcher = ExampleMatcher.matchingAny()
-                        .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
-                        .withIgnoreCase()
-                        .withIgnoreNullValues();
-                Example<BonFournisseur> example = Example.of(bonFournisseur, matcher);
-                Pageable pageable1 = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, bonFournisseur.getDate().toString()));
-                log.debug("getting search results");
-                return bonFournisseurRepo.findAll(example, pageable1);
-            }
-        } catch (Exception e) {
-            log.debug("Failed retrieving list of employes");
-            throw new OperationFailedException("Operation échouée", e);
-        }
-    }
+				try {
+					bonFournisseur.setDate(LocalDate.parse(search, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+				} catch (Exception e) {
+					log.debug("Cannot search by date : keyword doesn't match date pattern");
+				}
+
+				//creating matcher
+				ExampleMatcher matcher = ExampleMatcher.matchingAny()
+						.withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+						.withIgnoreCase()
+						.withIgnoreNullValues();
+				Example<BonFournisseur> example = Example.of(bonFournisseur, matcher);
+				log.debug("getting search results");
+				return bonFournisseurRepo.findAll(example, pageable);
+			}
+		} catch (Exception e) {
+			log.debug("Failed retrieving list of employes");
+			throw new OperationFailedException("Operation échouée", e);
+		}
+	}
 
 	@Override
 	public void delete(Long id) {

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="fragments :: head"></head>
+<body>
+<div th:replace="fragments :: menu('saisi')"></div>
+<div class="bmd-layout-container bmd-drawer-f-l  bmd-drawer-overlay-md-down">
+	<div th:replace="saisi/fragment :: menu('fs')"></div>
+	<main class="bmd-layout-content">
+		<div class="container">
+			<button class="btn bmd-btn-fab btn-primary bmd-btn-fab-sm active" type="button" data-toggle="drawer"
+					data-target="#side" style="margin-top: 10px">
+				<i class="material-icons text-light">menu</i>
+			</button>
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
+				<li class="breadcrumb-item"><a th:href="@{'/saisi'}" th:text="#{saisie}"></a></li>
+				<li class="breadcrumb-item" th:text="#{saisie.fournisseur.list}"></li>
+			</ol>
+			<a href="/saisi/fournisseurs/add" class="btn btn-success bmd-btn-fab bmd-btn-fab-sm float-right"
+			   th:title="#{saisie.fournisseur.add}">
+				<i class="material-icons mt-2">add</i>
+			</a>
+			<form th:replace="fragments :: search(#{saisie.fournisseur.placeHolder})"></form>
+			<div class="jumbotron alert alert-primary" th:if="${#lists.isEmpty(page.content)}">
+				<h1 class="text-center alert-heading" th:text="#{empty}"></h1>
+			</div>
+
+			<div class="table-responsive card" th:if="!${#lists.isEmpty(page.content)}">
+				<table class="table table-sm table-hover table-bordered">
+					<thead class="bg-primary">
+					<tr>
+						<th th:with="desc=${page.getSort().getOrderFor('date')?.descending}">
+							[[#{bonFournisseur.date}]]
+							<a th:href="'?page=0&sort=date'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('code')?.descending}">
+							[[#{bonFournisseur.code}]]
+							<a th:href="'?page=0&sort=code'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('fournisseur.nom')?.descending}">
+							[[#{bonFournisseur.fournisseur}]]
+							<a th:href="'?page=0&sort=fournisseur.nom'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('chantier.nom')?.descending}">
+							[[#{bonFournisseur.chantier}]]
+							<a th:href="'?page=0&sort=chantier.nom'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('quantite')?.descending}">
+							[[#{bonFournisseur.quantite}]]
+							<a th:href="'?page=0&sort=quantite'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('prixUnitaire')?.descending}">
+							[[#{bonFournisseur.prixUnitaire}]]
+							<a th:href="'?page=0&sort=prixUnitaire'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th></th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr th:each="bon : ${page.content}">
+						<td th:text="${bon.date}"></td>
+						<td th:text="${bon.code}"></td>
+						<td th:text="${bon.fournisseur?.nom}"></td>
+						<td th:text="${bon.chantier?.nom}"></td>
+						<td th:text="${bon.quantite}"></td>
+						<td th:text="${bon.prixUnitaire}"></td>
+						<td class="btn-group">
+							<button class="btn bmd-btn-icon dropdown-toggle" type="button" id="ex3"
+									data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="material-icons">more_vert</i>
+							</button>
+							<div class="dropdown-menu dropdown-menu-left" aria-labelledby="ex3">
+								<form th:action="@{'/saisi/livraisons/' + ${bon.id} +'/delete'}" method="post">
+									<button type="submit" class="dropdown-item">
+										<i class="material-icons">delete</i> [[#{delete}]]
+									</button>
+								</form>
+							</div>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+			<ul th:replace="fragments :: pagination"></ul>
+		</div>
+	</main>
+</div>
+</body>
+<div th:replace="fragments :: footer"></div>
+</html>

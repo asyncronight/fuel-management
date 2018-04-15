@@ -35,7 +35,7 @@
 <form th:fragment="search(placeHolder)" class="form-inline justify-content-center" method="get" action="#hrTable">
 	<div class="bmd-form-group">
 		<input class="form-control" type="text" th:name="search" th:value="${search}"
-			   th:placeholder="${placeHolder}">
+			   th:placeholder="${placeHolder}" th:title="${placeHolder}">
 		<button class="btn bmd-btn-icon" type="submit">
 			<i class="material-icons">search</i>
 		</button>

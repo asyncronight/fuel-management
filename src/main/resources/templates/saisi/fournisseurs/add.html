@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="fragments :: head"></head>
+<body>
+<div th:replace="fragments :: menu('saisi')"></div>
+<div class="bmd-layout-container bmd-drawer-f-l  bmd-drawer-overlay-md-down">
+	<div th:replace="saisi/fragment :: menu('fa')"></div>
+	<main class="bmd-layout-content">
+		<div class="container">
+			<button class="btn bmd-btn-fab btn-primary bmd-btn-fab-sm active" type="button" data-toggle="drawer"
+					data-target="#side" style="margin-top: 10px">
+				<i class="material-icons text-light">menu</i>
+			</button>
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
+				<li class="breadcrumb-item"><a th:href="@{'/saisi'}" th:text="#{saisie}"></a></li>
+				<li class="breadcrumb-item"><a th:href="@{'/saisi/fournisseurs'}"
+											   th:text="#{saisie.fournisseur.list}"></a>
+				</li>
+				<li class="breadcrumb-item" th:text="#{saisie.fournisseur.add}"></li>
+			</ol>
+			<form class="card p-5" method="post" th:object="${bonFournisseur}">
+				<h3 class="text-center"
+					th:text="#{saisie.fournisseur.add}"></h3>
+				<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+					<h4 class="alert-heading" th:text="#{formError}"></h4>
+					<ul>
+						<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+					</ul>
+				</div>
+				<div class="form-group">
+					<label class="bmd-label-floating" for="code" th:text="#{bonFournisseur.code}"></label>
+					<input type="text" id="code"
+						   class="form-control" th:field="*{code}"/>
+				</div>
+				<div class="form-group">
+					<label class="bmd-label-floating" for="date" th:text="#{bonFournisseur.date}"></label>
+					<input data-toggle="datepicker" class="form-control" id="date"
+						   th:field="*{date}">
+				</div>
+				<div class="input-group mb-3">
+					<label class="input-group-text text-muted" for="fournisseur"
+						   th:text="#{bonFournisseur.fournisseur}"></label>
+					<select class="js-example-basic-single" id="fournisseur" th:field="*{fournisseur.id}">
+						<option th:each="fournisseur : ${fournisseurs}" th:value="${fournisseur.id}"
+								th:text="${fournisseur.nom}"></option>
+					</select>
+				</div>
+				<div class="input-group mb-3">
+					<label class="input-group-text text-muted" for="chantier"
+						   th:text="#{bonFournisseur.chantier}"></label>
+					<select class="js-example-basic-single" id="chantier" th:field="*{chantier.id}">
+						<option th:each="chantier : ${chantiers}" th:value="${chantier.id}"
+								th:text="${chantier.nom}"></option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label class="bmd-label-floating" for="quantite" th:text="#{bonFournisseur.quantite}"></label>
+					<input type="number" id="quantite"
+						   class="form-control" th:field="*{quantite}"/>
+				</div>
+				<div class="form-group">
+					<label class="bmd-label-floating" for="prixUnitaire"
+						   th:text="#{bonFournisseur.prixUnitaire}"></label>
+					<input type="number" id="prixUnitaire"
+						   class="form-control" th:field="*{prixUnitaire}"/>
+				</div>
+				<button type="submit" class="btn btn-success btn-raised">
+					[[${edit}?#{save}: #{add}]]
+				</button>
+				<a href="/saisi/fournisseurs/" class="btn btn-secondary btn-raised">
+					[[#{cancel}]]
+				</a>
+			</form>
+		</div>
+	</main>
+</div>
+<div th:replace="fragments :: footer"></div>
+</body>
+</html>
