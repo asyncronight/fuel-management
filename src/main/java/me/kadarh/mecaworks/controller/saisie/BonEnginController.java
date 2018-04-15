@@ -65,6 +65,8 @@ public class BonEnginController {
 		} else if (bonEnginService.hasErrorsAttention(bonEngin)) {
 			model.addAttribute("bon", bonEngin);
 			return "saisi/engins/confirm";
+			//todo : lbon kàykhroj 3amr mzyan , mais kàydkhol l confirm ( POST ) khawyin les objects li fih .
+			//todo : dir chi 7el
 		}
 		bonEnginService.add(bonEngin);
 		return "redirect:/saisi/engins";

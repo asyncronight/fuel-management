@@ -361,7 +361,7 @@ public class BonEnginServiceImpl implements BonEnginService {
         long som_Q = 0;
         long som_Q_2 = 0;
         if (typeCompteur.equals(TypeCompteur.H)) {
-            lastBon = bonEnginRepo.findLastBonEnginH_toConsommation(bonEngin.getEngin());
+            lastBon = bonEnginRepo.findLastBonEnginH_toConsommation(bonEngin.getEngin().getId());
             if (lastBon != null) {
                 for (BonEngin b : bonEnginRepo.findAllBetweenLastBonAndCurrentBon_H(lastBon.getCompteurAbsoluH()))
                     som_Q += b.getQuantite();
@@ -371,7 +371,7 @@ public class BonEnginServiceImpl implements BonEnginService {
                 insertAlerte(bonEngin, "La consommation H est Annormale", TypeAlerte.CONSOMMATION_H_ANNORMALE);
         }
         if (typeCompteur.equals(TypeCompteur.KM)) {
-            lastBon = bonEnginRepo.findLastBonEnginKm_toConsommation(bonEngin.getEngin());
+            lastBon = bonEnginRepo.findLastBonEnginKm_toConsommation(bonEngin.getEngin().getId());
             if (lastBon != null) {
                 for (BonEngin b : bonEnginRepo.findAllBetweenLastBonAndCurrentBon_Km(lastBon.getCompteurAbsoluKm()))
                     som_Q += b.getQuantite();
@@ -382,8 +382,8 @@ public class BonEnginServiceImpl implements BonEnginService {
 
         }
         if (typeCompteur.equals(TypeCompteur.KM_H)) {
-            lastBon = bonEnginRepo.findLastBonEnginKm_toConsommation(bonEngin.getEngin());
-            lastBon2 = bonEnginRepo.findLastBonEnginH_toConsommation(bonEngin.getEngin());
+            lastBon = bonEnginRepo.findLastBonEnginKm_toConsommation(bonEngin.getEngin().getId());
+            lastBon2 = bonEnginRepo.findLastBonEnginH_toConsommation(bonEngin.getEngin().getId());
             if (lastBon != null) {
                 for (BonEngin b : bonEnginRepo.findAllBetweenLastBonAndCurrentBon_Km(lastBon.getCompteurAbsoluKm())) {
                     if (b.getQuantite() != null)

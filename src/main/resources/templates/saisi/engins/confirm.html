@@ -26,12 +26,13 @@
 				<p>Attention message 1</p>
 				<p>Attention message 2</p>
 			</div>
-			<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
-				<h4 class="alert-heading" th:text="#{formError}"></h4>
-				<ul>
-					<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
-				</ul>
-			</div>
+            <!--todo : resolve it
+            <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+                <h4 class="alert-heading" th:text="#{formError}"></h4>
+                <ul>
+                    <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+                </ul>
+            </div> -->
 			<form action="/saisi/engins/confirm" class="card p-5" method="post" th:object="${bon}">
 				<input type="hidden" th:field="*{date}">
 				<input type="hidden" th:field="*{code}">
