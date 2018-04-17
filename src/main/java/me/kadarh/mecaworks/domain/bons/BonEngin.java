@@ -11,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -55,8 +56,10 @@ public class BonEngin extends AbstractDomain {
 
 	//todo add constraints
 	private Long compteurPompe = 0L;
-    private Integer quantite = 0;
+	private Integer quantite = 0;
+	@Min(0)
 	private Long compteurKm = 0L;
+	@Min(0)
 	private Long compteurH = 0L;
 	private Boolean compteurHenPanne = false;
 	private Boolean compteurKmenPanne = false;
