@@ -54,6 +54,7 @@ public class BonEnginServiceImpl implements BonEnginService {
     @Override
     public BonEngin add(BonEngin bonEngin) {
         log.info("Service= BonEnginServiceImpl - calling methode add");
+        calculService.fillBon(bonEngin);
         try {
             if (bonEngin.getPlein())
                 bonEngin = calculService.calculConsommation(bonEngin);
@@ -62,7 +63,6 @@ public class BonEnginServiceImpl implements BonEnginService {
             bonEngin = bonEnginRepo.save(bonEngin);
             persistService.insertAlertes(bonEngin);
             persistService.insertStock(bonEngin);
-
             return bonEngin;
         } catch (Exception e) {
             log.debug("cannot add bonEngin , failed operation");
