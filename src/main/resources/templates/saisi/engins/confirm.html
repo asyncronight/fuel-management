@@ -18,12 +18,10 @@
 				<li class="breadcrumb-item" th:text="#{saisie.engin.add}"></li>
 			</ol>
 			<form action="/saisi/engins/confirm" class="card p-5" method="post" th:object="${bonEngin}">
-				<div class="alert alert-dark">
-					<!--todo add externalized messages-->
-					<h4 class="alert-heading">Attention</h4>
+				<div class="alert alert-dark text-warning">
+					<h4 class="alert-heading" th:text="#{bon.hasAttention}"></h4>
 					<hr>
-					<p>Attention message 1</p>
-					<p>Attention message 2</p>
+					<p th:text="#{bon.hasAttention.msg1}"></p>
 				</div>
 				<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
 					<h4 class="alert-heading" th:text="#{formError}"></h4>
@@ -46,7 +44,6 @@
 				<input type="hidden" th:field="*{compteurHenPanne}">
 				<input type="hidden" th:field="*{compteurKmenPanne}">
 				<input type="hidden" th:field="*{plein}">
-				<input type="hidden" th:field="*{compteurAbsoluKm}">
 
 				<button type="submit" class="btn btn-success btn-raised">
 					[[#{saisie.engin.confirm}]]

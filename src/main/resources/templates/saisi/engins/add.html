@@ -20,15 +20,14 @@
 			<form class="card p-5" method="post" th:object="${bonEngin}">
 				<h3 class="text-center"
 					th:text="#{saisie.engin.add}"></h3>
-				<div th:if="${hasError}" class="alert alert-dark">
+				<div th:if="${hasError}" class="alert alert-dark text-warning">
 					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
-					<!--todo add externalized messages-->
-					<h4 class="alert-heading">Has Error</h4>
+					<h4 class="alert-heading" th:text="#{bon.hasError}"></h4>
 					<ul>
-						<li>Error 1</li>
-						<li>Error 2</li>
+						<li th:text="#{bon.hasError.msg1}"></li>
+						<li th:text="#{bon.hasError.msg2}"></li>
 					</ul>
 				</div>
 				<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
