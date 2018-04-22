@@ -6,7 +6,9 @@ import me.kadarh.mecaworks.domain.alertes.TypeAlerte;
 import me.kadarh.mecaworks.domain.bons.BonEngin;
 import me.kadarh.mecaworks.domain.bons.BonLivraison;
 import me.kadarh.mecaworks.domain.others.Engin;
+import me.kadarh.mecaworks.domain.others.SousFamille;
 import me.kadarh.mecaworks.domain.others.Stock;
+import me.kadarh.mecaworks.domain.others.TypeCompteur;
 import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
 import me.kadarh.mecaworks.service.AlerteService;
 import me.kadarh.mecaworks.service.StockService;
@@ -126,6 +128,28 @@ public class PersistServiceImpl {
         } catch (Exception e) {
             log.info("Problem , cannot find last BonEngin with id = :" + engin.getId());
             throw new OperationFailedException("Operation echouée", e);
+        }
+    }
+
+    public void insertAlerteConsommation(BonEngin bonEngin) {
+        SousFamille sousFamille = bonEngin.getEngin().getSousFamille();
+        if (sousFamille == null) return;
+        String typeCompteur = sousFamille.getTypeCompteur().name();
+        String msgH = "La consommation H est Annormale";
+        String msgKm = "La consommation Km est Annormale";
+        if (typeCompteur.equals(TypeCompteur.H.name())) {
+            if (bonEngin.getConsommationH() > sousFamille.getConsommationHMax())
+                this.insertAlerte(bonEngin, msgH, TypeAlerte.CONSOMMATION_H_ANNORMALE);
+        }
+        if (typeCompteur.equals(TypeCompteur.KM.name())) {
+            if (bonEngin.getConsommationKm() > sousFamille.getConsommationKmMax())
+                this.insertAlerte(bonEngin, msgKm, TypeAlerte.CONSOMMATION_KM_ANNORMALE);
+        }
+        if (typeCompteur.equals(TypeCompteur.KM_H.name())) {
+            if (bonEngin.getConsommationH() > sousFamille.getConsommationHMax())
+                this.insertAlerte(bonEngin, msgH, TypeAlerte.CONSOMMATION_H_ANNORMALE);
+            if (bonEngin.getConsommationKm() > sousFamille.getConsommationKmMax())
+                this.insertAlerte(bonEngin, msgKm, TypeAlerte.CONSOMMATION_KM_ANNORMALE);
         }
     }
 }

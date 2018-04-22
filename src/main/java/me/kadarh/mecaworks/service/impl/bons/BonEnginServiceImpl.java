@@ -64,6 +64,7 @@ public class BonEnginServiceImpl implements BonEnginService {
             bonEngin = bonEnginRepo.save(bonEngin);
             persistService.insertAlertes(bonEngin);
             persistService.insertStock(bonEngin);
+            persistService.insertAlerteConsommation(bonEngin);
             return bonEngin;
         } catch (DataIntegrityViolationException e) {
             log.debug("cannot add bonEngin , failed operation");
