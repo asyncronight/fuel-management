@@ -3,15 +3,25 @@
 <head th:replace="fragments :: head"></head>
 <body>
 <div th:replace="fragments :: menu('')"></div>
-<br>
 <div class="middle-box text-center animated fadeInDown">
+	<br>
 	<h1>Error</h1>
 	<div class="error-desc">
-		<!--/*@thymesVar id="exception" type="benya.service.exceptions.ApplicationException"*/-->
-		<p th:text="'Message: '+${exception.message}"></p>
-		<p th:if="${exception.getCause()}" th:text="'Cause: '+${exception.getCause().message}">
-		<p th:text="${exception.getCause()?.getCause()?.message}"></p>
-		</p>
+		<!--/*@thymesVar id="causes" type="java.util.List<java.lang.String>"*/-->
+		<div>
+			<p>
+				Message: [[${exception.message}]]
+				<a href="#causes" class="btn btn-default" data-toggle="collapse">
+					<span th:if="!${#lists.isEmpty(causes)}" class="fa fa-plus"></span>
+				</a>
+			</p>
+		</div>
+		<div id="causes" class="collapse">
+			<p>Causes :</p>
+			<p th:each="cause,i : ${causes}" th:text="${i.size-i.count+1}+' - '+${cause}"></p>
+		</div>
+
+
 		<a th:href="@{'/'}" class="btn btn-secondary btn-raised" th:text="#{home}"></a>
 	</div>
 </div>
