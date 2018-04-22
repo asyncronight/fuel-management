@@ -106,10 +106,6 @@ public class CalculServiceImpl {
         long som_Q_2 = 0;
         List<BonEngin> list = new ArrayList<>();
         if (typeCompteur.equals(TypeCompteur.H)) {
-            if (bonEngin.getCompteurHenPanne()) {
-                bonEngin.setConsommationH(0f);
-                return bonEngin;
-            }
             lastBon = bonEnginRepo.findLastBonEnginH_toConsommation(bonEngin.getEngin().getId());
             if (lastBon != null) {
                 list = bonEnginRepo.findAllBetweenLastBonAndCurrentBon_H(lastBon.getCompteurAbsoluH());
@@ -117,6 +113,9 @@ public class CalculServiceImpl {
                     som_Q += b.getQuantite();
                 som_Q += bonEngin.getQuantite();
                 bonEngin.setConsommationH((float) som_Q / (bonEngin.getCompteurAbsoluH() - lastBon.getCompteurAbsoluH()));
+            }
+            if (bonEngin.getCompteurHenPanne()) {
+                bonEngin.setConsommationH(0f);
             }
             if (bonEngin.getConsommationH() > bonEngin.getEngin().getSousFamille().getConsommationHMax())
                 persistService.insertAlerte(bonEngin, "La consommation H est Annormale", TypeAlerte.CONSOMMATION_H_ANNORMALE);
