@@ -12,6 +12,9 @@ import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author kadarH
  */
@@ -101,17 +104,28 @@ public class CalculServiceImpl {
         BonEngin lastBon, lastBon2;
         long som_Q = 0;
         long som_Q_2 = 0;
+        List<BonEngin> list = new ArrayList<>();
         if (typeCompteur.equals(TypeCompteur.H)) {
+            if (bonEngin.getCompteurHenPanne()) {
+                bonEngin.setConsommationH(0f);
+                return bonEngin;
+            }
             lastBon = bonEnginRepo.findLastBonEnginH_toConsommation(bonEngin.getEngin().getId());
             if (lastBon != null) {
-                for (BonEngin b : bonEnginRepo.findAllBetweenLastBonAndCurrentBon_H(lastBon.getCompteurAbsoluH()))
+                list = bonEnginRepo.findAllBetweenLastBonAndCurrentBon_H(lastBon.getCompteurAbsoluH());
+                for (BonEngin b : list)
                     som_Q += b.getQuantite();
+                som_Q += bonEngin.getQuantite();
                 bonEngin.setConsommationH((float) som_Q / (bonEngin.getCompteurAbsoluH() - lastBon.getCompteurAbsoluH()));
             }
             if (bonEngin.getConsommationH() > bonEngin.getEngin().getSousFamille().getConsommationHMax())
                 persistService.insertAlerte(bonEngin, "La consommation H est Annormale", TypeAlerte.CONSOMMATION_H_ANNORMALE);
         }
         if (typeCompteur.equals(TypeCompteur.KM)) {
+            if (bonEngin.getCompteurKmenPanne()) {
+                bonEngin.setConsommationKm(0f);
+                return bonEngin;
+            }
             lastBon = bonEnginRepo.findLastBonEnginKm_toConsommation(bonEngin.getEngin().getId());
             if (lastBon != null) {
                 for (BonEngin b : bonEnginRepo.findAllBetweenLastBonAndCurrentBon_Km(lastBon.getCompteurAbsoluKm()))
@@ -139,6 +153,8 @@ public class CalculServiceImpl {
                 }
                 bonEngin.setConsommationH((float) som_Q_2 / (bonEngin.getCompteurAbsoluH() - lastBon2.getCompteurAbsoluH()));
             }
+            if (bonEngin.getCompteurHenPanne()) bonEngin.setConsommationH(0f);
+            if (bonEngin.getCompteurKmenPanne()) bonEngin.setConsommationKm(0f);
             if (bonEngin.getConsommationKm() > bonEngin.getEngin().getSousFamille().getConsommationKmMax())
                 persistService.insertAlerte(bonEngin, "La consommation Km est Annormale", TypeAlerte.CONSOMMATION_KM_ANNORMALE);
             if (bonEngin.getConsommationH() > bonEngin.getEngin().getSousFamille().getConsommationHMax())
