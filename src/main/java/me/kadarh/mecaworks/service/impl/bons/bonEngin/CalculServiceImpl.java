@@ -47,6 +47,8 @@ public class CalculServiceImpl {
             log.info("Compteur Absolu H = " + bon.getCompteurAbsoluH());
             log.info("Compteur Absolu Km = " + bon.getCompteurAbsoluKm());
             log.info("Bon has been filled correctly");
+            //todo : if(cmpt en panne) setCompteur = akhir compteur
+
             return bon;
         } catch (Exception e) {
             throw new OperationFailedException("Operation echouée", e);

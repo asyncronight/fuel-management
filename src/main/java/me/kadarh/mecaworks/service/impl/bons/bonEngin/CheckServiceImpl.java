@@ -67,4 +67,9 @@ public class CheckServiceImpl {
         throw new OperationFailedException("operation echouée , typeCompteur introuvable");
     }
 
+
+    // todo : cmpt_en_panne + date <= date_last_bon ( has error )
+    // date < date last bon
+    // màydkholch lbon
+
 }
