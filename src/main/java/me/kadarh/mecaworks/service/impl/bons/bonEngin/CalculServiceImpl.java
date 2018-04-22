@@ -109,6 +109,7 @@ public class CalculServiceImpl {
             lastBon = bonEnginRepo.findLastBonEnginH_toConsommation(bonEngin.getEngin().getId());
             if (lastBon != null) {
                 list = bonEnginRepo.findAllBetweenLastBonAndCurrentBon_H(lastBon.getCompteurAbsoluH());
+                list.remove(lastBon);
                 for (BonEngin b : list)
                     som_Q += b.getQuantite();
                 som_Q += bonEngin.getQuantite();
@@ -119,7 +120,9 @@ public class CalculServiceImpl {
         if (typeCompteur.equals(TypeCompteur.KM)) {
             lastBon = bonEnginRepo.findLastBonEnginKm_toConsommation(bonEngin.getEngin().getId());
             if (lastBon != null) {
-                for (BonEngin b : bonEnginRepo.findAllBetweenLastBonAndCurrentBon_Km(lastBon.getCompteurAbsoluKm()))
+                list = bonEnginRepo.findAllBetweenLastBonAndCurrentBon_Km(lastBon.getCompteurAbsoluKm());
+                list.remove(lastBon);
+                for (BonEngin b : list)
                     som_Q += b.getQuantite();
                 bonEngin.setConsommationKm((float) som_Q * 100 / (bonEngin.getCompteurAbsoluKm() - lastBon.getCompteurAbsoluKm()));
             }
@@ -129,6 +132,8 @@ public class CalculServiceImpl {
             lastBon = bonEnginRepo.findLastBonEnginKm_toConsommation(bonEngin.getEngin().getId());
             lastBon2 = bonEnginRepo.findLastBonEnginH_toConsommation(bonEngin.getEngin().getId());
             if (lastBon != null) {
+                list = bonEnginRepo.findAllBetweenLastBonAndCurrentBon_Km(lastBon.getCompteurAbsoluKm());
+                list.remove(lastBon);
                 for (BonEngin b : bonEnginRepo.findAllBetweenLastBonAndCurrentBon_Km(lastBon.getCompteurAbsoluKm())) {
                     if (b.getQuantite() != null)
                         som_Q += b.getQuantite();
@@ -136,6 +141,8 @@ public class CalculServiceImpl {
                 bonEngin.setConsommationKm((float) som_Q * 100 / (bonEngin.getCompteurAbsoluKm() - lastBon.getCompteurAbsoluKm()));
             }
             if (lastBon2 != null) {
+                list = bonEnginRepo.findAllBetweenLastBonAndCurrentBon_H(lastBon.getCompteurAbsoluH());
+                list.remove(lastBon);
                 for (BonEngin b : bonEnginRepo.findAllBetweenLastBonAndCurrentBon_H(lastBon2.getCompteurAbsoluH())) {
                     if (b.getQuantite() != null)
                         som_Q_2 += b.getQuantite();
