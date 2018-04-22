@@ -13,6 +13,7 @@ import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
 import me.kadarh.mecaworks.service.impl.bons.bonEngin.CalculServiceImpl;
 import me.kadarh.mecaworks.service.impl.bons.bonEngin.CheckServiceImpl;
 import me.kadarh.mecaworks.service.impl.bons.bonEngin.PersistServiceImpl;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
@@ -64,6 +65,9 @@ public class BonEnginServiceImpl implements BonEnginService {
             persistService.insertAlertes(bonEngin);
             persistService.insertStock(bonEngin);
             return bonEngin;
+        } catch (DataIntegrityViolationException e) {
+            log.debug("cannot add bonEngin , failed operation");
+            throw new OperationFailedException("L'ajout du bonEngin a echouée , le code engin existe déjà", e);
         } catch (Exception e) {
             log.debug("cannot add bonEngin , failed operation");
             throw new OperationFailedException("L'ajout du bonEngin a echouée ", e);

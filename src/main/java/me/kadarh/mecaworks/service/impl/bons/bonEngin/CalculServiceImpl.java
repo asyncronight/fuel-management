@@ -43,6 +43,7 @@ public class CalculServiceImpl {
             bon.setChantierTravail(chantierRepo.findById(bon.getChantierTravail().getId()).get());
             bon.setChantierGazoil(chantierRepo.findById(bon.getChantierGazoil().getId()).get());
             calculCompteursAbsolu(bon, persistService.getLastBonEngin(bon.getEngin()));
+            log.info("Compteur Absolu H = " + bon);
             return bon;
         } catch (Exception e) {
             throw new OperationFailedException("Operation echouée", e);
@@ -55,7 +56,7 @@ public class CalculServiceImpl {
         BonEngin bonEngin1 = lastBon;
         if (typeCompteur.equals(TypeCompteur.H.name())) {
             if (bonEngin1 != null) {
-                if (bonEngin.getCompteurH() < bonEngin1.getCompteurH())
+                if (bonEngin.getCompteurH() <= bonEngin1.getCompteurH())
                     bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH() + bonEngin.getCompteurH());
                 else
                     bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH() + bonEngin.getCompteurH() - bonEngin1.getCompteurH());
@@ -64,7 +65,7 @@ public class CalculServiceImpl {
                 bonEngin.setCompteurAbsoluH(bonEngin.getCompteurH());
         } else if (typeCompteur.equals(TypeCompteur.KM.name())) {
             if (bonEngin1 != null) {
-                if (bonEngin.getCompteurKm() < bonEngin1.getCompteurKm())
+                if (bonEngin.getCompteurKm() <= bonEngin1.getCompteurKm())
                     bonEngin.setCompteurAbsoluKm(bonEngin1.getCompteurAbsoluKm() + bonEngin.getCompteurKm());
                 else
                     bonEngin.setCompteurAbsoluKm(bonEngin1.getCompteurAbsoluKm() + bonEngin.getCompteurKm() - bonEngin1.getCompteurKm());
@@ -73,11 +74,11 @@ public class CalculServiceImpl {
                 bonEngin.setCompteurAbsoluKm(bonEngin.getCompteurKm());
         } else if (typeCompteur.equals(TypeCompteur.KM_H.name())) {
             if (bonEngin1 != null) {
-                if (bonEngin.getCompteurH() < bonEngin1.getCompteurH())
+                if (bonEngin.getCompteurH() <= bonEngin1.getCompteurH())
                     bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH() + bonEngin.getCompteurH());
                 else
                     bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH() + bonEngin.getCompteurH() - bonEngin1.getCompteurH());
-                if (bonEngin.getCompteurKm() < bonEngin1.getCompteurKm())
+                if (bonEngin.getCompteurKm() <= bonEngin1.getCompteurKm())
                     bonEngin.setCompteurAbsoluKm(bonEngin1.getCompteurAbsoluKm() + bonEngin.getCompteurKm());
                 else
                     bonEngin.setCompteurAbsoluKm(bonEngin1.getCompteurAbsoluKm() + bonEngin.getCompteurKm() - bonEngin1.getCompteurKm());
