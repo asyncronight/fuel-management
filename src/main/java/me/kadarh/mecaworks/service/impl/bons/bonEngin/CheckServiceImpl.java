@@ -67,9 +67,20 @@ public class CheckServiceImpl {
         throw new OperationFailedException("operation echouée , typeCompteur introuvable");
     }
 
+    public boolean hasLogicDate(BonEngin bonEngin, BonEngin lastBonEngin) {
+        Period period = Period.between(lastBonEngin.getDate(), bonEngin.getDate());
+        return !period.isNegative();
+    }
 
-    // todo : cmpt_en_panne + date <= date_last_bon ( has error )
-    // date < date last bon
-    // màydkholch lbon
-
+    public boolean hasLogicDateAndCompteur(BonEngin bonEngin, BonEngin lastBonEngin) {
+        Period period = Period.between(lastBonEngin.getDate(), bonEngin.getDate());
+        String typeCompteur = bonEngin.getEngin().getSousFamille().getTypeCompteur().name();
+        if (typeCompteur.equals(TypeCompteur.H.name()))
+            return !((period.isNegative() || period.isZero()) && bonEngin.getCompteurHenPanne());
+        if (typeCompteur.equals(TypeCompteur.KM.name()))
+            return !((period.isNegative() || period.isZero()) && bonEngin.getCompteurKmenPanne());
+        if (typeCompteur.equals(TypeCompteur.KM_H.name()))
+            return !((period.isNegative() || period.isZero()) && (bonEngin.getCompteurHenPanne() || bonEngin.getCompteurKmenPanne()));
+        return true;
+    }
 }

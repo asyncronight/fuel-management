@@ -158,7 +158,7 @@ public class BonEnginServiceImpl implements BonEnginService {
         calculService.fillBon(bon);
         BonEngin lastBonEngin = persistService.getLastBonEngin(bon.getEngin());
         if (lastBonEngin != null)
-            return !(checkService.hasLogicQuantite(bon) && checkService.hasLogicCompteur(bon, lastBonEngin));
+            return !(checkService.hasLogicQuantite(bon) && checkService.hasLogicCompteur(bon, lastBonEngin) && checkService.hasLogicDate(bon, lastBonEngin) && checkService.hasLogicDateAndCompteur(bon, lastBonEngin));
         else
             return !checkService.hasLogicQuantite(bon);
     }
