@@ -61,8 +61,15 @@ public class CalculServiceImpl {
         BonEngin bonEngin1 = lastBon;
         if (typeCompteur.equals(TypeCompteur.H.name())) {
             if (bonEngin1 != null) {
-                if (bonEngin.getCompteurH() <= bonEngin1.getCompteurH())
-                    bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH() + bonEngin.getCompteurH());
+                if (bonEngin.getCompteurH() <= bonEngin1.getCompteurH()) {
+                    if (bonEngin.getCompteurHenPanne()) {
+                        bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH());
+                        bonEngin.setCompteurH(bonEngin1.getCompteurH());
+                    } else
+                        bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH() + bonEngin.getCompteurH());
+                }
+                if (bonEngin.getCompteurHenPanne())
+                    bonEngin.setCompteurH(bonEngin1.getCompteurH());
                 else
                     bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH() + bonEngin.getCompteurH() - bonEngin1.getCompteurH());
             }
@@ -126,6 +133,7 @@ public class CalculServiceImpl {
                 list.remove(lastBon);
                 for (BonEngin b : list)
                     som_Q += b.getQuantite();
+                som_Q += bonEngin.getQuantite();
                 bonEngin.setConsommationKm((float) som_Q * 100 / (bonEngin.getCompteurAbsoluKm() - lastBon.getCompteurAbsoluKm()));
             }
             if (bonEngin.getCompteurKmenPanne()) bonEngin.setConsommationKm(0f);

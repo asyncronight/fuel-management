@@ -98,7 +98,6 @@ public class PersistServiceImpl {
         bonLivraison.setDate(bonEngin.getDate());
         bonLivraison.setChantierDepart(bonEngin.getChantierGazoil());
         bonLivraison.setChantierArrivee(bonEngin.getChantierTravail());
-        // Todo  : ask soufiane
         bonLivraison.setCode(bonEngin.getCode() + "X" + bonEngin.getId());
         bonLivraison.setPompiste(bonEngin.getPompiste());
         bonLivraison.setTransporteur(bonEngin.getChauffeur());

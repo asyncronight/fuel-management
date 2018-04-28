@@ -175,7 +175,7 @@ public class BonEnginServiceImpl implements BonEnginService {
         BonEngin bonEngin = persistService.getLastBonEngin(bon.getEngin());
         if (bonEngin == null) return false;
         if (bon.getEngin().getSousFamille().getTypeCompteur().equals(TypeCompteur.H)) {
-            return (bon.getCompteurH() < bonEngin.getCompteurH());
+            return (bon.getCompteurH() < bonEngin.getCompteurH() && !bon.getCompteurHenPanne());
         }
         if (bon.getEngin().getSousFamille().getTypeCompteur().equals(TypeCompteur.KM)) {
             return (bon.getCompteurKm() < bonEngin.getCompteurKm());
