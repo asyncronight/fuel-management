@@ -61,13 +61,7 @@ public class CalculServiceImpl {
         BonEngin bonEngin1 = lastBon;
         if (typeCompteur.equals(TypeCompteur.H.name())) {
             if (bonEngin1 != null) {
-                if (bonEngin.getCompteurH() <= bonEngin1.getCompteurH()) {
-                    if (bonEngin.getCompteurHenPanne()) {
-                        bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH());
-                        bonEngin.setCompteurH(bonEngin1.getCompteurH());
-                    } else
-                        bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH() + bonEngin.getCompteurH());
-                }
+                setCompteurAbsoluH_ifCmpBonInfCmptLastBon(bonEngin, bonEngin1);
                 if (bonEngin.getCompteurHenPanne())
                     bonEngin.setCompteurH(bonEngin1.getCompteurH());
                 else
@@ -77,8 +71,9 @@ public class CalculServiceImpl {
                 bonEngin.setCompteurAbsoluH(bonEngin.getCompteurH());
         } else if (typeCompteur.equals(TypeCompteur.KM.name())) {
             if (bonEngin1 != null) {
-                if (bonEngin.getCompteurKm() <= bonEngin1.getCompteurKm())
-                    bonEngin.setCompteurAbsoluKm(bonEngin1.getCompteurAbsoluKm() + bonEngin.getCompteurKm());
+                setCompteurAbsoluKm_ifCmpBonInfCmptLastBon(bonEngin, bonEngin1);
+                if (bonEngin.getCompteurKmenPanne())
+                    bonEngin.setCompteurKm(bonEngin1.getCompteurKm());
                 else
                     bonEngin.setCompteurAbsoluKm(bonEngin1.getCompteurAbsoluKm() + bonEngin.getCompteurKm() - bonEngin1.getCompteurKm());
             }
@@ -86,12 +81,15 @@ public class CalculServiceImpl {
                 bonEngin.setCompteurAbsoluKm(bonEngin.getCompteurKm());
         } else if (typeCompteur.equals(TypeCompteur.KM_H.name())) {
             if (bonEngin1 != null) {
-                if (bonEngin.getCompteurH() <= bonEngin1.getCompteurH())
-                    bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH() + bonEngin.getCompteurH());
+                setCompteurAbsoluH_ifCmpBonInfCmptLastBon(bonEngin, bonEngin1);
+                if (bonEngin.getCompteurHenPanne())
+                    bonEngin.setCompteurH(bonEngin1.getCompteurH());
                 else
                     bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH() + bonEngin.getCompteurH() - bonEngin1.getCompteurH());
-                if (bonEngin.getCompteurKm() <= bonEngin1.getCompteurKm())
-                    bonEngin.setCompteurAbsoluKm(bonEngin1.getCompteurAbsoluKm() + bonEngin.getCompteurKm());
+
+                setCompteurAbsoluKm_ifCmpBonInfCmptLastBon(bonEngin, bonEngin1);
+                if (bonEngin.getCompteurKmenPanne())
+                    bonEngin.setCompteurKm(bonEngin1.getCompteurKm());
                 else
                     bonEngin.setCompteurAbsoluKm(bonEngin1.getCompteurAbsoluKm() + bonEngin.getCompteurKm() - bonEngin1.getCompteurKm());
             } else {
@@ -101,6 +99,26 @@ public class CalculServiceImpl {
         }
         log.info("--- > Calcul compteur AbsoluKm = " + bonEngin.getCompteurKm());
         log.info("--- > Calcul compteur AbsoluH = " + bonEngin.getCompteurH());
+    }
+
+    private void setCompteurAbsoluH_ifCmpBonInfCmptLastBon(BonEngin bonEngin, BonEngin bonEngin1) {
+        if (bonEngin.getCompteurH() <= bonEngin1.getCompteurH()) {
+            if (bonEngin.getCompteurHenPanne()) {
+                bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH());
+                bonEngin.setCompteurH(bonEngin1.getCompteurH());
+            } else
+                bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH() + bonEngin.getCompteurH());
+        }
+    }
+
+    private void setCompteurAbsoluKm_ifCmpBonInfCmptLastBon(BonEngin bonEngin, BonEngin bonEngin1) {
+        if (bonEngin.getCompteurKm() <= bonEngin1.getCompteurKm()) {
+            if (bonEngin.getCompteurKmenPanne()) {
+                bonEngin.setCompteurAbsoluKm(bonEngin1.getCompteurAbsoluKm());
+                bonEngin.setCompteurKm(bonEngin1.getCompteurKm());
+            } else
+                bonEngin.setCompteurAbsoluKm(bonEngin1.getCompteurAbsoluKm() + bonEngin.getCompteurKm());
+        }
     }
 
     public BonEngin calculConsommation(BonEngin bonEngin) {
@@ -117,7 +135,7 @@ public class CalculServiceImpl {
         if (typeCompteur.equals(TypeCompteur.H)) {
             lastBon = bonEnginRepo.findLastBonEnginH_toConsommation(bonEngin.getEngin().getId());
             if (lastBon != null) {
-                list = bonEnginRepo.findAllBetweenLastBonAndCurrentBon_H(lastBon.getCompteurAbsoluH());
+                list = bonEnginRepo.findAllBetweenLastBonAndCurrentBon_H(bonEngin.getId(), lastBon.getCompteurAbsoluH());
                 list.remove(lastBon);
                 for (BonEngin b : list)
                     som_Q += b.getQuantite();
@@ -129,12 +147,12 @@ public class CalculServiceImpl {
         if (typeCompteur.equals(TypeCompteur.KM)) {
             lastBon = bonEnginRepo.findLastBonEnginKm_toConsommation(bonEngin.getEngin().getId());
             if (lastBon != null) {
-                list = bonEnginRepo.findAllBetweenLastBonAndCurrentBon_Km(lastBon.getCompteurAbsoluKm());
+                list = bonEnginRepo.findAllBetweenLastBonAndCurrentBon_Km(bonEngin.getId(), lastBon.getCompteurAbsoluKm());
                 list.remove(lastBon);
                 for (BonEngin b : list)
                     som_Q += b.getQuantite();
                 som_Q += bonEngin.getQuantite();
-                bonEngin.setConsommationKm((float) som_Q * 100 / (bonEngin.getCompteurAbsoluKm() - lastBon.getCompteurAbsoluKm()));
+                bonEngin.setConsommationKm((float) som_Q / (bonEngin.getCompteurAbsoluKm() - lastBon.getCompteurAbsoluKm()));
             }
             if (bonEngin.getCompteurKmenPanne()) bonEngin.setConsommationKm(0f);
         }
@@ -142,21 +160,23 @@ public class CalculServiceImpl {
             lastBon = bonEnginRepo.findLastBonEnginKm_toConsommation(bonEngin.getEngin().getId());
             lastBon2 = bonEnginRepo.findLastBonEnginH_toConsommation(bonEngin.getEngin().getId());
             if (lastBon != null) {
-                list = bonEnginRepo.findAllBetweenLastBonAndCurrentBon_Km(lastBon.getCompteurAbsoluKm());
+                list = bonEnginRepo.findAllBetweenLastBonAndCurrentBon_Km(bonEngin.getId(), lastBon.getCompteurAbsoluKm());
                 list.remove(lastBon);
-                for (BonEngin b : bonEnginRepo.findAllBetweenLastBonAndCurrentBon_Km(lastBon.getCompteurAbsoluKm())) {
+                for (BonEngin b : bonEnginRepo.findAllBetweenLastBonAndCurrentBon_Km(bonEngin.getId(), lastBon.getCompteurAbsoluKm())) {
                     if (b.getQuantite() != null)
                         som_Q += b.getQuantite();
                 }
-                bonEngin.setConsommationKm((float) som_Q * 100 / (bonEngin.getCompteurAbsoluKm() - lastBon.getCompteurAbsoluKm()));
+                som_Q += bonEngin.getQuantite();
+                bonEngin.setConsommationKm((float) som_Q / (bonEngin.getCompteurAbsoluKm() - lastBon.getCompteurAbsoluKm()));
             }
             if (lastBon2 != null) {
-                list = bonEnginRepo.findAllBetweenLastBonAndCurrentBon_H(lastBon.getCompteurAbsoluH());
+                list = bonEnginRepo.findAllBetweenLastBonAndCurrentBon_H(bonEngin.getId(), lastBon.getCompteurAbsoluH());
                 list.remove(lastBon);
-                for (BonEngin b : bonEnginRepo.findAllBetweenLastBonAndCurrentBon_H(lastBon2.getCompteurAbsoluH())) {
+                for (BonEngin b : bonEnginRepo.findAllBetweenLastBonAndCurrentBon_H(bonEngin.getId(), lastBon2.getCompteurAbsoluH())) {
                     if (b.getQuantite() != null)
                         som_Q_2 += b.getQuantite();
                 }
+                som_Q_2 += bonEngin.getQuantite();
                 bonEngin.setConsommationH((float) som_Q_2 / (bonEngin.getCompteurAbsoluH() - lastBon2.getCompteurAbsoluH()));
             }
             if (bonEngin.getCompteurHenPanne()) bonEngin.setConsommationH(0f);
