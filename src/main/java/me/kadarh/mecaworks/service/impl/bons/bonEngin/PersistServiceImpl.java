@@ -90,6 +90,9 @@ public class PersistServiceImpl {
         stock.setChantier(bonEngin.getChantierTravail());
         stock.setDate(bonEngin.getDate());
         stock.setSortieE(bonEngin.getQuantite());
+        if (stockService.getLastStock() != null)
+            stock.setStockC(stockService.getLastStock().getStockC() - bonEngin.getQuantite());
+        else stock.setStockC(bonEngin.getChantierGazoil().getStock());
         stockService.add(stock);
     }
 

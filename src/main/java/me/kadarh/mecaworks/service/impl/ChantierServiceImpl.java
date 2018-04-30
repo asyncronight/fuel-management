@@ -2,8 +2,10 @@ package me.kadarh.mecaworks.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.others.Chantier;
+import me.kadarh.mecaworks.domain.others.Stock;
 import me.kadarh.mecaworks.repo.others.ChantierRepo;
 import me.kadarh.mecaworks.service.ChantierService;
+import me.kadarh.mecaworks.service.StockService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
 import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
 import org.springframework.data.domain.Example;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -26,9 +29,11 @@ import java.util.NoSuchElementException;
 public class ChantierServiceImpl implements ChantierService {
 
 	private ChantierRepo chantierRepo;
+	private StockService stockService;
 
-	public ChantierServiceImpl(ChantierRepo chantierRepo) {
+	public ChantierServiceImpl(ChantierRepo chantierRepo, StockService stockService) {
 		this.chantierRepo = chantierRepo;
+		this.stockService = stockService;
 	}
 
 	/**
@@ -64,9 +69,20 @@ public class ChantierServiceImpl implements ChantierService {
 				old.setAdresse(chantier.getAdresse());
 			}
 			if (chantier.getStock() != null) {
+				if (!chantier.getStock().equals(old.getStock())) {
+					Stock stock = new Stock();
+					stock.setDate(LocalDate.now());
+					stock.setStockC(chantier.getStock());
+					stock.setStockReel(chantier.getStock());
+					stock.setChantier(old);
+					Integer stockC = stockService.getLastStock().getStockC();
+					if (stockC < chantier.getStock())
+						stock.setEcart_plus(chantier.getStock() - stockC);
+					else if (stockC > chantier.getStock())
+						stock.setEcart_moins(stockC - chantier.getStock());
+					stockService.add(stock);
+				}
 				old.setStock(chantier.getStock());
-				//Todo : persisting Stock table ( inventaire )
-				//Hint : Autowire chantierService and get by id - old.setStock(chantierService.fbi(chantier.stock.id))
 			}
 			return chantierRepo.save(old);
 

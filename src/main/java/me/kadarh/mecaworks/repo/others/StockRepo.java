@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StockRepo extends JpaRepository<Stock, Long> {
 
-    @Query(nativeQuery = true, value = "select * from STOCK order by UPDATED_AT desc limit 1")
+    @Query(nativeQuery = true, value = "select * from stock order by updated_at desc limit 1")
     Stock findLastStock();
 }
