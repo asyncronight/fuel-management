@@ -61,8 +61,10 @@ public class CalculServiceImpl {
         BonEngin bonEngin1 = lastBon;
         if (typeCompteur.equals(TypeCompteur.H.name())) {
             if (bonEngin1 != null) {
-                if (bonEngin.getCompteurHenPanne())
+                if (bonEngin.getCompteurHenPanne()) {
                     bonEngin.setCompteurH(bonEngin1.getCompteurH());
+                    bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH());
+                }
                 else
                     bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH() + bonEngin.getCompteurH() - bonEngin1.getCompteurH());
                 setCompteurAbsoluH_ifCmpBonInfCmptLastBon(bonEngin, bonEngin1);
@@ -71,8 +73,10 @@ public class CalculServiceImpl {
                 bonEngin.setCompteurAbsoluH(bonEngin.getCompteurH());
         } else if (typeCompteur.equals(TypeCompteur.KM.name())) {
             if (bonEngin1 != null) {
-                if (bonEngin.getCompteurKmenPanne())
+                if (bonEngin.getCompteurKmenPanne()) {
                     bonEngin.setCompteurKm(bonEngin1.getCompteurKm());
+                    bonEngin.setCompteurAbsoluKm(bonEngin1.getCompteurAbsoluKm());
+                }
                 else
                     bonEngin.setCompteurAbsoluKm(bonEngin1.getCompteurAbsoluKm() + bonEngin.getCompteurKm() - bonEngin1.getCompteurKm());
                 setCompteurAbsoluKm_ifCmpBonInfCmptLastBon(bonEngin, bonEngin1);
@@ -81,14 +85,18 @@ public class CalculServiceImpl {
                 bonEngin.setCompteurAbsoluKm(bonEngin.getCompteurKm());
         } else if (typeCompteur.equals(TypeCompteur.KM_H.name())) {
             if (bonEngin1 != null) {
-                if (bonEngin.getCompteurHenPanne())
+                if (bonEngin.getCompteurHenPanne()) {
                     bonEngin.setCompteurH(bonEngin1.getCompteurH());
+                    bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH());
+                }
                 else
                     bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH() + bonEngin.getCompteurH() - bonEngin1.getCompteurH());
                 setCompteurAbsoluH_ifCmpBonInfCmptLastBon(bonEngin, bonEngin1);
 
-                if (bonEngin.getCompteurKmenPanne())
+                if (bonEngin.getCompteurKmenPanne()) {
                     bonEngin.setCompteurKm(bonEngin1.getCompteurKm());
+                    bonEngin.setCompteurAbsoluKm(bonEngin1.getCompteurAbsoluKm());
+                }
                 else
                     bonEngin.setCompteurAbsoluKm(bonEngin1.getCompteurAbsoluKm() + bonEngin.getCompteurKm() - bonEngin1.getCompteurKm());
                 setCompteurAbsoluKm_ifCmpBonInfCmptLastBon(bonEngin, bonEngin1);
