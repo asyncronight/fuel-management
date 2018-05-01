@@ -6,7 +6,7 @@ import me.kadarh.mecaworks.domain.others.Chantier;
 import me.kadarh.mecaworks.domain.others.Fournisseur;
 import me.kadarh.mecaworks.domain.others.Stock;
 import me.kadarh.mecaworks.repo.bons.BonFournisseurRepo;
-import me.kadarh.mecaworks.repo.others.StockRepo;
+import me.kadarh.mecaworks.service.StockService;
 import me.kadarh.mecaworks.service.bons.BonFournisseurService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
 import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
@@ -32,35 +32,38 @@ import java.util.NoSuchElementException;
 public class BonFournisseurServiceImpl implements BonFournisseurService {
 
     private BonFournisseurRepo bonFournisseurRepo;
-    private StockRepo stockRepo;
+    private StockService stockService;
 
-    public BonFournisseurServiceImpl(BonFournisseurRepo bonFournisseurRepo, StockRepo stockRepo) {
+    public BonFournisseurServiceImpl(BonFournisseurRepo bonFournisseurRepo, StockService stockService) {
         this.bonFournisseurRepo = bonFournisseurRepo;
-        this.stockRepo = stockRepo;
+        this.stockService = stockService;
     }
 
-	@Override
-	public BonFournisseur add(BonFournisseur bonFournisseur) {
+    @Override
+    public BonFournisseur add(BonFournisseur bonFournisseur) {
         log.info("Service- BonFournisseurServiceImpl Calling add ");
         try {
-            //create a stock object and fill it from bon fournisseur
-            Stock stock = new Stock();
-            stock.setDate(bonFournisseur.getDate());
-            stock.setEntreeF(bonFournisseur.getQuantite());
-            stock.setChantier(bonFournisseur.getChantier());
-
-            //saving the stock
-            stockRepo.save(stock);
-
-            //saving the bon and return it
-            return bonFournisseurRepo.save(bonFournisseur);
+            bonFournisseur = bonFournisseurRepo.save(bonFournisseur);
+            insertStock_Fournisseur(bonFournisseur);
+            return bonFournisseur;
         } catch (Exception e) {
             throw new OperationFailedException("l'ajout du bon a été suspendu, opération echouée", e);
         }
     }
 
-	@Override
-	public BonFournisseur getBon(Long id) {
+    public void insertStock_Fournisseur(BonFournisseur bonFournisseur) {
+        Stock stock = new Stock();
+        stock.setChantier(bonFournisseur.getChantier());
+        stock.setDate(bonFournisseur.getDate());
+        stock.setEntreeF(bonFournisseur.getQuantite());
+        if (stockService.getLastStock() != null)
+            stock.setStockC(stockService.getLastStock().getStockC() + bonFournisseur.getQuantite());
+        else stock.setStockC(bonFournisseur.getChantier().getStock());
+        stockService.add(stock);
+    }
+
+    @Override
+    public BonFournisseur getBon(Long id) {
         log.info("Service- BonFournisseurServiceImpl Calling getBon with param id = " + id);
         try {
             return bonFournisseurRepo.findById(id).get();

@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.alertes.Alerte;
 import me.kadarh.mecaworks.domain.alertes.TypeAlerte;
 import me.kadarh.mecaworks.domain.bons.BonEngin;
-import me.kadarh.mecaworks.domain.bons.BonLivraison;
 import me.kadarh.mecaworks.domain.others.Engin;
 import me.kadarh.mecaworks.domain.others.SousFamille;
 import me.kadarh.mecaworks.domain.others.Stock;
@@ -12,7 +11,6 @@ import me.kadarh.mecaworks.domain.others.TypeCompteur;
 import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
 import me.kadarh.mecaworks.service.AlerteService;
 import me.kadarh.mecaworks.service.StockService;
-import me.kadarh.mecaworks.service.bons.BonLivraisonService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
 import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -31,13 +29,11 @@ import java.util.NoSuchElementException;
 public class PersistServiceImpl {
 
     private final AlerteService alerteService;
-    private final BonLivraisonService bonLivraisonService;
     private final StockService stockService;
     private final BonEnginRepo bonEnginRepo;
 
-    public PersistServiceImpl(AlerteService alerteService, BonLivraisonService bonLivraisonService, StockService stockService, BonEnginRepo bonEnginRepo) {
+    public PersistServiceImpl(AlerteService alerteService, StockService stockService, BonEnginRepo bonEnginRepo) {
         this.alerteService = alerteService;
-        this.bonLivraisonService = bonLivraisonService;
         this.stockService = stockService;
         this.bonEnginRepo = bonEnginRepo;
     }
@@ -47,7 +43,7 @@ public class PersistServiceImpl {
         boolean okey = false;
         if (lastBonEngin != null) okey = true;
         // Verify if chauffeur is changed.
-        if (lastBonEngin.getChauffeur() != bonEngin.getChauffeur() && okey)
+        if (okey && lastBonEngin.getChauffeur() != bonEngin.getChauffeur())
             insertAlerte(bonEngin, "Chauffeur changé", TypeAlerte.CHAUFFEUR_CHANGED);
         // Verify if compteur is en panne , and if no verify if compteur last bon was en panne
         if (whichCompteurIsDown(bonEngin) == 1)
@@ -96,17 +92,6 @@ public class PersistServiceImpl {
         stockService.add(stock);
     }
 
-    public void insertBonLivraison(BonEngin bonEngin) {
-        BonLivraison bonLivraison = new BonLivraison();
-        bonLivraison.setDate(bonEngin.getDate());
-        bonLivraison.setChantierDepart(bonEngin.getChantierGazoil());
-        bonLivraison.setChantierArrivee(bonEngin.getChantierTravail());
-        bonLivraison.setCode(bonEngin.getCode() + "X" + bonEngin.getId());
-        bonLivraison.setPompiste(bonEngin.getPompiste());
-        bonLivraison.setTransporteur(bonEngin.getChauffeur());
-        bonLivraison.setQuantite(bonEngin.getQuantite());
-        bonLivraisonService.add(bonLivraison);
-    }
 
     public int whichCompteurIsDown(BonEngin bonEngin) {
         boolean cmpHenPanne = bonEngin.getCompteurHenPanne();

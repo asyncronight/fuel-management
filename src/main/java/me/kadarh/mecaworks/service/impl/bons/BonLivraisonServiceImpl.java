@@ -1,14 +1,13 @@
 package me.kadarh.mecaworks.service.impl.bons;
 
 import lombok.extern.slf4j.Slf4j;
+import me.kadarh.mecaworks.domain.bons.BonEngin;
 import me.kadarh.mecaworks.domain.bons.BonLivraison;
 import me.kadarh.mecaworks.domain.others.Chantier;
 import me.kadarh.mecaworks.domain.others.Employe;
 import me.kadarh.mecaworks.domain.others.Stock;
 import me.kadarh.mecaworks.repo.bons.BonLivraisonRepo;
-import me.kadarh.mecaworks.repo.others.ChantierRepo;
-import me.kadarh.mecaworks.repo.others.EmployeRepo;
-import me.kadarh.mecaworks.repo.others.StockRepo;
+import me.kadarh.mecaworks.service.StockService;
 import me.kadarh.mecaworks.service.bons.BonLivraisonService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
 import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -31,40 +29,59 @@ import java.util.NoSuchElementException;
 @Slf4j
 public class BonLivraisonServiceImpl implements BonLivraisonService {
 
-	private StockRepo stockRepo;
-	private ChantierRepo chantierRepo;
-	private EmployeRepo employeRepo;
-	private BonLivraisonRepo bonLivraisonRepo;
+    private StockService stockService;
+    private BonLivraisonRepo bonLivraisonRepo;
 
-	public BonLivraisonServiceImpl(StockRepo stockRepo, ChantierRepo chantierRepo, EmployeRepo employeRepo, BonLivraisonRepo bonLivraisonRepo) {
-		this.stockRepo = stockRepo;
-		this.chantierRepo = chantierRepo;
-		this.employeRepo = employeRepo;
-		this.bonLivraisonRepo = bonLivraisonRepo;
+    public BonLivraisonServiceImpl(StockService stockService, BonLivraisonRepo bonLivraisonRepo) {
+        this.stockService = stockService;
+        this.bonLivraisonRepo = bonLivraisonRepo;
 	}
 
 	@Override
 	public BonLivraison add(BonLivraison bonLivraison) {
 		try {
-			// create the first stock Entree ( lgazoil li dkhol l chantier d'arrivée )
-			Stock stock = new Stock();
-			stock.setChantier(bonLivraison.getChantierArrivee());
-			stock.setEntreeL(bonLivraison.getQuantite());
-			stock.setDate(bonLivraison.getDate());
-
-			// create the second stock Sortie ( lgazoil li khroj men chantier de depart )
-			Stock stock1 = new Stock();
-			stock1.setDate(bonLivraison.getDate());
-			stock1.setChantier(bonLivraison.getChantierDepart());
-			stock1.setSortieL(bonLivraison.getQuantite());
-			stockRepo.saveAll(Arrays.asList(stock, stock1));
-
-			//saving the bon and return it
-			return bonLivraisonRepo.save(bonLivraison);
-		} catch (Exception e) {
+            bonLivraison = bonLivraisonRepo.save(bonLivraison);
+            insertStock_Livraison(bonLivraison);
+            return bonLivraison;
+        } catch (Exception e) {
 			throw new OperationFailedException("L'ajout du bon a echoué , opération echoué", e);
 		}
 	}
+
+    @Override
+    public void insertBonLivraison(BonEngin bonEngin) {
+        BonLivraison bonLivraison = new BonLivraison();
+        bonLivraison.setDate(bonEngin.getDate());
+        bonLivraison.setChantierDepart(bonEngin.getChantierGazoil());
+        bonLivraison.setChantierArrivee(bonEngin.getChantierTravail());
+        bonLivraison.setCode(bonEngin.getCode() + "X" + bonEngin.getId());
+        bonLivraison.setPompiste(bonEngin.getPompiste());
+        bonLivraison.setTransporteur(bonEngin.getChauffeur());
+        bonLivraison.setQuantite(bonEngin.getQuantite());
+        add(bonLivraison);
+    }
+
+    public void insertStock_Livraison(BonLivraison bonLivraison) {
+        //sortie Livraison
+        Stock stock = new Stock();
+        stock.setChantier(bonLivraison.getChantierDepart());
+        stock.setDate(bonLivraison.getDate());
+        stock.setSortieL(bonLivraison.getQuantite());
+        if (stockService.getLastStock().getStockC() != null)
+            stock.setStockC(stockService.getLastStock().getStockC() - bonLivraison.getQuantite());
+        else stock.setStockC(bonLivraison.getChantierDepart().getStock());
+
+        //Entréé livraison
+        Stock stock2 = new Stock();
+        stock2.setChantier(bonLivraison.getChantierArrivee());
+        stock2.setDate(bonLivraison.getDate());
+        stock2.setEntreeL(bonLivraison.getQuantite());
+        if (stockService.getLastStock().getStockC() != null)
+            stock.setStockC(stockService.getLastStock().getStockC() + bonLivraison.getQuantite());
+        else stock.setStockC(bonLivraison.getChantierArrivee().getStock());
+        stockService.add(stock);
+        stockService.add(stock2);
+    }
 
 	@Override
 	public BonLivraison getBon(Long id) {

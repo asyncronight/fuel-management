@@ -9,6 +9,7 @@ import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
 import me.kadarh.mecaworks.repo.others.EmployeRepo;
 import me.kadarh.mecaworks.repo.others.EnginRepo;
 import me.kadarh.mecaworks.service.bons.BonEnginService;
+import me.kadarh.mecaworks.service.bons.BonLivraisonService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
 import me.kadarh.mecaworks.service.impl.bons.bonEngin.CalculServiceImpl;
 import me.kadarh.mecaworks.service.impl.bons.bonEngin.CheckServiceImpl;
@@ -36,19 +37,22 @@ public class BonEnginServiceImpl implements BonEnginService {
     private final BonEnginRepo bonEnginRepo;
     private final EnginRepo enginRepo;
     private final EmployeRepo employeRepo;
-    private CalculServiceImpl calculService;
-    private CheckServiceImpl checkService;
-    private PersistServiceImpl persistService;
+    private final CalculServiceImpl calculService;
+    private final CheckServiceImpl checkService;
+    private final PersistServiceImpl persistService;
+    private final BonLivraisonService bonLivraisonService;
 
-    public BonEnginServiceImpl(BonEnginRepo bonEnginRepo, EnginRepo enginRepo, EmployeRepo employeRepo, CalculServiceImpl calculService, CheckServiceImpl checkService, PersistServiceImpl persistService) {
+    public BonEnginServiceImpl(BonEnginRepo bonEnginRepo, EnginRepo enginRepo, EmployeRepo employeRepo, CalculServiceImpl calculService, CheckServiceImpl checkService, PersistServiceImpl persistService, BonLivraisonService bonLivraisonService) {
         this.bonEnginRepo = bonEnginRepo;
         this.enginRepo = enginRepo;
         this.employeRepo = employeRepo;
         this.calculService = calculService;
         this.checkService = checkService;
         this.persistService = persistService;
+        this.bonLivraisonService = bonLivraisonService;
     }
-    /* ------------------------------------------------------------------------------ */
+
+    /*--------------------------------------------------------------------------- */
     /* ------------ CRUD METHODES -------------------------------------------------- */
     /* ---------------------------------------------------------------------------- */
 
@@ -60,7 +64,7 @@ public class BonEnginServiceImpl implements BonEnginService {
             if (bonEngin.getPlein())
                 bonEngin = calculService.calculConsommation(bonEngin);
             if (bonEngin.getChantierGazoil() != bonEngin.getChantierTravail())
-                persistService.insertBonLivraison(bonEngin);
+                bonLivraisonService.insertBonLivraison(bonEngin);
             bonEngin = bonEnginRepo.save(bonEngin);
             persistService.insertAlertes(bonEngin);
             persistService.insertStock(bonEngin);
