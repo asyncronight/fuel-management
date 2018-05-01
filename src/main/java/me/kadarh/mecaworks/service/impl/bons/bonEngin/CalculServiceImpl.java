@@ -103,7 +103,7 @@ public class CalculServiceImpl {
     }
 
     private void setCompteurAbsoluH_ifCmpBonInfCmptLastBon(BonEngin bonEngin, BonEngin bonEngin1) {
-        if (bonEngin.getCompteurH() <= bonEngin1.getCompteurH()) {
+        if (bonEngin.getCompteurH() < bonEngin1.getCompteurH()) {
             if (bonEngin.getCompteurHenPanne()) {
                 bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH());
                 bonEngin.setCompteurH(bonEngin1.getCompteurH());
