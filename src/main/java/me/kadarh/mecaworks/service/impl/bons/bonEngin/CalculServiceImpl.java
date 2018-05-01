@@ -140,7 +140,9 @@ public class CalculServiceImpl {
                 for (BonEngin b : list)
                     som_Q += b.getQuantite();
                 som_Q += bonEngin.getQuantite();
-                bonEngin.setConsommationH((float) som_Q / (bonEngin.getCompteurAbsoluH() - lastBon.getCompteurAbsoluH()));
+                if (bonEngin.getCompteurAbsoluH() > lastBon.getCompteurAbsoluH())
+                    bonEngin.setConsommationH((float) som_Q / (bonEngin.getCompteurAbsoluH() - lastBon.getCompteurAbsoluH()));
+                else bonEngin.setConsommationH(0f);
             }
             if (bonEngin.getCompteurHenPanne() || (!list.isEmpty() && list.get(list.size() - 1).getCompteurHenPanne()))
                 bonEngin.setConsommationH(0f);
@@ -153,7 +155,9 @@ public class CalculServiceImpl {
                 for (BonEngin b : list)
                     som_Q += b.getQuantite();
                 som_Q += bonEngin.getQuantite();
-                bonEngin.setConsommationKm((float) som_Q * 100 / (bonEngin.getCompteurAbsoluKm() - lastBon.getCompteurAbsoluKm()));
+                if (bonEngin.getCompteurAbsoluKm() > lastBon.getCompteurAbsoluKm())
+                    bonEngin.setConsommationKm((float) som_Q * 100 / (bonEngin.getCompteurAbsoluKm() - lastBon.getCompteurAbsoluKm()));
+                else bonEngin.setConsommationKm(0f);
             }
             if (bonEngin.getCompteurKmenPanne() || (!list.isEmpty() && list.get(list.size() - 1).getCompteurKmenPanne()))
                 bonEngin.setConsommationKm(0f);
@@ -171,6 +175,8 @@ public class CalculServiceImpl {
                 som_Q += bonEngin.getQuantite();
                 bonEngin.setConsommationKm((float) som_Q * 100 / (bonEngin.getCompteurAbsoluKm() - lastBon.getCompteurAbsoluKm()));
             }
+            if (bonEngin.getCompteurHenPanne() || (!list.isEmpty() && list.get(list.size() - 1).getCompteurHenPanne()))
+                bonEngin.setConsommationH(0f);
             if (lastBon2 != null) {
                 list = bonEnginRepo.findAllBetweenLastBonAndCurrentBon_H(bonEngin.getEngin().getId(), lastBon2.getCompteurAbsoluH());
                 list.remove(lastBon);
@@ -181,8 +187,6 @@ public class CalculServiceImpl {
                 som_Q_2 += bonEngin.getQuantite();
                 bonEngin.setConsommationH((float) som_Q_2 / (bonEngin.getCompteurAbsoluH() - lastBon2.getCompteurAbsoluH()));
             }
-            if (bonEngin.getCompteurHenPanne() || (!list.isEmpty() && list.get(list.size() - 1).getCompteurHenPanne()))
-                bonEngin.setConsommationH(0f);
             if (bonEngin.getCompteurKmenPanne() || (!list.isEmpty() && list.get(list.size() - 1).getCompteurKmenPanne()))
                 bonEngin.setConsommationKm(0f);
         }
