@@ -77,6 +77,8 @@ public class EnginServiceImpl implements EnginService {
 				old.setCode(engin.getCode());
             if (engin.getGroupe() != null)
                 old.setGroupe(groupeRepo.findById(engin.getGroupe().getId()).get());
+            if (engin.getObjectif() != null)
+                old.setObjectif(engin.getObjectif());
             if (engin.getSousFamille() != null)
                 old.setSousFamille(sousFamilleRepo.findById(engin.getSousFamille().getId()).get());
             return enginRepo.save(old);

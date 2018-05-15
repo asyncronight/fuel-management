@@ -57,6 +57,13 @@
 								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
 							</a>
 						</th>
+                        <th th:with="desc=${page.getSort().getOrderFor('objectif')?.descending}">
+                            [[#{engin.objectif}]]
+                            <a th:href="'?page=0&sort=objectif'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+                                <i class="material-icons text-light"
+                                   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+                            </a>
+                        </th>
 						<th th:with="desc=${page.getSort().getOrderFor('sousFamille.nom')?.descending}">
 							[[#{engin.sousFamille}]]
 							<a th:href="'?page=0&sort=sousFamille.nom'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
@@ -80,6 +87,7 @@
 						<td th:text="${engin.numeroSerie}"></td>
 						<td th:text="${engin.compteurInitialH}"></td>
 						<td th:text="${engin.compteurInitialKm}"></td>
+                        <td th:text="${engin.objectif}"></td>
 						<td th:text="${engin.sousFamille.nom}"></td>
 						<td th:text="${engin.groupe.nom}"></td>
 						<td class="btn-group">

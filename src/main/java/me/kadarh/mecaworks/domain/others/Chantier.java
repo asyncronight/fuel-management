@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 /**
  * @author kadarH
@@ -25,5 +26,8 @@ public class Chantier extends AbstractDomain {
     @Min(0)
 	@NotNull
     private Integer stock;
+
+    private LocalDate dateDebut;
+    private LocalDate dateFin;
 
 }

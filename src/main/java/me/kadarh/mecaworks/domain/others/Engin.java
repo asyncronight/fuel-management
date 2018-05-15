@@ -25,6 +25,8 @@ public class Engin extends AbstractDomain {
 	private String numeroSerie;
 	private Integer compteurInitialH;
 	private Integer compteurInitialKm;
+	private Integer objectif;
+	private Integer prixLocationJournalier;
 
 	@ManyToOne
 	private SousFamille sousFamille;
