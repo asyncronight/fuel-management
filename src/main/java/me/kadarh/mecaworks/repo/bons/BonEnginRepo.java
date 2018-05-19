@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -25,4 +26,7 @@ public interface BonEnginRepo extends JpaRepository<BonEngin, Long> {
 
     @Query(nativeQuery = true, value = "select * from bon_engin where engin_id =?1 and compteur_absolu_km >= ?2")
     List<BonEngin> findAllBetweenLastBonAndCurrentBon_Km(Long id, Long compteurAbsoluKm);
+
+    @Query(nativeQuery = true, value = "select * from bon_engin where DATE_BON between ?1 and ?2")
+    List<BonEngin> findAllBetweenDates(LocalDate date1, LocalDate date2);
 }
