@@ -48,27 +48,16 @@ public class PersistServiceImpl {
         // Verify if compteur is en panne , and if no verify if compteur last bon was en panne
         if (whichCompteurIsDown(bonEngin) == 1)
             insertAlerte(bonEngin, "Compteur H En Panne", TypeAlerte.COMPTEUR_H_EN_PANNE);
-        else if (whichCompteurIsDown(lastBonEngin) == 1 && okey)
-            insertAlerte(bonEngin, "Compteur H Reparé", TypeAlerte.COMPTEUR_H_REPARE);
-
         if (whichCompteurIsDown(bonEngin) == 2 && okey)
             insertAlerte(bonEngin, "Compteur Km En Panne", TypeAlerte.COMPTEUR_KM_EN_PANNE);
-        else if (whichCompteurIsDown(lastBonEngin) == 2)
-            insertAlerte(bonEngin, "Compteur Km Reparé", TypeAlerte.COMPTEUR_KM_REPARE);
-
         if (whichCompteurIsDown(bonEngin) == 3) {
             insertAlerte(bonEngin, "Compteur H En Panne", TypeAlerte.COMPTEUR_H_EN_PANNE);
             insertAlerte(bonEngin, "Compteur Km En Panne", TypeAlerte.COMPTEUR_KM_EN_PANNE);
-        } else if (okey) {
-            if (whichCompteurIsDown(lastBonEngin) == 1)
-                insertAlerte(bonEngin, "Compteur H Reparé", TypeAlerte.COMPTEUR_H_REPARE);
-            if (whichCompteurIsDown(lastBonEngin) == 2)
-                insertAlerte(bonEngin, "Compteur Km Reparé", TypeAlerte.COMPTEUR_KM_REPARE);
         }
-
         //verify quantité
         if (bonEngin.getQuantite() > bonEngin.getEngin().getSousFamille().getCapaciteReservoir())
             insertAlerte(bonEngin, "Quantité de gazoil depasse la capacité de reservoir", TypeAlerte.QUANTITE_MORE_THAN_RESERVOIR);
+        // FIXME: 20/05/18 : add alerte ( compteur reparé ) 
     }
 
     public void insertAlerte(BonEngin bonEngin, String msg, TypeAlerte type) {
