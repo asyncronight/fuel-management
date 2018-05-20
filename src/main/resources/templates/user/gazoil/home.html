@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="fragments :: head"></head>
+<body>
+<div th:replace="fragments :: menu('user')"></div>
+<div class="bmd-layout-container bmd-drawer-f-l  bmd-drawer-overlay-md-down">
+    <div th:replace="user/fragment :: menu('g')"></div>
+    <main class="bmd-layout-content">
+        <div class="container-fluid">
+            <button class="btn bmd-btn-fab btn-primary bmd-btn-fab-sm active" type="button" data-toggle="drawer"
+                    data-target="#side" style="margin-top: 10px">
+                <i class="material-icons text-light">menu</i>
+            </button>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
+                <li class="breadcrumb-item"><a th:href="@{'/user'}" th:text="#{user}"></a></li>
+                <li class="breadcrumb-item" th:text="#{gazoil}"></li>
+            </ol>
+
+            <p th:text="${data}"></p>
+
+
+        </div>
+    </main>
+</div>
+<div th:replace="fragments :: footer"></div>
+<script th:inline="javascript">
+    var data = /*[[${data}]]*/ '';
+</script>
+<script th:src="@{/js/user/gazoilHome.js}"></script>
+</body>
+</html>
