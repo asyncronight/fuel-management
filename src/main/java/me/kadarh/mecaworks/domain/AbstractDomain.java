@@ -1,5 +1,6 @@
 package me.kadarh.mecaworks.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,11 +21,14 @@ public abstract class AbstractDomain {
 	protected Long id;
 
 	@Version
+    @JsonIgnore
 	protected int version;
 
-	protected LocalDateTime createdAt;
+    @JsonIgnore
+    protected LocalDateTime createdAt;
 
-	protected LocalDateTime updatedAt;
+    @JsonIgnore
+    protected LocalDateTime updatedAt;
 
 	@PrePersist
 	protected void onCreate() {

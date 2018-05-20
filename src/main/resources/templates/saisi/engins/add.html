@@ -51,7 +51,7 @@
 				<div class="input-group mb-3">
 					<label class="input-group-text text-muted" for="engin"
 						   th:text="#{bonEngin.engin}"></label>
-					<select class="js-example-basic-single" id="engin" th:field="*{engin.id}">
+                    <select class="js-example-basic-single" id="engin" th:field="*{engin.id}" onchange="doWork(this);">
 						<option th:each="engin : ${engins}" th:value="${engin.id}"
 								th:text="${engin.code+' - '+engin.numeroSerie+' | '+engin.sousFamille.nom}"></option>
 					</select>
@@ -99,12 +99,12 @@
 					<input type="number" id="quantite"
 						   class="form-control" th:field="*{quantite}"/>
 				</div>
-				<div class="form-group">
+                <div class="form-group km">
 					<label class="bmd-label-floating" for="compteurKm" th:text="#{bonEngin.compteurKm}"></label>
 					<input type="number" id="compteurKm"
 						   class="form-control" th:field="*{compteurKm}"/>
 				</div>
-				<div class="form-group">
+                <div class="form-group h">
 					<label class="bmd-label-floating" for="compteurH" th:text="#{bonEngin.compteurH}"></label>
 					<input type="number" id="compteurH"
 						   class="form-control" th:field="*{compteurH}"/>
@@ -120,12 +120,12 @@
 					</label>
 				</div>
 				<div class="row pl-5 pb-5">
-					<div class="switch col">
+                    <div class="switch col h">
 						<label>
 							<input type="checkbox" th:field="*{compteurHenPanne}"> [[#{bonEngin.compteurHenPanne}]]
 						</label>
 					</div>
-					<div class="switch col">
+                    <div class="switch col km">
 						<label>
 							<input type="checkbox" th:field="*{compteurKmenPanne}"> [[#{bonEngin.compteurKmenPanne}]]
 						</label>
@@ -142,5 +142,33 @@
 	</main>
 </div>
 <div th:replace="fragments :: footer"></div>
+<script th:inline="javascript">
+    var engins = /*[[${engins}]]*/ '';
+    doWork(document.getElementById('engin'));
+
+    function doWork(elem) {
+        var id = elem.selectedOptions.item(0).value;
+        var type = engins.filter(function (engin) {
+            return engin.id == id;
+        })[0].sousFamille.typeCompteur;
+        if (type == 'H') {
+            document.getElementsByClassName('km')[0].style.display = "none";
+            document.getElementsByClassName('km')[1].style.display = "none";
+            document.getElementsByClassName('h')[0].style.display = "block";
+            document.getElementsByClassName('h')[1].style.display = "block";
+        } else if (type == 'KM') {
+            document.getElementsByClassName('km')[0].style.display = "block";
+            document.getElementsByClassName('km')[1].style.display = "block";
+            document.getElementsByClassName('h')[0].style.display = "none";
+            document.getElementsByClassName('h')[1].style.display = "none";
+        } else {
+            document.getElementsByClassName('km')[0].style.display = "block";
+            document.getElementsByClassName('km')[1].style.display = "block";
+            document.getElementsByClassName('h')[0].style.display = "block";
+            document.getElementsByClassName('h')[1].style.display = "block";
+        }
+    }
+
+</script>
 </body>
 </html>

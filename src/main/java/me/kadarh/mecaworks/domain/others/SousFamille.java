@@ -1,5 +1,6 @@
 package me.kadarh.mecaworks.domain.others;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import me.kadarh.mecaworks.domain.AbstractDomain;
@@ -29,8 +30,10 @@ public class SousFamille extends AbstractDomain {
 	private Integer capaciteReservoir;
 
 	@ManyToOne
+    @JsonIgnore
 	private Marque marque;
 
 	@ManyToOne
+    @JsonIgnore
 	private Famille famille;
 }
