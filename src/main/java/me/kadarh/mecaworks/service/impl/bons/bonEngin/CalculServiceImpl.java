@@ -47,8 +47,8 @@ public class CalculServiceImpl {
             calculCompteursAbsolu(bon, persistService.getLastBonEngin(bon.getEngin()));
             log.info("Compteur Absolu H = " + bon.getCompteurAbsoluH());
             log.info("Compteur Absolu Km = " + bon.getCompteurAbsoluKm());
+            log.info("Nombre Heure travaillé  = " + bon.getNbrHeures());
             log.info("Bon has been filled correctly");
-
             return bon;
         } catch (Exception e) {
             throw new OperationFailedException("Operation echouée", e);
@@ -64,13 +64,16 @@ public class CalculServiceImpl {
                 if (bonEngin.getCompteurHenPanne()) {
                     bonEngin.setCompteurH(bonEngin1.getCompteurH());
                     bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH());
-                }
-                else
+                    bonEngin.setNbrHeures(0L);
+                } else {
                     bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH() + bonEngin.getCompteurH() - bonEngin1.getCompteurH());
+                    bonEngin.setNbrHeures(bonEngin.getCompteurH() - bonEngin1.getCompteurH());
+                }
                 setCompteurAbsoluH_ifCmpBonInfCmptLastBon(bonEngin, bonEngin1);
-            }
-            else
+            } else {
                 bonEngin.setCompteurAbsoluH(bonEngin.getCompteurH());
+                bonEngin.setNbrHeures(bonEngin.getCompteurH());
+            }
         } else if (typeCompteur.equals(TypeCompteur.KM.name())) {
             if (bonEngin1 != null) {
                 if (bonEngin.getCompteurKmenPanne()) {
@@ -88,9 +91,11 @@ public class CalculServiceImpl {
                 if (bonEngin.getCompteurHenPanne()) {
                     bonEngin.setCompteurH(bonEngin1.getCompteurH());
                     bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH());
-                }
-                else
+                    bonEngin.setNbrHeures(0L);
+                } else {
                     bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH() + bonEngin.getCompteurH() - bonEngin1.getCompteurH());
+                    bonEngin.setNbrHeures(bonEngin.getCompteurH() - bonEngin1.getCompteurH());
+                }
                 setCompteurAbsoluH_ifCmpBonInfCmptLastBon(bonEngin, bonEngin1);
 
                 if (bonEngin.getCompteurKmenPanne()) {
@@ -101,12 +106,14 @@ public class CalculServiceImpl {
                     bonEngin.setCompteurAbsoluKm(bonEngin1.getCompteurAbsoluKm() + bonEngin.getCompteurKm() - bonEngin1.getCompteurKm());
                 setCompteurAbsoluKm_ifCmpBonInfCmptLastBon(bonEngin, bonEngin1);
             } else {
+                bonEngin.setNbrHeures(bonEngin.getCompteurH());
                 bonEngin.setCompteurAbsoluH(bonEngin.getCompteurH());
                 bonEngin.setCompteurAbsoluKm(bonEngin.getCompteurKm());
             }
         }
         log.info("--- > Calcul compteur AbsoluKm = " + bonEngin.getCompteurKm());
         log.info("--- > Calcul compteur AbsoluH = " + bonEngin.getCompteurH());
+        log.info("------------------------------------------ Compteur absolu calculated ------");
     }
 
     private void setCompteurAbsoluH_ifCmpBonInfCmptLastBon(BonEngin bonEngin, BonEngin bonEngin1) {
@@ -114,8 +121,11 @@ public class CalculServiceImpl {
             if (bonEngin.getCompteurHenPanne()) {
                 bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH());
                 bonEngin.setCompteurH(bonEngin1.getCompteurH());
-            } else
+                bonEngin.setNbrHeures(0L);
+            } else {
                 bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH() + bonEngin.getCompteurH());
+                bonEngin.setNbrHeures(bonEngin.getCompteurH());
+            }
         }
     }
 

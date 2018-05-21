@@ -69,6 +69,6 @@ public class BonEngin extends AbstractDomain {
     private Long compteurAbsoluH = 0L;
     private Float consommationKm = 0f;
     private Float consommationH = 0f;
-	private Integer nbrHeures = 0;
+    private Long nbrHeures = 0L;
 
 }

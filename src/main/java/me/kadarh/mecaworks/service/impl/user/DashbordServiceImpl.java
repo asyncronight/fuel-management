@@ -10,9 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author kadarH
@@ -37,38 +36,30 @@ public class DashbordServiceImpl implements DashbordService {
     }
 
     private Dashbord addThisMonthToDashbord(Dashbord dashbord, int mois, int year) {
-        dashbord.getMap().put(mois + "/" + year, new Quantite(dashbord.getChantierBatch().stream().map(ChantierBatch::getQuantite).count(),
-                dashbord.getChantierBatch().stream().map(ChantierBatch::getQuantite).count()));
-
-        dashbord.setChantierBatch(userCalculService.getListChantierWithQuantities(mois, year));
+        if (mois == LocalDate.now().getMonthValue() && year == LocalDate.now().getYear())
+            dashbord.setChantierBatch(userCalculService.getListChantierWithQuantities(mois, year));
+        else
+            dashbord.setChantierBatch(chantierBatchRepo.findAllByMoisAndAnnee(mois, year));
+        dashbord.getMap().put(mois + "/" + year, new Quantite(dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getQuantite).sum(),
+                dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getQuantiteLocation).sum()));
         return dashbord;
     }
 
     private Dashbord getDashbordFromBatch(int mois, int year) {
         Dashbord dashbord = new Dashbord();
-        Long somQ, somQL;
         int month, yeaar;
-        Map<String, Quantite> map = new HashMap<>();
+        LinkedHashMap<String, Quantite> map = new LinkedHashMap<>();
         List<ChantierBatch> chantierBatches = chantierBatchRepo.findAllByMoisAndAnnee(mois, year);
         dashbord.setChantierBatch(chantierBatches);
         LocalDate d = LocalDate.of(year, mois, 1);
-        Quantite quantite = null;
-        for (int i = 1; i <= 12; i++) {
+        for (int i = 12; i >= 1; i--) {
             month = d.minusMonths(i).getMonthValue();
             yeaar = d.minusMonths(i).getYear();
-            somQ = 0L;
-            somQL = 0L;
             chantierBatches = chantierBatchRepo.findAllByMoisAndAnnee(month, yeaar);
-            for (ChantierBatch chantierBatch : chantierBatches) {
-                somQ += chantierBatch.getQuantite();
-                somQL += chantierBatch.getQuantiteLocation();
-            }
-            quantite = new Quantite(somQ, somQL);
-            map.put(month + "/" + yeaar, quantite);
+            map.put(month + "/" + yeaar, new Quantite(chantierBatches.stream().mapToLong(ChantierBatch::getQuantite).sum(),
+                    chantierBatches.stream().mapToLong(ChantierBatch::getQuantiteLocation).sum()));
         }
         dashbord.setMap(map);
         return dashbord;
     }
-
-
 }
