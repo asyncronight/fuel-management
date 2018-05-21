@@ -54,7 +54,7 @@ public class GroupeServiceImpl implements GroupeService {
 	public Groupe update(Groupe groupe) {
 		log.info("Service = GroupeServiceImpl - calling methode update");
 		try {
-			Groupe old = groupeRepo.findById(groupe.getId()).get();
+			Groupe old = get(groupe.getId());
 			if (groupe.getNom() != null) {
 				old.setNom(groupe.getNom());
 			}
@@ -62,7 +62,6 @@ public class GroupeServiceImpl implements GroupeService {
 				old.setLocataire(groupe.getLocataire());
 			}
 			return groupeRepo.save(old);
-
 		} catch (Exception e) {
 			log.debug("cannot update Groupe , failed operation");
 			throw new OperationFailedException("La modification du Groupe a echouée ", e);

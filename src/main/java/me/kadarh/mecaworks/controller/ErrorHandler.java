@@ -8,7 +8,14 @@ import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * Global exception handling
+ *
+ * @author salah3x
+ */
 @ControllerAdvice
 @Slf4j
 public class ErrorHandler {
@@ -18,10 +25,13 @@ public class ErrorHandler {
 		/*if (AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null)
 			throw e;*/
 		ModelAndView mav = new ModelAndView();
-		if (e instanceof MultipartException) {
-			mav.addObject("exception", new Exception("Image upload échouée, vérifier la taille du fichier (max = 5MB)", e));
-		} else {
-			mav.addObject("exception", e);
+		if (e instanceof MultipartException)
+			e = new Exception("Image upload échouée, vérifier la taille du fichier (max = 5MB)", e);
+		mav.addObject("exception", e);
+		List<String> causes = new ArrayList<>();
+		while (e.getCause() instanceof ApplicationException) {
+			e = (Exception) e.getCause();
+			causes.add(e.getMessage());
 		}
 		mav.setViewName("error/exception");
 		log.warn("Application exception thrown - url : [" + request.getMethod() + "]" + request.getRequestURI(), e);

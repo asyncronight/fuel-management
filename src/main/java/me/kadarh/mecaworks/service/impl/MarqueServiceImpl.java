@@ -54,7 +54,7 @@ public class MarqueServiceImpl implements MarqueService {
     public Marque update(Marque marque) {
         log.info("Service= MarqueServiceImpl - calling methode update");
         try {
-            Marque old = marqueRepo.findById(marque.getId()).get();
+	        Marque old = get(marque.getId());
             if (marque.getNom() != null) {
                 old.setNom(marque.getNom());
             }

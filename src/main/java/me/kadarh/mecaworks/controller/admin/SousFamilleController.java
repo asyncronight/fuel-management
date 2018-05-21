@@ -16,8 +16,9 @@ import javax.validation.Valid;
 /**
  * PROJECT mecaworks
  *
- * @author kadarH
  * Created at 20/02/18
+ * @author kadarH
+ * @author salah3x
  */
 
 @Controller
@@ -88,7 +89,7 @@ public class SousFamilleController {
 
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable Long id) {
-        //sousFamilleService.delete(id);
+        sousFamilleService.delete(id);
         return "redirect:/admin/sousFamilles/add#hrTable";
     }
 

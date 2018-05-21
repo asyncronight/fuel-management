@@ -6,8 +6,6 @@ import me.kadarh.mecaworks.repo.others.StockRepo;
 import me.kadarh.mecaworks.service.StockService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
 import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,19 +39,6 @@ public class StockServiceImpl implements StockService {
             log.debug("cannot add Stock , failed operation");
             throw new OperationFailedException("L'ajout du Stock a echouée ", e);
         }
-    }
-
-
-    /**
-     * search with nom
-     *
-     * @param pageable page description
-     * @param search   keyword
-     * @return Page
-     */
-    @Override
-    public Page<Stock> stockList(Pageable pageable, String search) {
-        return null;
     }
 
     @Override

@@ -54,12 +54,11 @@ public class FournisseurServiceImpl implements FournisseurService {
 	public Fournisseur update(Fournisseur fournisseur) {
 		log.info("Service= FournisseurServiceImpl - calling methode update");
 		try {
-			Fournisseur old = fournisseurRepo.findById(fournisseur.getId()).get();
+			Fournisseur old = get(fournisseur.getId());
 			if (fournisseur.getNom() != null) {
 				old.setNom(fournisseur.getNom());
 			}
 			return fournisseurRepo.save(old);
-
 		} catch (Exception e) {
 			log.debug("cannot update Fournisseur , failed operation");
 			throw new OperationFailedException("La modification du Fournisseur a echouée ", e);
@@ -121,7 +120,7 @@ public class FournisseurServiceImpl implements FournisseurService {
 	public void delete(Long id) {
 		log.info("Service= FournisseurServiceImpl - calling methode delete");
 		try {
-			//fournisseurRepo.deleteById(id);
+			fournisseurRepo.deleteById(id);
 		} catch (Exception e) {
 			log.debug("cannot delete Fournisseur , failed operation");
 			throw new OperationFailedException("La suppression du Fournisseur a echouée ", e);

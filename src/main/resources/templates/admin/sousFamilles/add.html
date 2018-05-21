@@ -35,17 +35,18 @@
 				<div class="input-group mb-3">
 					<label class="input-group-text text-muted" for="typeCompteur"
 						   th:text="#{sousFamille.typeCompteur}"></label>
-					<select class="js-example-basic-single" id="typeCompteur" th:field="*{typeCompteur}">
+					<select class="js-example-basic-single" id="typeCompteur" th:field="*{typeCompteur}"
+					        onchange="doWork(this);">
 						<option th:each="typeCompteur : ${typesCompteur}" th:value="${typeCompteur}"
 								th:text="${typeCompteur}"></option>
 					</select>
 				</div>
-				<div class="form-group">
+				<div class="form-group" id="h">
 					<label class="bmd-label-floating" for="consommationHMax"
 						   th:text="#{sousFamille.consommationHMax}"></label>
 					<input type="number" id="consommationHMax" class="form-control" th:field="*{consommationHMax}"/>
 				</div>
-				<div class="form-group">
+				<div class="form-group" id="km">
 					<label class="bmd-label-floating" for="consommationKmMax"
 						   th:text="#{sousFamille.consommationKmMax}"></label>
 					<input type="number" id="consommationKmMax" class="form-control" th:field="*{consommationKmMax}"/>
@@ -61,7 +62,7 @@
 					   href="/admin/familles/add" th:title="#{admin.famille.add}">
 						<i class="material-icons mt-2">add</i>
 					</a>
-					<select class="js-example-basic-single" id="classe" th:field="*{famille.id}">
+					<select class="js-example-basic-single" id="famille" th:field="*{famille.id}">
 						<option th:each="famille : ${familles}" th:value="${famille.id}"
 								th:text="${famille.nom}"></option>
 					</select>
@@ -187,4 +188,25 @@
 </div>
 </body>
 <div th:replace="fragments :: footer"></div>
+<script th:inline="javascript">
+    var typesCompteur = /*[[${typesCompteur}]]*/ '';
+    doWork(document.getElementById('typeCompteur'));
+
+    function doWork(elem) {
+        var selected = elem.selectedOptions.item(0).value;
+        var type = typesCompteur.filter(function (typeCompteur) {
+            return typeCompteur === selected;
+        })[0];
+        if (type == 'H') {
+            document.getElementById('h').style.display = "block";
+            document.getElementById('km').style.display = "none";
+        } else if (type == 'KM') {
+            document.getElementById('h').style.display = "none";
+            document.getElementById('km').style.display = "block";
+        } else {
+            document.getElementById('h').style.display = "block";
+            document.getElementById('km').style.display = "block";
+        }
+    }
+</script>
 </html>
