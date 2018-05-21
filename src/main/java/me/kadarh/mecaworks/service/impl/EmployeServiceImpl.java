@@ -54,13 +54,12 @@ public class EmployeServiceImpl implements EmployeService {
 	public Employe update(Employe employe) {
 		log.info("Service= EmployeServiceImpl - calling methode update");
 		try {
-			Employe old = employeRepo.findById(employe.getId()).get();
+			Employe old = get(employe.getId());
 			if (employe.getNom() != null)
 				old.setNom(employe.getNom());
 			if (employe.getMetier() != null)
 				old.setMetier(employe.getMetier());
 			return employeRepo.save(old);
-
 		} catch (Exception e) {
 			log.debug("cannot update employe , failed operation");
 			throw new OperationFailedException("La modification du employe a echouée ", e);
@@ -112,7 +111,7 @@ public class EmployeServiceImpl implements EmployeService {
 		log.info("Service= EmployeServiceImpl - calling methode delete with id = " + id);
 		try {
 			employeRepo.deleteById(id);
-		} catch (NoSuchElementException e) {
+		} catch (Exception e) {
 			log.debug("cannot delete employe with id = " + id + " , failed operation");
 			throw new ResourceNotFoundException("La suppression de l'employe a echouée , l'employe n'existe pas", e);
 		}

@@ -13,8 +13,9 @@ import javax.validation.Valid;
 /**
  * PROJECT mecaworks
  *
- * @author kadarH
  * Created at 22/02/18
+ * @author kadarH
+ * @author salah3x
  */
 
 @Controller
@@ -74,7 +75,7 @@ public class ClasseController {
 
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable Long id) {
-        //classeService.delete(id);
+	    classeService.delete(id);
         return "redirect:/admin/classes/add#hrTable";
     }
 

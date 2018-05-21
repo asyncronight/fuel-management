@@ -1,10 +1,12 @@
 package me.kadarh.mecaworks.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import me.kadarh.mecaworks.domain.others.Famille;
+import me.kadarh.mecaworks.domain.others.Marque;
 import me.kadarh.mecaworks.domain.others.SousFamille;
-import me.kadarh.mecaworks.repo.others.FamilleRepo;
-import me.kadarh.mecaworks.repo.others.MarqueRepo;
 import me.kadarh.mecaworks.repo.others.SousFamilleRepo;
+import me.kadarh.mecaworks.service.FamilleService;
+import me.kadarh.mecaworks.service.MarqueService;
 import me.kadarh.mecaworks.service.SousFamilleService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
 import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
@@ -26,26 +28,27 @@ import java.util.NoSuchElementException;
 @Transactional
 public class SousFamilleServiceImpl implements SousFamilleService {
 
-	private SousFamilleRepo sousFamilleRepo;
-	private FamilleRepo familleRepo;
-	private MarqueRepo marqueRepo;
+	private final SousFamilleRepo sousFamilleRepo;
+	private final FamilleService familleService;
+	private final MarqueService marqueService;
 
-	public SousFamilleServiceImpl(SousFamilleRepo sousFamilleRepo, FamilleRepo familleRepo, MarqueRepo marqueRepo) {
+	public SousFamilleServiceImpl(SousFamilleRepo sousFamilleRepo, FamilleService familleService, MarqueService marqueService) {
 		this.sousFamilleRepo = sousFamilleRepo;
-		this.familleRepo = familleRepo;
-		this.marqueRepo = marqueRepo;
+		this.familleService = familleService;
+		this.marqueService = marqueService;
 	}
+
 
 	@Override
 	public SousFamille add(SousFamille sousFamille) {
 		log.info("Service= SousFamilleServiceImpl - calling methode add");
 		try {
-			sousFamille.setFamille(familleRepo.findById(sousFamille.getFamille().getId()).get());
-			sousFamille.setMarque(marqueRepo.findById(sousFamille.getFamille().getId()).get());
+			sousFamille.setFamille(familleService.get(sousFamille.getFamille().getId()));
+			sousFamille.setMarque(marqueService.get(sousFamille.getMarque().getId()));
 			return sousFamilleRepo.save(sousFamille);
-		} catch (NoSuchElementException e) {
-			log.debug("cannot find famille , failed operation");
-			throw new ResourceNotFoundException("L'ajout de la Sous-famille a echouée,famille introuvable ", e);
+		} catch (ResourceNotFoundException e) {
+			log.debug("cannot find famille or marque , failed operation");
+			throw new OperationFailedException("L'ajout de la Sous-famille a echouée,famille ou marque introuvable ", e);
 		} catch (Exception e) {
 			log.debug("cannot add SousFamille , failed operation");
 			throw new OperationFailedException("L'ajout de la Sous-famille a echouée ", e);
@@ -56,7 +59,7 @@ public class SousFamilleServiceImpl implements SousFamilleService {
 	public SousFamille update(SousFamille sousFamille) {
 		log.info("Service= SousFamilleServiceImpl - calling methode update");
 		try {
-			SousFamille old = sousFamilleRepo.findById(sousFamille.getId()).get();
+			SousFamille old = get(sousFamille.getId());
 			if (sousFamille.getNom() != null) {
 				old.setNom(sousFamille.getNom());
 			}
@@ -70,16 +73,19 @@ public class SousFamilleServiceImpl implements SousFamilleService {
 				old.setConsommationHMax(sousFamille.getConsommationHMax());
 			}
 			if (sousFamille.getMarque() != null)
-				old.setMarque(marqueRepo.findById(sousFamille.getMarque().getId()).get());
+				old.setMarque(marqueService.get(sousFamille.getMarque().getId()));
 
 			if (sousFamille.getTypeCompteur() != null) {
 				old.setTypeCompteur(sousFamille.getTypeCompteur());
 			}
 			if (sousFamille.getFamille() != null) {
-				old.setFamille(familleRepo.findById(sousFamille.getFamille().getId()).get());
+				old.setFamille(familleService.get(sousFamille.getFamille().getId()));
 			}
 			return sousFamilleRepo.save(old);
 
+		} catch (ResourceNotFoundException e) {
+			log.debug("cannot find famille or marque , failed operation");
+			throw new OperationFailedException("La modification de la Sous-famille a echouée,famille ou marque introuvable ", e);
 		} catch (Exception e) {
 			log.debug("cannot update Sousfamille , failed operation");
 			throw new OperationFailedException("La modification de la Sousfamille a echouée ", e);
@@ -98,13 +104,14 @@ public class SousFamilleServiceImpl implements SousFamilleService {
 				//creating example
 				SousFamille sousFamille = new SousFamille();
 				sousFamille.setNom(search);
-				if (marqueRepo.findByNom(search).isPresent()) {
-					sousFamille.setMarque(marqueRepo.findByNom(search).get());
-				}
-				if (familleRepo.findByNom(search).isPresent()) {
-					sousFamille.setFamille(familleRepo.findByNom(search).get());
 
-				}
+				Famille famille = new Famille();
+				famille.setNom(search);
+				Marque marque = new Marque();
+				marque.setNom(search);
+
+				sousFamille.setFamille(famille);
+				sousFamille.setMarque(marque);
 				//creating matcher
 				ExampleMatcher matcher = ExampleMatcher.matchingAny()
 						.withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)

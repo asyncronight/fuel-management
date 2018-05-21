@@ -55,7 +55,7 @@ public class ClasseServiceImpl implements ClasseService {
     public Classe update(Classe classe) {
         log.info("Service= ClasseServiceImpl - calling methode update");
         try {
-            Classe old = classeRepo.findById(classe.getId()).get();
+	        Classe old = get(classe.getId());
             if (classe.getNom() != null) {
                 old.setNom(classe.getNom());
             }

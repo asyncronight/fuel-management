@@ -3,13 +3,11 @@ package me.kadarh.mecaworks.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.others.Engin;
 import me.kadarh.mecaworks.domain.others.Groupe;
-import me.kadarh.mecaworks.domain.others.Marque;
 import me.kadarh.mecaworks.domain.others.SousFamille;
 import me.kadarh.mecaworks.repo.others.EnginRepo;
-import me.kadarh.mecaworks.repo.others.GroupeRepo;
-import me.kadarh.mecaworks.repo.others.MarqueRepo;
-import me.kadarh.mecaworks.repo.others.SousFamilleRepo;
 import me.kadarh.mecaworks.service.EnginService;
+import me.kadarh.mecaworks.service.GroupeService;
+import me.kadarh.mecaworks.service.SousFamilleService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
 import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
 import org.springframework.data.domain.Example;
@@ -31,15 +29,15 @@ import java.util.NoSuchElementException;
 @Slf4j
 public class EnginServiceImpl implements EnginService {
 
-	private EnginRepo enginRepo;
-	private SousFamilleRepo sousFamilleRepo;
-	private GroupeRepo groupeRepo;
+	private final EnginRepo enginRepo;
+	private final SousFamilleService sousFamilleService;
+	private final GroupeService groupeService;
 
-    public EnginServiceImpl(EnginRepo enginRepo, SousFamilleRepo sousFamilleRepo, GroupeRepo groupeRepo, MarqueRepo marqueRepo) {
-        this.enginRepo = enginRepo;
-        this.sousFamilleRepo = sousFamilleRepo;
-        this.groupeRepo = groupeRepo;
-    }
+	public EnginServiceImpl(EnginRepo enginRepo, SousFamilleService sousFamilleService, GroupeService groupeService) {
+		this.enginRepo = enginRepo;
+		this.sousFamilleService = sousFamilleService;
+		this.groupeService = groupeService;
+	}
 
 	/**
 	 * @param engin to add
@@ -49,9 +47,12 @@ public class EnginServiceImpl implements EnginService {
 	public Engin add(Engin engin) {
 		log.info("Service = EnginServiceImpl - calling methode add");
 		try {
-            engin.setGroupe(groupeRepo.findById(engin.getGroupe().getId()).get());
-            engin.setSousFamille(sousFamilleRepo.findById(engin.getSousFamille().getId()).get());
-            return enginRepo.save(engin);
+			engin.setGroupe(groupeService.get(engin.getGroupe().getId()));
+			engin.setSousFamille(sousFamilleService.get(engin.getSousFamille().getId()));
+			return enginRepo.save(engin);
+		} catch (ResourceNotFoundException e) {
+			log.debug("cannot find group or sousFamille , failed operation");
+			throw new OperationFailedException("L'ajout de l'engin a echouée,sous famille ou groupe introuvable ", e);
 		} catch (Exception e) {
 			log.debug("cannot add engin , failed operation");
 			throw new OperationFailedException("L'ajout de l'engin a echouée ", e);
@@ -66,7 +67,7 @@ public class EnginServiceImpl implements EnginService {
 	public Engin update(Engin engin) {
 		log.info("Service = EnginServiceImpl - calling methode update");
 		try {
-			Engin old = enginRepo.findById(engin.getId()).get();
+			Engin old = get(engin.getId());
 			if (engin.getCompteurInitialKm() != null)
 				old.setCompteurInitialKm(engin.getCompteurInitialKm());
             if (engin.getCompteurInitialH() != null)
@@ -76,13 +77,16 @@ public class EnginServiceImpl implements EnginService {
 			if (engin.getCode() != null)
 				old.setCode(engin.getCode());
             if (engin.getGroupe() != null)
-                old.setGroupe(groupeRepo.findById(engin.getGroupe().getId()).get());
+	            old.setGroupe(groupeService.get(engin.getGroupe().getId()));
             if (engin.getObjectif() != null)
                 old.setObjectif(engin.getObjectif());
             if (engin.getSousFamille() != null)
-                old.setSousFamille(sousFamilleRepo.findById(engin.getSousFamille().getId()).get());
+	            old.setSousFamille(sousFamilleService.get(engin.getSousFamille().getId()));
             return enginRepo.save(old);
-        } catch (Exception e) {
+		} catch (ResourceNotFoundException e) {
+			log.debug("cannot find group or sousFamille , failed operation");
+			throw new OperationFailedException("La modification de l'engin a echouée,sous famille ou groupe introuvable ", e);
+		} catch (Exception e) {
 			log.debug("cannot update engin , failed operation");
 			throw new OperationFailedException("La modification de l'engin a echouée ", e);
 		}
@@ -121,10 +125,7 @@ public class EnginServiceImpl implements EnginService {
                 //groupe
                 Groupe groupe = new Groupe();
                 groupe.setNom(search);
-                //marque
-                Marque marque = new Marque();
-                marque.setNom(search);
-                //setting groupe , marque , soufamille to engin
+	            //setting groupe , soufamille to engin
                 engin.setGroupe(groupe);
                 engin.setSousFamille(sousFamille);
                 //creating matcher

@@ -61,7 +61,7 @@ public class ChantierServiceImpl implements ChantierService {
 	public Chantier update(Chantier chantier) {
 		log.info("Service= ChantierServiceImpl - calling methode update");
 		try {
-			Chantier old = chantierRepo.findById(chantier.getId()).get();
+			Chantier old = get(chantier.getId());
 			if (chantier.getNom() != null) {
 				old.setNom(chantier.getNom());
 			}
@@ -153,8 +153,7 @@ public class ChantierServiceImpl implements ChantierService {
 	public void delete(Long id) {
 		log.info("Service= ChantierServiceImpl - calling methode delete");
 		try {
-			throw new OperationFailedException("La suppression du chantier a echouée ");
-			//chantierRepo.deleteById(id);
+			chantierRepo.deleteById(id);
 		} catch (Exception e) {
 			log.debug("cannot delete chantier , failed operation");
 			throw new OperationFailedException("La suppression du chantier a echouée ", e);

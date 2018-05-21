@@ -44,7 +44,11 @@ public class FamilleServiceImpl implements FamilleService {
 	public Famille add(Famille famille) {
 		log.info("Service= FamilleServiceImpl - calling methode add");
 		try {
+			famille.setClasse(classeService.get(famille.getClasse().getId()));
 			return familleRepo.save(famille);
+		} catch (ResourceNotFoundException e) {
+			log.debug("cannot add famille , classe not found");
+			throw new OperationFailedException("L'ajout de la famille a echouée ", e);
 		} catch (Exception e) {
 			log.debug("cannot add famille , failed operation");
 			throw new OperationFailedException("L'ajout de la famille a echouée ", e);
@@ -59,7 +63,7 @@ public class FamilleServiceImpl implements FamilleService {
 	public Famille update(Famille famille) {
 		log.info("Service= FamilleServiceImpl - calling methode update");
 		try {
-			Famille old = familleRepo.findById(famille.getId()).get();
+			Famille old = get(famille.getId());
 			if (famille.getNom() != null) {
 				old.setNom(famille.getNom());
 			}
@@ -67,7 +71,6 @@ public class FamilleServiceImpl implements FamilleService {
 				old.setClasse(famille.getClasse());
 			}
 			return familleRepo.save(old);
-
 		} catch (Exception e) {
 			log.debug("cannot update famille , failed operation");
 			throw new OperationFailedException("La modification de la famille a echouée ", e);
@@ -93,9 +96,6 @@ public class FamilleServiceImpl implements FamilleService {
 				//creating example
 				Famille famille = new Famille();
 				famille.setNom(search);
-				if (classeService.findByNom(search).isPresent()) {
-					famille.setClasse(classeService.findByNom(search).get());
-				}
 				Classe classe = new Classe();
 				classe.setNom(search);
 				famille.setClasse(classe);

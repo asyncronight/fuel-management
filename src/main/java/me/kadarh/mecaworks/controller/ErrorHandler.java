@@ -11,6 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Global exception handling
+ *
+ * @author salah3x
+ */
 @ControllerAdvice
 @Slf4j
 public class ErrorHandler {
