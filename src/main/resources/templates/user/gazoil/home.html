@@ -13,7 +13,7 @@
             </button>
 	        <select class="custom-select float-right col-md-3 col-lg-3 col-sm-6 text-center">
 		        <option th:text="${now}"></option>
-		        <option>--------------------</option>
+		        <option disabled="disabled">--------------------</option>
 		        <option th:each="month : ${months}" th:text="${month.value}"
 		                th:value="${month.key}" th:onclick="|navigate('${month.key}')|"></option>
 	        </select>
