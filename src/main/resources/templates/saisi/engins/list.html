@@ -36,6 +36,13 @@
 								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
 							</a>
 						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('engin.code')?.descending}">
+							[[#{bonEngin.engin}]]
+							<a th:href="'?page=0&sort=engin.code'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
 						<th th:with="desc=${page.getSort().getOrderFor('code')?.descending}">
 							[[#{bonEngin.code}]]
 							<a th:href="'?page=0&sort=code'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
@@ -53,13 +60,6 @@
 						<th th:with="desc=${page.getSort().getOrderFor('chantierTravail.nom')?.descending}">
 							[[#{bonEngin.chantierTravail}]]
 							<a th:href="'?page=0&sort=chantierTravail.nom'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
-								<i class="material-icons text-light"
-								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
-							</a>
-						</th>
-                        <th th:with="desc=${page.getSort().getOrderFor('engin.code')?.descending}">
-							[[#{bonEngin.engin}]]
-                            <a th:href="'?page=0&sort=engin.code'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
 								<i class="material-icons text-light"
 								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
 							</a>
@@ -168,10 +168,10 @@
 					<tbody>
 					<tr th:each="bon : ${page.content}">
 						<td th:text="${bon.date}"></td>
+						<td th:text="${bon.engin?.code}"></td>
 						<td th:text="${bon.code}"></td>
 						<td th:text="${bon.chantierGazoil?.nom}"></td>
 						<td th:text="${bon.chantierTravail?.nom}"></td>
-                        <td th:text="${bon.engin?.code}"></td>
 						<td th:text="${bon.pompiste?.nom}"></td>
 						<td th:text="${bon.chauffeur?.nom}"></td>
 						<td th:text="${bon.carburant}"></td>
