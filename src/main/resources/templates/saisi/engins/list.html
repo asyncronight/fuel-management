@@ -162,6 +162,13 @@
 								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
 							</a>
 						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('nbrHeures')?.descending}">
+							[[#{bonEngin.nbrHeures}]]
+							<a th:href="'?page=0&sort=nbrHeures'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
 						<th></th>
 					</tr>
 					</thead>
@@ -192,6 +199,7 @@
 						<td th:text="${bon.compteurAbsoluH}"></td>
 						<td th:text="${bon.consommationKm}"></td>
 						<td th:text="${bon.consommationH}"></td>
+						<td th:text="${bon.nbrHeures}"></td>
 						<td class="btn-group">
 							<button class="btn bmd-btn-icon dropdown-toggle" type="button" id="ex3"
 									data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
