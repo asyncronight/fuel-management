@@ -32,44 +32,4 @@ public class ChantierBatch extends AbstractDomain {
         this.quantiteLocation = quantiteLocation;
         this.chantier = chantier;
     }
-
-    public int getMois() {
-        return mois;
-    }
-
-    public void setMois(int mois) {
-        this.mois = mois;
-    }
-
-    public int getAnnee() {
-        return annee;
-    }
-
-    public void setAnnee(int annee) {
-        this.annee = annee;
-    }
-
-    public Long getQuantite() {
-        return quantite;
-    }
-
-    public void setQuantite(Long quantite) {
-        this.quantite = quantite;
-    }
-
-    public Long getQuantiteLocation() {
-        return quantiteLocation;
-    }
-
-    public void setQuantiteLocation(Long quantiteLocation) {
-        this.quantiteLocation = quantiteLocation;
-    }
-
-    public Chantier getChantier() {
-        return chantier;
-    }
-
-    public void setChantier(Chantier chantier) {
-        this.chantier = chantier;
-    }
 }
