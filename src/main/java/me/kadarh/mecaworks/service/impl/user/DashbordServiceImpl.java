@@ -24,13 +24,27 @@ import java.util.Map;
 public class DashbordServiceImpl implements DashbordService {
 
     private ChantierBatchRepo chantierBatchRepo;
+    private UserCalculService userCalculService;
 
-    public DashbordServiceImpl(ChantierBatchRepo chantierBatchRepo) {
+    public DashbordServiceImpl(ChantierBatchRepo chantierBatchRepo, UserCalculService userCalculService) {
         this.chantierBatchRepo = chantierBatchRepo;
+        this.userCalculService = userCalculService;
     }
 
     @Override
     public Dashbord getDashbord(int mois, int year) {
+        return addThisMonthToDashbord(getDashbordFromBatch(mois, year), mois, year);
+    }
+
+    private Dashbord addThisMonthToDashbord(Dashbord dashbord, int mois, int year) {
+        dashbord.getMap().put(mois + "/" + year, new Quantite(dashbord.getChantierBatch().stream().map(ChantierBatch::getQuantite).count(),
+                dashbord.getChantierBatch().stream().map(ChantierBatch::getQuantite).count()));
+
+        dashbord.setChantierBatch(userCalculService.getListChantierWithQuantities(mois, year));
+        return dashbord;
+    }
+
+    private Dashbord getDashbordFromBatch(int mois, int year) {
         Dashbord dashbord = new Dashbord();
         Long somQ, somQL;
         int month, yeaar;
@@ -39,7 +53,7 @@ public class DashbordServiceImpl implements DashbordService {
         dashbord.setChantierBatch(chantierBatches);
         LocalDate d = LocalDate.of(year, mois, 1);
         Quantite quantite = null;
-        for (int i = 0; i < 12; i++) {
+        for (int i = 1; i <= 12; i++) {
             month = d.minusMonths(i).getMonthValue();
             yeaar = d.minusMonths(i).getYear();
             somQ = 0L;
@@ -55,4 +69,6 @@ public class DashbordServiceImpl implements DashbordService {
         dashbord.setMap(map);
         return dashbord;
     }
+
+
 }
