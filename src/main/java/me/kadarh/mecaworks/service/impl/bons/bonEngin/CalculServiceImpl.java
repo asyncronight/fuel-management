@@ -4,9 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.bons.BonEngin;
 import me.kadarh.mecaworks.domain.others.TypeCompteur;
 import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
-import me.kadarh.mecaworks.repo.others.ChantierRepo;
-import me.kadarh.mecaworks.repo.others.EmployeRepo;
-import me.kadarh.mecaworks.repo.others.EnginRepo;
+import me.kadarh.mecaworks.service.ChantierService;
+import me.kadarh.mecaworks.service.EmployeService;
+import me.kadarh.mecaworks.service.EnginService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,27 +24,28 @@ import java.util.List;
 public class CalculServiceImpl {
 
     private final BonEnginRepo bonEnginRepo;
-    private final EnginRepo enginRepo;
-    private final ChantierRepo chantierRepo;
-    private final EmployeRepo employeRepo;
+    private final EnginService enginService;
+    private final ChantierService chantierService;
+    private final EmployeService employeService;
     private PersistServiceImpl persistService;
 
-    public CalculServiceImpl(BonEnginRepo bonEnginRepo, EnginRepo enginRepo, ChantierRepo chantierRepo, EmployeRepo employeRepo, PersistServiceImpl persistService) {
+    public CalculServiceImpl(BonEnginRepo bonEnginRepo, EnginService enginService, ChantierService chantierService, EmployeService employeService, PersistServiceImpl persistService) {
         this.bonEnginRepo = bonEnginRepo;
-        this.enginRepo = enginRepo;
-        this.chantierRepo = chantierRepo;
-        this.employeRepo = employeRepo;
+        this.enginService = enginService;
+        this.chantierService = chantierService;
+        this.employeService = employeService;
         this.persistService = persistService;
     }
 
     public BonEngin fillBon(BonEngin bon) {
         try {
-            bon.setEngin(enginRepo.findById(bon.getEngin().getId()).get());
-            bon.setChauffeur(employeRepo.findById(bon.getChauffeur().getId()).get());
-            bon.setPompiste(employeRepo.findById(bon.getPompiste().getId()).get());
-            bon.setChantierTravail(chantierRepo.findById(bon.getChantierTravail().getId()).get());
-            bon.setChantierGazoil(chantierRepo.findById(bon.getChantierGazoil().getId()).get());
+            bon.setEngin(enginService.get(bon.getEngin().getId()));
+            bon.setChauffeur(employeService.get(bon.getChauffeur().getId()));
+            bon.setPompiste(employeService.get(bon.getPompiste().getId()));
+            bon.setChantierTravail(chantierService.get(bon.getChantierTravail().getId()));
+            bon.setChantierGazoil(chantierService.get(bon.getChantierGazoil().getId()));
             calculCompteursAbsolu(bon, persistService.getLastBonEngin(bon.getEngin()));
+            bon.setChargeHoraire(bon.getNbrHeures() * bon.getEngin().getPrixLocationJournalier().longValue() / bon.getEngin().getObjectif());
             log.info("Compteur Absolu H = " + bon.getCompteurAbsoluH());
             log.info("Compteur Absolu Km = " + bon.getCompteurAbsoluKm());
             log.info("Nombre Heure travaillé  = " + bon.getNbrHeures());
@@ -61,14 +62,7 @@ public class CalculServiceImpl {
         BonEngin bonEngin1 = lastBon;
         if (typeCompteur.equals(TypeCompteur.H.name())) {
             if (bonEngin1 != null) {
-                if (bonEngin.getCompteurHenPanne()) {
-                    bonEngin.setCompteurH(bonEngin1.getCompteurH());
-                    bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH());
-                    bonEngin.setNbrHeures(0L);
-                } else {
-                    bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH() + bonEngin.getCompteurH() - bonEngin1.getCompteurH());
-                    bonEngin.setNbrHeures(bonEngin.getCompteurH() - bonEngin1.getCompteurH());
-                }
+                bonEngin = verifyBon_ifCompteurH_EnPanne(bonEngin, bonEngin1);
                 setCompteurAbsoluH_ifCmpBonInfCmptLastBon(bonEngin, bonEngin1);
             } else {
                 bonEngin.setCompteurAbsoluH(bonEngin.getCompteurH());
@@ -88,14 +82,7 @@ public class CalculServiceImpl {
                 bonEngin.setCompteurAbsoluKm(bonEngin.getCompteurKm());
         } else if (typeCompteur.equals(TypeCompteur.KM_H.name())) {
             if (bonEngin1 != null) {
-                if (bonEngin.getCompteurHenPanne()) {
-                    bonEngin.setCompteurH(bonEngin1.getCompteurH());
-                    bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH());
-                    bonEngin.setNbrHeures(0L);
-                } else {
-                    bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH() + bonEngin.getCompteurH() - bonEngin1.getCompteurH());
-                    bonEngin.setNbrHeures(bonEngin.getCompteurH() - bonEngin1.getCompteurH());
-                }
+                bonEngin = verifyBon_ifCompteurH_EnPanne(bonEngin, bonEngin1);
                 setCompteurAbsoluH_ifCmpBonInfCmptLastBon(bonEngin, bonEngin1);
 
                 if (bonEngin.getCompteurKmenPanne()) {
@@ -114,6 +101,18 @@ public class CalculServiceImpl {
         log.info("--- > Calcul compteur AbsoluKm = " + bonEngin.getCompteurKm());
         log.info("--- > Calcul compteur AbsoluH = " + bonEngin.getCompteurH());
         log.info("------------------------------------------ Compteur absolu calculated ------");
+    }
+
+    private BonEngin verifyBon_ifCompteurH_EnPanne(BonEngin bonEngin, BonEngin bonEngin1) {
+        if (bonEngin.getCompteurHenPanne()) {
+            bonEngin.setCompteurH(bonEngin1.getCompteurH());
+            bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH());
+            bonEngin.setNbrHeures(0L);
+        } else {
+            bonEngin.setCompteurAbsoluH(bonEngin1.getCompteurAbsoluH() + bonEngin.getCompteurH() - bonEngin1.getCompteurH());
+            bonEngin.setNbrHeures(bonEngin.getCompteurH() - bonEngin1.getCompteurH());
+        }
+        return bonEngin;
     }
 
     private void setCompteurAbsoluH_ifCmpBonInfCmptLastBon(BonEngin bonEngin, BonEngin bonEngin1) {

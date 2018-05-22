@@ -19,17 +19,22 @@ public class ChantierBatch extends AbstractDomain {
     private int annee;
     private Long quantite = 0L;
     private Long quantiteLocation = 0L;
+    private Long chargeLocataire = 0L;
+    private Long chargeLocataireExterne = 0L;
+
     @ManyToOne
     private Chantier chantier;
 
     public ChantierBatch() {
     }
 
-    public ChantierBatch(int mois, int annee, Long quantite, Long quantiteLocation, Chantier chantier) {
+    public ChantierBatch(int mois, int annee, Long quantite, Long quantiteLocation, Long chargeLocataire, Long chargeLocataireExterne, Chantier chantier) {
         this.mois = mois;
         this.annee = annee;
         this.quantite = quantite;
         this.quantiteLocation = quantiteLocation;
+        this.chargeLocataire = chargeLocataire;
+        this.chargeLocataireExterne = chargeLocataireExterne;
         this.chantier = chantier;
     }
 }
