@@ -11,6 +11,12 @@
                     data-target="#side" style="margin-top: 10px">
                 <i class="material-icons text-light">menu</i>
             </button>
+	        <select class="custom-select float-right col-md-3 col-lg-3 col-sm-6 text-center">
+		        <option th:text="${now}"></option>
+		        <option disabled="disabled">--------------------</option>
+		        <option th:each="month : ${months}" th:text="${month.value}"
+		                th:value="${month.key}" th:onclick="|navigate('${month.key}')|"></option>
+	        </select>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
                 <li class="breadcrumb-item"><a th:href="@{'/user'}" th:text="#{user}"></a></li>
@@ -26,6 +32,10 @@
 <div th:replace="fragments :: footer"></div>
 <script th:inline="javascript">
     var data = /*[[${data}]]*/ '';
+
+    function navigate(date) {
+        window.location.href = '?date=' + date;
+    }
 </script>
 <script th:src="@{/js/user/gazoilHome.js}"></script>
 </body>
