@@ -8,6 +8,7 @@ import me.kadarh.mecaworks.domain.others.*;
 import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
 import me.kadarh.mecaworks.repo.bons.BonFournisseurRepo;
 import me.kadarh.mecaworks.repo.bons.BonLivraisonRepo;
+import me.kadarh.mecaworks.repo.user.BatchFaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
@@ -51,6 +52,8 @@ public class DataFakerO implements CommandLineRunner {
 	BonLivraisonRepo bonLivraisonRepo;
 	@Autowired
 	BonFournisseurRepo bonFournisseurRepo;
+    @Autowired
+    BatchFaker batchFaker;
 
 	@Override
 	public void run(String... strings) {
@@ -67,6 +70,7 @@ public class DataFakerO implements CommandLineRunner {
         loadBonEngin(30);
 		loadBonLivraison(30);
 		loadBonFournisseur(30);
+        batchFaker.insertBatchChantier();
     }
 
 	private void loadBonFournisseur(int n) {
