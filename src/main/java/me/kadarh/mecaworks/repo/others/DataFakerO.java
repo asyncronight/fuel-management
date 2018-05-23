@@ -114,8 +114,11 @@ public class DataFakerO implements CommandLineRunner {
 			bonEngin.setConsommationH(i * 1500f);
 			bonEngin.setCompteurAbsoluH(i + 500L);
 			bonEngin.setCompteurAbsoluKm(i + 600L);
-			bonEngin.setEngin(enginRepo.getOne(1L));
-			bonEngin.setPompiste(employeRepo.getOne(1L));
+            bonEngin.setNbrHeures(i + 10L);
+            bonEngin.setEngin(enginRepo.getOne(1L));
+            bonEngin.setChargeHoraire(bonEngin.getNbrHeures() * bonEngin.getEngin().getPrixLocationJournalier() / bonEngin.getEngin().getObjectif());
+            bonEngin.setConsommationPrevu(bonEngin.getEngin().getConsommationMoyenne() * bonEngin.getNbrHeures());
+            bonEngin.setPompiste(employeRepo.getOne(1L));
 			bonEngin.setChauffeur(employeRepo.getOne(2L));
 			bonEngin.setChantierGazoil(chantierRepo.getOne(1L));
 			bonEngin.setChantierTravail(chantierRepo.getOne(2L));
@@ -241,15 +244,22 @@ public class DataFakerO implements CommandLineRunner {
 			engin.setNumeroSerie("TPF" + i + "zz" + i);
 			engin.setGroupe(groupe);
             engin.setSousFamille(sousFamille);
-			if (i % 3 == 0) {
+            engin.setConsommationMoyenne(32.4f);
+            if (i % 3 == 0) {
                 engin.setCompteurInitialH(1000 + (i * 10));
                 engin.setCompteurInitialKm(1000 + (i * 10));
-			} else if (i % 3 == 1) {
+                engin.setObjectif(11);
+                engin.setPrixLocationJournalier(1000 + i * 10);
+            } else if (i % 3 == 1) {
                 engin.setCompteurInitialH(1000 + (i * 10));
+                engin.setObjectif(9);
+                engin.setPrixLocationJournalier(1500 + i * 10);
             } else if (i % 3 == 2) {
 				engin.setCompteurInitialKm(1000 + (i * 10));
-			}
-			//Persisting
+                engin.setObjectif(12);
+                engin.setPrixLocationJournalier(2000 + i * 10);
+            }
+            //Persisting
 			enginRepo.save(engin);
 		}
 		log.info(n + " Engin Loaded *****");

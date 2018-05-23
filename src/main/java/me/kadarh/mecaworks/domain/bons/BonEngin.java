@@ -70,6 +70,8 @@ public class BonEngin extends AbstractDomain {
     private Float consommationKm = 0f;
     private Float consommationH = 0f;
     private Long nbrHeures = 0L;
+    private Float consommationPrevu = 0f;
     private Long chargeHoraire = 0L;
+
 
 }

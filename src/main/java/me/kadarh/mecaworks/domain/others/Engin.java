@@ -36,4 +36,6 @@ public class Engin extends AbstractDomain {
     @JsonIgnore
 	private Groupe groupe;
 
+	private Float consommationMoyenne;
+
 }
