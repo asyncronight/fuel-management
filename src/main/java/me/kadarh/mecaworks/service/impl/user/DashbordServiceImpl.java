@@ -41,7 +41,10 @@ public class DashbordServiceImpl implements DashbordService {
         else
             dashbord.setChantierBatch(chantierBatchRepo.findAllByMoisAndAnnee(mois, year));
         dashbord.getMap().put(mois + "/" + year, new Quantite(dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getQuantite).sum(),
-                dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getQuantiteLocation).sum()));
+                dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getQuantiteLocation).sum(),
+                dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getChargeLocataire).sum(),
+                dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getChargeLocataireExterne).sum(),
+                dashbord.getChantierBatch().stream().mapToDouble(ChantierBatch::getConsommationPrevue).sum()));
         return dashbord;
     }
 
@@ -50,14 +53,16 @@ public class DashbordServiceImpl implements DashbordService {
         int month, yeaar;
         LinkedHashMap<String, Quantite> map = new LinkedHashMap<>();
         List<ChantierBatch> chantierBatches = chantierBatchRepo.findAllByMoisAndAnnee(mois, year);
-        dashbord.setChantierBatch(chantierBatches);
         LocalDate d = LocalDate.of(year, mois, 1);
         for (int i = 12; i >= 1; i--) {
             month = d.minusMonths(i).getMonthValue();
             yeaar = d.minusMonths(i).getYear();
             chantierBatches = chantierBatchRepo.findAllByMoisAndAnnee(month, yeaar);
             map.put(month + "/" + yeaar, new Quantite(chantierBatches.stream().mapToLong(ChantierBatch::getQuantite).sum(),
-                    chantierBatches.stream().mapToLong(ChantierBatch::getQuantiteLocation).sum()));
+                    chantierBatches.stream().mapToLong(ChantierBatch::getQuantiteLocation).sum(),
+                    chantierBatches.stream().mapToLong(ChantierBatch::getChargeLocataire).sum(),
+                    chantierBatches.stream().mapToLong(ChantierBatch::getChargeLocataireExterne).sum(),
+                    chantierBatches.stream().mapToDouble(ChantierBatch::getConsommationPrevue).sum()));
         }
         dashbord.setMap(map);
         return dashbord;

@@ -109,6 +109,7 @@ public class DataFakerO implements CommandLineRunner {
 			bonEngin.setCompteurH((long) i);
 			bonEngin.setCompteurKmenPanne(i % 2 == 1);
 			bonEngin.setCompteurKm((long) i);
+			bonEngin.setQuantite(100 + i * 2);
 			bonEngin.setPlein(true);
 			bonEngin.setConsommationKm(i * 100f);
 			bonEngin.setConsommationH(i * 1500f);
@@ -121,7 +122,12 @@ public class DataFakerO implements CommandLineRunner {
             bonEngin.setPompiste(employeRepo.getOne(1L));
 			bonEngin.setChauffeur(employeRepo.getOne(2L));
 			bonEngin.setChantierGazoil(chantierRepo.getOne(1L));
-			bonEngin.setChantierTravail(chantierRepo.getOne(2L));
+			bonEngin.setChantierTravail(chantierRepo.getOne(1L));
+
+			if (i % 2 == 0)
+				bonEngin.setChantierTravail(chantierRepo.getOne(2L));
+			if (i % 3 == 0)
+				bonEngin.setChantierTravail(chantierRepo.getOne(3L));
 			bonEnginRepo.save(bonEngin);
 		}
 	}

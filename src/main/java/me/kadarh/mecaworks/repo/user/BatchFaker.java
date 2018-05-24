@@ -28,7 +28,7 @@ public class BatchFaker {
         log.info("Preparing to insert fake data ( chantier_batch ) ...");
         ChantierBatch chantierBatch;
         for (Chantier c : chantierService.getList()) {
-            for (int i = 1; i <= 6; i++) {
+            for (int i = 1; i < 5; i++) {
                 chantierBatch = new ChantierBatch(i, 2018, 1050 + i * 2 + 1L, 453 * i / 2 + 1L, 20 + i * 2 + 1L, 11 * i / 2 + 1L, 11 * i / 2 + 1D, c);
                 chantierBatchRepo.save(chantierBatch);
             }
