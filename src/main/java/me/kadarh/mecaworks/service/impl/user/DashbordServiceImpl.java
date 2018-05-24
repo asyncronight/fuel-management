@@ -32,10 +32,13 @@ public class DashbordServiceImpl implements DashbordService {
 
     @Override
     public Dashbord getDashbord(int mois, int year) {
+        log.info("calling method getDashbord(month,year) in DashbordServiceImpl -- Filling the Dashbord Object .. ");
         return addThisMonthToDashbord(getDashbordFromBatch(mois, year), mois, year);
     }
 
     private Dashbord addThisMonthToDashbord(Dashbord dashbord, int mois, int year) {
+        log.info("calling method addThisMonthToDashbord() in DashbordServiceImpl -- ");
+        log.info("--> Add data for this month ");
         if (mois == LocalDate.now().getMonthValue() && year == LocalDate.now().getYear())
             dashbord.setChantierBatch(userCalculService.getListChantierWithQuantities(mois, year));
         else
@@ -45,10 +48,13 @@ public class DashbordServiceImpl implements DashbordService {
                 dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getChargeLocataire).sum(),
                 dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getChargeLocataireExterne).sum(),
                 dashbord.getChantierBatch().stream().mapToDouble(ChantierBatch::getConsommationPrevue).sum()));
+        log.info("--> Object Dashbored filled  ");
         return dashbord;
     }
 
     private Dashbord getDashbordFromBatch(int mois, int year) {
+        log.info("calling method getDashbordFromBatch() in DashbordServiceImpl -- ");
+        log.info("--> Add data for 12 last month [ one year ago ] ");
         Dashbord dashbord = new Dashbord();
         int month, yeaar;
         LinkedHashMap<String, Quantite> map = new LinkedHashMap<>();

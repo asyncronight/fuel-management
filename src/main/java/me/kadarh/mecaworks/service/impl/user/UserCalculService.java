@@ -1,5 +1,6 @@
 package me.kadarh.mecaworks.service.impl.user;
 
+import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.bons.BonEngin;
 import me.kadarh.mecaworks.domain.others.Chantier;
 import me.kadarh.mecaworks.domain.user.ChantierBatch;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@Slf4j
 public class UserCalculService {
 
     private final BonEnginRepo bonEnginRepo;
@@ -32,6 +34,7 @@ public class UserCalculService {
     }
 
     public List<ChantierBatch> getListChantierWithQuantities(int month, int year) {
+        log.info("calling method getListChantierWithQuantities(month,year) in UserCalculService -- ");
         List<ChantierBatch> list = new ArrayList<>();
         ChantierBatch chantierBatch;
         List<BonEngin> bonEngins = bonEnginRepo.findAllBetweenDates(LocalDate.of(year, Month.of(month).getValue(), 1), LocalDate.of(year, Month.of(month).plus(1).getValue(), 1));
@@ -50,6 +53,7 @@ public class UserCalculService {
             if (chantierBatch.getConsommationPrevue() == null) chantierBatch.setConsommationPrevue(0D);
             list.add(chantierBatch);
         }
+        log.info("--> List of Chantier_Batch contains " + list.size() + " elements");
         return list;
     }
 }
