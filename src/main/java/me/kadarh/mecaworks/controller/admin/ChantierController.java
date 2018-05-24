@@ -23,6 +23,7 @@ import javax.validation.Valid;
 public class ChantierController {
 
     private final ChantierService chantierService;
+    private static final String PATH = "admin/chantiers";
 
     public ChantierController(ChantierService chantierService) {
         this.chantierService = chantierService;
@@ -32,13 +33,13 @@ public class ChantierController {
     public String list(Model model, Pageable pageable, @RequestParam(defaultValue = "") String search) {
         model.addAttribute("page", chantierService.chantierList(pageable, search));
         model.addAttribute("search", search);
-        return "admin/chantiers/list";
+        return PATH + "/list";
     }
 
     @GetMapping("/add")
     public String add(Model model) {
         model.addAttribute("chantier", new Chantier());
-        return "admin/chantiers/add";
+        return PATH + "/add";
     }
 
     @PostMapping("/add")
@@ -47,14 +48,14 @@ public class ChantierController {
             return "admin/chantiers/add";
         }
         chantierService.add(chantier);
-        return "redirect:/admin/chantiers";
+        return "redirect:/" + PATH;
     }
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable Long id) {
         model.addAttribute("chantier", chantierService.get(id));
         model.addAttribute("edit", true);
-        return "admin/chantiers/add";
+        return PATH + "/add";
     }
 
     @PostMapping("/{id}/edit")
@@ -64,13 +65,13 @@ public class ChantierController {
             return "admin/chantiers/add";
         }
         chantierService.update(chantier);
-        return "redirect:/admin/chantiers";
+        return "redirect:/" + PATH;
     }
 
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable Long id) {
         chantierService.delete(id);
-        return "redirect:/admin/chantiers";
+        return "redirect:/" + PATH;
     }
 
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -43,11 +44,12 @@ public class DashbordServiceImpl implements DashbordService {
             dashbord.setChantierBatch(userCalculService.getListChantierWithQuantities(mois, year));
         else
             dashbord.setChantierBatch(chantierBatchRepo.findAllByMoisAndAnnee(mois, year));
-        dashbord.getMap().put(mois + "/" + year, new Quantite(dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getQuantite).sum(),
+        dashbord.getQuantites().add(new Quantite(mois + "/" + year, dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getQuantite).sum(),
                 dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getQuantiteLocation).sum(),
                 dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getChargeLocataire).sum(),
                 dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getChargeLocataireExterne).sum(),
                 dashbord.getChantierBatch().stream().mapToDouble(ChantierBatch::getConsommationPrevue).sum()));
+
         log.info("--> Object Dashbored filled  ");
         return dashbord;
     }
@@ -56,6 +58,8 @@ public class DashbordServiceImpl implements DashbordService {
         log.info("calling method getDashbordFromBatch() in DashbordServiceImpl -- ");
         log.info("--> Add data for 12 last month [ one year ago ] ");
         Dashbord dashbord = new Dashbord();
+        Quantite quantite = new Quantite();
+        List<Quantite> quantites = new ArrayList<>();
         int month, yeaar;
         LinkedHashMap<String, Quantite> map = new LinkedHashMap<>();
         List<ChantierBatch> chantierBatches = chantierBatchRepo.findAllByMoisAndAnnee(mois, year);
@@ -64,13 +68,21 @@ public class DashbordServiceImpl implements DashbordService {
             month = d.minusMonths(i).getMonthValue();
             yeaar = d.minusMonths(i).getYear();
             chantierBatches = chantierBatchRepo.findAllByMoisAndAnnee(month, yeaar);
+            quantite.setDate(month + "/" + yeaar);
+            quantites.add(new Quantite(month + "/" + yeaar, chantierBatches.stream().mapToLong(ChantierBatch::getQuantite).sum(),
+                    chantierBatches.stream().mapToLong(ChantierBatch::getQuantiteLocation).sum(),
+                    chantierBatches.stream().mapToLong(ChantierBatch::getChargeLocataire).sum(),
+                    chantierBatches.stream().mapToLong(ChantierBatch::getChargeLocataireExterne).sum(),
+                    chantierBatches.stream().mapToDouble(ChantierBatch::getConsommationPrevue).sum()));
+
+
             map.put(month + "/" + yeaar, new Quantite(chantierBatches.stream().mapToLong(ChantierBatch::getQuantite).sum(),
                     chantierBatches.stream().mapToLong(ChantierBatch::getQuantiteLocation).sum(),
                     chantierBatches.stream().mapToLong(ChantierBatch::getChargeLocataire).sum(),
                     chantierBatches.stream().mapToLong(ChantierBatch::getChargeLocataireExterne).sum(),
                     chantierBatches.stream().mapToDouble(ChantierBatch::getConsommationPrevue).sum()));
         }
-        dashbord.setMap(map);
+        dashbord.setQuantites(quantites);
         return dashbord;
     }
 }
