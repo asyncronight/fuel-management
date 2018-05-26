@@ -1,5 +1,6 @@
 package me.kadarh.mecaworks.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -21,7 +22,7 @@ public class ChantierBatch extends AbstractDomain {
     private Long quantiteLocation = 0L;
     private Long chargeLocataire = 0L;
     private Long chargeLocataireExterne = 0L;
-    private Double consommationPrevue = 0D;
+    private Long consommationPrevue = 0L;
 
     @ManyToOne
     private Chantier chantier;
@@ -29,7 +30,7 @@ public class ChantierBatch extends AbstractDomain {
     public ChantierBatch() {
     }
 
-    public ChantierBatch(int mois, int annee, Long quantite, Long quantiteLocation, Long chargeLocataire, Long chargeLocataireExterne, Double consommationPrevue, Chantier chantier) {
+    public ChantierBatch(int mois, int annee, Long quantite, Long quantiteLocation, Long chargeLocataire, Long chargeLocataireExterne, Long consommationPrevue, Chantier chantier) {
         this.mois = mois;
         this.annee = annee;
         this.quantite = quantite;
@@ -38,5 +39,11 @@ public class ChantierBatch extends AbstractDomain {
         this.chargeLocataireExterne = chargeLocataireExterne;
         this.consommationPrevue = consommationPrevue;
         this.chantier = chantier;
+    }
+
+    @Override
+    @JsonIgnore
+    public Long getId() {
+        return this.id;
     }
 }

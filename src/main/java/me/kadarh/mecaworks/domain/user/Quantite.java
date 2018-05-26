@@ -10,9 +10,9 @@ public class Quantite {
     private Long quantiteLocation = 0L;
     private Long chargeLocataire = 0L;
     private Long chargeLocataireExterne = 0L;
-    private Double consommationPrevue = 0.2D;
+    private Long consommationPrevue = 0L;
 
-    public Quantite(String date, Long quantity, Long quantiteLocation, Long chargeLocataire, Long chargeLocataireExterne, Double consommationPrevue) {
+    public Quantite(String date, Long quantity, Long quantiteLocation, Long chargeLocataire, Long chargeLocataireExterne, Long consommationPrevue) {
         this.date = date;
         this.quantity = quantity;
         this.quantiteLocation = quantiteLocation;
