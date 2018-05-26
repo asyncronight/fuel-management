@@ -55,6 +55,20 @@ public class Dashbord {
 	}
 
 	@JsonIgnore
+	public Long getConsommationTotalePrevue() {
+		return quantites.stream()
+				.mapToLong(Quantite::getConsommationPrevue)
+				.sum() - quantites.get(0).getConsommationPrevue();
+	}
+
+	@JsonIgnore
+	public Double getConsommationTotalePrevueDh() {
+		return quantites.stream()
+				.mapToDouble(q -> q.getConsommationPrevue() * q.getPrix())
+				.sum() - quantites.get(0).getConsommationPrevue() * quantites.get(0).getPrix();
+	}
+
+	@JsonIgnore
 	public Long getChargeLocataireInterne() {
 		return quantites.stream()
 				.mapToLong(Quantite::getChargeLocataire)

@@ -7,7 +7,7 @@ var mixedChart = new Chart('chart1', {
             label: "Consommation gasoil totale (L)",
             backgroundColor: 'rgb(7, 102, 255,0.2)',
             borderColor: data.quantites.map(function (value) {
-                return parseInt(value.quantity, 10) > parseInt(value.consommationPrevue, 10) ? 'rgb(255, 0, 76)' : 'rgb(76, 220, 0)';
+                return parseInt(value.quantity, 10) >= parseInt(value.consommationPrevue, 10) ? 'rgb(255, 0, 76)' : 'rgb(76, 220, 0)';
             }),
             borderWidth: 1,
             data: data.quantites.map(function (value) {
