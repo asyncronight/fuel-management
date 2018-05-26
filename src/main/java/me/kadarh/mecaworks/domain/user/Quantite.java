@@ -11,6 +11,8 @@ public class Quantite {
     private Long chargeLocataire = 0L;
     private Long chargeLocataireExterne = 0L;
     private Double consommationPrevue = 0.2D;
+	//todo : fill with real value
+	private Float prix = 10F;
 
     public Quantite(String date, Long quantity, Long quantiteLocation, Long chargeLocataire, Long chargeLocataireExterne, Double consommationPrevue) {
         this.date = date;
