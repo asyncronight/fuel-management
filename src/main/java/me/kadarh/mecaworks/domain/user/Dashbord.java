@@ -1,5 +1,6 @@
 package me.kadarh.mecaworks.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -11,41 +12,66 @@ public class Dashbord {
 	private List<ChantierBatch> chantierBatch = new ArrayList<>();
 	private List<Quantite> quantites = new ArrayList<>();
 
-	//todo exclude last month (because there is 13 month in quantites) or just fill 12 month
-	// todo add prix to Quantite class
+	@JsonIgnore
 	public Long getTotaleGazoile() {
-		return quantites.stream().mapToLong(Quantite::getQuantity).sum();
+		return quantites.stream()
+				.mapToLong(Quantite::getQuantity)
+				.sum() - quantites.get(0).getQuantity();
 	}
 
-	public Long getTotaleGazoileDh() {
-		return quantites.stream().mapToLong(quantite -> quantite.getQuantity() * 10).sum();
+	@JsonIgnore
+	public Double getTotaleGazoileDh() {
+		return quantites.stream()
+				.mapToDouble(quantite -> quantite.getQuantity() * quantite.getPrix())
+				.sum() - quantites.get(0).getQuantity() * quantites.get(0).getPrix();
 	}
 
+	@JsonIgnore
 	public Long getTotaleGazoileLocation() {
-		return quantites.stream().mapToLong(Quantite::getQuantiteLocation).sum();
+		return quantites.stream()
+				.mapToLong(Quantite::getQuantiteLocation)
+				.sum() - quantites.get(0).getQuantiteLocation();
 	}
 
-	public Long getTotaleGazoileLocationDh() {
-		return quantites.stream().mapToLong(quantite -> quantite.getQuantiteLocation() * 10).sum();
+	@JsonIgnore
+	public Double getTotaleGazoileLocationDh() {
+		return quantites.stream()
+				.mapToDouble(quantite -> quantite.getQuantiteLocation() * quantite.getPrix())
+				.sum() - quantites.get(0).getQuantiteLocation() * quantites.get(0).getPrix();
 	}
 
+	@JsonIgnore
 	public Long getTotaleGazoileInterne() {
-		return quantites.stream().mapToLong(q -> q.getQuantity() - q.getQuantiteLocation()).sum();
+		return quantites.stream()
+				.mapToLong(q -> q.getQuantity() - q.getQuantiteLocation())
+				.sum() - (quantites.get(0).getQuantity() - quantites.get(0).getQuantiteLocation());
 	}
 
-	public Long getTotaleGazoileInterneDh() {
-		return quantites.stream().mapToLong(q -> (q.getQuantity() - q.getQuantiteLocation()) * 10).sum();
+	@JsonIgnore
+	public Double getTotaleGazoileInterneDh() {
+		return quantites.stream()
+				.mapToDouble(q -> (q.getQuantity() - q.getQuantiteLocation()) * q.getPrix())
+				.sum() - (quantites.get(0).getQuantity() - quantites.get(0).getQuantiteLocation()) * quantites.get(0).getPrix();
 	}
 
+	@JsonIgnore
 	public Long getChargeLocataireInterne() {
-		return quantites.stream().mapToLong(Quantite::getChargeLocataire).sum();
+		return quantites.stream()
+				.mapToLong(Quantite::getChargeLocataire)
+				.sum() - quantites.get(0).getChargeLocataire();
 	}
 
+	@JsonIgnore
 	public Long getChargeLocataireExterne() {
-		return quantites.stream().mapToLong(Quantite::getChargeLocataireExterne).sum();
+		return quantites.stream()
+				.mapToLong(Quantite::getChargeLocataireExterne)
+				.sum() - quantites.get(0).getChargeLocataireExterne();
 	}
 
+	@JsonIgnore
 	public Long getChargeLocataireTotale() {
-		return quantites.stream().mapToLong(quantite -> quantite.getChargeLocataire() + quantite.getChargeLocataireExterne()).sum();
+		return quantites.stream()
+				.mapToLong(quantite -> quantite.getChargeLocataire() + quantite.getChargeLocataireExterne())
+				.sum() - (quantites.get(0).getChargeLocataire() - quantites.get(0).getChargeLocataireExterne());
 	}
 }
