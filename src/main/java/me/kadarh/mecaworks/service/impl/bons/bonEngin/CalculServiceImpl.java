@@ -44,7 +44,7 @@ public class CalculServiceImpl {
             bon.setPompiste(employeService.get(bon.getPompiste().getId()));
             bon.setChantierTravail(chantierService.get(bon.getChantierTravail().getId()));
             bon.setChantierGazoil(chantierService.get(bon.getChantierGazoil().getId()));
-            bon.setConsommationPrevu(bon.getEngin().getConsommationMoyenne() * bon.getNbrHeures());
+            bon.setConsommationPrevu(bon.getEngin().getConsommationMoyenne().longValue() * bon.getNbrHeures());
             calculCompteursAbsolu(bon, persistService.getLastBonEngin(bon.getEngin()));
             bon.setChargeHoraire(bon.getNbrHeures() * bon.getEngin().getPrixLocationJournalier().longValue() / bon.getEngin().getObjectif());
             log.info("Compteur Absolu H = " + bon.getCompteurAbsoluH());
