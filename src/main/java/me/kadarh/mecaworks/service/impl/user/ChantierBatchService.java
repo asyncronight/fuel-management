@@ -31,7 +31,7 @@ public class ChantierBatchService {
         log.info("Batch Inserted for the last month [ for each Chantier ]  ");
     }
 
-    @Scheduled(fixedDelay = 30000)
+    @Scheduled(cron = "0 0 1 10 * ?")
     public void updateBatch() {
         log.info("calling method updateBatch() ChantierBatchService -- Insertion of batch .. ");
         chantierBatchRepo.saveAll(batchHelper.updateBatcheLastMonth());
