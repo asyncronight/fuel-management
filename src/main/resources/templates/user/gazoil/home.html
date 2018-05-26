@@ -28,23 +28,24 @@
 		        <div class="col-sm-12 col-md-9 card">
 			        <!--todo : make responsive-->
 			        <canvas id="chart1" width="400" height="100"></canvas>
+			        <hr>
 			        <canvas id="chart2" width="400" height="100"></canvas>
 		        </div>
-		        <div class="col-sm-12 col-md-3 card">
-			        <h5 class="pt-3 pl-3">Totale année</h5>
+		        <div class="col-sm-12 col-md-3 card text-center">
+			        <h5 class="card-title p-2 bg-dark text-white">Totale de l'année <span id="range"></span></h5>
 			        <table class="table table-hover">
 				        <tbody>
 				        <tr>
 					        <td>Consommation gasoile location</td>
-					        <td th:text="${data.totaleGazoileLocation} +'(L) - '+${data.totaleGazoileLocationDh}+' (DH)'"></td>
+					        <td th:text="${data.totaleGazoileLocation} +' (L) - '+${data.totaleGazoileLocationDh}+' (DH)'"></td>
 				        </tr>
 				        <tr>
 					        <td>Consommation gasoile interne</td>
-					        <td th:text="${data.totaleGazoileInterne} +'(L) - '+${data.totaleGazoileInterneDh}+' (DH)'"></td>
+					        <td th:text="${data.totaleGazoileInterne} +' (L) - '+${data.totaleGazoileInterneDh}+' (DH)'"></td>
 				        </tr>
-				        <tr>
+				        <tr class="bg-secondary text-white">
 					        <th>Consommation gasoile totale</th>
-					        <th th:text="${data.totaleGazoile} +'(L) - '+${data.totaleGazoileDh}+' (DH)'"></th>
+					        <th th:text="${data.totaleGazoile} +' (L) - '+${data.totaleGazoileDh}+' (DH)'"></th>
 				        </tr>
 				        <tr>
 					        <td>Charge locataire interne</td>
@@ -54,7 +55,7 @@
 					        <td>Charge locataire externe</td>
 					        <td th:text="${data.chargeLocataireExterne}+' (DH)'"></td>
 				        </tr>
-				        <tr>
+				        <tr class="bg-secondary text-white">
 					        <th>Charge locataire totale</th>
 					        <th th:text="${data.chargeLocataireTotale}+' (DH)'"></th>
 				        </tr>
@@ -63,7 +64,6 @@
 		        </div>
 	        </div>
 	        <hr>
-	        <pre id="json"></pre>
 
         </div>
     </main>
@@ -71,7 +71,6 @@
 <div th:replace="fragments :: footer"></div>
 <script th:inline="javascript">
     var data = /*[[${data}]]*/ '';
-    $("#json").html(JSON.stringify(data, undefined, 4));
 
     function navigate(date) {
         window.location.href = '?date=' + date;
