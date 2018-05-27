@@ -69,7 +69,7 @@ public class Dashbord {
 	}
 
 	@JsonIgnore
-	public Long getChargeLocataireInterne() {
+	public Long getChargeLocataireTotale() {
 		return quantites.stream()
 				.mapToLong(Quantite::getChargeLocataire)
 				.sum() - quantites.get(0).getChargeLocataire();
@@ -83,9 +83,9 @@ public class Dashbord {
 	}
 
 	@JsonIgnore
-	public Long getChargeLocataireTotale() {
+	public Long getChargeLocataireInterne() {
 		return quantites.stream()
-				.mapToLong(quantite -> quantite.getChargeLocataire() + quantite.getChargeLocataireExterne())
+				.mapToLong(quantite -> quantite.getChargeLocataire() - quantite.getChargeLocataireExterne())
 				.sum() - (quantites.get(0).getChargeLocataire() - quantites.get(0).getChargeLocataireExterne());
 	}
 }
