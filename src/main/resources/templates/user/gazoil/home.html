@@ -23,52 +23,45 @@
                 <li class="breadcrumb-item" th:text="#{gazoil}"></li>
             </ol>
 
-	        <h3 class="text-center">Consommation du gasoile</h3>
-	        <div class="row">
-		        <div class="col-sm-12 col-md-9 card">
-			        <!--todo : make responsive-->
-			        <canvas id="chart1" width="400" height="100"></canvas>
-			        <hr>
-			        <canvas id="chart2" width="400" height="100"></canvas>
+	        <div class="accordion" id="accordionExample">
+		        <div class="card">
+			        <div class="card-header text-center">
+				        <h5 class="m-0">
+					        <button class="btn btn-sm btn-link" type="button" data-toggle="collapse"
+					                data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+						        <h3>Consommation du gasoile</h3>
+					        </button>
+				        </h5>
+			        </div>
+
+			        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+			             data-parent="#accordionExample">
+				        <div class="card-body">
+					        <div th:include="user/gazoil/include/onglet1 :: onglet1"></div>
+				        </div>
+			        </div>
 		        </div>
-		        <div class="col-sm-12 col-md-3 card text-center">
-			        <h5 class="card-title p-2 bg-dark text-white">Totale de l'année <span id="range"></span></h5>
-			        <table class="table table-hover">
-				        <tbody>
-				        <tr>
-					        <td>Consommation gasoile location</td>
-					        <td th:text="${data.totaleGazoileLocation} +' (L) - '+${data.totaleGazoileLocationDh}+' (DH)'"></td>
-				        </tr>
-				        <tr>
-					        <td>Consommation gasoile interne</td>
-					        <td th:text="${data.totaleGazoileInterne} +' (L) - '+${data.totaleGazoileInterneDh}+' (DH)'"></td>
-				        </tr>
-				        <tr class="text-white"
-				            th:classappend="${data.totaleGazoile ge data.consommationTotalePrevue ? 'bg-danger': 'bg-success'}">
-					        <th>Consommation gasoile totale</th>
-					        <th th:text="${data.totaleGazoile} +' (L) - '+${data.totaleGazoileDh}+' (DH)'"></th>
-				        </tr>
-				        <tr class="bg-secondary text-white">
-					        <th>Consommation gasoile totale prévue</th>
-					        <th th:text="${data.consommationTotalePrevue} +' (L) - '+${data.consommationTotalePrevueDh}+' (DH)'"></th>
-				        </tr>
-				        <tr>
-					        <td>Charge locataire interne</td>
-					        <td th:text="${data.chargeLocataireInterne}+' (DH)'"></td>
-				        </tr>
-				        <tr>
-					        <td>Charge locataire externe</td>
-					        <td th:text="${data.chargeLocataireExterne}+' (DH)'"></td>
-				        </tr>
-				        <tr class="bg-secondary text-white">
-					        <th>Charge locataire totale</th>
-					        <th th:text="${data.chargeLocataireTotale}+' (DH)'"></th>
-				        </tr>
-				        </tbody>
-			        </table>
+		        <div class="card">
+			        <div class="card-header text-center">
+				        <h5 class="m-0">
+					        <button class="btn btn-sm btn-link" type="button" data-toggle="collapse"
+					                data-target="#collapse2" aria-expanded="true" aria-controls="collapse2">
+						        <h3>Consommation du gasoile par chantier</h3>
+					        </button>
+				        </h5>
+			        </div>
+
+			        <div id="collapse2" class="collapse show" aria-labelledby="headingOne"
+			             data-parent="#accordionExample">
+				        <div class="card-body">
+					        <div th:include="user/gazoil/include/onglet2 :: onglet2"></div>
+				        </div>
+			        </div>
 		        </div>
 	        </div>
+
 	        <hr>
+	        <pre id="json"></pre>
 
         </div>
     </main>
@@ -76,6 +69,7 @@
 <div th:replace="fragments :: footer"></div>
 <script th:inline="javascript">
     var data = /*[[${data}]]*/ '';
+    $("#json").html(JSON.stringify(data, undefined, 4));
 
     function navigate(date) {
         window.location.href = '?date=' + date;
