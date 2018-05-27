@@ -36,7 +36,7 @@ public class BatchFaker {
                         i == 1 || i == 3 ? 1050 + 1L : 2510 + 1L,
                         i == 2 || i == 3 ? 456 + 1L : 780 + 1L,
                         i == 1 || i == 4 ? 21000 + 1L : 35000 + 1L,
-                        i == 1 || i == 3 ? 21000 + 1L : 9000 + 1L,
+                        i == 1 || i == 3 ? 21000 + 1L : 9000 + 1L, 8f + i / 2,
                         i == 2 || i == 1 ? 900 + 1L : 1000 + 1L, c);
                 chantierBatchRepo.save(chantierBatch);
             }
@@ -46,7 +46,7 @@ public class BatchFaker {
                         i == 7 || i == 9 ? 1050 + 1L : 2510 + 1L,
                         i == 6 || i == 8 || i == 10 ? 456 + 1L : 780 + 1L,
                         i == 6 || i == 10 || i == 11 ? 21000 + 1L : 35000 + 1L,
-                        i == 7 || i == 5 || i == 12 ? 21000 + 1L : 9000 + 1L,
+                        i == 7 || i == 5 || i == 12 ? 21000 + 1L : 9000 + 1L, 8.5f + i / 4,
                         i == 7 || i == 9 ? 900 + 1L : 1200 + 1L, c);
                 chantierBatchRepo.save(chantierBatch);
             }

@@ -2,9 +2,11 @@ package me.kadarh.mecaworks.service.impl.user;
 
 import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.bons.BonEngin;
+import me.kadarh.mecaworks.domain.bons.BonFournisseur;
 import me.kadarh.mecaworks.domain.others.Chantier;
 import me.kadarh.mecaworks.domain.user.ChantierBatch;
 import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
+import me.kadarh.mecaworks.repo.bons.BonFournisseurRepo;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
 import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -31,9 +33,11 @@ import java.util.stream.Collectors;
 public class UserCalculService {
 
     private final BonEnginRepo bonEnginRepo;
+    private final BonFournisseurRepo bonFournisseurRepo;
 
-    public UserCalculService(BonEnginRepo bonEnginRepo) {
+    public UserCalculService(BonEnginRepo bonEnginRepo, BonFournisseurRepo bonFournisseurRepo) {
         this.bonEnginRepo = bonEnginRepo;
+        this.bonFournisseurRepo = bonFournisseurRepo;
     }
 
     public List<ChantierBatch> getListChantierWithQuantities(int month, int year) {
@@ -47,8 +51,11 @@ public class UserCalculService {
             Map<Chantier, Long> chargeLocataire = bonEngins.stream().collect(Collectors.groupingBy(BonEngin::getChantierTravail, Collectors.summingLong(BonEngin::getChargeHoraire)));
             Map<Chantier, Long> chargeLocataireExterne = bonEngins.stream().filter(bonEngin -> bonEngin.getEngin().getGroupe().getLocataire()).collect(Collectors.groupingBy(BonEngin::getChantierTravail, Collectors.summingLong(BonEngin::getChargeHoraire)));
             Map<Chantier, Long> consommationPrevue = bonEngins.stream().collect(Collectors.groupingBy(BonEngin::getChantierTravail, Collectors.summingLong(BonEngin::getConsommationPrevu)));
+
+            List<BonFournisseur> bonFournisseurs = bonFournisseurRepo.findAllBetweenDates(LocalDate.of(year, Month.of(month).getValue(), 1), LocalDate.of(year, Month.of(month).plus(1).getValue(), 1));
+            Map<Chantier, Double> prix = bonFournisseurs.stream().collect(Collectors.groupingBy(BonFournisseur::getChantier, Collectors.averagingDouble(BonFournisseur::getPrixUnitaire)));
             for (Map.Entry<Chantier, Long> entry : sum.entrySet()) {
-                chantierBatch = new ChantierBatch(month, year, entry.getValue(), sum2.get(entry.getKey()), chargeLocataire.get(entry.getKey()), chargeLocataireExterne.get(entry.getKey()), consommationPrevue.get(entry.getKey()), entry.getKey());
+                chantierBatch = new ChantierBatch(month, year, entry.getValue(), sum2.get(entry.getKey()), chargeLocataire.get(entry.getKey()), chargeLocataireExterne.get(entry.getKey()), prix.get(entry.getKey()).floatValue(), consommationPrevue.get(entry.getKey()), entry.getKey());
                 if (chantierBatch.getQuantiteLocation() == null) chantierBatch.setQuantiteLocation(0L);
                 if (chantierBatch.getQuantite() == null) chantierBatch.setQuantite(0L);
                 if (chantierBatch.getChargeLocataireExterne() == null) chantierBatch.setChargeLocataireExterne(0L);

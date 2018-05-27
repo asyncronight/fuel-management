@@ -14,12 +14,13 @@ public class Quantite {
 	private Float prix = 10F;
     private Long consommationPrevue = 0L;
 
-    public Quantite(String date, Long quantity, Long quantiteLocation, Long chargeLocataire, Long chargeLocataireExterne, Long consommationPrevue) {
+    public Quantite(String date, Long quantity, Long quantiteLocation, Long chargeLocataire, Long chargeLocataireExterne, Float prix, Long consommationPrevue) {
         this.date = date;
         this.quantity = quantity;
         this.quantiteLocation = quantiteLocation;
         this.chargeLocataire = chargeLocataire;
         this.chargeLocataireExterne = chargeLocataireExterne;
+        this.prix = prix;
         this.consommationPrevue = consommationPrevue;
     }
 

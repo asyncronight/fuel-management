@@ -51,6 +51,7 @@ public class DashbordServiceImpl implements DashbordService {
                     dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getQuantiteLocation).sum(),
                     dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getChargeLocataire).sum(),
                     dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getChargeLocataireExterne).sum(),
+                    ((float) dashbord.getChantierBatch().stream().mapToDouble(ChantierBatch::getPrix).average().getAsDouble()),
                     dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getConsommationPrevue).sum()));
             log.info("--> Object Dashbored filled  ");
             return dashbord;
@@ -78,6 +79,7 @@ public class DashbordServiceImpl implements DashbordService {
                         chantierBatches.stream().mapToLong(ChantierBatch::getQuantiteLocation).sum(),
                         chantierBatches.stream().mapToLong(ChantierBatch::getChargeLocataire).sum(),
                         chantierBatches.stream().mapToLong(ChantierBatch::getChargeLocataireExterne).sum(),
+                        ((float) chantierBatches.stream().mapToDouble(ChantierBatch::getPrix).average().getAsDouble()),
                         chantierBatches.stream().mapToLong(ChantierBatch::getConsommationPrevue).sum()));
             }
             Dashbord dashbord = new Dashbord();
