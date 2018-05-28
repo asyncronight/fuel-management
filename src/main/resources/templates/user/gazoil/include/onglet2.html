@@ -27,7 +27,7 @@
 					<td th:text="${chantier.quantiteLocation+' (L) - '+chantier.quantiteLocation*chantier.prix+' (DH)'}"></td>
 					<td th:text="${chantier.quantite+' (L) - '+chantier.quantite*chantier.prix+' (DH)'}"
 					    class="text-white"
-					    th:classappend="${chantier.quantite ge chantier.consommationPrevue? 'bg-danger': 'bg-success'}"></td>
+					    th:classappend="${chantier.quantite ge chantier.consommationPrevue*1.1? 'bg-danger': 'bg-success'}"></td>
 					<td class="text-white bg-secondary"
 					    th:text="${chantier.consommationPrevue+' (L) - '+chantier.consommationPrevue*chantier.prix+' (DH)'}"></td>
 					<td th:text="${chantier.chargeLocataire - chantier.chargeLocataireExterne}+' (DH)'"></td>
