@@ -80,6 +80,8 @@ public class EnginServiceImpl implements EnginService {
 	            old.setGroupe(groupeService.get(engin.getGroupe().getId()));
             if (engin.getObjectif() != null)
                 old.setObjectif(engin.getObjectif());
+			if (engin.getPrixLocationJournalier() != null)
+				old.setPrixLocationJournalier(engin.getPrixLocationJournalier());
             if (engin.getSousFamille() != null)
 	            old.setSousFamille(sousFamilleService.get(engin.getSousFamille().getId()));
             return enginRepo.save(old);
