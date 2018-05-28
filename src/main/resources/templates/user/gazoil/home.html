@@ -59,12 +59,14 @@
 			        </div>
 		        </div>
 	        </div>
+	        <pre id="json"></pre>
         </div>
     </main>
 </div>
 <div th:replace="fragments :: footer"></div>
 <script th:inline="javascript">
     var data = /*[[${data}]]*/ '';
+    $("#json").html(JSON.stringify(data, undefined, 4));
 
     function navigate(date) {
         window.location.href = '?date=' + date;
