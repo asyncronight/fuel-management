@@ -5,13 +5,43 @@
 <div th:fragment="onglet2">
 	<!--/*@thymesVar id="data" type="me.kadarh.mecaworks.domain.user.Dashbord"*/-->
 	<div class="row">
-		<div class="col-sm-12 col-md-9 card">
-			<canvas id="chart3" width="150" height="150"></canvas>
-			<hr>
-			<canvas id="chart4" width="150" height="150"></canvas>
+		<div class="col-md-6 col-sm-12 text-center card">
+			<table class="table table-hover table-responsive">
+				<thead>
+				<tr>
+					<th class="bg-dark text-white">Chantier</th>
+					<th class="bg-dark text-white">Consommation gasoile location</th>
+					<th class="bg-dark text-white">Consommation gasoile totale</th>
+					<th class="bg-dark text-white">Consommation gasoile prévue</th>
+					<th class="bg-dark text-white">Charge locataire interne</th>
+					<th class="bg-dark text-white">Charge locataire externe</th>
+					<th class="bg-dark text-white">Charge locataire totale</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr th:each="chantier : ${data.chantierBatch}">
+					<td>
+						<a th:text="${chantier.chantier.nom +' ('+chantier.chantier.adresse+')'}"
+						   th:href="'/usr/gazoil/chantier/'+${chantier.chantier.id}"></a>
+					</td>
+					<td th:text="${chantier.quantiteLocation+' (L) - '+chantier.quantiteLocation*chantier.prix+' (DH)'}"></td>
+					<td th:text="${chantier.quantite+' (L) - '+chantier.quantite*chantier.prix+' (DH)'}"
+					    class="text-white"
+					    th:classappend="${chantier.quantite ge chantier.consommationPrevue? 'bg-danger': 'bg-success'}"></td>
+					<td class="text-white bg-secondary"
+					    th:text="${chantier.consommationPrevue+' (L) - '+chantier.consommationPrevue*chantier.prix+' (DH)'}"></td>
+					<td th:text="${chantier.chargeLocataire - chantier.chargeLocataireExterne}+' (DH)'"></td>
+					<td th:text="${chantier.chargeLocataireExterne}+' (DH)'"></td>
+					<td class="text-white bg-secondary" th:text="${chantier.chargeLocataire}+' (DH)'"></td>
+				</tr>
+				</tbody>
+			</table>
 		</div>
-		<div class="col-sm-12 col-md-3 card text-center">
-
+		<div class="col-md-3 col-sm-6 card">
+			<canvas id="chart3" width="150" height="150"></canvas>
+		</div>
+		<div class="col-md-3 col-sm-6 card">
+			<canvas id="chart4" width="150" height="150"></canvas>
 		</div>
 	</div>
 </div>

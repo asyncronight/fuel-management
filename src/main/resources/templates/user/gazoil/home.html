@@ -27,9 +27,9 @@
 		        <div class="card">
 			        <div class="card-header text-center">
 				        <h5 class="m-0">
-					        <button class="btn btn-sm btn-link" type="button" data-toggle="collapse"
+					        <button class="btn btn-link" type="button" data-toggle="collapse"
 					                data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-						        <h3>Consommation du gasoile</h3>
+						        <strong>Consommation du gasoile <span id="range2"></span></strong>
 					        </button>
 				        </h5>
 			        </div>
@@ -44,14 +44,14 @@
 		        <div class="card">
 			        <div class="card-header text-center">
 				        <h5 class="m-0">
-					        <button class="btn btn-sm btn-link" type="button" data-toggle="collapse"
+					        <button class="btn btn-link" type="button" data-toggle="collapse"
 					                data-target="#collapse2" aria-expanded="true" aria-controls="collapse2">
-						        <h3>Consommation du gasoile par chantier</h3>
+						        <strong>Consommation du gasoile par chantier (<span th:text="${now}"></span>)</strong>
 					        </button>
 				        </h5>
 			        </div>
 
-			        <div id="collapse2" class="collapse show" aria-labelledby="headingOne"
+			        <div id="collapse2" class="collapse" aria-labelledby="headingOne"
 			             data-parent="#accordionExample">
 				        <div class="card-body">
 					        <div th:include="user/gazoil/include/onglet2 :: onglet2"></div>
@@ -59,17 +59,12 @@
 			        </div>
 		        </div>
 	        </div>
-
-	        <hr>
-	        <pre id="json"></pre>
-
         </div>
     </main>
 </div>
 <div th:replace="fragments :: footer"></div>
 <script th:inline="javascript">
     var data = /*[[${data}]]*/ '';
-    $("#json").html(JSON.stringify(data, undefined, 4));
 
     function navigate(date) {
         window.location.href = '?date=' + date;
