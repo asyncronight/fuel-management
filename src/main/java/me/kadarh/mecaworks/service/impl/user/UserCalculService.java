@@ -4,9 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.bons.BonEngin;
 import me.kadarh.mecaworks.domain.bons.BonFournisseur;
 import me.kadarh.mecaworks.domain.others.Chantier;
+import me.kadarh.mecaworks.domain.others.Engin;
 import me.kadarh.mecaworks.domain.user.ChantierBatch;
 import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
 import me.kadarh.mecaworks.repo.bons.BonFournisseurRepo;
+import me.kadarh.mecaworks.service.EnginService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
 import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -33,10 +35,12 @@ import java.util.stream.Collectors;
 public class UserCalculService {
 
     private final BonEnginRepo bonEnginRepo;
+    private final EnginService enginService;
     private final BonFournisseurRepo bonFournisseurRepo;
 
-    public UserCalculService(BonEnginRepo bonEnginRepo, BonFournisseurRepo bonFournisseurRepo) {
+    public UserCalculService(BonEnginRepo bonEnginRepo, EnginService enginService, BonFournisseurRepo bonFournisseurRepo) {
         this.bonEnginRepo = bonEnginRepo;
+        this.enginService = enginService;
         this.bonFournisseurRepo = bonFournisseurRepo;
     }
 
@@ -72,6 +76,28 @@ public class UserCalculService {
             log.info("Operation failed -- ");
             throw new OperationFailedException("Opération echouée, problème de la base", e);
         }
+    }
+
+    public void updateListEnginWithConsommation(int monthValue, int year) {
+        log.info("calling method getListEnginWithConsommation(month,year) in UserCalculService -- ");
+        try {
+            List<BonEngin> bonEngins = bonEnginRepo.findAllBetweenDates(LocalDate.of(year, Month.of(monthValue).getValue(), 1), LocalDate.of(year, Month.of(monthValue).plus(1).getValue(), 1));
+            Map<Engin, Double> consommationPrevue = bonEngins.stream().filter(bonEngin -> bonEngin.getConsommationH() != 0 && bonEngin.getConsommationH() != null).collect(Collectors.groupingBy(BonEngin::getEngin, Collectors.averagingDouble(BonEngin::getConsommationPrevu)));
+            for (Map.Entry<Engin, Double> entry : consommationPrevue.entrySet()) {
+                Engin engin = enginService.get(entry.getKey().getId());
+                engin.setConsommationMoyenne(entry.getValue().floatValue());
+                engin = enginService.update(engin);
+                log.info("Engin with id =" + engin.getId() + " updated successfully");
+            }
+        } catch (NoSuchElementException e) {
+            log.info("Operation failed : No element in Engin table -- ");
+            throw new ResourceNotFoundException("Opération echouée, Il n'y a aucun element pour cet engin", e);
+        } catch (Exception e) {
+            log.info("Operation failed -- ");
+            throw new OperationFailedException("Opération echouée, problème de la base", e);
+        }
+
+
     }
 }
 

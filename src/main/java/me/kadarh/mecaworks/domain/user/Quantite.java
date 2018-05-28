@@ -10,7 +10,6 @@ public class Quantite {
     private Long quantiteLocation = 0L;
     private Long chargeLocataire = 0L;
     private Long chargeLocataireExterne = 0L;
-	//todo : fill with real value
 	private Float prix = 10F;
     private Long consommationPrevue = 0L;
 

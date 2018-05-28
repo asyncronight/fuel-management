@@ -10,7 +10,8 @@ import me.kadarh.mecaworks.repo.bons.BonFournisseurRepo;
 import me.kadarh.mecaworks.repo.bons.BonLivraisonRepo;
 import me.kadarh.mecaworks.repo.user.BatchFaker;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +24,8 @@ import java.time.LocalDate;
 @Component
 @Transactional
 @Slf4j
-//@Profile("dev")
-public class DataFakerO {
+@Profile("dev")
+public class DataFakerO implements CommandLineRunner {
 
 
 	@Autowired
@@ -54,9 +55,9 @@ public class DataFakerO {
     @Autowired
     BatchFaker batchFaker;
 
-	@Scheduled(fixedRate = 1000000000)
-	public void run() {
-		log.info("This is the DataFaker Of Other Domains");
+    @Override
+    public void run(String... args) throws Exception {
+        log.info("This is the DataFaker Of Other Domains");
 		loadGroupe(5);
 		loadChantiers(5);
 		loadClasses(2);
@@ -67,7 +68,7 @@ public class DataFakerO {
 		loadFournisseur(20);
 		loadEmploye(20);
         loadBonEngin(30);
-		loadBonLivraison(30);
+        loadBonLivraison(30);
 		loadBonFournisseur(30);
         batchFaker.insertBatchChantier();
     }

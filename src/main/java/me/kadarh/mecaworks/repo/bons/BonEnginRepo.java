@@ -11,7 +11,6 @@ import java.util.List;
 @Repository
 public interface BonEnginRepo extends JpaRepository<BonEngin, Long> {
 
-    //todo : changing to Optional
     @Query(nativeQuery = true, value = "select * from bon_engin where engin_id=?1 order by created_at desc limit 1")
     BonEngin findLastBonEngin(Long id);
 
