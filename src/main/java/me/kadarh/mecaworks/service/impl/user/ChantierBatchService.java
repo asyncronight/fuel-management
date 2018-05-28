@@ -38,12 +38,7 @@ public class ChantierBatchService {
         log.info("10 Batch Updated for the last month [ for each Chantier ]  ");
     }
 
-    //TODO : add schedule that update the value of consommationPrevue of Engin
-    //how to do it :
-    //chnahia be3da consommation prevu engin :
-    //Map = bonEngin group by engin , filter consommation != 0 || null , moy
-    //for each Engin ,getEnginbyId setConsommationPrevu & update
-    @Scheduled(fixedDelay = 30000)
+    @Scheduled(cron = "0 0 1 1 * ?")
     public void updateEnginConsommationPrevu() {
         userCalculService.updateListEnginWithConsommation(LocalDate.now().getMonthValue(), LocalDate.now().getYear());
     }
