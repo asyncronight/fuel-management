@@ -22,32 +22,32 @@
 				<tbody>
 				<tr>
 					<td>Consommation gasoile location</td>
-					<td th:text="${data.totaleGazoileLocation} +' (L) - '+${data.totaleGazoileLocationDh}+' (DH)'"></td>
+					<td th:text="${#numbers.formatInteger(data.totaleGazoileLocation, 1, 'COMMA')} +' (L) - '+${#numbers.formatDecimal(data.totaleGazoileLocationDh, 1, 'COMMA', 2, 'POINT')}+' (DH)'"></td>
 				</tr>
 				<tr>
 					<td>Consommation gasoile interne</td>
-					<td th:text="${data.totaleGazoileInterne} +' (L) - '+${data.totaleGazoileInterneDh}+' (DH)'"></td>
+					<td th:text="${#numbers.formatInteger(data.totaleGazoileInterne, 1, 'COMMA')} +' (L) - '+${#numbers.formatDecimal(data.totaleGazoileInterneDh, 1, 'COMMA', 2, 'POINT')}+' (DH)'"></td>
 				</tr>
 				<tr class="text-white"
 				    th:classappend="${data.totaleGazoile ge data.consommationTotalePrevue*1.1 ? 'bg-danger': 'bg-success'}">
 					<th>Consommation gasoile totale</th>
-					<th th:text="${data.totaleGazoile} +' (L) - '+${data.totaleGazoileDh}+' (DH)'"></th>
+					<th th:text="${#numbers.formatInteger(data.totaleGazoile, 1, 'COMMA')} +' (L) - '+${#numbers.formatDecimal(data.totaleGazoileDh, 1, 'COMMA', 2, 'POINT')}+' (DH)'"></th>
 				</tr>
 				<tr class="bg-secondary text-white">
 					<th>Consommation gasoile totale prévue</th>
-					<th th:text="${data.consommationTotalePrevue} +' (L) - '+${data.consommationTotalePrevueDh}+' (DH)'"></th>
+					<th th:text="${#numbers.formatInteger(data.consommationTotalePrevue, 1, 'COMMA')} +' (L) - '+${#numbers.formatDecimal(data.consommationTotalePrevueDh, 1, 'COMMA', 2, 'POINT')}+' (DH)'"></th>
 				</tr>
 				<tr>
 					<td>Charge locataire interne</td>
-					<td th:text="${data.chargeLocataireInterne}+' (DH)'"></td>
+					<td th:text="${#numbers.formatDecimal(data.chargeLocataireInterne, 1, 'COMMA', 2, 'POINT')}+' (DH)'"></td>
 				</tr>
 				<tr>
 					<td>Charge locataire externe</td>
-					<td th:text="${data.chargeLocataireExterne}+' (DH)'"></td>
+					<td th:text="${#numbers.formatDecimal(data.chargeLocataireExterne, 1, 'COMMA', 2, 'POINT')}+' (DH)'"></td>
 				</tr>
 				<tr class="bg-secondary text-white">
 					<th>Charge locataire totale</th>
-					<th th:text="${data.chargeLocataireTotale}+' (DH)'"></th>
+					<th th:text="${#numbers.formatDecimal(data.chargeLocataireTotale, 1, 'COMMA', 2, 'POINT')}+' (DH)'"></th>
 				</tr>
 				</tbody>
 			</table>
@@ -64,32 +64,32 @@
 				<tbody>
 				<tr>
 					<td>Consommation gasoile interne</td>
-					<td th:text="${data.quantites[12].quantity - data.quantites[12].quantiteLocation} +' (L) - '+${(data.quantites[12].quantity - data.quantites[12].quantiteLocation)*data.quantites[12].prix}+' (DH)'"></td>
+					<td th:text="${#numbers.formatInteger(data.quantites[12].quantity - data.quantites[12].quantiteLocation, 0, 'COMMA')} +' (L) - '+${#numbers.formatDecimal((data.quantites[12].quantity - data.quantites[12].quantiteLocation)*data.quantites[12].prix,  0, 'COMMA', 2, 'POINT')}+' (DH)'"></td>
 				</tr>
 				<tr>
 					<td>Consommation gasoile location</td>
-					<td th:text="${data.quantites[12].quantiteLocation} +' (L) - '+${data.quantites[12].quantity*data.quantites[12].prix}+' (DH)'"></td>
+					<td th:text="${#numbers.formatInteger(data.quantites[12].quantiteLocation, 0, 'COMMA')} +' (L) - '+${#numbers.formatDecimal(data.quantites[12].quantity*data.quantites[12].prix, 0, 'COMMA', 2, 'POINT')}+' (DH)'"></td>
 				</tr>
 				<tr class="text-white"
 				    th:classappend="${data.quantites[12].quantity ge data.quantites[12].consommationPrevue*1.1 ? 'bg-danger': 'bg-success'}">
 					<th>Consommation gasoile totale</th>
-					<th th:text="${data.quantites[12].quantity} +' (L) - '+${data.quantites[12].quantity*data.quantites[12].prix}+' (DH)'"></th>
+					<th th:text="${#numbers.formatInteger(data.quantites[12].quantity, 0, 'COMMA')} +' (L) - '+${#numbers.formatDecimal(data.quantites[12].quantity*data.quantites[12].prix, 0, 'COMMA', 2, 'POINT')}+' (DH)'"></th>
 				</tr>
 				<tr class="bg-secondary text-white">
 					<th>Consommation gasoile totale prévue</th>
-					<th th:text="${data.quantites[12].consommationPrevue} +' (L) - '+${data.quantites[12].consommationPrevue*data.quantites[12].prix}+' (DH)'"></th>
+					<th th:text="${#numbers.formatInteger(data.quantites[12].consommationPrevue, 0, 'COMMA')} +' (L) - '+${#numbers.formatDecimal(data.quantites[12].consommationPrevue*data.quantites[12].prix, 0, 'COMMA', 2, 'POINT')}+' (DH)'"></th>
 				</tr>
 				<tr>
 					<td>Charge locataire interne</td>
-					<td th:text="${data.quantites[12].chargeLocataire - data.quantites[12].chargeLocataireExterne}+' (DH)'"></td>
+					<td th:text="${#numbers.formatDecimal(data.quantites[12].chargeLocataire - data.quantites[12].chargeLocataireExterne, 0, 'COMMA', 2, 'POINT')}+' (DH)'"></td>
 				</tr>
 				<tr>
 					<td>Charge locataire externe</td>
-					<td th:text="${data.quantites[12].chargeLocataireExterne}+' (DH)'"></td>
+					<td th:text="${#numbers.formatDecimal(data.quantites[12].chargeLocataireExterne, 0, 'COMMA', 2, 'POINT')}+' (DH)'"></td>
 				</tr>
 				<tr class="bg-secondary text-white">
 					<th>Charge locataire totale</th>
-					<th th:text="${data.quantites[12].chargeLocataire}+' (DH)'"></th>
+					<th th:text="${#numbers.formatDecimal(data.quantites[12].chargeLocataire, 0, 'COMMA', 2, 'POINT')}+' (DH)'"></th>
 				</tr>
 				</tbody>
 			</table>
