@@ -26,8 +26,8 @@ public class Engin extends AbstractDomain {
 	private String numeroSerie;
 	private Integer compteurInitialH;
 	private Integer compteurInitialKm;
-	private Integer objectif;
-	private Integer prixLocationJournalier;
+    private Integer objectif = 12;
+    private Integer prixLocationJournalier;
 
 	@ManyToOne
 	private SousFamille sousFamille;
@@ -36,6 +36,6 @@ public class Engin extends AbstractDomain {
     @JsonIgnore
 	private Groupe groupe;
 
-	private Float consommationMoyenne;
+    private Float consommationMoyenne = 30f;
 
 }

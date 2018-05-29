@@ -10,7 +10,8 @@ import me.kadarh.mecaworks.repo.bons.BonFournisseurRepo;
 import me.kadarh.mecaworks.repo.bons.BonLivraisonRepo;
 import me.kadarh.mecaworks.repo.user.BatchFaker;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +24,8 @@ import java.time.LocalDate;
 @Component
 @Transactional
 @Slf4j
-public class DataFakerO {
+@Profile("dev")
+public class DataFakerO implements CommandLineRunner {
 
 
 	@Autowired
@@ -53,13 +55,12 @@ public class DataFakerO {
     @Autowired
     BatchFaker batchFaker;
 
-    @Scheduled(fixedRate = 10000000)
-    public void run() {
+    public void run(String... args) throws Exception {
         log.info("This is the DataFaker Of Other Domains");
 		loadGroupe(5);
         loadChantiers(10);
         loadClasses(2);
-		loadFamille(5);
+        loadFamille(5);
 		loadMarques(5);
 		loadSousFamilles(10);
         loadEngins(40);
@@ -88,7 +89,7 @@ public class DataFakerO {
 			chantier.setAdresse("Kenitra" + i);
             chantier.setStock(1000 + i % 2 * 3);
             chantierRepo.save(chantier);
-		}
+        }
 		log.info(n + " Chantier Loaded *****");
 	}
 
@@ -98,7 +99,7 @@ public class DataFakerO {
             classe.setNom("Classe" + (i + 1));
             classeRepo.save(classe);
         }
-	}
+    }
 	private void loadFamille(int n) {
 		for (int i = 0; i < n; i++) {
 			Famille famille = new Famille();
@@ -108,7 +109,7 @@ public class DataFakerO {
             else
                 famille.setClasse(classeRepo.findById((i / 200) + 1L).get());
             familleRepo.save(famille);
-		}
+        }
 		log.info(n + " Famille Loaded *****");
 	}
 
@@ -122,12 +123,12 @@ public class DataFakerO {
     }
 
     private void loadSousFamilles(int n) {
-		for (int i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++) {
 			Famille famille = familleRepo.getOne((i / 2) + 1L);
             Marque marque = marqueRepo.getOne((i / 2) + 1L);
             SousFamille sousFamille = new SousFamille();
             sousFamille.setNom("sousFamille" + (i + 1));
-			sousFamille.setFamille(famille);
+            sousFamille.setFamille(famille);
             sousFamille.setMarque(marque);
             sousFamille.setCapaciteReservoir(10 + i * 10);
             if (i % 3 == 0) {
@@ -139,7 +140,7 @@ public class DataFakerO {
                 sousFamille.setConsommationHMax(20 + i * 10);
             } else if (i % 3 == 2) {
                 sousFamille.setTypeCompteur(TypeCompteur.KM);
-				sousFamille.setConsommationKmMax(20 + i * 10);
+                sousFamille.setConsommationKmMax(20 + i * 10);
 			}
 			sousFamilleRepo.save(sousFamille);
 
@@ -153,7 +154,7 @@ public class DataFakerO {
             SousFamille sousFamille = sousFamilleRepo.getOne(i / 100 + 1L);
             //Creation the object
             Engin engin = new Engin();
-			engin.setCode("Pelle" + (i + 1));
+            engin.setCode("Pelle" + (i + 1));
 			engin.setNumeroSerie("TPF" + i + "zz" + i);
 			engin.setGroupe(groupe);
             engin.setSousFamille(sousFamille);
@@ -174,7 +175,7 @@ public class DataFakerO {
             }
             //Persisting
             enginRepo.save(engin);
-		}
+        }
 		log.info(n + " Engin Loaded *****");
 	}
 
