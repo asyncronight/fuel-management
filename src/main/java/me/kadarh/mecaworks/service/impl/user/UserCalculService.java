@@ -59,13 +59,23 @@ public class UserCalculService {
             List<BonFournisseur> bonFournisseurs = bonFournisseurRepo.findAllBetweenDates(LocalDate.of(year, Month.of(month).getValue(), 1), LocalDate.of(year, Month.of(month).plus(1).getValue(), 1));
             Map<Chantier, Double> prix = bonFournisseurs.stream().collect(Collectors.groupingBy(BonFournisseur::getChantier, Collectors.averagingDouble(BonFournisseur::getPrixUnitaire)));
             for (Map.Entry<Chantier, Long> entry : sum.entrySet()) {
-                chantierBatch = new ChantierBatch(month, year, entry.getValue(), sum2.get(entry.getKey()), chargeLocataire.get(entry.getKey()), chargeLocataireExterne.get(entry.getKey()), prix.get(entry.getKey()).floatValue(), consommationPrevue.get(entry.getKey()), entry.getKey());
-                if (chantierBatch.getQuantiteLocation() == null) chantierBatch.setQuantiteLocation(0L);
-                if (chantierBatch.getQuantite() == null) chantierBatch.setQuantite(0L);
-                if (chantierBatch.getChargeLocataireExterne() == null) chantierBatch.setChargeLocataireExterne(0L);
-                if (chantierBatch.getChargeLocataire() == null) chantierBatch.setChargeLocataire(0L);
-                if (chantierBatch.getConsommationPrevue() == null) chantierBatch.setConsommationPrevue(0L);
-                list.add(chantierBatch);
+                if (entry != null) {
+                    //Fix in 0 if null
+                    Long quantite = entry.getValue();
+                    Long quantiteL = sum2.get(entry.getKey()) == null ? 0L : sum2.get(entry.getKey());
+                    Long cl = chargeLocataire.get(entry.getKey()) == null ? 0L : chargeLocataire.get(entry.getKey());
+                    Long clex = chargeLocataireExterne.get(entry.getKey()) == null ? 0L : chargeLocataireExterne.get(entry.getKey());
+                    Long cp = consommationPrevue.get(entry.getKey()) == null ? 0L : consommationPrevue.get(entry.getKey());
+                    Float p = prix.get(entry.getKey()) == null ? 0f : prix.get(entry.getKey()).floatValue();
+
+                    chantierBatch = new ChantierBatch(month, year, quantite, quantiteL, cl, clex, p, cp, entry.getKey());
+                    if (chantierBatch.getQuantiteLocation() == null) chantierBatch.setQuantiteLocation(0L);
+                    if (chantierBatch.getQuantite() == null) chantierBatch.setQuantite(0L);
+                    if (chantierBatch.getChargeLocataireExterne() == null) chantierBatch.setChargeLocataireExterne(0L);
+                    if (chantierBatch.getChargeLocataire() == null) chantierBatch.setChargeLocataire(0L);
+                    if (chantierBatch.getConsommationPrevue() == null) chantierBatch.setConsommationPrevue(0L);
+                    list.add(chantierBatch);
+                }
             }
             log.info("--> List of Chantier_Batch contains " + list.size() + " elements");
             return list;
@@ -84,10 +94,12 @@ public class UserCalculService {
             List<BonEngin> bonEngins = bonEnginRepo.findAllBetweenDates(LocalDate.of(year, Month.of(monthValue).getValue(), 1), LocalDate.of(year, Month.of(monthValue).plus(1).getValue(), 1));
             Map<Engin, Double> consommationPrevue = bonEngins.stream().filter(bonEngin -> bonEngin.getConsommationH() != 0 && bonEngin.getConsommationH() != null).collect(Collectors.groupingBy(BonEngin::getEngin, Collectors.averagingDouble(BonEngin::getConsommationPrevu)));
             for (Map.Entry<Engin, Double> entry : consommationPrevue.entrySet()) {
-                Engin engin = enginService.get(entry.getKey().getId());
-                engin.setConsommationMoyenne(entry.getValue().floatValue());
-                engin = enginService.update(engin);
-                log.info("Engin with id =" + engin.getId() + " updated successfully");
+                if (entry != null) {
+                    Engin engin = enginService.get(entry.getKey().getId());
+                    engin.setConsommationMoyenne(entry.getValue().floatValue());
+                    engin = enginService.update(engin);
+                    log.info("Engin with id =" + engin.getId() + " updated successfully");
+                }
             }
         } catch (NoSuchElementException e) {
             log.info("Operation failed : No element in Engin table -- ");
