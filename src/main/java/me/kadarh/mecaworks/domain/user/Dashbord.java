@@ -6,6 +6,12 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * PROJECT mecaworks
+ *
+ * @author kadarH
+ * Created at 30/05/18
+ */
 @Data
 public class Dashbord {
 

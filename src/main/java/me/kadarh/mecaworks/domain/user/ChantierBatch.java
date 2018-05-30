@@ -1,5 +1,10 @@
 package me.kadarh.mecaworks.domain.user;
-
+/**
+ * PROJECT mecaworks
+ *
+ * @author kadarH
+ * Created at 30/05/18
+ */
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
