@@ -5,47 +5,47 @@
 <div th:fragment="onglet2">
 	<!--/*@thymesVar id="data" type="me.kadarh.mecaworks.domain.user.Dashbord"*/-->
 	<div class="row">
-		<div class="col-md-6 col-sm-12 text-center card" style="height: 400px">
-			<table class="table table-hover table-responsive">
-				<thead>
-				<tr>
-					<th class="bg-dark text-white">Chantier</th>
-					<th class="bg-dark text-white">Consommation gasoile location</th>
-					<th class="bg-dark text-white">Consommation gasoile interne</th>
-					<th class="bg-dark text-white">Consommation gasoile totale</th>
-					<th class="bg-dark text-white">Consommation gasoile prévue</th>
-					<th class="bg-dark text-white">Charge locataire interne</th>
-					<th class="bg-dark text-white">Charge locataire externe</th>
-					<th class="bg-dark text-white">Charge locataire totale</th>
-				</tr>
-				</thead>
-				<tbody>
-				<tr th:each="chantier : ${data.chantierBatch}">
-					<td>
-						<a th:text="${chantier.chantier.nom +' ('+chantier.chantier.adresse+')'}"
-						   th:href="'/usr/gazoil/chantier/'+${chantier.chantier.id}"></a>
-					</td>
-					<td th:text="${#numbers.formatInteger(chantier.quantiteLocation, 1, 'COMMA')}+' (L) - '+${#numbers.formatDecimal(chantier.quantiteLocation*chantier.prix, 1, 'COMMA', 2, 'POINT')}+' (DH)'"></td>
-					<td th:text="${#numbers.formatInteger(chantier.quantite - chantier.quantiteLocation, 1, 'COMMA')}+' (L) - '+${#numbers.formatDecimal((chantier.quantite - chantier.quantiteLocation)*chantier.prix, 1, 'COMMA', 2, 'POINT')}+' (DH)'"></td>
-					<td th:text="${#numbers.formatInteger(chantier.quantite, 1, 'COMMA')}+' (L) - '+${#numbers.formatDecimal(chantier.quantite*chantier.prix, 1, 'COMMA', 2, 'POINT')}+' (DH)'"
-					    class="text-white"
-					    th:classappend="${chantier.quantite ge chantier.consommationPrevue*1.1? 'bg-danger': 'bg-success'}"></td>
-					<td class="text-white bg-secondary"
-					    th:text="${#numbers.formatInteger(chantier.consommationPrevue, 1, 'COMMA')}+' (L) - '+${#numbers.formatDecimal(chantier.consommationPrevue*chantier.prix, 1, 'COMMA', 2, 'POINT')}+' (DH)'"></td>
-					<td th:text="${#numbers.formatDecimal(chantier.chargeLocataire - chantier.chargeLocataireExterne, 1, 'COMMA', 2, 'POINT')}+' (DH)'"></td>
-					<td th:text="${#numbers.formatDecimal(chantier.chargeLocataireExterne, 1, 'COMMA', 2, 'POINT')}+' (DH)'"></td>
-					<td class="text-white bg-secondary"
-					    th:text="${#numbers.formatDecimal(chantier.chargeLocataire, 1, 'COMMA', 2, 'POINT')}+' (DH)'"></td>
-				</tr>
-				</tbody>
-			</table>
+		<div class="col-md-7 card">
+			<canvas id="chart3" width="150" height="100"></canvas>
 		</div>
-		<div class="col-md-3 col-sm-6 card">
-			<canvas id="chart3" width="150" height="150"></canvas>
+		<div class="col-md-5 card">
+			<canvas id="chart4" width="150" height="130"></canvas>
 		</div>
-		<div class="col-md-3 col-sm-6 card">
-			<canvas id="chart4" width="150" height="150"></canvas>
-		</div>
+	</div>
+	<div class="row card" style="height: 400px">
+		<table class="table table-hover table-responsive text-center">
+			<thead>
+			<tr>
+				<th class="bg-dark text-white">Chantier</th>
+				<th class="bg-dark text-white">Consommation gasoile location</th>
+				<th class="bg-dark text-white">Consommation gasoile interne</th>
+				<th class="bg-dark text-white">Consommation gasoile totale</th>
+				<th class="bg-dark text-white">Consommation gasoile prévue</th>
+				<th class="bg-dark text-white">Charge locataire interne</th>
+				<th class="bg-dark text-white">Charge locataire externe</th>
+				<th class="bg-dark text-white">Charge locataire totale</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="chantier : ${data.chantierBatch}">
+				<td>
+					<a th:text="${chantier.chantier.nom +' ('+chantier.chantier.adresse+')'}"
+					   th:href="'/usr/gazoil/chantier/'+${chantier.chantier.id}"></a>
+				</td>
+				<td th:text="${#numbers.formatInteger(chantier.quantiteLocation, 1, 'COMMA')}+' (L) - '+${#numbers.formatDecimal(chantier.quantiteLocation*chantier.prix, 1, 'COMMA', 2, 'POINT')}+' (DH)'"></td>
+				<td th:text="${#numbers.formatInteger(chantier.quantite - chantier.quantiteLocation, 1, 'COMMA')}+' (L) - '+${#numbers.formatDecimal((chantier.quantite - chantier.quantiteLocation)*chantier.prix, 1, 'COMMA', 2, 'POINT')}+' (DH)'"></td>
+				<td th:text="${#numbers.formatInteger(chantier.quantite, 1, 'COMMA')}+' (L) - '+${#numbers.formatDecimal(chantier.quantite*chantier.prix, 1, 'COMMA', 2, 'POINT')}+' (DH)'"
+				    class="text-white"
+				    th:classappend="${chantier.quantite ge chantier.consommationPrevue*1.1? 'bg-danger': 'bg-success'}"></td>
+				<td class="text-white bg-secondary"
+				    th:text="${#numbers.formatInteger(chantier.consommationPrevue, 1, 'COMMA')}+' (L) - '+${#numbers.formatDecimal(chantier.consommationPrevue*chantier.prix, 1, 'COMMA', 2, 'POINT')}+' (DH)'"></td>
+				<td th:text="${#numbers.formatDecimal(chantier.chargeLocataire - chantier.chargeLocataireExterne, 1, 'COMMA', 2, 'POINT')}+' (DH)'"></td>
+				<td th:text="${#numbers.formatDecimal(chantier.chargeLocataireExterne, 1, 'COMMA', 2, 'POINT')}+' (DH)'"></td>
+				<td class="text-white bg-secondary"
+				    th:text="${#numbers.formatDecimal(chantier.chargeLocataire, 1, 'COMMA', 2, 'POINT')}+' (DH)'"></td>
+			</tr>
+			</tbody>
+		</table>
 	</div>
 </div>
 </body>
