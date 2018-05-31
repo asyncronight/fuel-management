@@ -58,17 +58,17 @@ public class CheckServiceImpl {
         if (typeCompteur.equals(TypeCompteur.H.name())) {
             if (bonEngin.getCompteurH() > lastBonEngin.getCompteurH())
                 return ((bonEngin.getCompteurAbsoluH() - lastBonEngin.getCompteurAbsoluH()) < days * 24);
-            return true;
+            return false;
         } else if (typeCompteur.equals(TypeCompteur.KM.name())) {
             if (bonEngin.getCompteurKm() > lastBonEngin.getCompteurKm())
                 return ((bonEngin.getCompteurAbsoluKm() - lastBonEngin.getCompteurAbsoluKm()) < days * 2200);
-            return true;
+            return false;
         } else if (typeCompteur.equals(TypeCompteur.KM_H.name())) {
             diff = bonEngin.getCompteurAbsoluH() - lastBonEngin.getCompteurAbsoluH();
             diff1 = bonEngin.getCompteurAbsoluKm() - lastBonEngin.getCompteurAbsoluKm();
             if (bonEngin.getCompteurH() > lastBonEngin.getCompteurH() && bonEngin.getCompteurKm() > lastBonEngin.getCompteurKm())
                 return (diff < days * 24) && (diff1 < days * 2200);
-            return true;
+            return false;
         }
         throw new OperationFailedException("operation echouée , typeCompteur introuvable");
     }

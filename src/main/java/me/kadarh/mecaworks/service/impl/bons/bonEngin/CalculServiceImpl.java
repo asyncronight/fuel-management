@@ -44,8 +44,8 @@ public class CalculServiceImpl {
             bon.setPompiste(employeService.get(bon.getPompiste().getId()));
             bon.setChantierTravail(chantierService.get(bon.getChantierTravail().getId()));
             bon.setChantierGazoil(chantierService.get(bon.getChantierGazoil().getId()));
+            bon = calculCompteursAbsolu(bon, persistService.getLastBonEngin(bon.getEngin()));
             bon.setConsommationPrevu(bon.getEngin().getConsommationMoyenne().longValue() * bon.getNbrHeures());
-            calculCompteursAbsolu(bon, persistService.getLastBonEngin(bon.getEngin()));
             bon.setChargeHoraire(bon.getNbrHeures() * bon.getEngin().getPrixLocationJournalier().longValue() / bon.getEngin().getObjectif());
             log.info("Compteur Absolu H = " + bon.getCompteurAbsoluH());
             log.info("Compteur Absolu Km = " + bon.getCompteurAbsoluKm());
@@ -57,7 +57,7 @@ public class CalculServiceImpl {
         }
     }
 
-    public void calculCompteursAbsolu(BonEngin bonEngin, BonEngin lastBon) {
+    public BonEngin calculCompteursAbsolu(BonEngin bonEngin, BonEngin lastBon) {
         log.info("--- > Calcul compteur Absolu");
         String typeCompteur = bonEngin.getEngin().getSousFamille().getTypeCompteur().name();
         BonEngin bonEngin1 = lastBon;
@@ -102,6 +102,7 @@ public class CalculServiceImpl {
         log.info("--- > Calcul compteur AbsoluKm = " + bonEngin.getCompteurKm());
         log.info("--- > Calcul compteur AbsoluH = " + bonEngin.getCompteurH());
         log.info("------------------------------------------ Compteur absolu calculated ------");
+        return bonEngin1;
     }
 
     private BonEngin verifyBon_ifCompteurH_EnPanne(BonEngin bonEngin, BonEngin bonEngin1) {
