@@ -128,6 +128,13 @@ var chart3 = new Chart('chart3', {
                 return value.quantite;
             })
         }, {
+            label: "Consommation gasoil locataire (L)",
+            backgroundColor: colors,
+            borderWidth: 2,
+            data: data.chantierBatch.map(function (value) {
+                return value.quantiteLocation;
+            })
+        }, {
             label: "Consommation gasoil prevue (L)",
             borderColor: 'rgb(43, 106, 206)',
             backgroundColor: 'rgb(43, 106, 206, 0.2)',
@@ -187,7 +194,8 @@ var chart4 = new Chart('chart4', {
         legend: {
             labels: {
                 fullWidth: false
-            }
+            },
+            position: 'left'
         }
     }
 });
