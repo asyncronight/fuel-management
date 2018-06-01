@@ -14,8 +14,7 @@ var mixedChart = new Chart('chart1', {
             borderWidth: 1,
             data: data.quantites.map(function (value) {
                 return value.quantity;
-            }),
-            option: {}
+            })
         }, {
             label: 'Consommation gasoil location (L)',
             backgroundColor: 'rgb(244, 211, 90, 0.8)',
@@ -119,31 +118,53 @@ var colors = data.chantierBatch.map(function () {
     return "rgb(" + r + "," + g + "," + b + ")";
 });
 var chart3 = new Chart('chart3', {
-    type: 'doughnut',
+    type: 'bar',
     data: {
         datasets: [{
+            label: "Consommation gasoil totale (L)",
             backgroundColor: colors,
             borderWidth: 2,
             data: data.chantierBatch.map(function (value) {
                 return value.quantite;
             })
+        }, {
+            label: "Consommation gasoil locataire (L)",
+            backgroundColor: colors,
+            borderWidth: 2,
+            data: data.chantierBatch.map(function (value) {
+                return value.quantiteLocation;
+            })
+        }, {
+            label: "Consommation gasoil prevue (L)",
+            borderColor: 'rgb(43, 106, 206)',
+            backgroundColor: 'rgb(43, 106, 206, 0.2)',
+            type: 'line',
+            borderWidth: 2,
+            data: data.chantierBatch.map(function (value) {
+                return value.consommationPrevue;
+            })
         }],
         labels: data.chantierBatch.map(function (value) {
-            return value.chantier.nom + ' (' + value.chantier.adresse + ')';
+            return '';
         })
     },
     options: {
         title: {
             display: true,
-            text: 'Consommation de gasoile totale en litre'
+            text: 'Consommation de gasoile en litre'
         },
-        responsive: true,
         onClick: function (evt) {
             window.location = '/user/gazoil/chantier/' + data.chantierBatch[chart3.getElementAtEvent(evt)[0]._index].chantier.id;
         },
-        legend: {
-            display: false
-        }
+        tooltips: {
+            mode: 'index',
+            intersect: false
+        },
+        hover: {
+            mode: 'index',
+            intersect: false
+        },
+        responsive: true
     }
 });
 //initiate chart4
@@ -171,6 +192,9 @@ var chart4 = new Chart('chart4', {
             window.location = '/user/gazoil/chantier/' + data.chantierBatch[chart4.getElementAtEvent(evt)[0]._index].chantier.id;
         },
         legend: {
+            labels: {
+                fullWidth: false
+            },
             position: 'left'
         }
     }
