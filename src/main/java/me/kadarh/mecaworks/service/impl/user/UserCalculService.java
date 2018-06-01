@@ -96,7 +96,7 @@ public class UserCalculService {
             for (Map.Entry<Engin, Double> entry : consommationPrevue.entrySet()) {
                 if (entry != null) {
                     Engin engin = enginService.get(entry.getKey().getId());
-                    engin.setConsommationMoyenne(entry.getValue().floatValue());
+                    engin.setConsommationMoyenne(entry.getValue().floatValue() > engin.getSousFamille().getConsommationHMax() ? entry.getValue().floatValue() : engin.getSousFamille().getConsommationHMax().floatValue());
                     engin = enginService.update(engin);
                     log.info("Engin with id =" + engin.getId() + " updated successfully");
                 }
