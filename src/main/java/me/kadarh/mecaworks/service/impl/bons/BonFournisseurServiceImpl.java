@@ -6,6 +6,8 @@ import me.kadarh.mecaworks.domain.others.Chantier;
 import me.kadarh.mecaworks.domain.others.Fournisseur;
 import me.kadarh.mecaworks.domain.others.Stock;
 import me.kadarh.mecaworks.repo.bons.BonFournisseurRepo;
+import me.kadarh.mecaworks.service.ChantierService;
+import me.kadarh.mecaworks.service.FournisseurService;
 import me.kadarh.mecaworks.service.StockService;
 import me.kadarh.mecaworks.service.bons.BonFournisseurService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
@@ -31,19 +33,23 @@ import java.util.NoSuchElementException;
 @Slf4j
 public class BonFournisseurServiceImpl implements BonFournisseurService {
 
-    private BonFournisseurRepo bonFournisseurRepo;
-    private StockService stockService;
+    private final BonFournisseurRepo bonFournisseurRepo;
+    private final StockService stockService;
+    private final ChantierService chantierService;
+    private final FournisseurService fournisseurService;
 
-    public BonFournisseurServiceImpl(BonFournisseurRepo bonFournisseurRepo, StockService stockService) {
+    public BonFournisseurServiceImpl(BonFournisseurRepo bonFournisseurRepo, StockService stockService, ChantierService chantierService, FournisseurService fournisseurService) {
         this.bonFournisseurRepo = bonFournisseurRepo;
         this.stockService = stockService;
+        this.chantierService = chantierService;
+        this.fournisseurService = fournisseurService;
     }
 
     @Override
     public BonFournisseur add(BonFournisseur bonFournisseur) {
         log.info("Service- BonFournisseurServiceImpl Calling add ");
         try {
-            bonFournisseur = bonFournisseurRepo.save(bonFournisseur);
+            bonFournisseurRepo.save(fill(bonFournisseur));
             insertStock_Fournisseur(bonFournisseur);
             return bonFournisseur;
         } catch (Exception e) {
@@ -51,14 +57,21 @@ public class BonFournisseurServiceImpl implements BonFournisseurService {
         }
     }
 
+    private BonFournisseur fill(BonFournisseur bonFournisseur) {
+        bonFournisseur.setFournisseur(fournisseurService.get(bonFournisseur.getFournisseur().getId()));
+        bonFournisseur.setChantier(chantierService.get(bonFournisseur.getChantier().getId()));
+        return bonFournisseur;
+    }
+
     public void insertStock_Fournisseur(BonFournisseur bonFournisseur) {
         Stock stock = new Stock();
-        stock.setChantier(bonFournisseur.getChantier());
+        Chantier chantier = bonFournisseur.getChantier();
+        stock.setChantier(chantier);
         stock.setDate(bonFournisseur.getDate());
         stock.setEntreeF(bonFournisseur.getQuantite());
-        if (stockService.getLastStock() != null)
-            stock.setStockC(stockService.getLastStock().getStockC() + bonFournisseur.getQuantite());
-        else stock.setStockC(bonFournisseur.getChantier().getStock());
+        if (stockService.getLastStock(chantier) != null)
+            stock.setStockC(stockService.getLastStock(chantier).getStockC() + bonFournisseur.getQuantite());
+        else stock.setStockC(bonFournisseur.getChantier().getStock() + bonFournisseur.getQuantite());
         stockService.add(stock);
     }
 

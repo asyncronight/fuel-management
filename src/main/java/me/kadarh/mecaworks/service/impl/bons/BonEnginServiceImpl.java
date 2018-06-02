@@ -178,15 +178,12 @@ public class BonEnginServiceImpl implements BonEnginService {
         calculService.fillBon(bon);
         BonEngin bonEngin = persistService.getLastBonEngin(bon.getEngin());
         if (bonEngin == null) return false;
-        if (bon.getEngin().getSousFamille().getTypeCompteur().equals(TypeCompteur.H)) {
+        if (bon.getEngin().getSousFamille().getTypeCompteur().equals(TypeCompteur.H))
             return (bon.getCompteurH() < bonEngin.getCompteurH() && !bon.getCompteurHenPanne());
-        }
-        if (bon.getEngin().getSousFamille().getTypeCompteur().equals(TypeCompteur.KM)) {
+        if (bon.getEngin().getSousFamille().getTypeCompteur().equals(TypeCompteur.KM))
             return (bon.getCompteurKm() < bonEngin.getCompteurKm());
-        }
-        if (bon.getEngin().getSousFamille().getTypeCompteur().equals(TypeCompteur.KM_H)) {
+        if (bon.getEngin().getSousFamille().getTypeCompteur().equals(TypeCompteur.KM_H))
             return (bon.getCompteurH() < bonEngin.getCompteurH()) || (bon.getCompteurKm() < bonEngin.getCompteurKm());
-        }
         return false;
     }
 

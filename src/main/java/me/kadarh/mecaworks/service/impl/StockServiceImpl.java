@@ -1,6 +1,7 @@
 package me.kadarh.mecaworks.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import me.kadarh.mecaworks.domain.others.Chantier;
 import me.kadarh.mecaworks.domain.others.Stock;
 import me.kadarh.mecaworks.repo.others.StockRepo;
 import me.kadarh.mecaworks.service.StockService;
@@ -56,13 +57,13 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
-    public Stock getLastStock() {
+    public Stock getLastStock(Chantier chantier) {
         log.info("Service-StockServiceImpl Calling getLastStock  :");
         try {
-            return stockRepo.findLastStock();
+            return stockRepo.findLastStock(chantier.getId()).get();
         } catch (NoSuchElementException e) {
             log.info("Problem , cannot find last Stock");
-            throw new ResourceNotFoundException("Stock introuvable", e);
+            return null;
         } catch (Exception e) {
             log.info("Problem , cannot get last Stock");
             throw new OperationFailedException("Problème lors de la recherche du Stock", e);

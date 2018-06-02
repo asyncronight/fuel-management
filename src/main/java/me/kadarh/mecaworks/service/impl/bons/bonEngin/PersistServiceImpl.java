@@ -4,10 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.alertes.Alerte;
 import me.kadarh.mecaworks.domain.alertes.TypeAlerte;
 import me.kadarh.mecaworks.domain.bons.BonEngin;
-import me.kadarh.mecaworks.domain.others.Engin;
-import me.kadarh.mecaworks.domain.others.SousFamille;
-import me.kadarh.mecaworks.domain.others.Stock;
-import me.kadarh.mecaworks.domain.others.TypeCompteur;
+import me.kadarh.mecaworks.domain.others.*;
 import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
 import me.kadarh.mecaworks.service.AlerteService;
 import me.kadarh.mecaworks.service.StockService;
@@ -72,12 +69,13 @@ public class PersistServiceImpl {
 
     public void insertStock(BonEngin bonEngin) {
         Stock stock = new Stock();
-        stock.setChantier(bonEngin.getChantierTravail());
+        Chantier chantier = bonEngin.getChantierTravail();
+        stock.setChantier(chantier);
         stock.setDate(bonEngin.getDate());
         stock.setSortieE(bonEngin.getQuantite());
-        if (stockService.getLastStock() != null)
-            stock.setStockC(stockService.getLastStock().getStockC() - bonEngin.getQuantite());
-        else stock.setStockC(bonEngin.getChantierGazoil().getStock());
+        if (stockService.getLastStock(chantier) != null)
+            stock.setStockC(stockService.getLastStock(chantier).getStockC() - bonEngin.getQuantite());
+        else stock.setStockC(bonEngin.getChantierGazoil().getStock() - bonEngin.getQuantite());
         stockService.add(stock);
     }
 

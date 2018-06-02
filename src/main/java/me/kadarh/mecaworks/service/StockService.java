@@ -1,5 +1,6 @@
 package me.kadarh.mecaworks.service;
 
+import me.kadarh.mecaworks.domain.others.Chantier;
 import me.kadarh.mecaworks.domain.others.Stock;
 
 public interface StockService {
@@ -8,5 +9,5 @@ public interface StockService {
 
     Stock get(Long id);
 
-    Stock getLastStock();
+    Stock getLastStock(Chantier chantier);
 }

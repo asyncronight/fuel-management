@@ -75,7 +75,7 @@ public class ChantierServiceImpl implements ChantierService {
 					stock.setStockC(chantier.getStock());
 					stock.setStockReel(chantier.getStock());
 					stock.setChantier(old);
-					Integer stockC = stockService.getLastStock().getStockC();
+					Integer stockC = stockService.getLastStock(chantier).getStockC();
 					if (stockC < chantier.getStock())
 						stock.setEcart_plus(chantier.getStock() - stockC);
 					else if (stockC > chantier.getStock())
