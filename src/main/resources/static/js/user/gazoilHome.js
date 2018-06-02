@@ -170,7 +170,7 @@ var chart3 = new Chart('chart3', {
             text: 'Consommation de gasoile en litre'
         },
         onClick: function (evt) {
-            window.location = '/user/gazoil/chantier/' + data.chantierBatch[chart3.getElementAtEvent(evt)[0]._index].chantier.id;
+            window.location = '/user/gazoil/chantiers/' + data.chantierBatch[chart3.getElementAtEvent(evt)[0]._index].chantier.id;
         },
         tooltips: {
             mode: 'index',
@@ -205,7 +205,7 @@ var chart4 = new Chart('chart4', {
         },
         responsive: true,
         onClick: function (evt) {
-            window.location = '/user/gazoil/chantier/' + data.chantierBatch[chart4.getElementAtEvent(evt)[0]._index].chantier.id;
+            window.location = '/user/gazoil/chantiers/' + data.chantierBatch[chart4.getElementAtEvent(evt)[0]._index].chantier.id;
         },
         legend: {
             labels: {

@@ -1,6 +1,7 @@
 package me.kadarh.mecaworks.domain.user;
 
 import lombok.Data;
+import me.kadarh.mecaworks.domain.others.Chantier;
 
 /**
  * PROJECT mecaworks
@@ -11,4 +12,5 @@ import lombok.Data;
 @Data
 public class DashbordChantier {
 
+	private Chantier chantier;
 }

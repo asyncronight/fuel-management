@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="fragments :: head"></head>
+<body>
+<div th:replace="fragments :: menu('user')"></div>
+<div class="bmd-layout-container bmd-drawer-f-l  bmd-drawer-overlay-md-down">
+	<div th:replace="user/fragment :: menu('g')"></div>
+	<main class="bmd-layout-content">
+		<div class="container-fluid">
+			<button class="btn bmd-btn-fab btn-primary bmd-btn-fab-sm active" type="button" data-toggle="drawer"
+			        data-target="#side" style="margin-top: 10px">
+				<i class="material-icons text-light">menu</i>
+			</button>
+			<select class="custom-select float-right col-md-3 col-lg-3 col-sm-6 text-center">
+				<option th:text="${now}"></option>
+				<option disabled="disabled">--------------------</option>
+				<option th:each="month : ${months}" th:text="${month.value}"
+				        th:value="${month.key}" th:onclick="|navigate('${month.key}')|"></option>
+			</select>
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
+				<li class="breadcrumb-item"><a th:href="@{'/user'}" th:text="#{user}"></a></li>
+				<li class="breadcrumb-item"><a th:href="@{'/user/gazoil'}" th:text="#{gazoil}"></a></li>
+				<li class="breadcrumb-item" th:text="${data?.chantier?.nom +' ('+data?.chantier?.adresse+')'}"></li>
+			</ol>
+
+			<div class="accordion" id="accordionExample">
+				<div class="card">
+					<div class="card-header text-center">
+						<h5 class="m-0">
+							<button class="btn btn-link" type="button" data-toggle="collapse"
+							        data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+								<strong>Item 1</strong>
+							</button>
+						</h5>
+					</div>
+
+					<div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+					     data-parent="#accordionExample">
+						<div class="card-body">
+							<div th:include="user/gazoil/chantier/include/onglet1 :: onglet1"></div>
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header text-center">
+						<h5 class="m-0">
+							<button class="btn btn-link" type="button" data-toggle="collapse"
+							        data-target="#collapse2" aria-expanded="true" aria-controls="collapse2">
+								<strong>item2</strong>
+							</button>
+						</h5>
+					</div>
+
+					<div id="collapse2" class="collapse" aria-labelledby="headingOne"
+					     data-parent="#accordionExample">
+						<div class="card-body">
+							<div th:include="user/gazoil/chantier/include/onglet2 :: onglet2"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+</div>
+<div th:replace="fragments :: footer"></div>
+<script th:inline="javascript">
+    var data = /*[[${data}]]*/ '';
+
+    function navigate(date) {
+        window.location.href = '?date=' + date;
+    }
+</script>
+<script th:src="@{/js/user/chantierHome.js}"></script>
+</body>
+</html>

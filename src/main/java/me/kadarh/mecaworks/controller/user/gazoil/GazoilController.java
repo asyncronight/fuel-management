@@ -1,4 +1,4 @@
-package me.kadarh.mecaworks.controller.user;
+package me.kadarh.mecaworks.controller.user.gazoil;
 
 import me.kadarh.mecaworks.service.user.DashbordService;
 import org.springframework.stereotype.Controller;
@@ -39,7 +39,7 @@ public class GazoilController {
         return "user/gazoil/home";
     }
 
-	private Map<String, String> generate(Locale locale) {
+	static Map<String, String> generate(Locale locale) {
 		int month = LocalDate.now().getMonthValue();
 		int year = LocalDate.now().getYear();
 

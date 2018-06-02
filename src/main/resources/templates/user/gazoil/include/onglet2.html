@@ -31,7 +31,7 @@
 			<tr th:each="chantier : ${data.chantierBatch}">
 				<td>
 					<a th:text="${chantier.chantier.nom +' ('+chantier.chantier.adresse+')'}"
-					   th:href="'/usr/gazoil/chantier/'+${chantier.chantier.id}"></a>
+					   th:href="'/user/gazoil/chantiers/'+${chantier.chantier.id}"></a>
 				</td>
 				<td th:text="${#numbers.formatInteger(chantier.quantiteLocation, 1, 'COMMA')}+' (L) - '+${#numbers.formatDecimal(chantier.quantiteLocation*chantier.prix, 1, 'COMMA', 2, 'POINT')}+' (DH)'"></td>
 				<td th:text="${#numbers.formatInteger(chantier.quantite - chantier.quantiteLocation, 1, 'COMMA')}+' (L) - '+${#numbers.formatDecimal((chantier.quantite - chantier.quantiteLocation)*chantier.prix, 1, 'COMMA', 2, 'POINT')}+' (DH)'"></td>
