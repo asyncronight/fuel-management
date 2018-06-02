@@ -12,6 +12,8 @@ public class Quantite {
     private Long chargeLocataireExterne = 0L;
 	private Float prix = 10F;
     private Long consommationPrevue = 0L;
+	private Long gazoilAchete = 0L;
+	private Long gazoilFlotant = 0L;
 
     public Quantite(String date, Long quantity, Long quantiteLocation, Long chargeLocataire, Long chargeLocataireExterne, Float prix, Long consommationPrevue) {
         this.date = date;

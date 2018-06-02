@@ -94,4 +94,32 @@ public class Dashbord {
 				.mapToLong(quantite -> quantite.getChargeLocataire() - quantite.getChargeLocataireExterne())
 				.sum() - (quantites.get(0).getChargeLocataire() - quantites.get(0).getChargeLocataireExterne());
 	}
+
+	@JsonIgnore
+	public Long getGazoilAcheteTotal() {
+		return quantites.stream()
+				.mapToLong(Quantite::getGazoilAchete)
+				.sum() - quantites.get(0).getGazoilAchete();
+	}
+
+	@JsonIgnore
+	public Double getGazoilAcheteTotalDh() {
+		return quantites.stream()
+				.mapToDouble(q -> q.getGazoilAchete() * q.getPrix())
+				.sum() - quantites.get(0).getGazoilAchete() * quantites.get(0).getPrix();
+	}
+
+	@JsonIgnore
+	public Long getGazoilFlotantTotal() {
+		return quantites.stream()
+				.mapToLong(Quantite::getGazoilFlotant)
+				.sum() - quantites.get(0).getGazoilFlotant();
+	}
+
+	@JsonIgnore
+	public Double getGazoilFlotantTotalDh() {
+		return quantites.stream()
+				.mapToDouble(q -> q.getGazoilFlotant() * q.getPrix())
+				.sum() - quantites.get(0).getGazoilFlotant() * quantites.get(0).getPrix();
+	}
 }

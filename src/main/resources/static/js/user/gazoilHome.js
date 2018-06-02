@@ -6,8 +6,17 @@ var mixedChart = new Chart('chart1', {
     type: 'bar',
     data: {
         datasets: [{
+            label: 'Consommation gasoil location (L)',
+            backgroundColor: 'rgb(244, 211, 90, 0.7)',
+            borderColor: 'rgb(244, 211, 90)',
+            borderWidth: 1,
+            data: data.quantites.map(function (value) {
+                return value.quantiteLocation;
+            })
+
+        }, {
             label: "Consommation gasoil totale (L)",
-            backgroundColor: 'rgb(196, 196, 196, 0.8)',
+            backgroundColor: 'rgb(45, 45, 45, 0.7)',
             borderColor: data.quantites.map(function (value) {
                 return parseInt(value.quantity, 10) >= parseInt(value.consommationPrevue, 10) * 1.1 ? 'rgb(255, 0, 76)' : 'rgb(4, 150, 50)';
             }),
@@ -15,15 +24,6 @@ var mixedChart = new Chart('chart1', {
             data: data.quantites.map(function (value) {
                 return value.quantity;
             })
-        }, {
-            label: 'Consommation gasoil location (L)',
-            backgroundColor: 'rgb(244, 211, 90, 0.8)',
-            borderColor: 'rgb(244, 211, 90)',
-            borderWidth: 1,
-            data: data.quantites.map(function (value) {
-                return value.quantiteLocation;
-            })
-
         }, {
             label: "Consommation gasoil prevue (L)",
             borderColor: 'rgb(43, 106, 206)',
@@ -33,6 +33,22 @@ var mixedChart = new Chart('chart1', {
             borderWidth: 2,
             data: data.quantites.map(function (value) {
                 return value.consommationPrevue;
+            })
+        }, {
+            label: "Quantité gasoil acheté (L)",
+            borderColor: 'rgb(66, 244, 212)',
+            backgroundColor: 'rgb(66, 244, 212, 0.7)',
+            borderWidth: 2,
+            data: data.quantites.map(function (value) {
+                return value.gazoilAchete;
+            })
+        }, {
+            label: "Quantité gasoil flotant (L)",
+            borderColor: 'rgb(239, 69, 182)',
+            backgroundColor: 'rgb(239, 69, 182, 0.7)',
+            borderWidth: 2,
+            data: data.quantites.map(function (value) {
+                return value.gazoilFlotant;
             })
         }],
         labels: data.quantites.map(function (value) {
