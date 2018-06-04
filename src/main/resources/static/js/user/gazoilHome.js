@@ -62,8 +62,9 @@ var mixedChart = new Chart('chart1', {
         },
         scales: {
             yAxes: [{
-                ticks: {
-                    beginAtZero: true
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Quantité de gasoile (L)'
                 }
             }]
         },
@@ -110,8 +111,9 @@ var mixedChart2 = new Chart('chart2', {
         },
         scales: {
             yAxes: [{
-                ticks: {
-                    beginAtZero: true
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Charge locataire (DH)'
                 }
             }]
         },
@@ -161,7 +163,7 @@ var chart3 = new Chart('chart3', {
             })
         }],
         labels: data.chantierBatch.map(function (value) {
-            return '';
+            return value.chantier.nom;
         })
     },
     options: {
@@ -180,14 +182,26 @@ var chart3 = new Chart('chart3', {
             mode: 'index',
             intersect: false
         },
-        responsive: true
+        responsive: true,
+        legend: {
+            display: false
+        },
+        scales: {
+            yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Quantité de gasoile (L)'
+                }
+            }]
+        }
     }
 });
 //initiate chart4
 var chart4 = new Chart('chart4', {
-    type: 'pie',
+    type: 'bar',
     data: {
         datasets: [{
+            label: "Charge locataire totale (DH)",
             backgroundColor: colors,
             borderWidth: 2,
             data: data.chantierBatch.map(function (value) {
@@ -195,7 +209,7 @@ var chart4 = new Chart('chart4', {
             })
         }],
         labels: data.chantierBatch.map(function (value) {
-            return value.chantier.nom + ' (' + value.chantier.adresse + ')';
+            return value.chantier.nom;
         })
     },
     options: {
@@ -208,10 +222,15 @@ var chart4 = new Chart('chart4', {
             window.location = '/user/gazoil/chantiers/' + data.chantierBatch[chart4.getElementAtEvent(evt)[0]._index].chantier.id;
         },
         legend: {
-            labels: {
-                fullWidth: false
-            },
-            position: 'left'
+            display: false
+        },
+        scales: {
+            yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Charge locataire (DH)'
+                }
+            }]
         }
     }
 });
