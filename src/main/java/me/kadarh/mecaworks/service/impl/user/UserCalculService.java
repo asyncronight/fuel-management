@@ -3,11 +3,13 @@ package me.kadarh.mecaworks.service.impl.user;
 import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.bons.BonEngin;
 import me.kadarh.mecaworks.domain.bons.BonFournisseur;
+import me.kadarh.mecaworks.domain.bons.BonLivraison;
 import me.kadarh.mecaworks.domain.others.Chantier;
 import me.kadarh.mecaworks.domain.others.Engin;
 import me.kadarh.mecaworks.domain.user.ChantierBatch;
 import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
 import me.kadarh.mecaworks.repo.bons.BonFournisseurRepo;
+import me.kadarh.mecaworks.repo.bons.BonLivraisonRepo;
 import me.kadarh.mecaworks.service.EnginService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
 import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
@@ -37,11 +39,13 @@ public class UserCalculService {
     private final BonEnginRepo bonEnginRepo;
     private final EnginService enginService;
     private final BonFournisseurRepo bonFournisseurRepo;
+    private final BonLivraisonRepo bonLivraisonRepo;
 
-    public UserCalculService(BonEnginRepo bonEnginRepo, EnginService enginService, BonFournisseurRepo bonFournisseurRepo) {
+    public UserCalculService(BonEnginRepo bonEnginRepo, EnginService enginService, BonFournisseurRepo bonFournisseurRepo, BonLivraisonRepo bonLivraisonRepo) {
         this.bonEnginRepo = bonEnginRepo;
         this.enginService = enginService;
         this.bonFournisseurRepo = bonFournisseurRepo;
+        this.bonLivraisonRepo = bonLivraisonRepo;
     }
 
     public List<ChantierBatch> getListChantierWithQuantities(int month, int year) {
@@ -49,15 +53,22 @@ public class UserCalculService {
         try {
             List<ChantierBatch> list = new ArrayList<>();
             ChantierBatch chantierBatch;
-            List<BonEngin> bonEngins = bonEnginRepo.findAllBetweenDates(LocalDate.of(year, Month.of(month).getValue(), 1), LocalDate.of(year, Month.of(month).plus(1).getValue(), 1));
+            LocalDate from = LocalDate.of(year, Month.of(month).getValue(), 1);
+            LocalDate to = LocalDate.of(year, Month.of(month).plus(1).getValue(), 1);
+
+            List<BonEngin> bonEngins = bonEnginRepo.findAllBetweenDates(from, to);
+            List<BonLivraison> bonLivraisons = bonLivraisonRepo.findAllBetweenDates(from, to);
+            List<BonFournisseur> bonFournisseurs = bonFournisseurRepo.findAllBetweenDates(from, to);
+
             Map<Chantier, Long> sum = bonEngins.stream().collect(Collectors.groupingBy(BonEngin::getChantierTravail, Collectors.summingLong(BonEngin::getQuantite)));
             Map<Chantier, Long> sum2 = bonEngins.stream().filter(bonEngin -> bonEngin.getEngin().getGroupe().getLocataire()).collect(Collectors.groupingBy(BonEngin::getChantierTravail, Collectors.summingLong(BonEngin::getQuantite)));
             Map<Chantier, Long> chargeLocataire = bonEngins.stream().collect(Collectors.groupingBy(BonEngin::getChantierTravail, Collectors.summingLong(BonEngin::getChargeHoraire)));
             Map<Chantier, Long> chargeLocataireExterne = bonEngins.stream().filter(bonEngin -> bonEngin.getEngin().getGroupe().getLocataire()).collect(Collectors.groupingBy(BonEngin::getChantierTravail, Collectors.summingLong(BonEngin::getChargeHoraire)));
             Map<Chantier, Long> consommationPrevue = bonEngins.stream().collect(Collectors.groupingBy(BonEngin::getChantierTravail, Collectors.summingLong(BonEngin::getConsommationPrevu)));
-
-            List<BonFournisseur> bonFournisseurs = bonFournisseurRepo.findAllBetweenDates(LocalDate.of(year, Month.of(month).getValue(), 1), LocalDate.of(year, Month.of(month).plus(1).getValue(), 1));
             Map<Chantier, Double> prix = bonFournisseurs.stream().collect(Collectors.groupingBy(BonFournisseur::getChantier, Collectors.averagingDouble(BonFournisseur::getPrixUnitaire)));
+            Map<Chantier, Long> quantiteAchetee = bonFournisseurs.stream().collect(Collectors.groupingBy(BonFournisseur::getChantier, Collectors.summingLong(BonFournisseur::getQuantite)));
+            Map<Chantier, Long> quantiteFlotante = bonLivraisons.stream().collect(Collectors.groupingBy(BonLivraison::getChantierDepart, Collectors.summingLong(BonLivraison::getQuantite)));
+
             for (Map.Entry<Chantier, Long> entry : sum.entrySet()) {
                 if (entry != null) {
                     //Fix in 0 if null
@@ -66,14 +77,19 @@ public class UserCalculService {
                     Long cl = chargeLocataire.get(entry.getKey()) == null ? 0L : chargeLocataire.get(entry.getKey());
                     Long clex = chargeLocataireExterne.get(entry.getKey()) == null ? 0L : chargeLocataireExterne.get(entry.getKey());
                     Long cp = consommationPrevue.get(entry.getKey()) == null ? 0L : consommationPrevue.get(entry.getKey());
+                    Long qa = quantiteAchetee.get(entry.getKey()) == null ? 0L : quantiteAchetee.get(entry.getKey());
+                    Long qf = quantiteFlotante.get(entry.getKey()) == null ? 0L : quantiteFlotante.get(entry.getKey());
                     Float p = prix.get(entry.getKey()) == null ? 0f : prix.get(entry.getKey()).floatValue();
 
-                    chantierBatch = new ChantierBatch(month, year, quantite, quantiteL, cl, clex, p, cp, entry.getKey());
+
+                    chantierBatch = new ChantierBatch(month, year, quantite, quantiteL, cl, clex, cp, p, qa, qf, entry.getKey());
                     if (chantierBatch.getQuantiteLocation() == null) chantierBatch.setQuantiteLocation(0L);
                     if (chantierBatch.getQuantite() == null) chantierBatch.setQuantite(0L);
                     if (chantierBatch.getChargeLocataireExterne() == null) chantierBatch.setChargeLocataireExterne(0L);
                     if (chantierBatch.getChargeLocataire() == null) chantierBatch.setChargeLocataire(0L);
                     if (chantierBatch.getConsommationPrevue() == null) chantierBatch.setConsommationPrevue(0L);
+                    if (chantierBatch.getGazoilAchete() == null) chantierBatch.setGazoilAchete(0L);
+                    if (chantierBatch.getGazoilFlotant() == null) chantierBatch.setGazoilFlotant(0L);
                     list.add(chantierBatch);
                 }
             }

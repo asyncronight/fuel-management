@@ -15,7 +15,7 @@ public class Quantite {
 	private Long gazoilAchete = 0L;
 	private Long gazoilFlotant = 0L;
 
-    public Quantite(String date, Long quantity, Long quantiteLocation, Long chargeLocataire, Long chargeLocataireExterne, Float prix, Long consommationPrevue) {
+    public Quantite(String date, Long quantity, Long quantiteLocation, Long chargeLocataire, Long chargeLocataireExterne, Float prix, Long consommationPrevue, Long gazoilAchete, Long gazoilFlotant) {
         this.date = date;
         this.quantity = quantity;
         this.quantiteLocation = quantiteLocation;
@@ -23,6 +23,8 @@ public class Quantite {
         this.chargeLocataireExterne = chargeLocataireExterne;
         this.prix = prix;
         this.consommationPrevue = consommationPrevue;
+        this.gazoilAchete = gazoilAchete;
+        this.gazoilFlotant = gazoilFlotant;
     }
 
     public Quantite() {

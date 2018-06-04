@@ -43,13 +43,18 @@ public class DashbordServiceImpl implements DashbordService {
                 dashbord.setChantierBatch(userCalculService.getListChantierWithQuantities(mois, year));
             else
                 dashbord.setChantierBatch(chantierBatchRepo.findAllByMoisAndAnnee(mois, year));
-            dashbord.getQuantites().add(new Quantite(mois + "/" + year, dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getQuantite).sum(),
+        dashbord.getQuantites().add(new Quantite(mois + "/" + year,
+                dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getQuantite).sum(),
                     dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getQuantiteLocation).sum(),
                     dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getChargeLocataire).sum(),
                     dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getChargeLocataireExterne).sum(),
                     dashbord.getChantierBatch().stream().mapToDouble(ChantierBatch::getPrix).average().isPresent() ? (float) dashbord.getChantierBatch().stream().mapToDouble(ChantierBatch::getPrix).average().getAsDouble() : 0f,
-                    dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getConsommationPrevue).sum()));
+                dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getConsommationPrevue).sum(),
+                dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getGazoilAchete).sum(),
+                dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getGazoilFlotant).sum()));
             log.info("--> Object Dashbored filled  ");
+
+        //Todo : dashbord.getQuantites().sort(Comparator.comparing(Quantite::getQuantity));
             return dashbord;
     }
 
@@ -68,7 +73,9 @@ public class DashbordServiceImpl implements DashbordService {
                         chantierBatches.stream().mapToLong(ChantierBatch::getChargeLocataire).sum(),
                         chantierBatches.stream().mapToLong(ChantierBatch::getChargeLocataireExterne).sum(),
                         (chantierBatches.stream().mapToDouble(ChantierBatch::getPrix).average().isPresent() ? (float) chantierBatches.stream().mapToDouble(ChantierBatch::getPrix).average().getAsDouble() : 0f),
-                        chantierBatches.stream().mapToLong(ChantierBatch::getConsommationPrevue).sum()));
+                        chantierBatches.stream().mapToLong(ChantierBatch::getConsommationPrevue).sum(),
+                        chantierBatches.stream().mapToLong(ChantierBatch::getGazoilAchete).sum(),
+                        chantierBatches.stream().mapToLong(ChantierBatch::getGazoilFlotant).sum()));
             }
             Dashbord dashbord = new Dashbord();
             dashbord.setQuantites(quantites);

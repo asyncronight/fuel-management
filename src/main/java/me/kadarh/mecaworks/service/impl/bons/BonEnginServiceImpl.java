@@ -6,12 +6,11 @@ import me.kadarh.mecaworks.domain.others.Employe;
 import me.kadarh.mecaworks.domain.others.Engin;
 import me.kadarh.mecaworks.domain.others.TypeCompteur;
 import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
-import me.kadarh.mecaworks.repo.others.EmployeRepo;
-import me.kadarh.mecaworks.repo.others.EnginRepo;
 import me.kadarh.mecaworks.service.bons.BonEnginService;
 import me.kadarh.mecaworks.service.bons.BonLivraisonService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
-import me.kadarh.mecaworks.service.impl.bons.bonEngin.CalculServiceImpl;
+import me.kadarh.mecaworks.service.impl.bons.bonEngin.CalculAbsoluServiceImpl;
+import me.kadarh.mecaworks.service.impl.bons.bonEngin.CalculConsommationServiceImpl;
 import me.kadarh.mecaworks.service.impl.bons.bonEngin.CheckServiceImpl;
 import me.kadarh.mecaworks.service.impl.bons.bonEngin.PersistServiceImpl;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -35,21 +34,19 @@ import java.time.format.DateTimeFormatter;
 public class BonEnginServiceImpl implements BonEnginService {
 
     private final BonEnginRepo bonEnginRepo;
-    private final EnginRepo enginRepo;
-    private final EmployeRepo employeRepo;
-    private final CalculServiceImpl calculService;
+    private final CalculConsommationServiceImpl calculService;
     private final CheckServiceImpl checkService;
     private final PersistServiceImpl persistService;
     private final BonLivraisonService bonLivraisonService;
+    private final CalculAbsoluServiceImpl calculAbsoluService;
 
-    public BonEnginServiceImpl(BonEnginRepo bonEnginRepo, EnginRepo enginRepo, EmployeRepo employeRepo, CalculServiceImpl calculService, CheckServiceImpl checkService, PersistServiceImpl persistService, BonLivraisonService bonLivraisonService) {
+    public BonEnginServiceImpl(BonEnginRepo bonEnginRepo, CalculConsommationServiceImpl calculService, CheckServiceImpl checkService, PersistServiceImpl persistService, BonLivraisonService bonLivraisonService, CalculAbsoluServiceImpl calculAbsoluService) {
         this.bonEnginRepo = bonEnginRepo;
-        this.enginRepo = enginRepo;
-        this.employeRepo = employeRepo;
         this.calculService = calculService;
         this.checkService = checkService;
         this.persistService = persistService;
         this.bonLivraisonService = bonLivraisonService;
+        this.calculAbsoluService = calculAbsoluService;
     }
 
     /*--------------------------------------------------------------------------- */
@@ -59,7 +56,7 @@ public class BonEnginServiceImpl implements BonEnginService {
     @Override
     public BonEngin add(BonEngin bonEngin) {
         log.info("Service= BonEnginServiceImpl - calling methode add");
-        calculService.fillBon(bonEngin);
+        bonEngin = calculAbsoluService.fillBon(bonEngin);
         try {
             if (bonEngin.getPlein())
                 bonEngin = calculService.calculConsommation(bonEngin);
@@ -159,7 +156,7 @@ public class BonEnginServiceImpl implements BonEnginService {
      */
     @Override
     public boolean hasErrors(BonEngin bon) {
-        calculService.fillBon(bon);
+        calculAbsoluService.fillBon(bon);
         BonEngin lastBonEngin = persistService.getLastBonEngin(bon.getEngin());
         if (lastBonEngin != null)
             return !(checkService.hasLogicQuantite(bon) && checkService.hasLogicCompteur(bon, lastBonEngin) && checkService.hasLogicDate(bon, lastBonEngin) && checkService.hasLogicDateAndCompteur(bon, lastBonEngin));
@@ -175,7 +172,7 @@ public class BonEnginServiceImpl implements BonEnginService {
      */
     @Override
     public boolean hasErrorsAttention(BonEngin bon) {
-        calculService.fillBon(bon);
+        calculAbsoluService.fillBon(bon);
         BonEngin bonEngin = persistService.getLastBonEngin(bon.getEngin());
         if (bonEngin == null) return false;
         if (bon.getEngin().getSousFamille().getTypeCompteur().equals(TypeCompteur.H))
