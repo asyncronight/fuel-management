@@ -7,6 +7,7 @@ import me.kadarh.mecaworks.domain.bons.BonLivraison;
 import me.kadarh.mecaworks.domain.others.Chantier;
 import me.kadarh.mecaworks.domain.others.Engin;
 import me.kadarh.mecaworks.domain.user.ChantierBatch;
+import me.kadarh.mecaworks.domain.user.Quantite;
 import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
 import me.kadarh.mecaworks.repo.bons.BonFournisseurRepo;
 import me.kadarh.mecaworks.repo.bons.BonLivraisonRepo;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -102,6 +104,59 @@ public class UserCalculService {
             log.info("Operation failed -- ");
             throw new OperationFailedException("Opération echouée, problème de la base", e);
         }
+    }
+
+    public Quantite getMonthsWithQuantities(Chantier chantier, int month, int year) {
+        log.info("calling method getListChantierWithQuantities(month,year) in UserCalculService -- ");
+        LocalDate from = LocalDate.of(year, Month.of(month).getValue(), 1);
+        LocalDate to = LocalDate.of(year, Month.of(month).plus(1).getValue(), 1);
+
+        List<BonEngin> bonEngins = bonEnginRepo.findAllByChantier(chantier.getId(), from, to);
+        List<BonLivraison> bonLivraisons = bonLivraisonRepo.findAllByChantier(chantier.getId(), from, to);
+        List<BonFournisseur> bonFournisseurs = bonFournisseurRepo.findAllByChantier(chantier.getId(), from, to);
+        Long quantiteTotal, quantiteLocation, chargeLocataireTotale, chargeLocataireExterne, consommationPrevue, gazoilAchetee, gazoilFlottant;
+
+        quantiteTotal = bonEngins.stream().mapToLong(BonEngin::getQuantite).sum();
+        quantiteLocation = bonEngins.stream().mapToLong(BonEngin::getQuantite).sum();
+        chargeLocataireTotale = bonEngins.stream().mapToLong(BonEngin::getQuantite).sum();
+        chargeLocataireExterne = bonEngins.stream().mapToLong(BonEngin::getQuantite).sum();
+        consommationPrevue = bonEngins.stream().mapToLong(BonEngin::getQuantite).sum();
+        gazoilAchetee = bonFournisseurs.stream().mapToLong(BonFournisseur::getQuantite).sum();
+        gazoilFlottant = bonLivraisons.stream().mapToLong(BonLivraison::getQuantite).sum();
+
+        return new Quantite(month + "/" + year, quantiteTotal, quantiteLocation, chargeLocataireTotale, chargeLocataireExterne,
+                0f, consommationPrevue, gazoilAchetee, gazoilFlottant);
+    }
+
+    public List<Quantite> getListDaysQuantities(Chantier chantier, int month, int year) {
+        //Declaring variables
+        List<Quantite> quantites = new ArrayList<>();
+        LocalDate from = LocalDate.of(year, Month.of(month).getValue(), 1);
+        LocalDate to = LocalDate.of(year, Month.of(month).plus(1).getValue(), 1);
+        List<BonEngin> bonEngins = bonEnginRepo.findAllByChantier(chantier.getId(), from, to);
+        List<BonLivraison> bonLivraisons = bonLivraisonRepo.findAllByChantier(chantier.getId(), from, to);
+        List<BonFournisseur> bonFournisseurs = bonFournisseurRepo.findAllByChantier(chantier.getId(), from, to);
+        Long quantiteTotal, quantiteLocation, chargeLocataireTotale, chargeLocataireExterne, consommationPrevue, gazoilAchetee, gazoilFlottant;
+        String date;
+        long days = ChronoUnit.DAYS.between(from, to);
+
+        //Looping over days
+
+        for (int i = 0; i < days; i++) {
+            LocalDate localDate = LocalDate.of(year, month, i + 1);
+            date = (i + 1) + "-" + month + "-" + year;
+            quantiteTotal = bonEngins.stream().filter(be -> be.getDate().equals(localDate)).mapToLong(BonEngin::getQuantite).sum();
+            quantiteLocation = bonEngins.stream().filter(be -> be.getDate().equals(localDate)).mapToLong(BonEngin::getQuantite).sum();
+            chargeLocataireTotale = bonEngins.stream().filter(be -> be.getDate().equals(localDate)).mapToLong(BonEngin::getQuantite).sum();
+            chargeLocataireExterne = bonEngins.stream().filter(be -> be.getDate().equals(localDate)).mapToLong(BonEngin::getQuantite).sum();
+            consommationPrevue = bonEngins.stream().filter(be -> be.getDate().equals(localDate)).mapToLong(BonEngin::getQuantite).sum();
+            gazoilAchetee = bonFournisseurs.stream().filter(bf -> bf.getDate().equals(localDate)).mapToLong(BonFournisseur::getQuantite).sum();
+            gazoilFlottant = bonLivraisons.stream().filter(bl -> bl.getDate().equals(localDate)).mapToLong(BonLivraison::getQuantite).sum();
+
+            quantites.add(new Quantite(date, quantiteTotal, quantiteLocation, chargeLocataireTotale, chargeLocataireExterne,
+                    0f, consommationPrevue, gazoilAchetee, gazoilFlottant));
+        }
+        return quantites;
     }
 
     public void updateListEnginWithConsommation(int monthValue, int year) {

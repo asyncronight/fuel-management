@@ -28,4 +28,7 @@ public interface BonEnginRepo extends JpaRepository<BonEngin, Long> {
 
     @Query(nativeQuery = true, value = "select * from bon_engin where DATE_BON >= ?1 and DATE_BON < ?2")
     List<BonEngin> findAllBetweenDates(LocalDate date1, LocalDate date2);
+
+    @Query(nativeQuery = true, value = "select * from bon_engin where chantier_travail_id =?1 and DATE_BON >= ?2 and DATE_BON < ?3")
+    List<BonEngin> findAllByChantier(Long idc, LocalDate date1, LocalDate date2);
 }

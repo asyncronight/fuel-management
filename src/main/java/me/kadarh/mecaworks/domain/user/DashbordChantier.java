@@ -3,6 +3,8 @@ package me.kadarh.mecaworks.domain.user;
 import lombok.Data;
 import me.kadarh.mecaworks.domain.others.Chantier;
 
+import java.util.List;
+
 /**
  * PROJECT mecaworks
  *
@@ -12,5 +14,13 @@ import me.kadarh.mecaworks.domain.others.Chantier;
 @Data
 public class DashbordChantier {
 
-	private Chantier chantier;
+    private List<Quantite> quantitesDays;
+    private List<Quantite> quantitesMonths;
+    private Chantier chantier;
+
+    public DashbordChantier(List<Quantite> quantitesDays, List<Quantite> quantitesMonths, Chantier chantier) {
+        this.quantitesDays = quantitesDays;
+        this.quantitesMonths = quantitesMonths;
+        this.chantier = chantier;
+    }
 }

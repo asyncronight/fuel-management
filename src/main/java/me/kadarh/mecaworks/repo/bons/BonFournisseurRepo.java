@@ -15,4 +15,7 @@ public interface BonFournisseurRepo extends JpaRepository<BonFournisseur, Long> 
     @Query(nativeQuery = true, value = "select * from bon_fournisseur where DATE >= ?1 and DATE < ?2")
     List<BonFournisseur> findAllBetweenDates(LocalDate date1, LocalDate date2);
 
+    @Query(nativeQuery = true, value = "select * from bon_fournisseur where chantier_id =?1 and DATE >= ?2 and DATE < ?3")
+    List<BonFournisseur> findAllByChantier(Long idc, LocalDate date1, LocalDate date2);
+
 }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Random;
 
 /**
  * @author kadarH
@@ -201,7 +202,8 @@ public class DataFakerO implements CommandLineRunner {
     private void loadBonEngin(int n) {
         for (int i = 0; i < n; i++) {
             BonEngin bonEngin = new BonEngin();
-            bonEngin.setDate(LocalDate.now());
+            bonEngin.setDate(LocalDate.of(2018, LocalDate.now().getMonth().getValue(),
+                    new Random().nextInt(28) + 1));
             bonEngin.setCode("code " + i);
             bonEngin.setCompteurHenPanne(i % 2 == 0);
             bonEngin.setCompteurH((long) i);
