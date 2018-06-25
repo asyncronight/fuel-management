@@ -22,7 +22,7 @@ public abstract class AbstractDomain {
 
 	@Version
     @JsonIgnore
-	protected int version;
+	protected Integer version;
 
     @JsonIgnore
     protected LocalDateTime createdAt;

@@ -16,11 +16,17 @@ public class DashbordChantier {
 
     private List<Quantite> quantitesDays;
     private List<Quantite> quantitesMonths;
+    private Long stockC;
+    private Long ecartPlus;
+    private Long ecartMoins;
     private Chantier chantier;
 
-    public DashbordChantier(List<Quantite> quantitesDays, List<Quantite> quantitesMonths, Chantier chantier) {
+    public DashbordChantier(List<Quantite> quantitesDays, List<Quantite> quantitesMonths, Long stockC, Long ecartPlus, Long ecartMoins, Chantier chantier) {
         this.quantitesDays = quantitesDays;
         this.quantitesMonths = quantitesMonths;
+        this.stockC = stockC;
+        this.ecartPlus = ecartPlus;
+        this.ecartMoins = ecartMoins;
         this.chantier = chantier;
     }
 }

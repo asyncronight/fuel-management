@@ -149,16 +149,15 @@ public class DataFakerO implements CommandLineRunner {
 		log.info(n + " SousFamille Loaded *****");
 	}
 	private void loadEngins(int n) {
-		for (int i = 0; i < n; i++) {
-			//Getting groupe and sous-famille
+        for (int i = 0; i < n; i++) {
+            //Getting groupe and sous-famille
             Groupe groupe = groupeRepo.getOne(i / 9 + 1L);
-            SousFamille sousFamille = sousFamilleRepo.getOne(i / 100 + 1L);
             //Creation the object
             Engin engin = new Engin();
             engin.setCode("Pelle" + (i + 1));
-			engin.setNumeroSerie("TPF" + i + "zz" + i);
-			engin.setGroupe(groupe);
-            engin.setSousFamille(sousFamille);
+            engin.setNumeroSerie("TPF" + i + "zz" + i);
+            engin.setGroupe(groupe);
+            engin.setSousFamille(sousFamilleRepo.getOne(i / 4 + 1L));
             engin.setConsommationMoyenne(32.4f);
             if (i % 3 == 0) {
                 engin.setCompteurInitialH(1000 + (i * 10));
@@ -177,8 +176,8 @@ public class DataFakerO implements CommandLineRunner {
             //Persisting
             enginRepo.save(engin);
         }
-		log.info(n + " Engin Loaded *****");
-	}
+        log.info(n + " Engin Loaded *****");
+    }
 
     private void loadFournisseur(int n) {
         for (int i = 0; i < n; i++) {

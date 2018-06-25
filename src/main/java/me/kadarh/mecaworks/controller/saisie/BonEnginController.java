@@ -3,10 +3,12 @@ package me.kadarh.mecaworks.controller.saisie;
 import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.bons.BonEngin;
 import me.kadarh.mecaworks.domain.bons.Carburant;
+import me.kadarh.mecaworks.domain.dtos.BonEnginDto;
 import me.kadarh.mecaworks.service.ChantierService;
 import me.kadarh.mecaworks.service.EmployeService;
 import me.kadarh.mecaworks.service.EnginService;
 import me.kadarh.mecaworks.service.bons.BonEnginService;
+import me.kadarh.mecaworks.service.bons.BonFilterService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,13 +29,15 @@ public class BonEnginController {
 	private final EmployeService employeService;
 	private final ChantierService chantierService;
 	private final EnginService enginService;
+    private final BonFilterService filterService;
 
-	public BonEnginController(BonEnginService bonEnginService, EmployeService employeService, ChantierService chantierService, EnginService enginService) {
-		this.bonEnginService = bonEnginService;
+    public BonEnginController(BonEnginService bonEnginService, EmployeService employeService, ChantierService chantierService, EnginService enginService, BonFilterService filterService) {
+        this.bonEnginService = bonEnginService;
 		this.employeService = employeService;
 		this.chantierService = chantierService;
 		this.enginService = enginService;
-	}
+        this.filterService = filterService;
+    }
 
 	@GetMapping("")
 	public String list(Model model, Pageable pageable, @RequestParam(defaultValue = "") String search) {
@@ -41,6 +45,20 @@ public class BonEnginController {
 		model.addAttribute("search", search);
 		return "saisi/engins/list";
 	}
+
+    @GetMapping("/filter")
+    public String filter(Model model, Pageable pageable) {
+        BonEnginDto bonEnginDto = new BonEnginDto();
+        bonEnginDto.setChantierDepart("chantier1");
+        bonEnginDto.setClasse("classe1");
+        bonEnginDto.setCodeEngin("Pelle1");
+        bonEnginDto.setFamille("famille1");
+        bonEnginDto.setDateFrom("2018-06-01");
+        bonEnginDto.setDateTo("2018-06-15");
+        model.addAttribute("page", filterService.filterBonEngin(pageable, bonEnginDto));
+        model.addAttribute("search", "");
+        return "saisi/engins/list";
+    }
 
 	@GetMapping("/add")
 	public String addGet(Model model) {
