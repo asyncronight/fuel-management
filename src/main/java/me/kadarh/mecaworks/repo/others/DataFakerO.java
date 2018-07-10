@@ -54,7 +54,7 @@ public class DataFakerO /*implements CommandLineRunner */ {
     @Autowired
     BatchFaker batchFaker;
 
-    @Scheduled(fixedDelay = 20000)
+    @Scheduled(fixedRate = 20000)
     public void run() /*throws Exception*/ {
         log.info("This is the DataFaker Of Other Domains");
 		loadGroupe(5);

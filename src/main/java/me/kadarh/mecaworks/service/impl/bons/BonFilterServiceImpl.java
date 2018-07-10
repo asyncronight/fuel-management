@@ -140,4 +140,21 @@ public class BonFilterServiceImpl implements BonFilterService {
         }
     }
 
+    @Override
+    public BonEnginDto createBonDto(String chantierD, String chantierA, String engin, String famille, String sousFamille, String classe, String groupe, String marque, String chauffeur, String pompiste, String dateFrom, String dateTo) {
+        BonEnginDto bonEnginDto = new BonEnginDto();
+        bonEnginDto.setChantierDepart(chantierD);
+        bonEnginDto.setChantierArrivee(chantierA);
+        bonEnginDto.setCodeEngin(engin);
+        bonEnginDto.setFamille(famille);
+        bonEnginDto.setSousFamille(sousFamille);
+        bonEnginDto.setClasse(classe);
+        bonEnginDto.setGroupe(groupe);
+        bonEnginDto.setMarque(marque);
+        bonEnginDto.setChauffeur(chauffeur);
+        bonEnginDto.setPompiste(pompiste);
+        bonEnginDto.setDateFrom(dateFrom);
+        bonEnginDto.setDateTo(dateTo);
+        return bonEnginDto;
+    }
 }
