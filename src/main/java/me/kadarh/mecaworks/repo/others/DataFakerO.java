@@ -10,8 +10,7 @@ import me.kadarh.mecaworks.repo.bons.BonFournisseurRepo;
 import me.kadarh.mecaworks.repo.bons.BonLivraisonRepo;
 import me.kadarh.mecaworks.repo.user.BatchFaker;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Profile;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,9 +24,8 @@ import java.util.Random;
 @Component
 @Transactional
 @Slf4j
-@Profile("dev")
-public class DataFakerO implements CommandLineRunner {
-
+//@Profile("dev")
+public class DataFakerO /*implements CommandLineRunner */ {
 
 	@Autowired
 	private ChantierRepo chantierRepo;
@@ -56,7 +54,8 @@ public class DataFakerO implements CommandLineRunner {
     @Autowired
     BatchFaker batchFaker;
 
-    public void run(String... args) throws Exception {
+    @Scheduled(fixedDelay = 20000)
+    public void run() /*throws Exception*/ {
         log.info("This is the DataFaker Of Other Domains");
 		loadGroupe(5);
         loadChantiers(10);
@@ -88,7 +87,7 @@ public class DataFakerO implements CommandLineRunner {
 			Chantier chantier = new Chantier();
 			chantier.setNom("chantier" + (i + 1));
 			chantier.setAdresse("Kenitra" + i);
-            chantier.setStock(1000 + i % 2 * 3);
+            chantier.setStock(988 + i * 3);
             chantierRepo.save(chantier);
         }
 		log.info(n + " Chantier Loaded *****");
@@ -131,14 +130,14 @@ public class DataFakerO implements CommandLineRunner {
             sousFamille.setNom("sousFamille" + (i + 1));
             sousFamille.setFamille(famille);
             sousFamille.setMarque(marque);
-            sousFamille.setCapaciteReservoir(10 + i * 10);
+            sousFamille.setCapaciteReservoir(100 + i % 2 * 10);
             if (i % 3 == 0) {
                 sousFamille.setTypeCompteur(TypeCompteur.KM_H);
-                sousFamille.setConsommationKmMax(20 + i * 10);
-                sousFamille.setConsommationHMax(20 + i * 10);
+                sousFamille.setConsommationKmMax(10 + i * 2);
+                sousFamille.setConsommationHMax(20 + i * 2);
             } else if (i % 3 == 1) {
                 sousFamille.setTypeCompteur(TypeCompteur.H);
-                sousFamille.setConsommationHMax(20 + i * 10);
+                sousFamille.setConsommationHMax(5 + i * 3);
             } else if (i % 3 == 2) {
                 sousFamille.setTypeCompteur(TypeCompteur.KM);
                 sousFamille.setConsommationKmMax(20 + i * 10);
@@ -158,7 +157,7 @@ public class DataFakerO implements CommandLineRunner {
             engin.setNumeroSerie("TPF" + i + "zz" + i);
             engin.setGroupe(groupe);
             engin.setSousFamille(sousFamilleRepo.getOne(i / 4 + 1L));
-            engin.setConsommationMoyenne(32.4f);
+            engin.setConsommationMoyenne(6f);
             if (i % 3 == 0) {
                 engin.setCompteurInitialH(1000 + (i * 10));
                 engin.setCompteurInitialKm(1000 + (i * 10));
@@ -166,11 +165,11 @@ public class DataFakerO implements CommandLineRunner {
                 engin.setPrixLocationJournalier(1000 + i * 10);
             } else if (i % 3 == 1) {
                 engin.setCompteurInitialH(1000 + (i * 10));
-                engin.setObjectif(9);
+                engin.setObjectif(9 + i / 10);
                 engin.setPrixLocationJournalier(1500 + i * 10);
             } else if (i % 3 == 2) {
                 engin.setCompteurInitialKm(1000 + (i * 10));
-                engin.setObjectif(12);
+                engin.setObjectif(12 - i / 20);
                 engin.setPrixLocationJournalier(2000 + i * 10);
             }
             //Persisting
@@ -208,13 +207,13 @@ public class DataFakerO implements CommandLineRunner {
             bonEngin.setCompteurH((long) i);
             bonEngin.setCompteurKmenPanne(i % 2 == 1);
             bonEngin.setCompteurKm((long) i);
-            bonEngin.setQuantite(10000 + i * 2);
+            bonEngin.setQuantite(200 + i * 10);
             bonEngin.setPlein(true);
             bonEngin.setConsommationKm(i * 100f);
             bonEngin.setConsommationH(i * 1500f);
-            bonEngin.setCompteurAbsoluH(i + 500L);
+            bonEngin.setCompteurAbsoluH(i + 502L);
             bonEngin.setCompteurAbsoluKm(i + 600L);
-            bonEngin.setNbrHeures(i + 100L);
+            bonEngin.setNbrHeures(i + 2L);
             bonEngin.setEngin(enginRepo.getOne(i / 26 + 1L));
             bonEngin.setChargeHoraire(bonEngin.getNbrHeures() * bonEngin.getEngin().getPrixLocationJournalier() / bonEngin.getEngin().getObjectif());
             bonEngin.setConsommationPrevu(bonEngin.getEngin().getConsommationMoyenne().longValue() * bonEngin.getNbrHeures());
@@ -231,7 +230,7 @@ public class DataFakerO implements CommandLineRunner {
             BonLivraison bonLivraison = new BonLivraison();
             bonLivraison.setCode("Code " + (j + 1));
             bonLivraison.setDate(LocalDate.now());
-            bonLivraison.setQuantite(i * (j + 1));
+            bonLivraison.setQuantite(10090);
             bonLivraison.setChantierArrivee(chantierRepo.getOne(j % 3L + 2));
             bonLivraison.setChantierDepart(chantierRepo.getOne(j % 3L + 1));
             bonLivraison.setPompiste(employeRepo.getOne(j % 3L + 2));
