@@ -55,7 +55,7 @@ public class BonEnginController {
         bonEnginDto.setFamille("famille1");
         bonEnginDto.setDateFrom("2018-06-01");
         bonEnginDto.setDateTo("2018-06-15");
-        model.addAttribute("page", filterService.filterBonEngin(pageable, bonEnginDto));
+        model.addAttribute("page", filterService.filterBonEngin(bonEnginDto));
         model.addAttribute("search", "");
         return "saisi/engins/list";
     }
