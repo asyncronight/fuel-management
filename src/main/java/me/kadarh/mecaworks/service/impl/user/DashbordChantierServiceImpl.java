@@ -36,8 +36,8 @@ public class DashbordChantierServiceImpl implements DashbordChantierService {
 	public DashbordChantier getDashbordChantier(Long idc, int mois, int annee) {
 		List<Quantite> quantites = new ArrayList<>();
 		LocalDate d = LocalDate.of(annee, mois, 1);
-		for (int i = 12, month, yeaar; i >= 1; i--) {
-			month = d.minusMonths(i).getMonthValue();
+        for (int i = 12, month, yeaar; i >= 0; i--) {
+            month = d.minusMonths(i).getMonthValue();
 			yeaar = d.minusMonths(i).getYear();
 			quantites.add(userCalculService.getMonthsWithQuantities(chantierService.get(idc), month, yeaar));
 		}
