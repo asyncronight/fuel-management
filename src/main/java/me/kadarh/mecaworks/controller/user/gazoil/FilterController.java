@@ -1,6 +1,7 @@
 package me.kadarh.mecaworks.controller.user.gazoil;
 
 import me.kadarh.mecaworks.domain.dtos.BonEnginDto;
+import me.kadarh.mecaworks.domain.others.Chantier;
 import me.kadarh.mecaworks.service.*;
 import me.kadarh.mecaworks.service.bons.BonFilterService;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * PROJECT mecaworks
@@ -45,7 +47,8 @@ public class FilterController {
 
     @GetMapping("/bons")
     public String home(Model model) {
-        model.addAttribute("chantiers", chantierService.getList());
+        List<Chantier> list = chantierService.getList();
+        model.addAttribute("chantiers", list);
         model.addAttribute("engins", enginService.getList());
         model.addAttribute("classes", classeService.list());
         model.addAttribute("groupes", groupeService.list());
@@ -53,8 +56,13 @@ public class FilterController {
         model.addAttribute("familles", familleService.list());
         model.addAttribute("sousFamilles", sousFamilleService.list());
         model.addAttribute("employes", employeService.getList());
-        model.addAttribute("page", bonFilterService.filterBonEngin(new BonEnginDto()));
-        model.addAttribute("bonEnginDto", new BonEnginDto());
+
+        BonEnginDto bonEnginDto = new BonEnginDto();
+        bonEnginDto.setChantierDepart(list.get(0).getNom() != null ? list.get(0).getNom() : "");
+        //bonEnginDto.setChantierArrivee(list.get(0).getNom()!=null?list.get(0).getNom():"");
+
+        model.addAttribute("page", bonFilterService.filterBonEngin(bonEnginDto));
+        model.addAttribute("bonEnginDto", bonEnginDto);
         return "user/gazoil/bons";
     }
 

@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
-<body th:with="bonEnginDto=${bonEnginDto}">
+<body th:with="bonEnginDto=${bonEnginDto}" onload="myFunction()">
 <div th:replace="fragments :: menu('user')"></div>
+<div th:replace="fragments :: loader"></div>
 <div class="bmd-layout-container bmd-drawer-f-l  bmd-drawer-overlay-md-down">
     <div th:replace="user/fragment :: menu('bons')"></div>
+
     <main class="bmd-layout-content">
-        <div class="container-fluid">
+
+        <div class="container-fluid" style="display:none;" id="myDiv">
             <button class="btn bmd-btn-fab btn-primary bmd-btn-fab-sm active" type="button" data-toggle="drawer"
                     data-target="#side" style="margin-top: 10px">
                 <i class="material-icons text-light">menu</i>
@@ -133,21 +136,30 @@
                     <thead class="bg-dark">
                     <tr>
                         <th class="text-light">
+                            Nombre de bons
+                        </th>
+                        <th class="text-light">
                             Consommation H Moyenne
                         </th>
                         <th class="text-light">
                             Consommation Km Moyenne
                         </th>
                         <th class="text-light">
-                            Quantité Totale
+                            Quantité Totale (L)
                         </th>
                         <th class="text-light">
-                            Nombre d'heures Total
+                            Nombre d'heures Total (H)
+                        </th>
+                        <th class="text-light">
+                            Prix Total Total (MAD) [ prix unitaire =10dh/L ]
                         </th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
+                        <td>
+                            <span th:text="${#lists.size(page)}"></span>
+                        </td>
                         <td>
                             <span th:text="${#aggregates.avg(page.![consommationH])}"></span>
                         </td>
@@ -159,6 +171,9 @@
                         </td>
                         <td>
                             <span th:text="${#aggregates.sum(page.![nbrHeures])}"></span>
+                        </td>
+                        <td>
+                            <span th:text="${#aggregates.sum(page.![nbrHeures])}*10 +' DH'"></span>
                         </td>
                     </tr>
                     </tbody>

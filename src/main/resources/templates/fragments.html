@@ -33,6 +33,10 @@
 		</ul>
 	</div>
 </nav>
+<div th:fragment="loader" id="loader">
+    <h1 class="text-center"> M </h1>
+    <h1 class="text-center"> W </h1>
+</div>
 <form th:fragment="search(placeHolder)" class="form-inline justify-content-center" method="get" action="#hrTable">
 	<div class="bmd-form-group">
 		<input class="form-control" type="text" th:name="search" th:value="${search}"
@@ -70,6 +74,7 @@
 	<script th:src="@{/webjars/bootstrap-material-design/4.1.1/js/bootstrap-material-design.min.js}"></script>
 	<script th:src="@{/webjars/github-com-fengyuanchen-datepicker/0.6.4/datepicker.min.js}"></script>
 	<script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/js/loader.js}"></script>
 	<script type="text/javascript"
 			th:src="@{'https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'}"></script>
 </div>
