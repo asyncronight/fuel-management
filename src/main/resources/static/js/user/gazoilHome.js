@@ -16,11 +16,11 @@ var mixedChart = new Chart('chart1', {
 
         }, {
             label: "Consommation gasoil totale (L)",
-            backgroundColor: 'rgb(45, 45, 45, 0.7)',
+            backgroundColor: 'rgb(66, 244, 176, 0.7)',
             borderColor: data.quantites.map(function (value) {
                 return parseInt(value.quantity, 10) >= parseInt(value.consommationPrevue, 10) * 1.1 ? 'rgb(255, 0, 76)' : 'rgb(4, 150, 50)';
             }),
-            borderWidth: 1,
+            borderWidth: 1.5,
             data: data.quantites.map(function (value) {
                 return value.quantity;
             })
@@ -36,16 +36,16 @@ var mixedChart = new Chart('chart1', {
             })
         }, {
             label: "Quantité gasoil acheté (L)",
-            borderColor: 'rgb(66, 244, 212)',
-            backgroundColor: 'rgb(66, 244, 212, 0.7)',
+            borderColor: 'rgb(190, 65, 244)',
+            backgroundColor: 'rgb(190, 65, 244, 0.7)',
             borderWidth: 2,
             data: data.quantites.map(function (value) {
                 return value.gazoilAchete;
             })
         }, {
             label: "Quantité gasoil flotant (L)",
-            borderColor: 'rgb(239, 69, 182)',
-            backgroundColor: 'rgb(239, 69, 182, 0.7)',
+            borderColor: 'rgb(244, 65, 106)',
+            backgroundColor: 'rgb(244, 65, 106, 0.7)',
             borderWidth: 2,
             data: data.quantites.map(function (value) {
                 return value.gazoilFlotant;
@@ -79,6 +79,10 @@ var mixedChart = new Chart('chart1', {
         responsive: true
     }
 });
+mixedChart.getDatasetMeta(0).hidden = true;
+mixedChart.getDatasetMeta(3).hidden = true;
+mixedChart.getDatasetMeta(4).hidden = true;
+mixedChart.update();
 //initiate chart2
 var mixedChart2 = new Chart('chart2', {
     type: 'line',

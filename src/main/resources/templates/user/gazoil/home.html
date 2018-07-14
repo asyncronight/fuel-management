@@ -11,11 +11,12 @@
                     data-target="#side" style="margin-top: 10px">
                 <i class="material-icons text-light">menu</i>
             </button>
-	        <select class="custom-select float-right col-md-3 col-lg-3 col-sm-6 text-center">
+            <select class="custom-select float-right col-md-3 col-lg-3 col-sm-6 text-center"
+                    onchange="if (this.selectedIndex) navigate(this.options[this.selectedIndex].value)">
 		        <option th:text="${now}"></option>
 		        <option disabled="disabled">--------------------</option>
 		        <option th:each="month : ${months}" th:text="${month.value}"
-		                th:value="${month.key}" th:onclick="|navigate('${month.key}')|"></option>
+                        th:value="${month.key}"></option>
 	        </select>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
@@ -67,6 +68,7 @@
     var data = /*[[${data}]]*/ '';
 
     function navigate(date) {
+        console.log(date);
         window.location.href = '?date=' + date;
     }
 </script>
