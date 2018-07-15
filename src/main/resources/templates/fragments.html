@@ -1,82 +1,87 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:fragment="head">
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Mecaworks</title>
-	<link rel="stylesheet" th:href="@{/webjars/material-design-icons/3.0.1/material-icons.css}"/>
-	<link rel="stylesheet" th:href="@{/webjars/roboto-fontface/0.7.0/css/roboto/roboto-fontface.css}"/>
-	<link rel="stylesheet" th:href="@{/webjars/select2/4.0.0/dist/css/select2.min.css}"/>
-	<link rel="stylesheet" th:href="@{/webjars/bootstrap-material-design/4.1.1/css/bootstrap-material-design.min.css}"/>
-	<link rel="stylesheet" th:href="@{/webjars/github-com-fengyuanchen-datepicker/0.6.4/datepicker.min.css}"/>
+    <link rel="stylesheet" th:href="@{/webjars/material-design-icons/3.0.1/material-icons.css}"/>
+    <link rel="stylesheet" th:href="@{/webjars/roboto-fontface/0.7.0/css/roboto/roboto-fontface.css}"/>
+    <link rel="stylesheet" th:href="@{/webjars/select2/4.0.0/dist/css/select2.min.css}"/>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-material-design/4.1.1/css/bootstrap-material-design.min.css}"/>
+    <link rel="stylesheet" th:href="@{/webjars/github-com-fengyuanchen-datepicker/0.6.4/datepicker.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
-	<link rel="stylesheet" th:href="@{'https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css'}"/>
+    <link rel="stylesheet" th:href="@{'https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css'}"/>
 </head>
 <body>
 <nav th:fragment="menu(active)" class="navbar navbar-expand-lg navbar-light bg-primary">
-	<a class="navbar-brand text-light" href="/"><h3>MecaWorks</h3></a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
-			aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-	</button>
-	<div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-		<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-			<li class="nav-item" th:classappend="${active} eq 'admin'?'active':''">
-				<a class="nav-link" href="/admin" th:text="#{admin}"></a>
-			</li>
-			<li class="nav-item" th:classappend="${active} eq 'user'?'active':''">
-				<a class="nav-link" href="/user" th:text="#{user}"></a>
-			</li>
-			<li class="nav-item" th:classappend="${active} eq 'saisi'?'active':''">
-				<a class="nav-link" href="/saisi" th:text="#{saisie}"></a>
-			</li>
-		</ul>
-	</div>
+    <a class="navbar-brand text-light" href="/"><h3>MecaWorks</h3></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+            aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item" th:classappend="${active} eq 'admin'?'active':''">
+                <a class="nav-link" href="/admin" th:text="#{admin}"></a>
+            </li>
+            <li class="nav-item" th:classappend="${active} eq 'user'?'active':''">
+                <a class="nav-link" href="/user" th:text="#{user}"></a>
+            </li>
+            <li class="nav-item" th:classappend="${active} eq 'saisi'?'active':''">
+                <a class="nav-link" href="/saisi" th:text="#{saisie}"></a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0" action="/logout" method="post" sec:authorize="isAuthenticated()">
+            <p sec:authentication="name" class="text-white mt-3 mr-2"></p>
+            <button class="btn btn-warning btn-raised my-2 my-sm-0" type="submit" th:text="#{sec.logout}"></button>
+        </form>
+    </div>
 </nav>
 <div th:fragment="loader" id="loader">
     <h1 class="text-center"> M </h1>
     <h1 class="text-center"> W </h1>
 </div>
 <form th:fragment="search(placeHolder)" class="form-inline justify-content-center" method="get" action="#hrTable">
-	<div class="bmd-form-group">
-		<input class="form-control" type="text" th:name="search" th:value="${search}"
-			   th:placeholder="${placeHolder}" th:title="${placeHolder}">
-		<button class="btn bmd-btn-icon" type="submit">
-			<i class="material-icons">search</i>
-		</button>
-	</div>
+    <div class="bmd-form-group">
+        <input class="form-control" type="text" th:name="search" th:value="${search}"
+               th:placeholder="${placeHolder}" th:title="${placeHolder}">
+        <button class="btn bmd-btn-icon" type="submit">
+            <i class="material-icons">search</i>
+        </button>
+    </div>
 </form>
 <ul th:fragment="pagination" class="pagination justify-content-center p-3">
-	<li class="page-item" th:classappend="${page.number} eq 0?'disabled':''">
-		<a class="page-link"
-		   th:href="'?page='+${(page.number)-1}+(${search.isEmpty()}?'':'&search='+${search})
+    <li class="page-item" th:classappend="${page.number} eq 0?'disabled':''">
+        <a class="page-link"
+           th:href="'?page='+${(page.number)-1}+(${search.isEmpty()}?'':'&search='+${search})
 						 +(${page.getSort().sorted? '&sort='+page.getSort().iterator().next().property
 						 +','+page.getSort().iterator().next().direction:''})">
-			<span aria-hidden="true">&laquo;</span>
-		</a>
-	</li>
-	<li class="page-item active">
-		<a class="page-link" th:text="${page.number+1}+'/'+${page.totalPages} "></a>
-	</li>
-	<li class="page-item" th:classappend="${page.number+1} ge ${page.totalPages}?'disabled':''">
-		<a class="page-link"
-		   th:href="'?page='+${page.number+1}+(${search.isEmpty()}?'':'&search='+${search})
+            <span aria-hidden="true">&laquo;</span>
+        </a>
+    </li>
+    <li class="page-item active">
+        <a class="page-link" th:text="${page.number+1}+'/'+${page.totalPages} "></a>
+    </li>
+    <li class="page-item" th:classappend="${page.number+1} ge ${page.totalPages}?'disabled':''">
+        <a class="page-link"
+           th:href="'?page='+${page.number+1}+(${search.isEmpty()}?'':'&search='+${search})
 					   +(${page.getSort().sorted? '&sort='+page.getSort().iterator().next().property
 					   +','+page.getSort().iterator().next().direction:''})">
-			<span aria-hidden="true">&raquo;</span>
-		</a>
-	</li>
+            <span aria-hidden="true">&raquo;</span>
+        </a>
+    </li>
 </ul>
 <div th:fragment="footer">
-	<script th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script>
-	<script th:src="@{/webjars/select2/4.0.0/dist/js/select2.min.js}"></script>
-	<script th:src="@{/webjars/popper.js/1.13.0/dist/umd/popper.min.js}"></script>
-	<script th:src="@{/webjars/bootstrap-material-design/4.1.1/js/bootstrap-material-design.min.js}"></script>
-	<script th:src="@{/webjars/github-com-fengyuanchen-datepicker/0.6.4/datepicker.min.js}"></script>
-	<script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/select2/4.0.0/dist/js/select2.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/1.13.0/dist/umd/popper.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap-material-design/4.1.1/js/bootstrap-material-design.min.js}"></script>
+    <script th:src="@{/webjars/github-com-fengyuanchen-datepicker/0.6.4/datepicker.min.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
     <script th:src="@{/js/loader.js}"></script>
-	<script type="text/javascript"
-			th:src="@{'https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'}"></script>
+    <script type="text/javascript"
+            th:src="@{'https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'}"></script>
 </div>
 </body>
 </html>

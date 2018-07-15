@@ -1,20 +1,25 @@
 package me.kadarh.mecaworks.repo.others;
 
 import lombok.extern.slf4j.Slf4j;
+import me.kadarh.mecaworks.config.security.AuthoritiesConstants;
+import me.kadarh.mecaworks.domain.User;
 import me.kadarh.mecaworks.domain.bons.BonEngin;
 import me.kadarh.mecaworks.domain.bons.BonFournisseur;
 import me.kadarh.mecaworks.domain.bons.BonLivraison;
 import me.kadarh.mecaworks.domain.others.*;
+import me.kadarh.mecaworks.repo.UserRepo;
 import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
 import me.kadarh.mecaworks.repo.bons.BonFournisseurRepo;
 import me.kadarh.mecaworks.repo.bons.BonLivraisonRepo;
 import me.kadarh.mecaworks.repo.user.BatchFaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -53,6 +58,10 @@ public class DataFakerO {
 	BonFournisseurRepo bonFournisseurRepo;
     @Autowired
     BatchFaker batchFaker;
+    @Autowired
+    UserRepo userRepo;
+    @Autowired
+    PasswordEncoder encoder;
 
     @Scheduled(initialDelay = 10000, fixedRate = 1000000000)
     public void run() {
@@ -69,10 +78,18 @@ public class DataFakerO {
         loadBonEngin(1000);
         loadBonLivraison(300);
         loadBonFournisseur(100);
+        loadUsers();
         batchFaker.insertBatchChantier();
     }
 
-	private void loadGroupe(int n) {
+    private void loadUsers() {
+        userRepo.save(new User("user", encoder.encode("user"), Arrays.asList(AuthoritiesConstants.USER)));
+        userRepo.save(new User("saisi", encoder.encode("saisi"), Arrays.asList(AuthoritiesConstants.SAISI)));
+        userRepo.save(new User("admin", encoder.encode("admin"), Arrays.asList(AuthoritiesConstants.ADMIN)));
+        userRepo.save(new User("mecaworks", encoder.encode("mecaworks"), Arrays.asList(AuthoritiesConstants.ADMIN, AuthoritiesConstants.SAISI, AuthoritiesConstants.USER)));
+    }
+
+    private void loadGroupe(int n) {
 		for (int i = 0; i < n; i++) {
 			Groupe groupe = new Groupe();
 			groupe.setNom("groupe" + (i + 1));
