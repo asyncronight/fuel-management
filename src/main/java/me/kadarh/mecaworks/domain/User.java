@@ -16,8 +16,10 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class User extends AbstractDomain {
 
+    private String username;
+
+    private String password;
+
     @ElementCollection
     List<String> roles;
-    private String username;
-    private String password;
 }
