@@ -8,12 +8,15 @@ import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
 import me.kadarh.mecaworks.repo.others.*;
 import me.kadarh.mecaworks.service.bons.BonFilterService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -46,16 +49,18 @@ public class BonFilterServiceImpl implements BonFilterService {
     }
 
     @Override
-    public Page<BonEngin> filterBonEngin(Pageable pageable, BonEnginDto bonEnginDto) {
+    public List<BonEngin> filterBonEngin(BonEnginDto bonEnginDto) {
         try {
-            String famille = bonEnginDto.getFamille();
-            String classe = bonEnginDto.getClasse();
-            String engin = bonEnginDto.getCodeEngin();
-            String sousFamille = bonEnginDto.getSousFamille();
-            String groupe = bonEnginDto.getGroupe();
-            String marque = bonEnginDto.getMarque();
-            String chantierDepart = bonEnginDto.getChantierDepart();
-            String chantierArrivee = bonEnginDto.getChantierArrivee();
+            String famille = bonEnginDto.getFamille().equals("") ? null : bonEnginDto.getFamille();
+            String classe = bonEnginDto.getClasse().equals("") ? null : bonEnginDto.getClasse();
+            String engin = bonEnginDto.getCodeEngin().equals("") ? null : bonEnginDto.getCodeEngin();
+            String sousFamille = bonEnginDto.getSousFamille().equals("") ? null : bonEnginDto.getSousFamille();
+            String groupe = bonEnginDto.getGroupe().equals("") ? null : bonEnginDto.getGroupe();
+            String marque = bonEnginDto.getMarque().equals("") ? null : bonEnginDto.getMarque();
+            String chantierDepart = bonEnginDto.getChantierDepart().equals("") ? null : bonEnginDto.getChantierDepart();
+            String chantierArrivee = bonEnginDto.getChantierArrivee().equals("") ? null : bonEnginDto.getChantierArrivee();
+            String chauffeur = bonEnginDto.getChauffeur().equals("") ? null : bonEnginDto.getChauffeur();
+            String pompiste = bonEnginDto.getPompiste().equals("") ? null : bonEnginDto.getPompiste();
 
             BonEngin bonEngin = new BonEngin();
             bonEngin.setCode(null);
@@ -74,8 +79,10 @@ public class BonFilterServiceImpl implements BonFilterService {
             bonEngin.setConsommationPrevu(null);
             bonEngin.setChargeHoraire(null);
 
-            Employe employe = new Employe();
-            employe.setNom(null);
+            Employe chauf = new Employe();
+            chauf.setNom(chauffeur);
+            Employe pomp = new Employe();
+            pomp.setNom(pompiste);
 
             Engin engin1 = new Engin();
             engin1.setCode(engin);
@@ -109,52 +116,34 @@ public class BonFilterServiceImpl implements BonFilterService {
             engin1.setSousFamille(sousFamille1);
             engin1.setGroupe(groupe1);
 
-            bonEngin.setPompiste(employe);
-            bonEngin.setChauffeur(employe);
+            bonEngin.setPompiste(pomp);
+            bonEngin.setChauffeur(chauf);
             bonEngin.setEngin(engin1);
             bonEngin.setChantierGazoil(chantierDepart1);
             bonEngin.setChantierTravail(chantierArrivee1);
 
             ExampleMatcher matcher = ExampleMatcher.matchingAll()
-                    .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                    .withStringMatcher(ExampleMatcher.StringMatcher.EXACT)
                     .withIgnoreCase()
                     .withIgnoreNullValues();
             Example<BonEngin> example = Example.of(bonEngin, matcher);
             log.debug("getting search results");
-            Page<BonEngin> page = bonEnginRepo.findAll(example, pageable);
-            try {
-                page = new PageImpl<>(
-                        page.getContent().stream().filter(bonEngin1 -> bonEngin1.getDate().isBefore(LocalDate.parse(bonEnginDto.getDateTo(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                        ).filter(bonEngin1 -> bonEngin1.getDate().isAfter(LocalDate.parse(bonEnginDto.getDateFrom(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
-                        ).collect(Collectors.toList()), pageable, page.getTotalElements()
-                );
-                log.debug("filter by dates successfully");
-            } catch (Exception e) {
-                log.debug("Cannot search by date : keyword doesn't match date pattern");
-            }
-            return page;
 
+            List<BonEngin> page = bonEnginRepo.findAll(example);
+            try {
+                page = page.stream().filter(bonEngin1 -> bonEngin1.getDate().isBefore(LocalDate.parse(bonEnginDto.getDateTo(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                        || bonEngin1.getDate().isEqual(LocalDate.parse(bonEnginDto.getDateTo(), DateTimeFormatter.ofPattern("yyyy-MM-dd"))))
+                        .filter(bonEngin1 -> bonEngin1.getDate().isAfter(LocalDate.parse(bonEnginDto.getDateFrom(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                                || bonEngin1.getDate().isEqual(LocalDate.parse(bonEnginDto.getDateFrom(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                        ).collect(Collectors.toList());
+            } catch (DateTimeParseException e) {
+                return page;
+            }
+                log.debug("filter by dates successfully");
+            return page;
         } catch (Exception e) {
             log.debug("Failed retrieving list of bons");
             throw new OperationFailedException("Operation échouée", e);
         }
-    }
-
-    @Override
-    public BonEnginDto createBonDto(String chantierD, String chantierA, String engin, String famille, String sousFamille, String classe, String groupe, String marque, String chauffeur, String pompiste, String dateFrom, String dateTo) {
-        BonEnginDto bonEnginDto = new BonEnginDto();
-        bonEnginDto.setChantierDepart(chantierD);
-        bonEnginDto.setChantierArrivee(chantierA);
-        bonEnginDto.setCodeEngin(engin);
-        bonEnginDto.setFamille(famille);
-        bonEnginDto.setSousFamille(sousFamille);
-        bonEnginDto.setClasse(classe);
-        bonEnginDto.setGroupe(groupe);
-        bonEnginDto.setMarque(marque);
-        bonEnginDto.setChauffeur(chauffeur);
-        bonEnginDto.setPompiste(pompiste);
-        bonEnginDto.setDateFrom(dateFrom);
-        bonEnginDto.setDateTo(dateTo);
-        return bonEnginDto;
     }
 }

@@ -16,6 +16,9 @@
 		<hr class="bg-primary" style="width: 80%">
 		<a class="list-group-item" th:href="@{'/user/preventif'}" th:classappend="${active} eq 'pr'?'active':''"
 		   th:text="#{preventif}"></a>
+		<hr class="bg-primary" style="width: 80%">
+		<a class="list-group-item" th:href="@{'/user/gazoil/bons'}" th:classappend="${active} eq 'bons'?'active':''"
+		   th:text="#{bons}"></a>
 	</ul>
 
     <script th:src="@{/webjars/chart.js/2.7.2/dist/Chart.bundle.min.js}"></script>

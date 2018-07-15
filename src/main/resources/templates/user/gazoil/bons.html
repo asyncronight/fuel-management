@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="fragments :: head"></head>
+<body th:with="bonEnginDto=${bonEnginDto}" onload="myFunction()">
+<div th:replace="fragments :: menu('user')"></div>
+<div th:replace="fragments :: loader"></div>
+<div class="bmd-layout-container bmd-drawer-f-l  bmd-drawer-overlay-md-down">
+    <div th:replace="user/fragment :: menu('bons')"></div>
+
+    <main class="bmd-layout-content">
+
+        <div class="container-fluid" style="display:none;" id="myDiv">
+            <button class="btn bmd-btn-fab btn-primary bmd-btn-fab-sm active" type="button" data-toggle="drawer"
+                    data-target="#side" style="margin-top: 10px">
+                <i class="material-icons text-light">menu</i>
+            </button>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
+                <li class="breadcrumb-item"><a th:href="@{'/user'}" th:text="#{gazoil}"></a></li>
+                <li class="breadcrumb-item" th:text="#{bons}"></li>
+            </ol>
+            <div class="jumbotron alert alert-primary" th:if="${#lists.isEmpty(page)}">
+                <h1 class="text-center alert-heading" th:text="#{empty}"></h1>
+            </div>
+            <div class="row">
+                <div class="col-1"></div>
+                <form th:object="${bonEnginDto}" method="POST" class="col-10 bg-light card card-12 p-3 bg-inverse">
+                    <p class="alerte-info">Faites votre choix de filtre :</p>
+                    <hr>
+                    <div class="form-row">
+                        <div class="col py-2">
+                            <select th:field="*{chauffeur}" class="js-example-basic-single" id="chauffeur">
+                                <option value="" selected="selected" th:text="#{chauffeur}"> --</option>
+                                <option th:each="chauffeur : ${employes}" th:value="${chauffeur.nom}"
+                                        th:text="${chauffeur.nom}">cc
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col py-2">
+                            <select th:field="*{pompiste}" class="js-example-basic-single" id="pompiste">
+                                <option value="" selected="selected" th:text="#{pompiste}"> --</option>
+                                <option th:each="pompiste : ${employes}" th:value="${pompiste.nom}"
+                                        th:text="${pompiste.nom}">cc
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col py-2">
+                            <select th:field="*{marque}" class="js-example-basic-single" id="marque">
+                                <option value="" selected="selected" th:text="#{marque}"> --</option>
+                                <option th:each="marque : ${marques}" th:value="${marque.nom}"
+                                        th:text="${marque.nom}">cc
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col py-2">
+                            <select th:field="*{groupe}" class="js-example-basic-single" id="groupe">
+                                <option value="" selected="selected" th:text="#{groupe}"> --</option>
+                                <option th:each="groupe : ${groupes}" th:value="${groupe.nom}"
+                                        th:text="${groupe.nom}">cc
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col py-2">
+                            <input th:field="*{dateFrom}" data-toggle="datepicker" class="bg-light form-control"
+                                   id="dateF" th:placeholder="dateFrom">
+                        </div>
+                        <div class="col py-2">
+                            <input th:field="*{dateTo}" data-toggle="datepicker" class="bg-light form-control"
+                                   id="dateT" th:placeholder="dateTo">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col py-2">
+                            <select th:field="*{chantierDepart}" class="js-example-basic-single" id="chantierD">
+                                <option value="" selected="selected" th:text="#{chantierDepart}"> --</option>
+                                <option th:each="chantierD : ${chantiers}" th:value="${chantierD.nom}"
+                                        th:text="${chantierD.nom}">cc
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col py-2">
+                            <select th:field="*{chantierArrivee}" class="js-example-basic-single" id="chantierA">
+                                <option value="" selected="selected" th:text="#{chantierArrivee}"> --</option>
+                                <option th:each="chantierA : ${chantiers}" th:value="${chantierA.nom}"
+                                        th:text="${chantierA.nom}">cc
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col py-2">
+                            <select th:field="*{classe}" class="js-example-basic-single" id="classe">
+                                <option value="" selected="selected" th:text="#{classe}"> --</option>
+                                <option th:each="classe : ${classes}" th:value="${classe.nom}"
+                                        th:text="${classe.nom}">cc
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col py-2">
+                            <select th:field="*{famille}" class="js-example-basic-single" id="famille">
+                                <option value="" selected="selected" th:text="#{famille}"> --</option>
+                                <option th:each="famille : ${familles}" th:value="${famille.nom}"
+                                        th:text="${famille.nom}">cc
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col py-2">
+                            <select th:field="*{sousFamille}" class="js-example-basic-single" id="sousFamille">
+                                <option value="" selected="selected" th:text="#{sousFamille}"> --</option>
+                                <option th:each="sousFamille : ${sousFamilles}" th:value="${sousFamille.nom}"
+                                        th:text="${sousFamille.nom}">cc
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col py-2">
+                            <select th:field="*{codeEngin}" class="js-example-basic-single" id="codeEngin">
+                                <option value="" selected="selected" th:text="#{codeEngin}"> --</option>
+                                <option th:each="engin : ${engins}" th:value="${engin.code}"
+                                        th:text="${engin.code}">cc
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-row">
+                        <div class="col">
+                        </div>
+                        <input name="submit" type="submit" value="filtrer"
+                               class="col bg-dark text-light btn btn-rounded"/>
+                        <div class="col"></div>
+                    </div>
+                </form>
+
+                <div class="col-1"></div>
+            </div>
+            <div class="table-responsive card" th:if="!${#lists.isEmpty(page)}">
+                <table id="myTableFilterTotal" class="display table table-striped table-bordered">
+                    <thead class="bg-dark">
+                    <tr>
+                        <th class="text-light">
+                            Nombre de bons
+                        </th>
+                        <th class="text-light">
+                            Consommation H Moyenne
+                        </th>
+                        <th class="text-light">
+                            Consommation Km Moyenne
+                        </th>
+                        <th class="text-light">
+                            Quantité Totale (L)
+                        </th>
+                        <th class="text-light">
+                            Nombre d'heures Total (H)
+                        </th>
+                        <th class="text-light">
+                            Prix Total Total (MAD) [ prix unitaire =10dh/L ]
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <span th:text="${#lists.size(page)}"></span>
+                        </td>
+                        <td>
+                            <span th:text="${#aggregates.avg(page.![consommationH])}"></span>
+                        </td>
+                        <td>
+                            <span th:text="${#aggregates.avg(page.![consommationKm])}"></span>
+                        </td>
+                        <td>
+                            <span th:text="${#aggregates.sum(page.![quantite])}"></span>
+                        </td>
+                        <td>
+                            <span th:text="${#aggregates.sum(page.![nbrHeures])}"></span>
+                        </td>
+                        <td>
+                            <span th:text="${#aggregates.sum(page.![nbrHeures])}*10 +' DH'"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-responsive card" th:if="!${#lists.isEmpty(page)}">
+                <table id="myTableFilter" class="display table table-striped table-bordered">
+                    <thead class="bg-dark">
+                    <tr>
+                        <th class="text-light">
+                            [[#{bonEngin.date}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonEngin.engin}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonEngin.code}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonEngin.chantierGazoil}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonEngin.chantierTravail}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonEngin.pompiste}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonEngin.chauffeur}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonEngin.carburant}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonEngin.quantite}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonEngin.compteurKm}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonEngin.compteurH}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonEngin.compteurPompe}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonEngin.compteurKmenPanne}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonEngin.compteurHenPanne}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonEngin.plein}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonEngin.compteurAbsoluKm}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonEngin.compteurAbsoluH}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonEngin.consommationKm}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonEngin.consommationH}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonEngin.nbrHeures}]]
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="bon : ${page}">
+                        <td th:text="${bon.date}"></td>
+                        <td th:text="${bon.engin?.code}"></td>
+                        <td th:text="${bon.code}"></td>
+                        <td th:text="${bon.chantierGazoil?.nom}"></td>
+                        <td th:text="${bon.chantierTravail?.nom}"></td>
+                        <td th:text="${bon.pompiste?.nom}"></td>
+                        <td th:text="${bon.chauffeur?.nom}"></td>
+                        <td th:text="${bon.carburant}"></td>
+                        <td th:text="${bon.quantite}"></td>
+                        <td th:text="${bon.compteurKm}"></td>
+                        <td th:text="${bon.compteurH}"></td>
+                        <td th:text="${bon.compteurPompe}"></td>
+                        <td>
+                            <i class="material-icons" th:text="${bon.compteurKmenPanne}?'done':'close'"></i>
+                        </td>
+                        <td>
+                            <i class="material-icons" th:text="${bon.compteurHenPanne}?'done':'close'"></i>
+                        </td>
+                        <td>
+                            <i class="material-icons" th:text="${bon.plein}?'done':'close'"></i>
+                        </td>
+                        <td th:text="${bon.compteurAbsoluKm}"></td>
+                        <td th:text="${bon.compteurAbsoluH}"></td>
+                        <td th:text="${bon.consommationKm}"></td>
+                        <td th:text="${bon.consommationH}"></td>
+                        <td th:text="${bon.nbrHeures}"></td>
+
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+<div th:replace="fragments :: footer"></div>
+</html>

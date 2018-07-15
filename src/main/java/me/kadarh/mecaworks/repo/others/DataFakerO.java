@@ -25,7 +25,7 @@ import java.util.Random;
 @Transactional
 @Slf4j
 //@Profile("dev")
-public class DataFakerO /*implements CommandLineRunner */ {
+public class DataFakerO {
 
 	@Autowired
 	private ChantierRepo chantierRepo;
@@ -54,15 +54,15 @@ public class DataFakerO /*implements CommandLineRunner */ {
     @Autowired
     BatchFaker batchFaker;
 
-    @Scheduled(initialDelay = 10000, fixedRate = 2000000000)
-    public void run() /*throws Exception*/ {
+    @Scheduled(initialDelay = 10000, fixedRate = 1000000000)
+    public void run() {
         log.info("This is the DataFaker Of Other Domains");
-		loadGroupe(5);
+        loadGroupe(5);
         loadChantiers(10);
         loadClasses(2);
         loadFamille(5);
-		loadMarques(5);
-		loadSousFamilles(10);
+        loadMarques(5);
+        loadSousFamilles(10);
         loadEngins(40);
         loadFournisseur(10);
         loadEmploye(70);
