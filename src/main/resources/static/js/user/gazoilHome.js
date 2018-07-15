@@ -6,15 +6,6 @@ var mixedChart = new Chart('chart1', {
     type: 'bar',
     data: {
         datasets: [{
-            label: 'Consommation gasoil location (L)',
-            backgroundColor: 'rgb(244, 211, 90, 0.7)',
-            borderColor: 'rgb(244, 211, 90)',
-            borderWidth: 1,
-            data: data.quantites.map(function (value) {
-                return value.quantiteLocation;
-            })
-
-        }, {
             label: "Consommation gasoil totale (L)",
             backgroundColor: 'rgb(66, 244, 176, 0.7)',
             borderColor: data.quantites.map(function (value) {
@@ -34,6 +25,15 @@ var mixedChart = new Chart('chart1', {
             data: data.quantites.map(function (value) {
                 return value.consommationPrevue;
             })
+        }, {
+            label: 'Consommation gasoil location (L)',
+            backgroundColor: 'rgb(244, 211, 90, 0.7)',
+            borderColor: 'rgb(244, 211, 90)',
+            borderWidth: 1,
+            data: data.quantites.map(function (value) {
+                return value.quantiteLocation;
+            })
+
         }, {
             label: "Quantité gasoil acheté (L)",
             borderColor: 'rgb(190, 65, 244)',
@@ -79,19 +79,20 @@ var mixedChart = new Chart('chart1', {
         responsive: true
     }
 });
-mixedChart.getDatasetMeta(0).hidden = true;
+mixedChart.getDatasetMeta(2).hidden = true;
 mixedChart.getDatasetMeta(3).hidden = true;
 mixedChart.getDatasetMeta(4).hidden = true;
 mixedChart.update();
 //initiate chart2
 var mixedChart2 = new Chart('chart2', {
-    type: 'line',
+    type: 'bar',
     data: {
         datasets: [{
             label: 'Charge locataire totale (DH)',
             backgroundColor: 'rgb(43, 106, 206, 0.1)',
             borderColor: 'rgb(43, 106, 206)',
             borderWidth: 2,
+            type: 'line',
             data: data.quantites.map(function (value) {
                 return value.chargeLocataire;
             })
