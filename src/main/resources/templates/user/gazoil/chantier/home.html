@@ -11,26 +11,55 @@
 			        data-target="#side" style="margin-top: 10px">
 				<i class="material-icons text-light">menu</i>
 			</button>
-			<select class="custom-select float-right col-md-3 col-lg-3 col-sm-6 text-center">
-				<option th:text="${now}"></option>
+            <select class="custom-select float-right col-md-3 col-lg-3 col-sm-6 text-center"
+                    onchange="if (this.selectedIndex) navigate(this.options[this.selectedIndex].value)">
+                <option th:text="${now}" class="bg-primary text-white"></option>
 				<option disabled="disabled">--------------------</option>
 				<option th:each="month : ${months}" th:text="${month.value}"
-				        th:value="${month.key}" th:onclick="|navigate('${month.key}')|"></option>
+                        th:value="${month.key}"></option>
 			</select>
 			<ol class="breadcrumb">
 				<li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
 				<li class="breadcrumb-item"><a th:href="@{'/user'}" th:text="#{user}"></a></li>
 				<li class="breadcrumb-item"><a th:href="@{'/user/gazoil'}" th:text="#{gazoil}"></a></li>
-				<li class="breadcrumb-item" th:text="${data?.chantier?.nom +' ('+data?.chantier?.adresse+')'}"></li>
+                <li class="breadcrumb-item" th:text="${data.chantier.nom}"></li>
 			</ol>
 
-			<div class="accordion" id="accordionExample">
+            <div class="row justify-content-center">
+                <div class="card text-center text-white bg-info mb-3 ml-3 col-sm-3">
+                    <div class="card-header">
+                        <h3 th:text="#{chantier.nom} +' :'"></h3>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${data.chantier.nom}"></h5>
+                    </div>
+                </div>
+                <div class="card text-center text-white bg-success mb-3 ml-3 col-sm-3">
+                    <div class="card-header">
+                        <h3 th:text="#{chantier.adresse} +' :'"></h3>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${data.chantier.adresse}"></h5>
+                    </div>
+                </div>
+                <div class="card text-center text-white bg-warning mb-3 ml-3 col-sm-3">
+                    <div class="card-header">
+                        <h3 th:text="#{chantier.stock} +' (L):'"></h3>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${data.chantier.stock}"></h5>
+                    </div>
+                </div>
+            </div>
+            <hr>
+
+            <div class="accordion" id="accordionExample">
 				<div class="card">
 					<div class="card-header text-center">
 						<h5 class="m-0">
 							<button class="btn btn-link" type="button" data-toggle="collapse"
 							        data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-								<strong>Item 1</strong>
+                                <strong>Consommation du gasoile <span id="range"></span></strong>
 							</button>
 						</h5>
 					</div>
@@ -47,7 +76,7 @@
 						<h5 class="m-0">
 							<button class="btn btn-link" type="button" data-toggle="collapse"
 							        data-target="#collapse2" aria-expanded="true" aria-controls="collapse2">
-								<strong>item2</strong>
+                                <strong>Consommation du gasoile par jour (<span th:text="${now}"></span>)</strong>
 							</button>
 						</h5>
 					</div>
