@@ -1,5 +1,8 @@
 package me.kadarh.mecaworks.config.security;
 
+import me.kadarh.mecaworks.domain.User;
+import me.kadarh.mecaworks.repo.UserRepo;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -12,6 +15,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -63,5 +68,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    //Add a default user for the app (in case there is none)
+    @Bean
+    CommandLineRunner defaultUser(UserRepo userRepo,
+                                  PasswordEncoder encoder) {
+        return args -> {
+            if (userRepo.count() == 0) {
+                userRepo.save(
+                        new User("mecaworks",
+                                encoder.encode("mecaworks"),
+                                Arrays.asList(AuthoritiesConstants.USER,
+                                        AuthoritiesConstants.SAISI,
+                                        AuthoritiesConstants.ADMIN))
+                );
+            }
+        };
     }
 }
