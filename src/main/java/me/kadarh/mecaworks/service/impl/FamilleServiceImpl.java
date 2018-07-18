@@ -68,7 +68,7 @@ public class FamilleServiceImpl implements FamilleService {
 				old.setNom(famille.getNom());
 			}
 			if (famille.getClasse() != null) {
-				old.setClasse(famille.getClasse());
+                old.setClasse(classeService.get(famille.getClasse().getId()));
 			}
 			return familleRepo.save(old);
 		} catch (Exception e) {
