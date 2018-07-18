@@ -3,15 +3,15 @@
 <head th:replace="fragments :: head"></head>
 <body>
 <div th:replace="fragments :: menu('')"></div>
-<div class="container text-center">
-    <div class="card mt-5">
+<div class="container-fluid text-center row justify-content-center">
+    <div class="card m-3 mt-5 col-md-6">
         <div class="card-header">
-            <p th:if="${param.error}" class="alert alert-danger" th:text="#{sec.msg1}"></p>
-            <p th:if="${param.logout}" class="alert alert-info" th:text="#{sec.msg2}"></p>
             <h4 th:text="#{sec.msg3}"></h4>
         </div>
         <div class="card-body">
-            <form class="m-5" method="post">
+            <p th:if="${param.error}" class="alert alert-danger" th:text="#{sec.msg1}"></p>
+            <p th:if="${param.logout}" class="alert alert-info" th:text="#{sec.msg2}"></p>
+            <form class="ml-5 mr-5" method="post">
                 <div class="form-group">
                     <label for="username" class="bmd-label-floating" th:text="#{sec.username}"></label>
                     <input type="text" class="form-control" name="username" id="username">
