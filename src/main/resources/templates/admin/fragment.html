@@ -40,7 +40,9 @@
 				   th:classappend="${active} eq 'cl'?'active':''"
 				   th:text="#{famille.classe}"></a>
 				<div class="dropdown-divider"></div>
-				<a class="list-group-item" href="#">Gestion des utilisateurs</a>
+				<a class="list-group-item" th:href="@{'/admin/users/add'}"
+				   th:classappend="${active} eq 'u'?'active':''"
+				   th:text="#{admin.users}"></a>
 			</div>
 		</div>
 	</ul>

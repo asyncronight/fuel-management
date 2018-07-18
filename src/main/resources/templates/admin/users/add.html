@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="fragments :: head"></head>
+<body>
+<div th:replace="fragments :: menu('admin')"></div>
+<div class="bmd-layout-container bmd-drawer-f-l  bmd-drawer-overlay-md-down">
+    <div th:replace="admin/fragment :: menu('u')"></div>
+    <main class="bmd-layout-content">
+        <div class="container">
+            <button class="btn bmd-btn-fab btn-primary bmd-btn-fab-sm active" type="button" data-toggle="drawer"
+                    data-target="#side" style="margin-top: 10px">
+                <i class="material-icons text-light">menu</i>
+            </button>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
+                <li class="breadcrumb-item"><a th:href="@{'/admin'}" th:text="#{admin}"></a></li>
+                <li class="breadcrumb-item" th:text="#{admin.users}"></li>
+            </ol>
+            <form class="card p-5" method="post" th:object="${user}">
+                <h3 class="text-center"
+                    th:text="#{admin.users.add}"></h3>
+                <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+                    <h4 class="alert-heading" th:text="#{formError}"></h4>
+                    <ul>
+                        <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <label class="bmd-label-floating" for="nom" th:text="#{sec.username}"></label>
+                    <input type="text" id="nom"
+                           class="form-control" th:field="*{username}"/>
+                </div>
+                <div class="form-group">
+                    <label class="bmd-label-floating" for="password" th:text="#{sec.password}"></label>
+                    <input type="text" id="password"
+                           class="form-control" th:field="*{password}"/>
+                </div>
+                <br>
+                <label class="bmd-label-floating" for="roles" th:text="#{admin.users.roles}"></label>
+                <select class="custom-select" id="roles" multiple th:field="*{roles}">
+                    <option th:each="role : ${roles}"
+                            th:text="${role}" th:value="${role}"></option>
+                </select><br>
+
+                <button type="submit" class="btn btn-success btn-raised">
+                    [[#{add}]]
+                </button>
+                <a href="/admin/" class="btn btn-secondary btn-raised">
+                    [[#{cancel}]]
+                </a>
+            </form>
+
+            <div class="jumbotron alert alert-primary" th:if="${#lists.isEmpty(page.content)}">
+                <h1 class="text-center alert-heading" th:text="#{empty}"></h1>
+            </div>
+
+            <div class="table-responsive card" th:if="!${#lists.isEmpty(page.content)}">
+                <table class="table table-sm table-hover table-bordered">
+                    <thead class="bg-primary">
+                    <tr>
+                        <th th:text="#{sec.username}"></th>
+                        <th th:text="#{admin.users.roles}"></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user : ${page.content}">
+                        <td th:text="${user.username}"></td>
+                        <td>
+                            <li th:each="role : ${user.roles}" th:text="${role}"></li>
+                        </td>
+                        <td>
+                            <form method="post" th:action="@{'/admin/users/' + ${user.id} + '/delete'}">
+                                <button type="submit" class="btn btn-raised btn-danger" th:text="#{delete}"></button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+<div th:replace="fragments :: footer"></div>
+</html>
