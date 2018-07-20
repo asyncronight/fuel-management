@@ -1,5 +1,6 @@
 package me.kadarh.mecaworks.controller.user.gazoil;
 
+import me.kadarh.mecaworks.domain.bons.BonEngin;
 import me.kadarh.mecaworks.domain.dtos.BonEnginDto;
 import me.kadarh.mecaworks.domain.others.Chantier;
 import me.kadarh.mecaworks.service.*;
@@ -21,7 +22,6 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/user/gazoil")
-
 public class FilterController {
     private final BonFilterService bonFilterService;
     private final ChantierService chantierService;
@@ -59,9 +59,11 @@ public class FilterController {
 
         BonEnginDto bonEnginDto = new BonEnginDto();
         bonEnginDto.setChantierDepart(list.get(0).getNom() != null ? list.get(0).getNom() : "");
-        //bonEnginDto.setChantierArrivee(list.get(0).getNom()!=null?list.get(0).getNom():"");
 
-        model.addAttribute("page", bonFilterService.filterBonEngin(bonEnginDto));
+        List<BonEngin> bonEngins = bonFilterService.filterBonEngin(bonEnginDto);
+        model.addAttribute("page", bonEngins);
+        model.addAttribute("consommationH_avg", bonEngins.stream().filter(bonEngin -> bonEngin.getConsommationH() != 0).mapToDouble(BonEngin::getConsommationH).average().getAsDouble());
+        model.addAttribute("consommationKm_avg", bonEngins.stream().filter(bonEngin -> bonEngin.getConsommationKm() != 0).mapToDouble(BonEngin::getConsommationH).average().getAsDouble());
         model.addAttribute("bonEnginDto", bonEnginDto);
         return "user/gazoil/bons";
     }
@@ -77,6 +79,10 @@ public class FilterController {
         model.addAttribute("sousFamilles", sousFamilleService.list());
         model.addAttribute("employes", employeService.getList());
         model.addAttribute("page", bonFilterService.filterBonEngin(bonEnginDto));
+        List<BonEngin> bonEngins = bonFilterService.filterBonEngin(bonEnginDto);
+        model.addAttribute("page", bonEngins);
+        model.addAttribute("consommationH_avg", bonEngins.stream().filter(bonEngin -> bonEngin.getConsommationH() != 0).mapToDouble(BonEngin::getConsommationH).average().getAsDouble());
+        model.addAttribute("consommationKm_avg", bonEngins.stream().filter(bonEngin -> bonEngin.getConsommationKm() != 0).mapToDouble(BonEngin::getConsommationH).average().getAsDouble());
         model.addAttribute("bonEnginDto", bonEnginDto);
         return "user/gazoil/bons";
     }

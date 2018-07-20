@@ -63,7 +63,7 @@ public class UserCalculService {
             List<BonFournisseur> bonFournisseurs = bonFournisseurRepo.findAllBetweenDates(from, to);
 
             Map<Chantier, Long> sum = bonEngins.stream().collect(Collectors.groupingBy(BonEngin::getChantierTravail, Collectors.summingLong(BonEngin::getQuantite)));
-            Map<Chantier, Long> sum2 = bonEngins.stream().filter(bonEngin -> bonEngin.getEngin().getGroupe().getLocataire()).collect(Collectors.groupingBy(BonEngin::getChantierTravail, Collectors.summingLong(BonEngin::getQuantite)));
+            Map<Chantier, Long> sum2 = bonEngins.stream().filter(bonEngin -> bonEngin.getEngin().getGroupe().getLocataire() && bonEngin.getId() != null).collect(Collectors.groupingBy(BonEngin::getChantierTravail, Collectors.summingLong(BonEngin::getQuantite)));
             Map<Chantier, Long> chargeLocataire = bonEngins.stream().collect(Collectors.groupingBy(BonEngin::getChantierTravail, Collectors.summingLong(BonEngin::getChargeHoraire)));
             Map<Chantier, Long> chargeLocataireExterne = bonEngins.stream().filter(bonEngin -> bonEngin.getEngin().getGroupe().getLocataire()).collect(Collectors.groupingBy(BonEngin::getChantierTravail, Collectors.summingLong(BonEngin::getChargeHoraire)));
             Map<Chantier, Long> consommationPrevue = bonEngins.stream().collect(Collectors.groupingBy(BonEngin::getChantierTravail, Collectors.summingLong(BonEngin::getConsommationPrevu)));
@@ -117,13 +117,12 @@ public class UserCalculService {
         Long quantiteTotal, quantiteLocation, chargeLocataireTotale, chargeLocataireExterne, consommationPrevue, gazoilAchetee, gazoilFlottant;
 
         quantiteTotal = bonEngins.stream().mapToLong(BonEngin::getQuantite).sum();
-        quantiteLocation = bonEngins.stream().mapToLong(BonEngin::getQuantite).sum();
-        chargeLocataireTotale = bonEngins.stream().mapToLong(BonEngin::getQuantite).sum();
-        chargeLocataireExterne = bonEngins.stream().mapToLong(BonEngin::getQuantite).sum();
-        consommationPrevue = bonEngins.stream().mapToLong(BonEngin::getQuantite).sum();
+        quantiteLocation = bonEngins.stream().filter(bonEngin -> bonEngin.getEngin().getGroupe().getLocataire()).mapToLong(BonEngin::getQuantite).sum();
+        chargeLocataireTotale = bonEngins.stream().mapToLong(bonEngin -> bonEngin.getChargeHoraire()).sum();
+        chargeLocataireExterne = bonEngins.stream().filter(bonEngin -> bonEngin.getEngin().getGroupe().getLocataire()).mapToLong(BonEngin::getQuantite).sum();
+        consommationPrevue = bonEngins.stream().mapToLong(BonEngin::getConsommationPrevu).sum();
         gazoilAchetee = bonFournisseurs.stream().mapToLong(BonFournisseur::getQuantite).sum();
         gazoilFlottant = bonLivraisons.stream().mapToLong(BonLivraison::getQuantite).sum();
-
         return new Quantite(month + "/" + year, quantiteTotal, quantiteLocation, chargeLocataireTotale, chargeLocataireExterne,
                 0f, consommationPrevue, gazoilAchetee, gazoilFlottant);
     }
@@ -146,8 +145,8 @@ public class UserCalculService {
             LocalDate localDate = LocalDate.of(year, month, i + 1);
             date = (i + 1) + "-" + month + "-" + year;
             quantiteTotal = bonEngins.stream().filter(be -> be.getDate().equals(localDate)).mapToLong(BonEngin::getQuantite).sum();
-            quantiteLocation = bonEngins.stream().filter(be -> be.getDate().equals(localDate)).mapToLong(BonEngin::getQuantite).sum();
-            chargeLocataireTotale = bonEngins.stream().filter(be -> be.getDate().equals(localDate)).mapToLong(BonEngin::getQuantite).sum();
+            quantiteLocation = bonEngins.stream().filter(be -> be.getDate().equals(localDate)).filter(bonEngin -> bonEngin.getEngin().getGroupe().getLocataire()).mapToLong(BonEngin::getQuantite).sum();
+            chargeLocataireTotale = bonEngins.stream().filter(be -> be.getDate().equals(localDate)).mapToLong(BonEngin::getNbrHeures).sum();
             chargeLocataireExterne = bonEngins.stream().filter(be -> be.getDate().equals(localDate)).mapToLong(BonEngin::getQuantite).sum();
             consommationPrevue = bonEngins.stream().filter(be -> be.getDate().equals(localDate)).mapToLong(BonEngin::getQuantite).sum();
             gazoilAchetee = bonFournisseurs.stream().filter(bf -> bf.getDate().equals(localDate)).mapToLong(BonFournisseur::getQuantite).sum();

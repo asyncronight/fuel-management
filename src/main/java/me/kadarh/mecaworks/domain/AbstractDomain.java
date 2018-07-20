@@ -20,10 +20,6 @@ public abstract class AbstractDomain {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long id;
 
-	@Version
-    @JsonIgnore
-	protected Integer version;
-
     @JsonIgnore
     protected LocalDateTime createdAt;
 

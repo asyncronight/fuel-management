@@ -31,14 +31,6 @@ public class BonLivraison extends AbstractDomain {
 	@NotNull
 	private String code;
 
-    @ManyToOne
-	@NotNull
-    private Chantier chantierDepart;
-
-    @ManyToOne
-	@NotNull
-    private Chantier chantierArrivee;
-
 	@NotNull
 	@Positive
 	private Integer quantite;
@@ -50,5 +42,14 @@ public class BonLivraison extends AbstractDomain {
     @ManyToOne
 	@NotNull
 	private Employe pompiste;
+
+	@ManyToOne
+	@NotNull
+	private Chantier chantierDepart;
+
+	@ManyToOne
+	@NotNull
+	private Chantier chantierArrivee;
+
 
 }

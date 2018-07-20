@@ -13,8 +13,8 @@ import me.kadarh.mecaworks.repo.bons.BonFournisseurRepo;
 import me.kadarh.mecaworks.repo.bons.BonLivraisonRepo;
 import me.kadarh.mecaworks.repo.user.BatchFaker;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +31,7 @@ import java.util.Random;
 @Transactional
 @Slf4j
 @Profile("dev")
-public class DataFakerO {
+public class DataFakerO implements CommandLineRunner {
 
 	@Autowired
 	private ChantierRepo chantierRepo;
@@ -64,12 +64,13 @@ public class DataFakerO {
     @Autowired
     PasswordEncoder encoder;
 
-    @Scheduled(initialDelay = 10000, fixedRate = 1000000000)
-    public void run() {
+    //@Scheduled(initialDelay = 1000,fixedRate = 1000000000)
+    @Override
+    public void run(String... args) throws Exception {
         log.info("This is the DataFaker Of Other Domains");
         loadGroupe(5);
         loadChantiers(10);
-        loadClasses(2);
+        loadClasses(5);
         loadFamille(5);
         loadMarques(5);
         loadSousFamilles(10);
@@ -116,15 +117,16 @@ public class DataFakerO {
             classe.setNom("Classe" + (i + 1));
             classeRepo.save(classe);
         }
+        log.info(n + " Classe Loaded *****");
     }
 	private void loadFamille(int n) {
 		for (int i = 0; i < n; i++) {
 			Famille famille = new Famille();
 			famille.setNom("famille" + (i + 1));
 			if (i <= 2)
-                famille.setClasse(classeRepo.findById((i / 200) + 1L).get());
+                famille.setClasse(classeRepo.getOne(1L));
             else
-                famille.setClasse(classeRepo.findById((i / 200) + 1L).get());
+                famille.setClasse(classeRepo.getOne(2L));
             familleRepo.save(famille);
         }
 		log.info(n + " Famille Loaded *****");

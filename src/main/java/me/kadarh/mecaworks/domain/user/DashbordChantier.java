@@ -18,6 +18,7 @@ public class DashbordChantier {
     private List<Quantite> quantitesMonths;
     private Long stockC;
     private Long ecartPlus;
+    //todo : add date dernière mise à jours
     private Long ecartMoins;
     private Chantier chantier;
 

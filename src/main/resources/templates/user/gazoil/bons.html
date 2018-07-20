@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
-<body th:with="bonEnginDto=${bonEnginDto}" onload="myFunction()">
+<body onload="myFunction()">
 <div th:replace="fragments :: menu('user')"></div>
 <div th:replace="fragments :: loader"></div>
 <div class="bmd-layout-container bmd-drawer-f-l  bmd-drawer-overlay-md-down">
@@ -161,10 +161,10 @@
                             <span th:text="${#lists.size(page)}"></span>
                         </td>
                         <td>
-                            <span th:text="${#aggregates.avg(page.![consommationH])}"></span>
+                            <span th:text="${consommationH_avg}"></span>
                         </td>
                         <td>
-                            <span th:text="${#aggregates.avg(page.![consommationKm])}"></span>
+                            <span th:text="${consommationKm_avg}"></span>
                         </td>
                         <td>
                             <span th:text="${#aggregates.sum(page.![quantite])}"></span>
@@ -173,7 +173,7 @@
                             <span th:text="${#aggregates.sum(page.![nbrHeures])}"></span>
                         </td>
                         <td>
-                            <span th:text="${#aggregates.sum(page.![nbrHeures])}*10 +' DH'"></span>
+                            <span th:text="${#aggregates.sum(page.![quantite])}*10 +' DH'"></span>
                         </td>
                     </tr>
                     </tbody>

@@ -32,14 +32,6 @@ public class BonFournisseur extends AbstractDomain {
 	@Column(unique = true)
 	private String code;
 
-	@ManyToOne
-	@NotNull
-	private Fournisseur fournisseur;
-
-	@NotNull
-	@ManyToOne
-	private Chantier chantier;
-
 	@Positive
 	@NotNull
 	private Integer quantite;
@@ -47,5 +39,13 @@ public class BonFournisseur extends AbstractDomain {
 	@NotNull
 	@Positive
 	private Float prixUnitaire;
+
+	@ManyToOne
+	@NotNull
+	private Fournisseur fournisseur;
+
+	@NotNull
+	@ManyToOne
+	private Chantier chantier;
 
 }
