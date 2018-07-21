@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="fragments :: head"></head>
+<body onload="myFunction()">
+<div th:replace="fragments :: menu('user')"></div>
+<div th:replace="fragments :: loader"></div>
+<div class="bmd-layout-container bmd-drawer-f-l  bmd-drawer-overlay-md-down">
+    <div th:replace="user/fragment :: menu('bf')"></div>
+
+    <main class="bmd-layout-content">
+
+        <div class="container-fluid" style="display:none;" id="myDiv">
+            <button class="btn bmd-btn-fab btn-primary bmd-btn-fab-sm active" type="button" data-toggle="drawer"
+                    data-target="#side" style="margin-top: 10px">
+                <i class="material-icons text-light">menu</i>
+            </button>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
+                <li class="breadcrumb-item"><a th:href="@{'/user'}" th:text="#{gazoil}"></a></li>
+                <li class="breadcrumb-item" th:text="#{bonFournisseurs}"></li>
+            </ol>
+            <div class="jumbotron alert alert-primary" th:if="${#lists.isEmpty(page)}">
+                <h1 class="text-center alert-heading" th:text="#{empty}"></h1>
+            </div>
+            <div class="row">
+                <div class="col-1"></div>
+                <form th:object="${bonFournisseurDto}" method="POST"
+                      class="col-10 bg-light card card-12 p-3 bg-inverse">
+                    <p class="alerte-info">Faites votre choix de filtre :</p>
+                    <hr>
+                    <div class="form-row">
+                        <div class="col py-2">
+                            <select th:field="*{fournisseur}" class="js-example-basic-single" id="transporteur">
+                                <option value="" selected="selected" th:text="#{bonFournisseur.fournisseur}"> --
+                                </option>
+                                <option th:each="fournisseur : ${fournisseurs}" th:value="${fournisseur.nom}"
+                                        th:text="${fournisseur.nom}">cc
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col py-2">
+                            <select th:field="*{chantier}" class="js-example-basic-single" id="chantier">
+                                <option value="" selected="selected" th:text="#{bonFournisseur.chantier}"> --</option>
+                                <option th:each="chantier : ${chantiers}" th:value="${chantier.nom}"
+                                        th:text="${chantier.nom}">cc
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col py-2">
+                            <input th:field="*{dateFrom}" data-toggle="datepicker" class="bg-light form-control"
+                                   id="dateF" th:placeholder="dateFrom">
+                        </div>
+                        <div class="col py-2">
+                            <input th:field="*{dateTo}" data-toggle="datepicker" class="bg-light form-control"
+                                   id="dateT" th:placeholder="dateTo">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-row">
+                        <div class="col">
+                        </div>
+                        <input name="submit" type="submit" value="filtrer"
+                               class="col bg-dark text-light btn btn-rounded"/>
+                        <div class="col"></div>
+                    </div>
+                </form>
+
+                <div class="col-1"></div>
+            </div>
+            <div class="table-responsive card" th:if="!${#lists.isEmpty(page)}">
+                <table id="myTableFilterTotal" class="display table table-striped table-bordered">
+                    <thead class="bg-dark">
+                    <tr>
+                        <th class="text-light">
+                            Nombre de bons
+                        </th>
+                        <th class="text-light">
+                            Quantité Totale (L)
+                        </th>
+                        <th class="text-light">
+                            Prix Total Total (MAD) [ prix unitaire =10dh/L ]
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <span th:text="${#lists.size(page)}"></span>
+                        </td>
+                        <td>
+                            <span th:text="${#aggregates.sum(page.![quantite])}"></span>
+                        </td>
+                        <td>
+                            <span th:text="${#aggregates.sum(page.![quantite])}*10 +' DH'"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-responsive card" th:if="!${#lists.isEmpty(page)}">
+                <table id="myTableFilter" class=" table table-striped table-bordered">
+                    <thead class="bg-dark">
+                    <tr>
+                        <th class="text-light">
+                            [[#{bonFournisseur.date}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonFournisseur.code}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonFournisseur.chantier}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonFournisseur.fournisseur}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonLivraison.quantite}]]
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="bon : ${page}">
+                        <td th:text="${bon.date}"></td>
+                        <td th:text="${bon.code}"></td>
+                        <td th:text="${bon.chantier?.nom}"></td>
+                        <td th:text="${bon.fournisseur?.nom}"></td>
+                        <td th:text="${bon.quantite}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+<div th:replace="fragments :: footer"></div>
+<script th:src="@{/js/loader.js}"></script>
+<script type="text/javascript"
+        th:src="@{'https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'}"></script>
+</html>

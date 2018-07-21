@@ -1,7 +1,11 @@
 package me.kadarh.mecaworks.service.bons;
 
 import me.kadarh.mecaworks.domain.bons.BonEngin;
+import me.kadarh.mecaworks.domain.bons.BonFournisseur;
+import me.kadarh.mecaworks.domain.bons.BonLivraison;
 import me.kadarh.mecaworks.domain.dtos.BonEnginDto;
+import me.kadarh.mecaworks.domain.dtos.BonFournisseurDto;
+import me.kadarh.mecaworks.domain.dtos.BonLivraisonDto;
 
 import java.util.List;
 
@@ -13,7 +17,10 @@ import java.util.List;
  */
 public interface BonFilterService {
 
-    //Todo @salah use this function for filter
     List<BonEngin> filterBonEngin(BonEnginDto bonEnginDto);
+
+    List<BonLivraison> filterBonLivraison(BonLivraisonDto bonLivraisonDto);
+
+    List<BonFournisseur> filterBonFournisseur(BonFournisseurDto bonFournisseurDto);
 
 }

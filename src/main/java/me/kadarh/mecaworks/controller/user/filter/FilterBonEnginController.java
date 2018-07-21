@@ -1,4 +1,4 @@
-package me.kadarh.mecaworks.controller.user.gazoil;
+package me.kadarh.mecaworks.controller.user.filter;
 
 import me.kadarh.mecaworks.domain.bons.BonEngin;
 import me.kadarh.mecaworks.domain.dtos.BonEnginDto;
@@ -23,7 +23,7 @@ import java.util.OptionalDouble;
  */
 @Controller
 @RequestMapping("/user/gazoil")
-public class FilterController {
+public class FilterBonEnginController {
     private final BonFilterService bonFilterService;
     private final ChantierService chantierService;
     private final EnginService enginService;
@@ -34,7 +34,7 @@ public class FilterController {
     private final MarqueService marqueService;
     private final EmployeService employeService;
 
-    public FilterController(BonFilterService bonFilterService, ChantierService chantierService, EnginService enginService, FamilleService familleService, SousFamilleService sousFamilleService, ClasseService classeService, GroupeService groupeService, MarqueService marqueService, EmployeService employeService) {
+    public FilterBonEnginController(BonFilterService bonFilterService, ChantierService chantierService, EnginService enginService, FamilleService familleService, SousFamilleService sousFamilleService, ClasseService classeService, GroupeService groupeService, MarqueService marqueService, EmployeService employeService) {
         this.bonFilterService = bonFilterService;
         this.chantierService = chantierService;
         this.enginService = enginService;
