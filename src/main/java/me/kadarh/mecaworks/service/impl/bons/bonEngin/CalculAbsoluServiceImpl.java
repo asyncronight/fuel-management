@@ -57,7 +57,7 @@ public class CalculAbsoluServiceImpl {
             bonEngin = verifyBon_ifCompteurKm_EnPanne(bonEngin, bonEngin1);
             bonEngin = setCompteurAbsoluKm_ifCmpBonInfCmptLastBon(bonEngin, bonEngin1);
         } else {
-            bonEngin.setNbrHeures(bonEngin.getCompteurH());
+            bonEngin.setNbrHeures(0L);
             bonEngin.setCompteurAbsoluH(bonEngin.getCompteurH());
             bonEngin.setCompteurAbsoluKm(bonEngin.getCompteurKm());
         }
@@ -70,7 +70,7 @@ public class CalculAbsoluServiceImpl {
             setCompteurAbsoluH_ifCmpBonInfCmptLastBon(bonEngin, bonEngin1);
         } else {
             bonEngin.setCompteurAbsoluH(bonEngin.getCompteurH());
-            bonEngin.setNbrHeures(bonEngin.getCompteurH());
+            bonEngin.setNbrHeures(0L);
         }
         return bonEngin;
     }
