@@ -1,32 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
-<body>
-<div th:replace="fragments :: menu('')"></div>
-<div class="container-fluid text-center row justify-content-center">
-    <div class="card m-3 mt-5 col-md-6">
-        <div class="card-header">
-            <h4 th:text="#{sec.msg3}"></h4>
-        </div>
-        <div class="card-body">
-            <p th:if="${param.error}" class="alert alert-danger" th:text="#{sec.msg1}"></p>
-            <p th:if="${param.logout}" class="alert alert-info" th:text="#{sec.msg2}"></p>
-            <form class="ml-5 mr-5" method="post">
-                <div class="form-group">
-                    <label for="username" class="bmd-label-floating" th:text="#{sec.username}"></label>
-                    <input type="text" class="form-control" name="username" id="username">
-                </div>
-                <div class="form-group">
-                    <label for="password" class="bmd-label-floating" th:text="#{sec.password}"></label>
-                    <input type="password" class="form-control" name="password" id="password">
-                </div>
-                <div class="card-footer">
-                    <input type="submit" class="btn btn-info btn-raised" th:value="#{sec.login}">
-                </div>
-            </form>
-        </div>
+
+<body style="background-image: url('http://leseco.ma/images/stories/1826/btp.jpg');position: fixed;width: 100%">
+<div th:replace="fragments :: menu('')" class="bg-dark"></div>
+<form method="post" class="form-signin card card-8 mt-4 text-center " style="opacity: 0.7">
+    <div class="row">
+        <div class="col-4"></div>
+        <img class="mb-4 col-4" src="http://www.gm-auto.ca/_img/icon_qualite.png" alt="" width="72" height="72">
+        <div class="col-4"></div>
     </div>
-</div>
+    <h1 class="h3 mb-3 font-weight-normal" th:text="#{sec.msg3}">Please sign in</h1>
+    <p th:if="${param.error}" class="alert alert-danger row" th:text="#{sec.msg1}"></p>
+    <p th:if="${param.logout}" class="alert alert-info text-center" th:text="#{sec.msg2}"></p>
+    <label for="username" class="sr-only">Email address</label>
+    <input type="text" th:placeholder="#{sec.username}" class="text-center form-control" name="username" id="username">
+    <label for="password" class="sr-only">Password</label>
+    <input type="password" th:placeholder="#{sec.password}" class="text-center form-control" name="password"
+           id="password">
+    <div class="checkbox mb-3">
+
+    </div>
+    <input class="btn btn-lg btn-primary btn-block pb-3 pt-3" type="submit" th:value="#{sec.login}">
+</form>
 <div th:replace="fragments :: footer"></div>
 </body>
 </html>
