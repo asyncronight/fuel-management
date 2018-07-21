@@ -9,11 +9,3 @@ $(document).ready(function () {
     });
 
 });
-
-$(document).ready(function () {
-    $('#myTableFilter').DataTable({
-        "pagingType": "full_numbers",
-        "scrollY": "500px",
-        "scrollCollapse": true,
-    });
-});
