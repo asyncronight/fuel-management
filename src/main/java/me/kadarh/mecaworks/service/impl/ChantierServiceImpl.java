@@ -75,12 +75,17 @@ public class ChantierServiceImpl implements ChantierService {
 					stock.setStockC(chantier.getStock());
 					stock.setStockReel(chantier.getStock());
 					stock.setChantier(old);
-					Integer stockC = stockService.getLastStock(chantier).getStockC();
-					if (stockC < chantier.getStock())
-						stock.setEcart_plus(chantier.getStock() - stockC);
-					else if (stockC > chantier.getStock())
-						stock.setEcart_moins(stockC - chantier.getStock());
-					stockService.add(stock);
+                    Stock stockC = stockService.getLastStock(chantier);
+                    if (stockC != null) {
+                        if (stockC.getStockC() < chantier.getStock())
+                            stock.setEcart_plus(chantier.getStock() - stockC.getStockC());
+                        else if (stockC.getStockC() > chantier.getStock())
+                            stock.setEcart_moins(stockC.getStockC() - chantier.getStock());
+                    } else {
+                        stock.setEcart_moins(0);
+                        stock.setEcart_plus(0);
+                    }
+                    stockService.add(stock);
 				}
 				old.setStock(chantier.getStock());
 			}
@@ -136,8 +141,8 @@ public class ChantierServiceImpl implements ChantierService {
 	public Chantier get(Long id) {
 		log.info("Service- ChantierServiceImpl Calling getChantier with params :" + id);
 		try {
-			return chantierRepo.findById(id).get();
-		} catch (NoSuchElementException e) {
+            return chantierRepo.getOne(id);
+        } catch (NoSuchElementException e) {
 			log.info("Problem , cannot find chantier with id = :" + id);
 			throw new ResourceNotFoundException("chantier introuvable", e);
 		} catch (Exception e) {
