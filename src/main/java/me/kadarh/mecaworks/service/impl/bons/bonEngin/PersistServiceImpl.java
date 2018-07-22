@@ -2,6 +2,7 @@ package me.kadarh.mecaworks.service.impl.bons.bonEngin;
 
 import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.alertes.Alerte;
+import me.kadarh.mecaworks.domain.alertes.Severity;
 import me.kadarh.mecaworks.domain.alertes.TypeAlerte;
 import me.kadarh.mecaworks.domain.bons.BonEngin;
 import me.kadarh.mecaworks.domain.others.*;
@@ -40,28 +41,30 @@ public class PersistServiceImpl {
         boolean okey = false;
         if (lastBonEngin != null) okey = true;
         // Verify if chauffeur is changed.
-        if (okey && lastBonEngin.getChauffeur() != bonEngin.getChauffeur())
-            insertAlerte(bonEngin, "Chauffeur changé", TypeAlerte.CHAUFFEUR_CHANGED);
+        if (okey && lastBonEngin.getChauffeur() != bonEngin.getChauffeur()) {
+            insertAlerte(bonEngin, "Chauffeur changé", TypeAlerte.CHAUFFEUR_CHANGED, Severity.NORMAL);
+        }
         // Verify if compteur is en panne , and if no verify if compteur last bon was en panne
         if (whichCompteurIsDown(bonEngin) == 1)
-            insertAlerte(bonEngin, "Compteur H En Panne", TypeAlerte.COMPTEUR_H_EN_PANNE);
+            insertAlerte(bonEngin, "Compteur H En Panne", TypeAlerte.COMPTEUR_H_EN_PANNE, Severity.WARNING);
         if (whichCompteurIsDown(bonEngin) == 2 && okey)
-            insertAlerte(bonEngin, "Compteur Km En Panne", TypeAlerte.COMPTEUR_KM_EN_PANNE);
+            insertAlerte(bonEngin, "Compteur Km En Panne", TypeAlerte.COMPTEUR_KM_EN_PANNE, Severity.WARNING);
         if (whichCompteurIsDown(bonEngin) == 3) {
-            insertAlerte(bonEngin, "Compteur H En Panne", TypeAlerte.COMPTEUR_H_EN_PANNE);
-            insertAlerte(bonEngin, "Compteur Km En Panne", TypeAlerte.COMPTEUR_KM_EN_PANNE);
+            insertAlerte(bonEngin, "Compteur H En Panne", TypeAlerte.COMPTEUR_H_EN_PANNE, Severity.WARNING);
+            insertAlerte(bonEngin, "Compteur Km En Panne", TypeAlerte.COMPTEUR_KM_EN_PANNE, Severity.WARNING);
         }
         //verify quantité
         if (bonEngin.getQuantite() > bonEngin.getEngin().getSousFamille().getCapaciteReservoir())
-            insertAlerte(bonEngin, "Quantité de gazoil depasse la capacité de reservoir", TypeAlerte.QUANTITE_MORE_THAN_RESERVOIR);
+            insertAlerte(bonEngin, "Quantité de gazoil depasse la capacité de reservoir", TypeAlerte.QUANTITE_MORE_THAN_RESERVOIR, Severity.CRITIQUE);
         // FIXME: 20/05/18 : add alerte ( compteur reparé )
     }
 
-    public void insertAlerte(BonEngin bonEngin, String msg, TypeAlerte type) {
+    public void insertAlerte(BonEngin bonEngin, String msg, TypeAlerte type, Severity severity) {
         Alerte alerte = new Alerte();
         alerte.setDate(LocalDate.now());
-        alerte.setIdBon(bonEngin.getId());
+        alerte.setBonEngin(bonEngin);
         alerte.setMessage(msg);
+        alerte.setSeverity(severity);
         alerte.setEtat(true);
         alerte.setTypeAlerte(type);
         alerteService.add(alerte);
@@ -113,17 +116,17 @@ public class PersistServiceImpl {
         String msgKm = "La consommation Km est Annormale";
         if (typeCompteur.equals(TypeCompteur.H.name())) {
             if (bonEngin.getConsommationH() > sousFamille.getConsommationHMax())
-                this.insertAlerte(bonEngin, msgH, TypeAlerte.CONSOMMATION_H_ANNORMALE);
+                this.insertAlerte(bonEngin, msgH, TypeAlerte.CONSOMMATION_H_ANNORMALE, Severity.CRITIQUE);
         }
         if (typeCompteur.equals(TypeCompteur.KM.name())) {
             if (bonEngin.getConsommationKm() > sousFamille.getConsommationKmMax())
-                this.insertAlerte(bonEngin, msgKm, TypeAlerte.CONSOMMATION_KM_ANNORMALE);
+                this.insertAlerte(bonEngin, msgKm, TypeAlerte.CONSOMMATION_KM_ANNORMALE, Severity.WARNING);
         }
         if (typeCompteur.equals(TypeCompteur.KM_H.name())) {
             if (bonEngin.getConsommationH() > sousFamille.getConsommationHMax())
-                this.insertAlerte(bonEngin, msgH, TypeAlerte.CONSOMMATION_H_ANNORMALE);
+                this.insertAlerte(bonEngin, msgH, TypeAlerte.CONSOMMATION_H_ANNORMALE, Severity.WARNING);
             if (bonEngin.getConsommationKm() > sousFamille.getConsommationKmMax())
-                this.insertAlerte(bonEngin, msgKm, TypeAlerte.CONSOMMATION_KM_ANNORMALE);
+                this.insertAlerte(bonEngin, msgKm, TypeAlerte.CONSOMMATION_KM_ANNORMALE, Severity.WARNING);
         }
     }
 }

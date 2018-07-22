@@ -3,8 +3,10 @@ package me.kadarh.mecaworks.domain.alertes;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import me.kadarh.mecaworks.domain.AbstractDomain;
+import me.kadarh.mecaworks.domain.bons.BonEngin;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 
 /**
@@ -20,7 +22,9 @@ public class Alerte extends AbstractDomain {
 	private TypeAlerte typeAlerte;
 	private String message;
 	private Boolean etat;
+    private Severity severity;
 
-	private Long idBon;
+    @ManyToOne
+    private BonEngin bonEngin;
 
 }

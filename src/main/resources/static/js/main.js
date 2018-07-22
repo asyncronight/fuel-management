@@ -9,3 +9,7 @@ $(document).ready(function () {
     });
 
 });
+
+$(document).ready(function () {
+    $('#alerteTable').DataTable();
+});

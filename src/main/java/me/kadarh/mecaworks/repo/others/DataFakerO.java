@@ -3,6 +3,9 @@ package me.kadarh.mecaworks.repo.others;
 import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.config.security.AuthoritiesConstants;
 import me.kadarh.mecaworks.domain.User;
+import me.kadarh.mecaworks.domain.alertes.Alerte;
+import me.kadarh.mecaworks.domain.alertes.Severity;
+import me.kadarh.mecaworks.domain.alertes.TypeAlerte;
 import me.kadarh.mecaworks.domain.bons.BonEngin;
 import me.kadarh.mecaworks.domain.bons.BonFournisseur;
 import me.kadarh.mecaworks.domain.bons.BonLivraison;
@@ -64,6 +67,8 @@ public class DataFakerO implements CommandLineRunner {
     @Autowired
     UserRepo userRepo;
     @Autowired
+    AlerteRepo alerteRepo;
+    @Autowired
     PasswordEncoder encoder;
 
     //@Scheduled(initialDelay = 1000, fixedRate = 1000000000)
@@ -84,9 +89,32 @@ public class DataFakerO implements CommandLineRunner {
         loadBonFournisseur(100);
         loadStock(190);
         loadUsers();
+        insertAlertes(20);
         batchFaker.insertBatchChantier();
     }
 
+    public void insertAlertes(int n) {
+        for (int i = 0; i < n; i++) {
+            Alerte alerte = new Alerte();
+            alerte.setDate(LocalDate.now());
+            alerte.setBonEngin(bonEnginRepo.findLastBonEngin(1L));
+            if (i % 2 == 0) {
+                alerte.setMessage("Le compteur est reparé");
+                alerte.setTypeAlerte(TypeAlerte.COMPTEUR_H_REPARE);
+                alerte.setSeverity(Severity.NORMAL);
+            } else if (i % 3 == 0) {
+                alerte.setMessage("Consommation Annormale");
+                alerte.setTypeAlerte(TypeAlerte.CONSOMMATION_H_ANNORMALE);
+                alerte.setSeverity(Severity.CRITIQUE);
+            } else {
+                alerte.setMessage("Compteur H En panne");
+                alerte.setTypeAlerte(TypeAlerte.COMPTEUR_H_EN_PANNE);
+                alerte.setSeverity(Severity.WARNING);
+            }
+            alerte.setEtat(true);
+            alerteRepo.save(alerte);
+        }
+    }
     private void loadUsers() {
         userRepo.save(new User("user", encoder.encode("user"), Arrays.asList(AuthoritiesConstants.USER)));
         userRepo.save(new User("saisi", encoder.encode("saisi"), Arrays.asList(AuthoritiesConstants.SAISI)));

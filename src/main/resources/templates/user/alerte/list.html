@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="fragments :: head"></head>
+<body>
+<div th:replace="fragments :: menu('user')"></div>
+<div class="bmd-layout-container bmd-drawer-f-l  bmd-drawer-overlay-md-down">
+    <div th:replace="user/fragment :: menu('alerte')"></div>
+    <main class="bmd-layout-content">
+        <div class="container">
+            <button class="btn bmd-btn-fab btn-primary bmd-btn-fab-sm active" type="button" data-toggle="drawer"
+                    data-target="#side" style="margin-top: 10px">
+                <i class="material-icons text-light">menu</i>
+            </button>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
+                <li class="breadcrumb-item"><a th:href="@{'/user'}" th:text="#{user}"></a></li>
+                <li class="breadcrumb-item" th:text="#{user.alertes}"></li>
+            </ol>
+            <div class="jumbotron alert alert-primary" th:if="${#lists.isEmpty(page.content)}">
+                <h1 class="text-center alert-heading" th:text="#{empty}"></h1>
+            </div>
+            <!--/*@thymesVar id="alerte" type="me.kadarh.mecaworks.domain.alertes.Alerte"*/-->
+            <div class="table-responsive card" th:if="!${#lists.isEmpty(page.content)}">
+                <table id="alerteTable" class="display table table-sm table-hover table-bordered">
+                    <thead class="bg-primary">
+                    <tr>
+                        <th>
+                        </th>
+                        <th>
+                            [[#{alerte.date}]]
+                        </th>
+                        <th>
+                            [[#{alerte.typeAlerte}]]
+                        </th>
+                        <th>
+                            [[#{alerte.message}]]
+                        </th>
+                        <th>
+                            [[#{alerte.bon.code}]]
+                        </th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="alerte : ${page.content}">
+                        <td class="py-3">
+                            <div class="text-center" th:if="${alerte.severity.name() == 'WARNING'}">
+                                <i class="material-icons orange600 md-40">report_problem</i>
+                                <div class="icon-caption" th:text="${alerte.severity}"></div>
+                            </div>
+                            <div class="text-center" th:if="${alerte.severity.name() == 'CRITIQUE'}">
+                                <i class="material-icons red600 md-40">report_problem</i>
+                                <div class="icon-caption" th:text="${alerte.severity}"></div>
+                            </div>
+                            <div class="text-center" th:if="${alerte.severity.name() == 'NORMAL'}">
+                                <i class="material-icons green600 md-40">report_problem</i>
+                                <div class="icon-caption" th:text="${alerte.severity}"></div>
+                            </div>
+                        </td>
+                        <td class="py-3" th:text="${alerte.date}"></td>
+                        <td class="py-3" th:text="${alerte.typeAlerte}"></td>
+                        <td class="py-3" th:text="${alerte.message}"></td>
+                        <td class="py-3" th:text="${alerte.bonEngin?.code}"></td>
+                        <td class="py-3">
+                            <button class="btn btn-light bg-dark ">Oublier</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+<div th:replace="fragments :: footer"></div>
+</html>

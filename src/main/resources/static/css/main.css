@@ -2,6 +2,25 @@
     border-radius: 0px;
 }
 
+.material-icons.md-40 {
+    font-size: 40px;
+}
+
+.material-icons.mdt-10 {
+    font-size: 0.5em;
+}
+
+.material-icons.orange600 {
+    color: #FB8C00;
+}
+
+.material-icons.red600 {
+    color: red;
+}
+
+.material-icons.green600 {
+    color: green;
+}
 #loader {
     position: absolute;
     left: 50%;
