@@ -53,7 +53,9 @@ public class DataFakerO implements CommandLineRunner {
 	private FournisseurRepo fournisseurRepo;
 	@Autowired
 	BonEnginRepo bonEnginRepo;
-	@Autowired
+    @Autowired
+    private StockRepo stockRepo;
+    @Autowired
 	BonLivraisonRepo bonLivraisonRepo;
 	@Autowired
 	BonFournisseurRepo bonFournisseurRepo;
@@ -80,6 +82,7 @@ public class DataFakerO implements CommandLineRunner {
         loadBonEngin(1000);
         loadBonLivraison(300);
         loadBonFournisseur(100);
+        loadStock(190);
         loadUsers();
         batchFaker.insertBatchChantier();
     }
@@ -269,6 +272,23 @@ public class DataFakerO implements CommandLineRunner {
             bonFournisseur.setFournisseur(fournisseurRepo.getOne(i / 10 + 1L));
             bonFournisseurRepo.save(bonFournisseur);
         }
+    }
+
+    private void loadStock(int n) {
+
+        for (int i = 0; i < n; i++) {
+            Stock stock = new Stock();
+            stock.setChantier(chantierRepo.getOne(i / 20 + 1L));
+            stock.setDate(LocalDate.of(2018, LocalDate.now().getMonth().getValue(),
+                    new Random().nextInt(30) + 1));
+            stock.setStockC(i % 2 == 0 ? i + 10 : i - 4);
+            stock.setStockReel(i % 10 == 0 ? i + 8 : 0);
+            stock.setEcart_plus(i % 10 == 0 ? i / 2 + 1 : i * i / 12);
+            stock.setEcart_moins(i % 10 == 0 ? i * i / 12 : i / 2 + 1);
+
+            stockRepo.save(stock);
+        }
+
     }
 
 }

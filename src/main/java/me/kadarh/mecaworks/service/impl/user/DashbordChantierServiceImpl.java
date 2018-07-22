@@ -61,7 +61,9 @@ public class DashbordChantierServiceImpl implements DashbordChantierService {
 		}
 		return new DashbordChantier(
 				userCalculService.getListDaysQuantities(chantierService.get(idc), mois, annee),
-				quantites, stock_c, ecartPlus, ecartMoins, dateMaj,
+				quantites,
+				userCalculService.getListChantierStockDays(chantierService.get(idc), mois, annee),
+				stock_c, ecartPlus, ecartMoins, dateMaj,
 				chantierService.get(idc)
 		);
 	}

@@ -6,11 +6,13 @@ import me.kadarh.mecaworks.domain.bons.BonFournisseur;
 import me.kadarh.mecaworks.domain.bons.BonLivraison;
 import me.kadarh.mecaworks.domain.others.Chantier;
 import me.kadarh.mecaworks.domain.others.Engin;
+import me.kadarh.mecaworks.domain.others.Stock;
 import me.kadarh.mecaworks.domain.user.ChantierBatch;
 import me.kadarh.mecaworks.domain.user.Quantite;
 import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
 import me.kadarh.mecaworks.repo.bons.BonFournisseurRepo;
 import me.kadarh.mecaworks.repo.bons.BonLivraisonRepo;
+import me.kadarh.mecaworks.repo.others.StockRepo;
 import me.kadarh.mecaworks.service.EnginService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
 import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
@@ -42,12 +44,14 @@ public class UserCalculService {
     private final EnginService enginService;
     private final BonFournisseurRepo bonFournisseurRepo;
     private final BonLivraisonRepo bonLivraisonRepo;
+    private final StockRepo stockRepo;
 
-    public UserCalculService(BonEnginRepo bonEnginRepo, EnginService enginService, BonFournisseurRepo bonFournisseurRepo, BonLivraisonRepo bonLivraisonRepo) {
+    public UserCalculService(BonEnginRepo bonEnginRepo, EnginService enginService, BonFournisseurRepo bonFournisseurRepo, BonLivraisonRepo bonLivraisonRepo, StockRepo stockRepo) {
         this.bonEnginRepo = bonEnginRepo;
         this.enginService = enginService;
         this.bonFournisseurRepo = bonFournisseurRepo;
         this.bonLivraisonRepo = bonLivraisonRepo;
+        this.stockRepo = stockRepo;
     }
 
     public List<ChantierBatch> getListChantierWithQuantities(int month, int year) {
@@ -180,6 +184,27 @@ public class UserCalculService {
         }
 
 
+    }
+
+    public List<Stock> getListChantierStockDays(Chantier chantier, int month, int year) {
+        LocalDate from = LocalDate.of(year, Month.of(month).getValue(), 1);
+        LocalDate to = LocalDate.of(year, Month.of(month).plus(1).getValue(), 1);
+        List<Stock> list = new ArrayList<>();
+        List<Stock> stocks = stockRepo.findAllByChantier(chantier.getId(), from, to);
+        Stock stock;
+        Long stock1;
+        long days = ChronoUnit.DAYS.between(from, to);
+
+        for (int i = 0; i < days; i++) {
+            stock = new Stock();
+            LocalDate localDate = LocalDate.of(year, month, i + 1);
+            stock1 = stocks.stream().filter(be -> be.getDate().equals(localDate)).mapToLong(Stock::getStockC).sum();
+            stock.setStockC(stock1.intValue());
+            stock.setChantier(chantier);
+            stock.setDate(LocalDate.of(year, month, i + 1));
+            list.add(stock);
+        }
+        return list;
     }
 }
 
