@@ -1,5 +1,6 @@
 package me.kadarh.mecaworks.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import me.kadarh.mecaworks.domain.others.Chantier;
 import me.kadarh.mecaworks.domain.others.Stock;
@@ -23,6 +24,7 @@ public class DashbordChantier {
     private Long ecartPlus;
     private Long ecartMoins;
     private LocalDate dateMAJ;
+    @JsonIgnore
     private Chantier chantier;
 
     public DashbordChantier(List<Quantite> quantitesDays, List<Quantite> quantitesMonths, List<Stock> stocks, Long stockC, Long ecartPlus, Long ecartMoins, LocalDate dateMAJ, Chantier chantier) {

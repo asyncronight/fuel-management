@@ -47,7 +47,7 @@
                         <h3 th:text="#{chantier.stock} +' (L):'"></h3>
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title" th:text="${data.chantier.stock}"></h5>
+                        <h5 class="card-title" th:text="${data.stockC} +' ('+${data.dateMAJ}+')'"></h5>
                     </div>
                 </div>
             </div>
@@ -88,6 +88,23 @@
 						</div>
 					</div>
 				</div>
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h5 class="m-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse"
+                                    data-target="#collapse3" aria-expanded="true" aria-controls="collapse2">
+                                <strong>L'historique du stock par jour (<span th:text="${now}"></span>)</strong>
+                            </button>
+                        </h5>
+                    </div>
+
+                    <div id="collapse3" class="collapse" aria-labelledby="headingOne"
+                         data-parent="#accordionExample">
+                        <div class="card-body">
+                            <div th:include="user/gazoil/chantier/include/onglet3 :: onglet3"></div>
+                        </div>
+                    </div>
+                </div>
 			</div>
 		</div>
 	</main>

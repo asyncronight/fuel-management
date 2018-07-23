@@ -1,5 +1,6 @@
 package me.kadarh.mecaworks.domain.others;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import me.kadarh.mecaworks.domain.AbstractDomain;
@@ -28,6 +29,7 @@ public class Stock extends AbstractDomain {
     private Integer ecart_moins = 0;
 
 	@ManyToOne
+    @JsonIgnore
 	private Chantier chantier;
 
 }

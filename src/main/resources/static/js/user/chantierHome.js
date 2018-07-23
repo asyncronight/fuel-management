@@ -264,3 +264,48 @@ var chart4 = new Chart('chart4', {
         responsive: true
     }
 });
+//initiate chart5
+var chart5 = new Chart('chart5', {
+    type: 'line',
+    data: {
+        datasets: [{
+            label: 'Stock C (L)',
+            backgroundColor: 'rgb(244, 65, 214, 0.1)',
+            borderColor: 'rgb(244, 65, 214)',
+            borderWidth: 2,
+            data: data.stocks.map(function (value) {
+                return value.stockC;
+            })
+        }, {
+            label: 'Stock réel (L)',
+            backgroundColor: 'rgb(107, 244, 66, 0.1)',
+            borderColor: 'rgb(107, 244, 66)',
+            borderWidth: 2,
+            data: data.stocks.map(function (value) {
+                return value.stockReel;
+            })
+        }],
+        labels: data.stocks.map(function (value) {
+            return value.date;
+        })
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Stock (L)'
+                }
+            }]
+        },
+        tooltips: {
+            mode: 'index',
+            intersect: false
+        },
+        hover: {
+            mode: 'index',
+            intersect: false
+        },
+        responsive: true
+    }
+});
