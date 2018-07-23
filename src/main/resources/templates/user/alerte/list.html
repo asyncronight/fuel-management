@@ -4,7 +4,7 @@
 <body>
 <div th:replace="fragments :: menu('user')"></div>
 <div class="bmd-layout-container bmd-drawer-f-l  bmd-drawer-overlay-md-down">
-    <div th:replace="user/fragment :: menu('alerte')"></div>
+    <div th:replace="user/fragment :: menu('a')"></div>
     <main class="bmd-layout-content">
         <div class="container">
             <button class="btn bmd-btn-fab btn-primary bmd-btn-fab-sm active" type="button" data-toggle="drawer"
@@ -21,7 +21,7 @@
             </div>
             <!--/*@thymesVar id="alerte" type="me.kadarh.mecaworks.domain.alertes.Alerte"*/-->
             <div class="table-responsive card" th:if="!${#lists.isEmpty(page.content)}">
-                <table id="alerteTable" class="display table table-sm table-hover table-bordered">
+                <table id="myTableFilter" class="display table table-sm table-hover table-bordered">
                     <thead class="bg-primary">
                     <tr>
                         <th>

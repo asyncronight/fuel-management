@@ -11,5 +11,5 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
-    $('#alerteTable').DataTable();
+    $('#myTableFilter').DataTable();
 });

@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head th:replace="fragments :: head"></head>
 <body onload="myFunction()">
+<script th:src="@{/js/loader.js}"></script>
 <div th:replace="fragments :: menu('user')"></div>
 <div th:replace="fragments :: loader"></div>
 <div class="bmd-layout-container bmd-drawer-f-l  bmd-drawer-overlay-md-down">
@@ -16,7 +17,7 @@
             </button>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
-                <li class="breadcrumb-item"><a th:href="@{'/user'}" th:text="#{gazoil}"></a></li>
+                <li class="breadcrumb-item"><a th:href="@{'/user'}" th:text="#{user}"></a></li>
                 <li class="breadcrumb-item" th:text="#{bonLivraisons}"></li>
             </ol>
             <div class="jumbotron alert alert-primary" th:if="${#lists.isEmpty(page)}">
@@ -158,7 +159,4 @@
 </div>
 </body>
 <div th:replace="fragments :: footer"></div>
-<script th:src="@{/js/loader.js}"></script>
-<script type="text/javascript"
-        th:src="@{'https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'}"></script>
 </html>

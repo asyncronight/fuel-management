@@ -22,7 +22,7 @@ import java.util.OptionalDouble;
  * Created at 10/07/18
  */
 @Controller
-@RequestMapping("/user/gazoil")
+@RequestMapping("/user/filter")
 public class FilterBonEnginController {
     private final BonFilterService bonFilterService;
     private final ChantierService chantierService;
@@ -46,7 +46,7 @@ public class FilterBonEnginController {
         this.employeService = employeService;
     }
 
-    @GetMapping("/bons")
+    @GetMapping("/be")
     public String home(Model model) {
         List<Chantier> list = chantierService.getList();
         model.addAttribute("chantiers", list);
@@ -68,10 +68,10 @@ public class FilterBonEnginController {
         model.addAttribute("consommationH_avg", conH.isPresent() ? conH : "0.00");
         model.addAttribute("consommationKm_avg", conKm.isPresent() ? conKm : "0.00");
         model.addAttribute("bonEnginDto", bonEnginDto);
-        return "user/gazoil/bons";
+        return "user/filter/bonEngins";
     }
 
-    @PostMapping("/bons")
+    @PostMapping("/be")
     public String index(Model model, @Valid BonEnginDto bonEnginDto) {
         model.addAttribute("chantiers", chantierService.getList());
         model.addAttribute("engins", enginService.getList());
@@ -90,6 +90,6 @@ public class FilterBonEnginController {
         model.addAttribute("consommationH_avg", conH.isPresent() ? conH : "0.00");
         model.addAttribute("consommationKm_avg", conKm.isPresent() ? conKm : "0.00");
         model.addAttribute("bonEnginDto", bonEnginDto);
-        return "user/gazoil/bons";
+        return "user/filter/bonEngins";
     }
 }

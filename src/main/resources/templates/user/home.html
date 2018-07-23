@@ -30,28 +30,34 @@
 					</div>
 				</div>
 				<div class="card bg-light">
-					<a th:href="@{'/user/panne/'}">
-						<img class="card-img-top"
-							 src="http://www.ccemagazine.com/wp-content/uploads/2016/09/Ardent-131-c.jpg"
-							 alt="Card image cap">
-						<div class="card-header">
-							<h2 th:text="#{panne}"></h2>
-						</div>
-					</a>
-					<div class="card-body">
-						<p class="card-text" th:text="#{panne.msg}"></p>
+                    <img class="card-img-top"
+                         src="https://thumbs.dreamstime.com/b/pen-magnifying-glass-financial-statement-paper-analysis-business-concept-photo-sunlight-filter-effect-75773208.jpg"
+                         alt="Card image cap">
+                    <div class="card-header">
+                        <h2 th:text="#{bons}"></h2>
+                    </div>
+                    <div class="card-body pb-1">
+                        <p class="card-text" th:text="#{bons.msg}"></p>
+                        <div class="btn-group m-0 p-0">
+                            <a class="btn btn-info btn-outline-info" th:title="#{bonEngins}"
+                               href="/user/filter/be">E</a>
+                            <a class="btn btn-info btn-outline-info" th:title="#{bonLivraisons}" href="/user/filter/bl">L</a>
+                            <a class="btn btn-info btn-outline-info" th:title="#{bonFournisseurs}"
+                               href="/user/filter/bf">F</a>
+                        </div>
 					</div>
 				</div>
 				<div class="card bg-light">
-					<a th:href="@{'/user/preventif/'}">
-						<img class="card-img-top" src="http://www.guponline.net/files/theme/slides/img/vidange-gup.jpg"
+                    <a href="/user/alerte/">
+                        <img class="card-img-top"
+                             src="https://static.vecteezy.com/system/resources/previews/000/111/279/non_2x/free-vector-car-dashboard-icons.jpg"
 							 alt="Card image cap">
 						<div class="card-header">
-							<h2 th:text="#{preventif}"></h2>
+                            <h2 th:text="#{alerte}"></h2>
 						</div>
 					</a>
 					<div class="card-body">
-						<p class="card-text" th:text="#{preventif.msg}"></p>
+                        <p class="card-text" th:text="#{alerte.msg}"></p>
 					</div>
 				</div>
 			</div>

@@ -11,24 +11,28 @@
 		<a class="list-group-item" th:href="@{'/user/gazoil'}" th:classappend="${active} eq 'g'?'active':''"
 		   th:text="#{gazoil}"></a>
 		<hr class="bg-primary" style="width: 80%">
-		<a class="list-group-item" th:href="@{'/user/panne'}" th:classappend="${active} eq 'pa'?'active':''"
-		   th:text="#{panne}"></a>
-		<hr class="bg-primary" style="width: 80%">
-		<a class="list-group-item" th:href="@{'/user/preventif'}" th:classappend="${active} eq 'pr'?'active':''"
-		   th:text="#{preventif}"></a>
-		<hr class="bg-primary" style="width: 80%">
-		<a class="list-group-item" th:href="@{'/user/gazoil/bons'}" th:classappend="${active} eq 'bons'?'active':''"
-		   th:text="#{bons}"></a>
-		<hr class="bg-primary" style="width: 80%">
-		<!-- FIXME : Fix this fragment
-		<a class="list-group-item" th:href="@{'/user/filter/bl'}" th:classappend="${active} eq 'bl'?'active':''"
-		   th:text="#{bonLivraisons}"></a>
-		<hr class="bg-primary" style="width: 80%">
-		<a class="list-group-item" th:href="@{'/user/filter/bf'}" th:classappend="${active} eq 'bf'?'active':''"
-		   th:text="#{bonFournisseurs}"></a>
-		<a class="list-group-item" th:href="@{'/user/alerte'}" th:classappend="${active} eq 'alerte'?'active':''"
-		   th:text="#{user.alertes}"></a>
-		-->
+
+        <div class="dropdown">
+            <a class="list-group-item dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="#{bons}">
+            </a>
+
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="list-group-item" href="/user/filter/be"
+                   th:classappend="${active} eq 'be'?'active':''"
+                   th:text="#{bonEngins}"></a>
+                <a class="list-group-item" href="/user/filter/bl"
+                   th:classappend="${active} eq 'bl'?'active':''"
+                   th:text="#{bonLivraisons}"></a>
+                <a class="list-group-item" href="/user/filter/bf"
+                   th:classappend="${active} eq 'bf'?'active':''"
+                   th:text="#{bonFournisseurs}"></a>
+            </div>
+        </div>
+
+        <hr class="bg-primary" style="width: 80%">
+        <a class="list-group-item" th:href="@{'/user/alerte'}" th:classappend="${active} eq 'a'?'active':''"
+           th:text="#{alerte}"></a>
 	</ul>
 
     <script th:src="@{/webjars/chart.js/2.7.2/dist/Chart.bundle.min.js}"></script>

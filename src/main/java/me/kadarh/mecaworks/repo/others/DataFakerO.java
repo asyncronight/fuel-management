@@ -73,7 +73,7 @@ public class DataFakerO implements CommandLineRunner {
 
     //@Scheduled(initialDelay = 1000, fixedRate = 1000000000)
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         log.info("This is the DataFaker Of Other Domains");
         loadGroupe(5);
         loadChantiers(10);
@@ -119,6 +119,7 @@ public class DataFakerO implements CommandLineRunner {
         userRepo.save(new User("user", encoder.encode("user"), Arrays.asList(AuthoritiesConstants.USER)));
         userRepo.save(new User("saisi", encoder.encode("saisi"), Arrays.asList(AuthoritiesConstants.SAISI)));
         userRepo.save(new User("admin", encoder.encode("admin"), Arrays.asList(AuthoritiesConstants.ADMIN)));
+        userRepo.save(new User("mecaworks", encoder.encode("mecaworks"), AuthoritiesConstants.getRoles()));
     }
 
     private void loadGroupe(int n) {
