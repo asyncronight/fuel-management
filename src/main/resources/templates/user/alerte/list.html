@@ -44,15 +44,15 @@
                     <tbody>
                     <tr th:each="alerte : ${page.content}">
                         <td class="py-3">
-                            <div class="text-center" th:if="${alerte.severity.name() == 'WARNING'}">
+                            <div class="text-center" th:if="${alerte.severity?.name() == 'WARNING'}">
                                 <i class="material-icons orange600 md-40">report_problem</i>
                                 <div class="icon-caption" th:text="${alerte.severity}"></div>
                             </div>
-                            <div class="text-center" th:if="${alerte.severity.name() == 'CRITIQUE'}">
+                            <div class="text-center" th:if="${alerte.severity?.name() == 'CRITIQUE'}">
                                 <i class="material-icons red600 md-40">report_problem</i>
                                 <div class="icon-caption" th:text="${alerte.severity}"></div>
                             </div>
-                            <div class="text-center" th:if="${alerte.severity.name() == 'NORMAL'}">
+                            <div class="text-center" th:if="${alerte.severity?.name() == 'NORMAL'}">
                                 <i class="material-icons green600 md-40">report_problem</i>
                                 <div class="icon-caption" th:text="${alerte.severity}"></div>
                             </div>
