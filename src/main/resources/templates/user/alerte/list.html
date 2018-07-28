@@ -36,7 +36,19 @@
                             [[#{alerte.message}]]
                         </th>
                         <th>
-                            [[#{alerte.bon.code}]]
+                            [[#{bonEngin.chauffeur}]]
+                        </th>
+                        <th>
+                            [[#{bonEngin.code}]]
+                        </th>
+                        <th>
+                            [[#{engin.groupe}]]
+                        </th>
+                        <th>
+                            [[#{bonEngin.chantierTravail}]]
+                        </th>
+                        <th>
+                            [[#{bonEngin.chantierGazoil}]]
                         </th>
                         <th></th>
                     </tr>
@@ -60,7 +72,11 @@
                         <td class="py-3" th:text="${alerte.date}"></td>
                         <td class="py-3" th:text="${alerte.typeAlerte}"></td>
                         <td class="py-3" th:text="${alerte.message}"></td>
-                        <td class="py-3" th:text="${alerte.bonEngin?.code}"></td>
+                        <td class="py-3" th:text="${alerte.bonEngin.chauffeur.nom}"></td>
+                        <td class="py-3" th:text="${alerte.bonEngin.engin.code}"></td>
+                        <td class="py-3" th:text="${alerte.bonEngin.engin.groupe.nom}"></td>
+                        <td class="py-3" th:text="${alerte.bonEngin.chantierTravail.nom}"></td>
+                        <td class="py-3" th:text="${alerte.bonEngin.chantierGazoil.nom}"></td>
                         <td class="py-3">
                             <button class="btn btn-light bg-dark ">Oublier</button>
                         </td>
