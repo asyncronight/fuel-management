@@ -5,9 +5,10 @@ import me.kadarh.mecaworks.domain.alertes.Alerte;
 import me.kadarh.mecaworks.repo.others.AlerteRepo;
 import me.kadarh.mecaworks.service.AlerteService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
-import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author kadarH
@@ -35,33 +36,27 @@ public class AlerteServiceImpl implements AlerteService {
 		}
 	}
 
-	@Override
-	public Page<Alerte> getPage(Pageable pageable, String search) {
-		log.info("Service- BonEnginServiceImpl Calling bonEnginList with params :" + pageable + ", " + search);
-		try {
-			Pageable pageable1 = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "date"));
+    @Override
+    public void hideAlert(Long id) {
+        log.info("Service- BonEnginServiceImpl Calling hideAlert with params :" + id);
+        try {
+            Alerte alerte = alerteRepo.getOne(id);
+            alerte.setEtat(false);
+            alerteRepo.save(alerte);
+        } catch (Exception e) {
+            log.debug("Failed hiding alert id:" + id);
+            throw new OperationFailedException("Alerte introuvable", e);
+        }
+    }
 
-			if (search.isEmpty()) {
-				log.debug("fetching Alerte page");
-				return alerteRepo.findAll(pageable1);
-			} else {
-				log.debug("Searching by :" + search);
-				//creating example
-				Alerte alerte = new Alerte();
-				alerte.setMessage(search);
-				//creating matcher
-				ExampleMatcher matcher = ExampleMatcher.matchingAny()
-						.withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
-						.withIgnoreCase()
-						.withIgnoreNullValues();
-				Example<Alerte> example = Example.of(alerte, matcher);
-				log.debug("getting search results");
-				return alerteRepo.findAll(example, pageable1);
-			}
-		} catch (Exception e) {
-			log.debug("Failed retrieving list of bons");
+    @Override
+    public List<Alerte> getList() {
+        log.info("Service- BonEnginServiceImpl Calling getList");
+        try {
+            return alerteRepo.findByEtatOrderByCreatedAt(true);
+        } catch (Exception e) {
+            log.debug("Failed retrieving list of alerts");
 			throw new OperationFailedException("Operation échouée", e);
 		}
 	}
-
 }

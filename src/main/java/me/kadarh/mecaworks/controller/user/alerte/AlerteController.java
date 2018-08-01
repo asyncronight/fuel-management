@@ -1,12 +1,12 @@
 package me.kadarh.mecaworks.controller.user.alerte;
 
 import me.kadarh.mecaworks.service.AlerteService;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * PROJECT mecaworks
@@ -26,10 +26,15 @@ public class AlerteController {
     }
 
     @GetMapping("")
-    public String index(Model model, Pageable pageable, @RequestParam(defaultValue = "") String search) {
+    public String index(Model model) {
 
-        model.addAttribute("page", alerteService.getPage(pageable, search));
-        model.addAttribute("search", search);
+        model.addAttribute("alerts", alerteService.getList());
         return "user/alerte/list";
+    }
+
+    @PostMapping("/{id}")
+    public String hide(@PathVariable Long id) {
+        alerteService.hideAlert(id);
+        return "redirect:/user/alerte";
     }
 }

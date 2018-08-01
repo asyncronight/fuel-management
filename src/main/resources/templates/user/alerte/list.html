@@ -16,11 +16,11 @@
                 <li class="breadcrumb-item"><a th:href="@{'/user'}" th:text="#{user}"></a></li>
                 <li class="breadcrumb-item" th:text="#{user.alertes}"></li>
             </ol>
-            <div class="jumbotron alert alert-primary" th:if="${#lists.isEmpty(page.content)}">
+            <div class="jumbotron alert alert-primary" th:if="${#lists.isEmpty(alerts)}">
                 <h1 class="text-center alert-heading" th:text="#{empty}"></h1>
             </div>
             <!--/*@thymesVar id="alerte" type="me.kadarh.mecaworks.domain.alertes.Alerte"*/-->
-            <div class="table-responsive card" th:if="!${#lists.isEmpty(page.content)}">
+            <div class="table-responsive card" th:if="!${#lists.isEmpty(alerts)}">
                 <table id="myTableFilter" class="display table table-sm table-hover table-bordered">
                     <thead class="bg-primary">
                     <tr>
@@ -54,7 +54,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="alerte : ${page.content}">
+                    <tr th:each="alerte : ${alerts}">
                         <td class="py-3">
                             <div class="text-center" th:if="${alerte.severity?.name() == 'WARNING'}">
                                 <i class="material-icons orange600 md-40">report_problem</i>
@@ -72,13 +72,15 @@
                         <td class="py-3" th:text="${alerte.date}"></td>
                         <td class="py-3" th:text="${alerte.typeAlerte}"></td>
                         <td class="py-3" th:text="${alerte.message}"></td>
-                        <td class="py-3" th:text="${alerte.bonEngin.chauffeur.nom}"></td>
-                        <td class="py-3" th:text="${alerte.bonEngin.engin.code}"></td>
-                        <td class="py-3" th:text="${alerte.bonEngin.engin.groupe.nom}"></td>
-                        <td class="py-3" th:text="${alerte.bonEngin.chantierTravail.nom}"></td>
-                        <td class="py-3" th:text="${alerte.bonEngin.chantierGazoil.nom}"></td>
+                        <td class="py-3" th:text="${alerte.bonEngin?.chauffeur?.nom}"></td>
+                        <td class="py-3" th:text="${alerte.bonEngin?.engin?.code}"></td>
+                        <td class="py-3" th:text="${alerte.bonEngin?.engin?.groupe?.nom}"></td>
+                        <td class="py-3" th:text="${alerte.bonEngin?.chantierTravail?.nom}"></td>
+                        <td class="py-3" th:text="${alerte.bonEngin?.chantierGazoil?.nom}"></td>
                         <td class="py-3">
-                            <button class="btn btn-light bg-dark ">Oublier</button>
+                            <form method="post" th:action="'/user/alerte/'+${alerte.id}">
+                                <button type="submit" class="btn btn-light bg-dark ">Oublier</button>
+                            </form>
                         </td>
                     </tr>
                     </tbody>
