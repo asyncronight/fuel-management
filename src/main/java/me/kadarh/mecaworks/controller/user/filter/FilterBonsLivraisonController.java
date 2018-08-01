@@ -41,7 +41,7 @@ public class FilterBonsLivraisonController {
         model.addAttribute("chantiers", list);
         model.addAttribute("employes", employeService.getList());
         BonLivraisonDto bonLivraisonDto = new BonLivraisonDto();
-        bonLivraisonDto.setChantierDepart(list.get(0).getNom() != null ? list.get(0).getNom() : "");
+        bonLivraisonDto.setChantierDepart(list.size() != 0 ? list.get(0).getNom() : "");
 
         List<BonLivraison> bonLivraisons = bonFilterService.filterBonLivraison(bonLivraisonDto);
         model.addAttribute("page", bonLivraisons);

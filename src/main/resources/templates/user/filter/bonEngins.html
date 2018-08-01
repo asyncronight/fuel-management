@@ -19,9 +19,6 @@
                 <li class="breadcrumb-item"><a th:href="@{'/user'}" th:text="#{user}"></a></li>
                 <li class="breadcrumb-item" th:text="#{bonEngins}"></li>
             </ol>
-            <div class="jumbotron alert alert-primary" th:if="${#lists.isEmpty(page)}">
-                <h1 class="text-center alert-heading" th:text="#{empty}"></h1>
-            </div>
             <div class="row">
                 <div class="col-1"></div>
                 <form th:object="${bonEnginDto}" method="POST" class="col-10 bg-light card card-12 p-3 bg-inverse">
@@ -130,6 +127,10 @@
                 </form>
 
                 <div class="col-1"></div>
+            </div>
+
+            <div class="jumbotron alert alert-primary" th:if="${#lists.isEmpty(page)}">
+                <h1 class="text-center alert-heading" th:text="#{empty}"></h1>
             </div>
             <div class="table-responsive card" th:if="!${#lists.isEmpty(page)}">
                 <table id="myTableFilterTotal" class="display table table-striped table-bordered">

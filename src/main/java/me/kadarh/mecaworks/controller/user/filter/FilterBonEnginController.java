@@ -59,7 +59,8 @@ public class FilterBonEnginController {
         model.addAttribute("employes", employeService.getList());
 
         BonEnginDto bonEnginDto = new BonEnginDto();
-        bonEnginDto.setChantierDepart(list.get(0).getNom() != null ? list.get(0).getNom() : "");
+
+        bonEnginDto.setChantierDepart(list.size() != 0 ? list.get(0).getNom() : "");
 
         List<BonEngin> bonEngins = bonFilterService.filterBonEngin(bonEnginDto);
         model.addAttribute("page", bonEngins);
