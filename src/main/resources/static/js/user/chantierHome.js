@@ -276,14 +276,6 @@ var chart5 = new Chart('chart5', {
             data: data.stocks.map(function (value) {
                 return value.stockC;
             })
-        }, {
-            label: 'Stock réel (L)',
-            backgroundColor: 'rgb(107, 244, 66, 0.1)',
-            borderColor: 'rgb(107, 244, 66)',
-            borderWidth: 2,
-            data: data.stocks.map(function (value) {
-                return value.stockReel;
-            })
         }],
         labels: data.stocks.map(function (value) {
             return value.date;

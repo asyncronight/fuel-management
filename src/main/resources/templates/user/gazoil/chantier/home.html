@@ -28,32 +28,27 @@
             <div class="row justify-content-center">
                 <div class="card text-center text-white bg-info mb-3 col-md-3">
                     <div class="card-header">
-                        <h3 th:text="#{chantier.nom} +' :'"></h3>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${data.chantier.nom}"></h5>
-                    </div>
-                </div>
-                <div class="card text-center text-white bg-success mb-3 col-md-3">
-                    <div class="card-header">
-                        <h3 th:text="#{chantier.adresse} +' :'"></h3>
+                        <h3 th:text="${data.chantier.nom}"></h3>
                     </div>
                     <div class="card-body">
                         <h5 class="card-title" th:text="${data.chantier.adresse}"></h5>
                     </div>
                 </div>
-                <div class="card text-center text-white bg-primary mb-3 col-md-3">
+                <div class="card text-center text-white bg-success mb-3 col-md-3">
                     <div class="card-header">
-                        <h3 th:text="#{chantier.stock} +' (L):'"></h3>
+                        <h3>Date dernier inventaire :</h3>
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title" th:text="${data.stockC} +' ('+${data.dateMAJ}+')'"></h5>
+                        <h5 class="card-title" th:text="${data.dateMAJ}"></h5>
                     </div>
                 </div>
                 <div class="card text-center text-white bg-warning mb-3 col-md-3">
+                    <div class="card-header">
+                        <h3 th:text="#{chantier.stock} +' (L): '+${data.stockC}"></h3>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-header" th:text="'Ecart plus (L): '+${data.ecartPlus}"></h5>
-                        <h5 class="card-header" th:text="'Ecart moins (L): '+${data.ecartMoins}"></h5>
+                        <h5 class="card-text" th:text="'Ecart plus (L): '+${data.ecartPlus}"></h5>
+                        <h5 class="card-text" th:text="'Ecart moins (L): '+${data.ecartMoins}"></h5>
                     </div>
                 </div>
             </div>
