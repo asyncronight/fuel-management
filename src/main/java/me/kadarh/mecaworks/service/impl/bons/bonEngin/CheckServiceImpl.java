@@ -56,6 +56,7 @@ public class CheckServiceImpl {
         long diff, diff1;
         String typeCompteur = bonEngin.getEngin().getSousFamille().getTypeCompteur().name();
         if (typeCompteur.equals(TypeCompteur.H.name())) {
+            if (bonEngin.getCompteurHenPanne() || bonEngin.getCompteurH() < lastBonEngin.getCompteurH()) return true;
             if (bonEngin.getCompteurH() > lastBonEngin.getCompteurH())
                 return ((bonEngin.getCompteurAbsoluH() - lastBonEngin.getCompteurAbsoluH()) < days * 24);
             return false;

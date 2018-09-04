@@ -8,6 +8,7 @@ import me.kadarh.mecaworks.domain.bons.BonEngin;
 import me.kadarh.mecaworks.domain.others.*;
 import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
 import me.kadarh.mecaworks.service.AlerteService;
+import me.kadarh.mecaworks.service.ChantierService;
 import me.kadarh.mecaworks.service.StockService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
 import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
@@ -29,11 +30,13 @@ public class PersistServiceImpl {
     private final AlerteService alerteService;
     private final StockService stockService;
     private final BonEnginRepo bonEnginRepo;
+    private final ChantierService chantierService;
 
-    public PersistServiceImpl(AlerteService alerteService, StockService stockService, BonEnginRepo bonEnginRepo) {
+    public PersistServiceImpl(AlerteService alerteService, StockService stockService, BonEnginRepo bonEnginRepo, ChantierService chantierService) {
         this.alerteService = alerteService;
         this.stockService = stockService;
         this.bonEnginRepo = bonEnginRepo;
+        this.chantierService = chantierService;
     }
 
     public void insertAlertes(BonEngin bonEngin) {
@@ -79,6 +82,9 @@ public class PersistServiceImpl {
         if (stockService.getLastStock(chantier) != null)
             stock.setStockC(stockService.getLastStock(chantier).getStockC() - bonEngin.getQuantite());
         else stock.setStockC(bonEngin.getChantierGazoil().getStock() - bonEngin.getQuantite());
+        Chantier chantier1 = chantierService.get(chantier.getId());
+        chantier1.setStock(stock.getStockC());
+        chantierService.update(chantier1);
         stockService.add(stock);
     }
 

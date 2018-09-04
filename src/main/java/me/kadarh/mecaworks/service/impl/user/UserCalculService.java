@@ -159,6 +159,7 @@ public class UserCalculService {
             quantites.add(new Quantite(date, quantiteTotal, quantiteLocation, chargeLocataireTotale, chargeLocataireExterne,
                     0f, consommationPrevue, gazoilAchetee, gazoilFlottant));
         }
+
         return quantites;
     }
 
@@ -203,6 +204,9 @@ public class UserCalculService {
             stock.setChantier(chantier);
             stock.setDate(LocalDate.of(year, month, i + 1));
             list.add(stock);
+        }
+        for (int i = 1; i < list.size(); i++) {
+            if (list.get(i).getStockC() == 0) list.get(i).setStockC(list.get(i - 1).getStockC());
         }
         return list;
     }
