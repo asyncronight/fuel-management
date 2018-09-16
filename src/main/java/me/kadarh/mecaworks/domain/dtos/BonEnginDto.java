@@ -24,5 +24,6 @@ public class BonEnginDto {
     private String chantierArrivee = "";
     private String chauffeur = "";
     private String pompiste = "";
+    private String locataire = "";
 
 }

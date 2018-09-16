@@ -115,6 +115,14 @@
                                 </option>
                             </select>
                         </div>
+                        <div class="col py-2">
+                            <select th:field="*{locataire}" class="js-example-basic-single" id="locataire">
+                                <option value="" selected="selected"> -- Locataire --</option>
+                                <option th:value="oui">oui
+                                <option th:value="non">non
+                                </option>
+                            </select>
+                        </div>
                     </div>
                     <hr>
                     <div class="form-row">

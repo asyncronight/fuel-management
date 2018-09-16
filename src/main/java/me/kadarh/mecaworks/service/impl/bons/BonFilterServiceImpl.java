@@ -59,6 +59,7 @@ public class BonFilterServiceImpl implements BonFilterService {
             String chantierArrivee = bonEnginDto.getChantierArrivee().equals("") ? null : bonEnginDto.getChantierArrivee();
             String chauffeur = bonEnginDto.getChauffeur().equals("") ? null : bonEnginDto.getChauffeur();
             String pompiste = bonEnginDto.getPompiste().equals("") ? null : bonEnginDto.getPompiste();
+            String locataire = bonEnginDto.getLocataire().equals("") ? "all" : bonEnginDto.getLocataire();
 
             BonEngin bonEngin = new BonEngin();
             bonEngin.setCode(null);
@@ -128,6 +129,11 @@ public class BonFilterServiceImpl implements BonFilterService {
             log.debug("getting search results");
 
             List<BonEngin> page = bonEnginRepo.findAll(example);
+            if (locataire.equals("oui"))
+                page = page.stream().filter(bonEngin1 -> bonEngin1.getEngin().getGroupe().getLocataire()).collect(Collectors.toList());
+            else if (locataire.equals("non"))
+                page = page.stream().filter(bonEngin1 -> !bonEngin1.getEngin().getGroupe().getLocataire()).collect(Collectors.toList());
+
             try {
                 page = page.stream().filter(bonEngin1 -> bonEngin1.getDate().isBefore(LocalDate.parse(bonEnginDto.getDateTo(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                         || bonEngin1.getDate().isEqual(LocalDate.parse(bonEnginDto.getDateTo(), DateTimeFormatter.ofPattern("yyyy-MM-dd"))))
