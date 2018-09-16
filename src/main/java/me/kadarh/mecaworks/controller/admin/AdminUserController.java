@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.security.Principal;
+import java.util.Optional;
 
 @Controller
 @Transactional
@@ -58,8 +60,10 @@ public class AdminUserController {
     }
 
     @PostMapping("/{id}/delete")
-    public String delete(@PathVariable Long id) {
-        userRepo.deleteById(id);
+    public String delete(@PathVariable Long id, Principal principal) {
+        Optional<User> user = userRepo.findById(id);
+        if (user.isPresent() && !user.get().getUsername().equals(principal.getName()))
+            userRepo.deleteById(id);
         return "redirect:/admin/users/add";
     }
 }
