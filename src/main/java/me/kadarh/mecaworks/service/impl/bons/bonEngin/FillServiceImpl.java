@@ -43,6 +43,10 @@ public class FillServiceImpl {
             bon.setPompiste(employeService.get(bon.getPompiste().getId()));
             bon.setChantierTravail(chantierService.get(bon.getChantierTravail().getId()));
             bon.setChantierGazoil(chantierService.get(bon.getChantierGazoil().getId()));
+            if (bon.getCompteurH() == null)
+                bon.setCompteurH(0L);
+            if (bon.getCompteurKm() == null)
+                bon.setCompteurKm(0L);
             return bon;
         } catch (Exception e) {
             throw new OperationFailedException("Operation echouée", e);

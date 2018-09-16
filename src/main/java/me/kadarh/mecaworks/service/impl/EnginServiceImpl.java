@@ -130,6 +130,8 @@ public class EnginServiceImpl implements EnginService {
 	            //setting groupe , soufamille to engin
                 engin.setGroupe(groupe);
                 engin.setSousFamille(sousFamille);
+                engin.setObjectif(null);
+                engin.setConsommationMoyenne(null);
                 //creating matcher
                 ExampleMatcher matcher = ExampleMatcher.matchingAny()
                         .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)

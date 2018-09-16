@@ -121,9 +121,10 @@ public class BonEnginServiceImpl implements BonEnginService {
                 Employe employe = new Employe();
                 employe.setNom(search);
 				Engin engin = new Engin();
-				engin.setNumeroSerie(search);
-
-				bonEngin.setPompiste(employe);
+                engin.setNumeroSerie(null);
+                engin.setConsommationMoyenne(null);
+                engin.setObjectif(null);
+                bonEngin.setPompiste(employe);
 				bonEngin.setChauffeur(employe);
 				bonEngin.setEngin(engin);
 
