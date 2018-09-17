@@ -39,7 +39,7 @@
                             [[#{bonEngin.chauffeur}]]
                         </th>
                         <th>
-                            [[#{bonEngin.code}]]
+                            [[#{engin.code}+' '+#{bonEngin.engin}]]
                         </th>
                         <th>
                             [[#{engin.groupe}]]
@@ -49,6 +49,9 @@
                         </th>
                         <th>
                             [[#{bonEngin.chantierGazoil}]]
+                        </th>
+                        <th>
+                            [[#{bonEngin.code}]]
                         </th>
                         <th></th>
                     </tr>
@@ -77,6 +80,7 @@
                         <td class="py-3" th:text="${alerte.bonEngin?.engin?.groupe?.nom}"></td>
                         <td class="py-3" th:text="${alerte.bonEngin?.chantierTravail?.nom}"></td>
                         <td class="py-3" th:text="${alerte.bonEngin?.chantierGazoil?.nom}"></td>
+                        <td class="py-3" th:text="${alerte.bonEngin?.code}"></td>
                         <td class="py-3">
                             <form method="post" th:action="'/user/alerte/'+${alerte.id}">
                                 <button type="submit" class="btn btn-light bg-dark ">Oublier</button>
