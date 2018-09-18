@@ -199,13 +199,28 @@
                             [[#{bonEngin.engin}]]
                         </th>
                         <th class="text-light">
-                            [[#{bonEngin.code}]]
+                            [[#{engin.sousFamille}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonEngin.chantierTravail}]]
                         </th>
                         <th class="text-light">
                             [[#{bonEngin.chantierGazoil}]]
                         </th>
                         <th class="text-light">
-                            [[#{bonEngin.chantierTravail}]]
+                            [[#{bonEngin.quantite}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonEngin.consommationH}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonEngin.consommationKm}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonEngin.nbrHeures}]]
+                        </th>
+                        <th class="text-light">
+                            [[#{bonEngin.code}]]
                         </th>
                         <th class="text-light">
                             [[#{bonEngin.pompiste}]]
@@ -215,9 +230,6 @@
                         </th>
                         <th class="text-light">
                             [[#{bonEngin.carburant}]]
-                        </th>
-                        <th class="text-light">
-                            [[#{bonEngin.quantite}]]
                         </th>
                         <th class="text-light">
                             [[#{bonEngin.compteurKm}]]
@@ -243,28 +255,23 @@
                         <th class="text-light">
                             [[#{bonEngin.compteurAbsoluH}]]
                         </th>
-                        <th class="text-light">
-                            [[#{bonEngin.consommationKm}]]
-                        </th>
-                        <th class="text-light">
-                            [[#{bonEngin.consommationH}]]
-                        </th>
-                        <th class="text-light">
-                            [[#{bonEngin.nbrHeures}]]
-                        </th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="bon : ${page}">
                         <td th:text="${bon.date}"></td>
                         <td th:text="${bon.engin?.code}"></td>
-                        <td th:text="${bon.code}"></td>
-                        <td th:text="${bon.chantierGazoil?.nom}"></td>
+                        <td th:text="${bon.engin?.sousFamille?.nom}"></td>
                         <td th:text="${bon.chantierTravail?.nom}"></td>
+                        <td th:text="${bon.chantierGazoil?.nom}"></td>
+                        <td th:text="${bon.quantite}"></td>
+                        <td th:text="${bon.consommationH}"></td>
+                        <td th:text="${bon.consommationKm}"></td>
+                        <td th:text="${bon.nbrHeures}"></td>
+                        <td th:text="${bon.code}"></td>
                         <td th:text="${bon.pompiste?.nom}"></td>
                         <td th:text="${bon.chauffeur?.nom}"></td>
                         <td th:text="${bon.carburant}"></td>
-                        <td th:text="${bon.quantite}"></td>
                         <td th:text="${bon.compteurKm}"></td>
                         <td th:text="${bon.compteurH}"></td>
                         <td th:text="${bon.compteurPompe}"></td>
@@ -279,9 +286,6 @@
                         </td>
                         <td th:text="${bon.compteurAbsoluKm}"></td>
                         <td th:text="${bon.compteurAbsoluH}"></td>
-                        <td th:text="${bon.consommationKm}"></td>
-                        <td th:text="${bon.consommationH}"></td>
-                        <td th:text="${bon.nbrHeures}"></td>
 
                     </tr>
                     </tbody>

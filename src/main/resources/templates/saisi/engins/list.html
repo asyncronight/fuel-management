@@ -25,8 +25,8 @@
 				<h1 class="text-center alert-heading" th:text="#{empty}"></h1>
 			</div>
 
-			<div class="table-responsive card" th:if="!${#lists.isEmpty(page.content)}">
-				<table class="table table-sm table-hover table-bordered">
+			<div class="card" th:if="!${#lists.isEmpty(page.content)}">
+				<table class="table table-responsive table-sm table-hover table-bordered">
 					<thead class="bg-primary">
 					<tr>
 						<th th:with="desc=${page.getSort().getOrderFor('date')?.descending}">
@@ -43,9 +43,16 @@
 								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
 							</a>
 						</th>
-						<th th:with="desc=${page.getSort().getOrderFor('code')?.descending}">
-							[[#{bonEngin.code}]]
-							<a th:href="'?page=0&sort=code'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+						<th th:with="desc=${page.getSort().getOrderFor('engin.sousFamille.nom')?.descending}">
+							[[#{engin.sousFamille}]]
+							<a th:href="'?page=0&sort=engin.sousFamille.nom'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('chantierTravail.nom')?.descending}">
+							[[#{bonEngin.chantierTravail}]]
+							<a th:href="'?page=0&sort=chantierTravail.nom'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
 								<i class="material-icons text-light"
 								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
 							</a>
@@ -57,9 +64,37 @@
 								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
 							</a>
 						</th>
-						<th th:with="desc=${page.getSort().getOrderFor('chantierTravail.nom')?.descending}">
-							[[#{bonEngin.chantierTravail}]]
-							<a th:href="'?page=0&sort=chantierTravail.nom'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+						<th th:with="desc=${page.getSort().getOrderFor('quantite')?.descending}">
+							[[#{bonEngin.quantite}]]
+							<a th:href="'?page=0&sort=quantite'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('consommationH')?.descending}">
+							[[#{bonEngin.consommationH}]]
+							<a th:href="'?page=0&sort=consommationH'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('consommationKm')?.descending}">
+							[[#{bonEngin.consommationKm}]]
+							<a th:href="'?page=0&sort=consommationKm'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('nbrHeures')?.descending}">
+							[[#{bonEngin.nbrHeures}]]
+							<a th:href="'?page=0&sort=nbrHeures'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
+								<i class="material-icons text-light"
+								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
+							</a>
+						</th>
+						<th th:with="desc=${page.getSort().getOrderFor('code')?.descending}">
+							[[#{bonEngin.code}]]
+							<a th:href="'?page=0&sort=code'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
 								<i class="material-icons text-light"
 								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
 							</a>
@@ -81,13 +116,6 @@
 						<th th:with="desc=${page.getSort().getOrderFor('carburant')?.descending}">
 							[[#{bonEngin.carburant}]]
 							<a th:href="'?page=0&sort=carburant'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
-								<i class="material-icons text-light"
-								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
-							</a>
-						</th>
-						<th th:with="desc=${page.getSort().getOrderFor('quantite')?.descending}">
-							[[#{bonEngin.quantite}]]
-							<a th:href="'?page=0&sort=quantite'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
 								<i class="material-icons text-light"
 								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
 							</a>
@@ -148,27 +176,6 @@
 								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
 							</a>
 						</th>
-						<th th:with="desc=${page.getSort().getOrderFor('consommationKm')?.descending}">
-							[[#{bonEngin.consommationKm}]]
-							<a th:href="'?page=0&sort=consommationKm'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
-								<i class="material-icons text-light"
-								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
-							</a>
-						</th>
-						<th th:with="desc=${page.getSort().getOrderFor('consommationH')?.descending}">
-							[[#{bonEngin.consommationH}]]
-							<a th:href="'?page=0&sort=consommationH'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
-								<i class="material-icons text-light"
-								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
-							</a>
-						</th>
-						<th th:with="desc=${page.getSort().getOrderFor('nbrHeures')?.descending}">
-							[[#{bonEngin.nbrHeures}]]
-							<a th:href="'?page=0&sort=nbrHeures'+(${desc}?'':',desc')+(${search.isEmpty()}?'':'&search='+${search})">
-								<i class="material-icons text-light"
-								   th:text="${desc}?'keyboard_arrow_up':'keyboard_arrow_down'"></i>
-							</a>
-						</th>
 						<th></th>
 					</tr>
 					</thead>
@@ -176,13 +183,17 @@
 					<tr th:each="bon : ${page.content}">
 						<td th:text="${bon.date}"></td>
 						<td th:text="${bon.engin?.code}"></td>
-						<td th:text="${bon.code}"></td>
-						<td th:text="${bon.chantierGazoil?.nom}"></td>
+						<td th:text="${bon.engin?.sousFamille?.nom}"></td>
 						<td th:text="${bon.chantierTravail?.nom}"></td>
+						<td th:text="${bon.chantierGazoil?.nom}"></td>
+						<td th:text="${bon.quantite}"></td>
+						<td th:text="${bon.consommationH}"></td>
+						<td th:text="${bon.consommationKm}"></td>
+						<td th:text="${bon.nbrHeures}"></td>
+						<td th:text="${bon.code}"></td>
 						<td th:text="${bon.pompiste?.nom}"></td>
 						<td th:text="${bon.chauffeur?.nom}"></td>
 						<td th:text="${bon.carburant}"></td>
-						<td th:text="${bon.quantite}"></td>
 						<td th:text="${bon.compteurKm}"></td>
 						<td th:text="${bon.compteurH}"></td>
 						<td th:text="${bon.compteurPompe}"></td>
@@ -197,9 +208,6 @@
 						</td>
 						<td th:text="${bon.compteurAbsoluKm}"></td>
 						<td th:text="${bon.compteurAbsoluH}"></td>
-						<td th:text="${bon.consommationKm}"></td>
-						<td th:text="${bon.consommationH}"></td>
-						<td th:text="${bon.nbrHeures}"></td>
 						<td class="btn-group">
 							<button class="btn bmd-btn-icon dropdown-toggle" type="button" id="ex3"
 									data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
