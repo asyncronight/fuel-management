@@ -2,6 +2,7 @@ package me.kadarh.mecaworks.service.impl.bons;
 
 import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.bons.BonEngin;
+import me.kadarh.mecaworks.domain.others.Chantier;
 import me.kadarh.mecaworks.domain.others.Employe;
 import me.kadarh.mecaworks.domain.others.Engin;
 import me.kadarh.mecaworks.domain.others.TypeCompteur;
@@ -121,9 +122,15 @@ public class BonEnginServiceImpl implements BonEnginService {
                 Employe employe = new Employe();
                 employe.setNom(search);
 				Engin engin = new Engin();
+                engin.setCode(search);
+                engin.setNumeroSerie(search);
                 engin.setNumeroSerie(null);
                 engin.setConsommationMoyenne(null);
                 engin.setObjectif(null);
+                Chantier chantier = new Chantier();
+                chantier.setStock(null);
+                chantier.setNom(search);
+                bonEngin.setChantierGazoil(chantier);
                 bonEngin.setPompiste(employe);
 				bonEngin.setChauffeur(employe);
 				bonEngin.setEngin(engin);
