@@ -197,6 +197,11 @@ var chart3 = new Chart('chart3', {
                     display: true,
                     labelString: 'Quantité de gasoile (L)'
                 }
+            }],
+            xAxes: [{
+                ticks: {
+                    autoSkip: false
+                }
             }]
         }
     }
