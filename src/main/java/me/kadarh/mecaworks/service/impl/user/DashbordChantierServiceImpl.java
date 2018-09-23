@@ -49,12 +49,10 @@ public class DashbordChantierServiceImpl implements DashbordChantierService {
 			quantites.add(userCalculService.getMonthsWithQuantities(chantierService.get(idc), month, yeaar));
 		}
 		if (stock.isPresent()) {
-			stock_c = stock.get().getStockC().longValue();
 			ecartPlus = stock.get().getEcart_plus().longValue();
 			ecartMoins = stock.get().getEcart_moins().longValue();
 			dateMaj = stock.get().getDate();
 		} else {
-			stock_c = chantierService.get(idc).getStock().longValue();
 			ecartPlus = 0L;
 			ecartMoins = 0L;
 			dateMaj = LocalDate.now();
@@ -63,7 +61,8 @@ public class DashbordChantierServiceImpl implements DashbordChantierService {
 				userCalculService.getListDaysQuantities(chantierService.get(idc), mois, annee),
 				quantites,
 				userCalculService.getListChantierStockDays(chantierService.get(idc), mois, annee),
-				stock_c, ecartPlus, ecartMoins, dateMaj,
+				chantierService.get(idc).getStock().longValue(),
+				ecartPlus, ecartMoins, dateMaj,
 				chantierService.get(idc)
 		);
 	}

@@ -22,10 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -128,7 +125,7 @@ public class UserCalculService {
         gazoilAchetee = bonFournisseurs.stream().mapToLong(BonFournisseur::getQuantite).sum();
         gazoilFlottant = bonLivraisons.stream().mapToLong(BonLivraison::getQuantite).sum();
         return new Quantite(month + "/" + year, quantiteTotal, quantiteLocation, chargeLocataireTotale, chargeLocataireExterne,
-                0f, consommationPrevue, gazoilAchetee, gazoilFlottant);
+                8.5f, consommationPrevue, gazoilAchetee, gazoilFlottant);
     }
 
     public List<Quantite> getListDaysQuantities(Chantier chantier, int month, int year) {
@@ -157,7 +154,7 @@ public class UserCalculService {
             gazoilFlottant = bonLivraisons.stream().filter(bl -> bl.getDate().equals(localDate)).mapToLong(BonLivraison::getQuantite).sum();
 
             quantites.add(new Quantite(date, quantiteTotal, quantiteLocation, chargeLocataireTotale, chargeLocataireExterne,
-                    0f, consommationPrevue, gazoilAchetee, gazoilFlottant));
+                    8.5f, consommationPrevue, gazoilAchetee, gazoilFlottant));
         }
 
         return quantites;
@@ -199,14 +196,17 @@ public class UserCalculService {
         for (int i = 0; i < days; i++) {
             stock = new Stock();
             LocalDate localDate = LocalDate.of(year, month, i + 1);
-            stock1 = stocks.stream().filter(be -> be.getDate().equals(localDate)).mapToLong(Stock::getStockC).sum();
+            OptionalLong id_s = stocks.stream().filter(be -> be.getDate().equals(localDate)).mapToLong(Stock::getId).max();
+            if (id_s.isPresent())
+                stock1 = stockRepo.getOne(id_s.getAsLong()).getStockC().longValue();
+            else stock1 = 100000L;
             stock.setStockC(stock1.intValue());
             stock.setChantier(chantier);
             stock.setDate(LocalDate.of(year, month, i + 1));
             list.add(stock);
         }
         for (int i = 1; i < list.size(); i++) {
-            if (list.get(i).getStockC() == 0) list.get(i).setStockC(list.get(i - 1).getStockC());
+            if (list.get(i).getStockC() == 100000L) list.get(i).setStockC(list.get(i - 1).getStockC());
         }
         return list;
     }

@@ -42,13 +42,13 @@ public class DashbordServiceImpl implements DashbordService {
             if (mois == LocalDate.now().getMonthValue() && year == LocalDate.now().getYear())
                 dashbord.setChantierBatch(userCalculService.getListChantierWithQuantities(mois, year));
             else
-                dashbord.setChantierBatch(chantierBatchRepo.findAllByMoisAndAnnee(mois, year));
+                dashbord.setChantierBatch(chantierBatchRepo.findAllByMoisAndAnnee(mois, year).isEmpty() ? new ArrayList<>() : chantierBatchRepo.findAllByMoisAndAnnee(mois, year));
         dashbord.getQuantites().add(new Quantite(mois + "/" + year,
                 dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getQuantite).sum(),
                     dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getQuantiteLocation).sum(),
                     dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getChargeLocataire).sum(),
                     dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getChargeLocataireExterne).sum(),
-                    dashbord.getChantierBatch().stream().mapToDouble(ChantierBatch::getPrix).average().isPresent() ? (float) dashbord.getChantierBatch().stream().mapToDouble(ChantierBatch::getPrix).average().getAsDouble() : 0f,
+                8.5f,
                 dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getConsommationPrevue).sum(),
                 dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getGazoilAchete).sum(),
                 dashbord.getChantierBatch().stream().mapToLong(ChantierBatch::getGazoilFlotant).sum()));
@@ -72,7 +72,7 @@ public class DashbordServiceImpl implements DashbordService {
                         chantierBatches.stream().mapToLong(ChantierBatch::getQuantiteLocation).sum(),
                         chantierBatches.stream().mapToLong(ChantierBatch::getChargeLocataire).sum(),
                         chantierBatches.stream().mapToLong(ChantierBatch::getChargeLocataireExterne).sum(),
-                        (chantierBatches.stream().mapToDouble(ChantierBatch::getPrix).average().isPresent() ? (float) chantierBatches.stream().mapToDouble(ChantierBatch::getPrix).average().getAsDouble() : 0f),
+                        8.5f,
                         chantierBatches.stream().mapToLong(ChantierBatch::getConsommationPrevue).sum(),
                         chantierBatches.stream().mapToLong(ChantierBatch::getGazoilAchete).sum(),
                         chantierBatches.stream().mapToLong(ChantierBatch::getGazoilFlotant).sum()));

@@ -44,6 +44,14 @@ public class ChantierServiceImpl implements ChantierService {
 	public Chantier add(Chantier chantier) {
 		log.info("Service= ChantierServiceImpl - calling methode add");
 		try {
+			Stock stock = new Stock();
+			stock.setDate(LocalDate.now());
+			stock.setStockC(chantier.getStock());
+			stock.setStockReel(chantier.getStock());
+			stock.setChantier(chantier);
+			stock.setEcart_plus(0);
+			stock.setEcart_moins(0);
+			stockService.add(stock);
 			return chantierRepo.save(chantier);
 		} catch (Exception e) {
 			log.debug("cannot add chantier , failed operation");

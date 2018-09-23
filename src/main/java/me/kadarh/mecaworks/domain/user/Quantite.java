@@ -10,7 +10,7 @@ public class Quantite {
     private Long quantiteLocation = 0L;
     private Long chargeLocataire = 0L;
     private Long chargeLocataireExterne = 0L;
-	private Float prix = 10F;
+    private Float prix = 8.5f;
     private Long consommationPrevue = 0L;
 	private Long gazoilAchete = 0L;
 	private Long gazoilFlotant = 0L;

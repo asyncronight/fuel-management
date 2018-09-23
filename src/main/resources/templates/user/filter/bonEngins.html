@@ -160,7 +160,7 @@
                             Nombre d'heures Total (H)
                         </th>
                         <th class="text-light">
-                            Prix Total Total (MAD) [ prix unitaire =10dh/L ]
+                            Prix Total Total (MAD) [ prix unitaire = 8.5 DH/L ]
                         </th>
                     </tr>
                     </thead>
@@ -182,7 +182,7 @@
                             <span th:text="${#aggregates.sum(page.![nbrHeures])}"></span>
                         </td>
                         <td>
-                            <span th:text="${#aggregates.sum(page.![quantite])}*10 +' DH'"></span>
+                            <span th:text="${#aggregates.sum(page.![quantite])}*8.5 +' DH'"></span>
                         </td>
                     </tr>
                     </tbody>

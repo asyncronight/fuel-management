@@ -28,7 +28,7 @@ public class ChantierBatch extends AbstractDomain {
     private Long chargeLocataire = 0L;
     private Long chargeLocataireExterne = 0L;
     private Long consommationPrevue = 0L;
-    private Float prix = 10F;
+    private Float prix = 8.5F;
     private Long gazoilAchete = 0L;
     private Long gazoilFlotant = 0L;
 
