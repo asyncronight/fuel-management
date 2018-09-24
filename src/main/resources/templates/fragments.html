@@ -4,18 +4,19 @@
 <head th:fragment="head">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>MyFuel</title>
+    <title>Mecaworks - Gasoil</title>
     <link rel="stylesheet" th:href="@{/webjars/material-design-icons/3.0.1/material-icons.css}"/>
     <link rel="stylesheet" th:href="@{/webjars/roboto-fontface/0.7.0/css/roboto/roboto-fontface.css}"/>
     <link rel="stylesheet" th:href="@{/webjars/select2/4.0.0/dist/css/select2.min.css}"/>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap-material-design/4.1.1/css/bootstrap-material-design.min.css}"/>
     <link rel="stylesheet" th:href="@{/webjars/github-com-fengyuanchen-datepicker/0.6.4/datepicker.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
-    <link rel="stylesheet" th:href="@{'https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css'}"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.2/b-flash-1.5.2/b-html5-1.5.2/r-2.2.2/sc-1.5.0/datatables.min.css"/>
 </head>
 <body>
 <nav th:fragment="menu(active)" class="navbar navbar-expand-lg navbar-light bg-primary">
-    <a class="navbar-brand text-light" href="/"><h3>MyFuel</h3></a>
+    <a class="navbar-brand text-light" href="/"><h3>Mecaworks - Gasoil</h3></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
             aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -78,6 +79,18 @@
     <script th:src="@{/webjars/github-com-fengyuanchen-datepicker/0.6.4/datepicker.min.js}"></script>
     <script th:src="@{/webjars/datatables/1.10.19/js/jquery.dataTables.min.js}"></script>
     <script th:src="@{/js/main.js}"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript"
+            src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/b-1.5.2/b-flash-1.5.2/b-html5-1.5.2/r-2.2.2/sc-1.5.0/datatables.min.js"></script>
+    <script type="text/javascript">
+        $('#myTableFilter').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'csv', 'excel', 'pdf'
+            ]
+        });
+    </script>
 </div>
 </body>
 </html>
