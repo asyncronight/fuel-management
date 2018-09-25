@@ -6,7 +6,7 @@
 <div class="bmd-layout-container bmd-drawer-f-l  bmd-drawer-overlay-md-down">
     <div th:replace="user/fragment :: menu('a')"></div>
     <main class="bmd-layout-content">
-        <div class="container">
+        <div class="container-fluid">
             <button class="btn bmd-btn-fab btn-primary bmd-btn-fab-sm active" type="button" data-toggle="drawer"
                     data-target="#side" style="margin-top: 10px">
                 <i class="material-icons text-light">menu</i>
@@ -20,7 +20,7 @@
                 <h1 class="text-center alert-heading" th:text="#{empty}"></h1>
             </div>
             <!--/*@thymesVar id="alerte" type="me.kadarh.mecaworks.domain.alertes.Alerte"*/-->
-            <div class="table-responsive card" th:if="!${#lists.isEmpty(alerts)}">
+            <div class="table-responsive card container-fluid py-3" th:if="!${#lists.isEmpty(alerts)}">
                 <table id="myTableFilter" class="display table table-sm table-hover table-bordered">
                     <thead class="bg-primary">
                     <tr>
@@ -90,6 +90,7 @@
                     </tbody>
                 </table>
             </div>
+            <br>
         </div>
     </main>
 </div>

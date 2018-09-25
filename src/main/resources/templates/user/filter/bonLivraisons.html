@@ -84,7 +84,7 @@
             <div class="jumbotron alert alert-primary" th:if="${#lists.isEmpty(page)}">
                 <h1 class="text-center alert-heading" th:text="#{empty}"></h1>
             </div>
-            <div class="table-responsive card" th:if="!${#lists.isEmpty(page)}">
+            <div class="table-responsive card container-fluid pt-3" th:if="!${#lists.isEmpty(page)}">
                 <table id="myTableFilterTotal" class="display table table-striped table-bordered">
                     <thead class="bg-dark">
                     <tr>
@@ -114,7 +114,8 @@
                     </tbody>
                 </table>
             </div>
-            <div class="table-responsive card" th:if="!${#lists.isEmpty(page)}">
+            <br>
+            <div class="table-responsive card container-fluid py-3" th:if="!${#lists.isEmpty(page)}">
                 <table id="myTableFilter" class=" table table-striped table-bordered">
                     <thead class="bg-dark">
                     <tr>
@@ -154,6 +155,7 @@
                     </tbody>
                 </table>
             </div>
+            <br>
         </div>
     </main>
 </div>

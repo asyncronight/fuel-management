@@ -11,5 +11,12 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
-    $('#myTableFilter').DataTable();
+    $('#myTableFilter').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'csv',
+            'excel',
+            'pdf'
+        ]
+    });
 });
