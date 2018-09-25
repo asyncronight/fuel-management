@@ -75,12 +75,12 @@
                         <td class="py-3" th:text="${alerte.date}"></td>
                         <td class="py-3" th:text="${alerte.typeAlerte}"></td>
                         <td class="py-3" th:text="${alerte.message}"></td>
-                        <td class="py-3" th:text="${alerte.bonEngin?.chauffeur?.nom}"></td>
-                        <td class="py-3" th:text="${alerte.bonEngin?.engin?.code}"></td>
-                        <td class="py-3" th:text="${alerte.bonEngin?.engin?.groupe?.nom}"></td>
-                        <td class="py-3" th:text="${alerte.bonEngin?.chantierTravail?.nom}"></td>
-                        <td class="py-3" th:text="${alerte.bonEngin?.chantierGazoil?.nom}"></td>
-                        <td class="py-3" th:text="${alerte.bonEngin?.code}"></td>
+                        <td class="py-3" th:text="${alerte?.bonEngin?.chauffeur?.nom}"></td>
+                        <td class="py-3" th:text="${alerte?.bonEngin?.engin?.code}"></td>
+                        <td class="py-3" th:text="${alerte?.bonEngin?.engin?.groupe?.nom}"></td>
+                        <td class="py-3" th:text="${alerte?.bonEngin?.chantierTravail?.nom}"></td>
+                        <td class="py-3" th:text="${alerte?.bonEngin?.chantierGazoil?.nom}"></td>
+                        <td class="py-3" th:text="${alerte?.bonEngin?.code}"></td>
                         <td class="py-3">
                             <form method="post" th:action="'/user/alerte/'+${alerte.id}">
                                 <button type="submit" class="btn btn-light bg-dark ">Oublier</button>
