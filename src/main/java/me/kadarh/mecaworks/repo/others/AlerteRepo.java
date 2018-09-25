@@ -10,4 +10,6 @@ import java.util.List;
 public interface AlerteRepo extends JpaRepository<Alerte, Long> {
 
     List<Alerte> findByEtatOrderByCreatedAt(boolean etat);
+
+    void deleteAllByBonEngin_Id(Long idBon);
 }

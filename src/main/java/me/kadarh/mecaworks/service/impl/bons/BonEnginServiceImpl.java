@@ -7,6 +7,7 @@ import me.kadarh.mecaworks.domain.others.Employe;
 import me.kadarh.mecaworks.domain.others.Engin;
 import me.kadarh.mecaworks.domain.others.TypeCompteur;
 import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
+import me.kadarh.mecaworks.repo.others.AlerteRepo;
 import me.kadarh.mecaworks.service.bons.BonEnginService;
 import me.kadarh.mecaworks.service.bons.BonLivraisonService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
@@ -40,14 +41,16 @@ public class BonEnginServiceImpl implements BonEnginService {
     private final PersistServiceImpl persistService;
     private final BonLivraisonService bonLivraisonService;
     private final CalculAbsoluServiceImpl calculAbsoluService;
+    private final AlerteRepo alerteRepo;
 
-    public BonEnginServiceImpl(BonEnginRepo bonEnginRepo, CalculConsommationServiceImpl calculService, CheckServiceImpl checkService, PersistServiceImpl persistService, BonLivraisonService bonLivraisonService, CalculAbsoluServiceImpl calculAbsoluService) {
+    public BonEnginServiceImpl(BonEnginRepo bonEnginRepo, CalculConsommationServiceImpl calculService, CheckServiceImpl checkService, PersistServiceImpl persistService, BonLivraisonService bonLivraisonService, CalculAbsoluServiceImpl calculAbsoluService, AlerteRepo alerteRepo) {
         this.bonEnginRepo = bonEnginRepo;
         this.calculService = calculService;
         this.checkService = checkService;
         this.persistService = persistService;
         this.bonLivraisonService = bonLivraisonService;
         this.calculAbsoluService = calculAbsoluService;
+        this.alerteRepo = alerteRepo;
     }
 
     /*--------------------------------------------------------------------------- */
@@ -80,7 +83,9 @@ public class BonEnginServiceImpl implements BonEnginService {
     @Override
     public void delete(Long id) {
         try {
-            bonEnginRepo.delete(bonEnginRepo.findById(id).get());
+            //Todo hamza : delete stock
+            alerteRepo.deleteAllByBonEngin_Id(id);
+            bonEnginRepo.deleteById(id);
         } catch (Exception e) {
             throw new OperationFailedException("Probleme lors de la suppression du bon, ce bon ne peut pas être supprimer", e);
         }

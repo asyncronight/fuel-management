@@ -6,7 +6,6 @@ import me.kadarh.mecaworks.domain.AbstractDomain;
 import me.kadarh.mecaworks.domain.bons.BonEngin;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 
@@ -25,7 +24,7 @@ public class Alerte extends AbstractDomain {
 	private Boolean etat;
     private Severity severity;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	private BonEngin bonEngin;
 
 }
