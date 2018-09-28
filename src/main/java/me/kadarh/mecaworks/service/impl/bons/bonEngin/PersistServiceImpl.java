@@ -31,12 +31,14 @@ public class PersistServiceImpl {
     private final StockService stockService;
     private final BonEnginRepo bonEnginRepo;
     private final ChantierService chantierService;
+    private final StockManagerServiceImpl stockManagerService;
 
-    public PersistServiceImpl(AlerteService alerteService, StockService stockService, BonEnginRepo bonEnginRepo, ChantierService chantierService) {
+    public PersistServiceImpl(AlerteService alerteService, StockService stockService, BonEnginRepo bonEnginRepo, ChantierService chantierService, StockManagerServiceImpl stockManagerService) {
         this.alerteService = alerteService;
         this.stockService = stockService;
         this.bonEnginRepo = bonEnginRepo;
         this.chantierService = chantierService;
+        this.stockManagerService = stockManagerService;
     }
 
     public void insertAlertes(BonEngin bonEngin) {
@@ -79,6 +81,9 @@ public class PersistServiceImpl {
         stock.setChantier(chantier);
         stock.setDate(bonEngin.getDate());
         stock.setSortieE(bonEngin.getQuantite());
+        stock.setQuantite(stock.getSortieE());
+        stock.setId_Bon(bonEngin.getId());
+        stock.setTypeBon(TypeBon.BE);
         if (stockService.getLastStock(chantier) != null)
             stock.setStockC(stockService.getLastStock(chantier).getStockC() - bonEngin.getQuantite());
         else stock.setStockC(bonEngin.getChantierGazoil().getStock() - bonEngin.getQuantite());

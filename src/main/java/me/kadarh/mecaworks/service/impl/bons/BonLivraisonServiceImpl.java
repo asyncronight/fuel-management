@@ -6,6 +6,7 @@ import me.kadarh.mecaworks.domain.bons.BonLivraison;
 import me.kadarh.mecaworks.domain.others.Chantier;
 import me.kadarh.mecaworks.domain.others.Employe;
 import me.kadarh.mecaworks.domain.others.Stock;
+import me.kadarh.mecaworks.domain.others.TypeBon;
 import me.kadarh.mecaworks.repo.bons.BonLivraisonRepo;
 import me.kadarh.mecaworks.service.ChantierService;
 import me.kadarh.mecaworks.service.EmployeService;
@@ -13,6 +14,7 @@ import me.kadarh.mecaworks.service.StockService;
 import me.kadarh.mecaworks.service.bons.BonLivraisonService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
 import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
+import me.kadarh.mecaworks.service.impl.bons.bonEngin.StockManagerServiceImpl;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -37,13 +39,13 @@ public class BonLivraisonServiceImpl implements BonLivraisonService {
 
 	private final ChantierService chantierService;
 	private final EmployeService employeService;
+    private final StockManagerServiceImpl stockManagerService;
 
-	public BonLivraisonServiceImpl(StockService stockService, BonLivraisonRepo bonLivraisonRepo, ChantierService chantierService, EmployeService employeService) {
-		this.stockService = stockService;
-		this.bonLivraisonRepo = bonLivraisonRepo;
-		this.chantierService = chantierService;
+    public BonLivraisonServiceImpl(ChantierService chantierService, EmployeService employeService, StockManagerServiceImpl stockManagerService) {
+        this.chantierService = chantierService;
 		this.employeService = employeService;
-	}
+        this.stockManagerService = stockManagerService;
+    }
 
 	@Override
 	public BonLivraison add(BonLivraison bonLivraison) {
@@ -86,7 +88,10 @@ public class BonLivraisonServiceImpl implements BonLivraisonService {
 		stock.setChantier(chantier);
 		stock.setDate(bonLivraison.getDate());
         stock.setSortieL(bonLivraison.getQuantite());
-		if (stockService.getLastStock(chantier) != null)
+        stock.setQuantite(stock.getSortieL());
+        stock.setId_Bon(bonLivraison.getId());
+        stock.setTypeBon(TypeBon.BL);
+        if (stockService.getLastStock(chantier) != null)
 			stock.setStockC(stockService.getLastStock(chantier).getStockC() - bonLivraison.getQuantite());
 		else stock.setStockC(bonLivraison.getChantierDepart().getStock() - bonLivraison.getQuantite());
 
@@ -96,7 +101,10 @@ public class BonLivraisonServiceImpl implements BonLivraisonService {
 		stock2.setChantier(chantier1);
 		stock2.setDate(bonLivraison.getDate());
         stock2.setEntreeL(bonLivraison.getQuantite());
-		if (stockService.getLastStock(chantier1) != null)
+        stock2.setQuantite(stock2.getEntreeL());
+        stock2.setId_Bon(bonLivraison.getId());
+        stock2.setTypeBon(TypeBon.BL);
+        if (stockService.getLastStock(chantier1) != null)
 			stock2.setStockC(stockService.getLastStock(chantier1).getStockC() + bonLivraison.getQuantite());
 		else stock2.setStockC(chantier1.getStock() + bonLivraison.getQuantite());
 		stockService.add(stock);
@@ -208,7 +216,11 @@ public class BonLivraisonServiceImpl implements BonLivraisonService {
 	@Override
 	public void delete(Long id) {
 		try {
-			bonLivraisonRepo.delete(bonLivraisonRepo.findById(id).get());
+            BonLivraison bonLivraison = bonLivraisonRepo.getOne(id);
+            Long idChantier = bonLivraison.getChantierArrivee().getId();
+            Long idGasoil = bonLivraison.getChantierDepart().getId();
+            stockManagerService.deleteStock(idGasoil, idChantier, id, TypeBon.BL);
+            bonLivraisonRepo.delete(bonLivraisonRepo.findById(id).get());
 		} catch (NoSuchElementException e) {
 			throw new ResourceNotFoundException("Le bon n'existe pas , opération échouée");
 		} catch (Exception e) {

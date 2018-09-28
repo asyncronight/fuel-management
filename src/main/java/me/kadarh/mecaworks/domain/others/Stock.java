@@ -32,4 +32,8 @@ public class Stock extends AbstractDomain {
     @JsonIgnore
 	private Chantier chantier;
 
+    private Long id_Bon;
+    private TypeBon typeBon;
+    private Integer quantite;
+
 }

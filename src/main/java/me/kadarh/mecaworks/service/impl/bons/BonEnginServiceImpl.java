@@ -2,19 +2,13 @@ package me.kadarh.mecaworks.service.impl.bons;
 
 import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.bons.BonEngin;
-import me.kadarh.mecaworks.domain.others.Chantier;
-import me.kadarh.mecaworks.domain.others.Employe;
-import me.kadarh.mecaworks.domain.others.Engin;
-import me.kadarh.mecaworks.domain.others.TypeCompteur;
+import me.kadarh.mecaworks.domain.others.*;
 import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
 import me.kadarh.mecaworks.repo.others.AlerteRepo;
 import me.kadarh.mecaworks.service.bons.BonEnginService;
 import me.kadarh.mecaworks.service.bons.BonLivraisonService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
-import me.kadarh.mecaworks.service.impl.bons.bonEngin.CalculAbsoluServiceImpl;
-import me.kadarh.mecaworks.service.impl.bons.bonEngin.CalculConsommationServiceImpl;
-import me.kadarh.mecaworks.service.impl.bons.bonEngin.CheckServiceImpl;
-import me.kadarh.mecaworks.service.impl.bons.bonEngin.PersistServiceImpl;
+import me.kadarh.mecaworks.service.impl.bons.bonEngin.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -42,8 +36,9 @@ public class BonEnginServiceImpl implements BonEnginService {
     private final BonLivraisonService bonLivraisonService;
     private final CalculAbsoluServiceImpl calculAbsoluService;
     private final AlerteRepo alerteRepo;
+    private final StockManagerServiceImpl stockManagerService;
 
-    public BonEnginServiceImpl(BonEnginRepo bonEnginRepo, CalculConsommationServiceImpl calculService, CheckServiceImpl checkService, PersistServiceImpl persistService, BonLivraisonService bonLivraisonService, CalculAbsoluServiceImpl calculAbsoluService, AlerteRepo alerteRepo) {
+    public BonEnginServiceImpl(BonEnginRepo bonEnginRepo, CalculConsommationServiceImpl calculService, CheckServiceImpl checkService, PersistServiceImpl persistService, BonLivraisonService bonLivraisonService, CalculAbsoluServiceImpl calculAbsoluService, AlerteRepo alerteRepo, StockManagerServiceImpl stockManagerService) {
         this.bonEnginRepo = bonEnginRepo;
         this.calculService = calculService;
         this.checkService = checkService;
@@ -51,6 +46,7 @@ public class BonEnginServiceImpl implements BonEnginService {
         this.bonLivraisonService = bonLivraisonService;
         this.calculAbsoluService = calculAbsoluService;
         this.alerteRepo = alerteRepo;
+        this.stockManagerService = stockManagerService;
     }
 
     /*--------------------------------------------------------------------------- */
@@ -83,7 +79,10 @@ public class BonEnginServiceImpl implements BonEnginService {
     @Override
     public void delete(Long id) {
         try {
-            //Todo hamza : delete stock
+            BonEngin bonEngin = bonEnginRepo.getOne(id);
+            Long idChantier = bonEngin.getChantierTravail().getId();
+            Long idGasoil = bonEngin.getChantierGazoil().getId();
+            stockManagerService.deleteStock(idGasoil, idChantier, id, TypeBon.BE);
             alerteRepo.deleteAllByBonEngin_Id(id);
             bonEnginRepo.deleteById(id);
         } catch (Exception e) {

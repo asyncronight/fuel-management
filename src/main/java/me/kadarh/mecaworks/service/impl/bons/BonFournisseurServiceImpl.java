@@ -5,6 +5,7 @@ import me.kadarh.mecaworks.domain.bons.BonFournisseur;
 import me.kadarh.mecaworks.domain.others.Chantier;
 import me.kadarh.mecaworks.domain.others.Fournisseur;
 import me.kadarh.mecaworks.domain.others.Stock;
+import me.kadarh.mecaworks.domain.others.TypeBon;
 import me.kadarh.mecaworks.repo.bons.BonFournisseurRepo;
 import me.kadarh.mecaworks.service.ChantierService;
 import me.kadarh.mecaworks.service.FournisseurService;
@@ -12,6 +13,7 @@ import me.kadarh.mecaworks.service.StockService;
 import me.kadarh.mecaworks.service.bons.BonFournisseurService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
 import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
+import me.kadarh.mecaworks.service.impl.bons.bonEngin.StockManagerServiceImpl;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
@@ -37,12 +39,14 @@ public class BonFournisseurServiceImpl implements BonFournisseurService {
     private final StockService stockService;
     private final ChantierService chantierService;
     private final FournisseurService fournisseurService;
+    private final StockManagerServiceImpl stockManagerService;
 
-    public BonFournisseurServiceImpl(BonFournisseurRepo bonFournisseurRepo, StockService stockService, ChantierService chantierService, FournisseurService fournisseurService) {
+    public BonFournisseurServiceImpl(BonFournisseurRepo bonFournisseurRepo, StockService stockService, ChantierService chantierService, FournisseurService fournisseurService, StockManagerServiceImpl stockManagerService) {
         this.bonFournisseurRepo = bonFournisseurRepo;
         this.stockService = stockService;
         this.chantierService = chantierService;
         this.fournisseurService = fournisseurService;
+        this.stockManagerService = stockManagerService;
     }
 
     @Override
@@ -69,6 +73,9 @@ public class BonFournisseurServiceImpl implements BonFournisseurService {
         stock.setChantier(chantier);
         stock.setDate(bonFournisseur.getDate());
         stock.setEntreeF(bonFournisseur.getQuantite());
+        stock.setQuantite(stock.getEntreeF());
+        stock.setId_Bon(bonFournisseur.getId());
+        stock.setTypeBon(TypeBon.BF);
         if (stockService.getLastStock(chantier) != null)
             stock.setStockC(stockService.getLastStock(chantier).getStockC() + bonFournisseur.getQuantite());
         else stock.setStockC(bonFournisseur.getChantier().getStock() + bonFournisseur.getQuantite());
@@ -177,7 +184,10 @@ public class BonFournisseurServiceImpl implements BonFournisseurService {
 	public void delete(Long id) {
         log.info("Service- BonFournisseurServiceImpl Calling delete with param id = " + id);
         try {
-            bonFournisseurRepo.delete(bonFournisseurRepo.findById(id).get());
+            BonFournisseur bonFournisseur = bonFournisseurRepo.getOne(id);
+            Long idChantier = bonFournisseur.getChantier().getId();
+            stockManagerService.deleteStock(null, idChantier, id, TypeBon.BF);
+            bonFournisseurRepo.delete(bonFournisseur);
         } catch (NoSuchElementException e) {
             throw new ResourceNotFoundException("opération échouée , l'élement est introuvable", e);
         } catch (Exception e) {

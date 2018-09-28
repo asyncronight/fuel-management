@@ -14,9 +14,13 @@ $(document).ready(function () {
     $('#myTableFilter').DataTable({
         dom: 'Bfrtip',
         buttons: [
+            {
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                pageSize: 'LEGAL'
+            },
             'csv',
-            'excel',
-            'pdf'
+            'excel'
         ]
     });
 });
