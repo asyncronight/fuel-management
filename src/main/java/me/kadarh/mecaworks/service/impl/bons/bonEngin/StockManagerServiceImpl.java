@@ -39,13 +39,18 @@ public class StockManagerServiceImpl {
         //then doUpdateStocks + doUpdateChantierStock
         //else don't do anything
         //always do : delete stock with id bon = id_bon and type bon = type_bon
-        LocalDate date;
         Stock stock = stockRepo.findByTypeBonAndId_Bon(type_bon, id_bon).get();
         List<Stock> list = stockRepo.findAllById_Bon(id_bon);
         stockRepo.deleteAll(list);
-        if (type_bon.equals(TypeBon.BE) && weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {
-            doMiseAjour(idC_travail, stock, true);
-            updateStockChantier(idC_travail, stock.getQuantite(), true);
+        if (type_bon.equals(TypeBon.BE)) {
+            if (!idC_gasoil.equals(idC_travail) && weHaveToDoMiseAjour(stock.getDate(), idC_gasoil)) {
+                doMiseAjour(idC_gasoil, stock, true);
+                updateStockChantier(idC_gasoil, stock.getQuantite(), true);
+            }
+            if (weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {
+                doMiseAjour(idC_travail, stock, true);
+                updateStockChantier(idC_travail, stock.getQuantite(), true);
+            }
         }
         if (type_bon.equals(TypeBon.BF) && weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {
             doMiseAjour(idC_travail, stock, false);
@@ -89,7 +94,6 @@ public class StockManagerServiceImpl {
     }
 
     private void doMiseAjour(Long idc, Stock stock, boolean signe) {
-        Optional<Stock> stockx = stockRepo.findLastStockReel(idc);
         List<Stock> list = stockRepo.findAllByChantierAndIdGreaterThan(chantierService.get(idc), stock.getId());
         list.forEach(stock1 -> stock1.setStockC(signe ? stock1.getStockC() + stock.getQuantite() : stock1.getStockC() - stock.getQuantite()));
         stockRepo.saveAll(list);
