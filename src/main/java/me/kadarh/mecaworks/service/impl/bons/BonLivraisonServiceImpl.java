@@ -96,7 +96,6 @@ public class BonLivraisonServiceImpl implements BonLivraisonService {
         if (stockService.getLastStock(chantier) != null)
 			stock.setStockC(stockService.getLastStock(chantier).getStockC() - bonLivraison.getQuantite());
 		else stock.setStockC(bonLivraison.getChantierDepart().getStock() - bonLivraison.getQuantite());
-
         //Entréé livraison
         Stock stock2 = new Stock();
 		Chantier chantier1 = bonLivraison.getChantierArrivee();
