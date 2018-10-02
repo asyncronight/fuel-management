@@ -34,23 +34,25 @@ import java.util.NoSuchElementException;
 @Slf4j
 public class BonLivraisonServiceImpl implements BonLivraisonService {
 
-    private StockService stockService;
-    private BonLivraisonRepo bonLivraisonRepo;
+	private final StockService stockService;
+	private final BonLivraisonRepo bonLivraisonRepo;
 
 	private final ChantierService chantierService;
 	private final EmployeService employeService;
     private final StockManagerServiceImpl stockManagerService;
 
-    public BonLivraisonServiceImpl(ChantierService chantierService, EmployeService employeService, StockManagerServiceImpl stockManagerService) {
-        this.chantierService = chantierService;
+	public BonLivraisonServiceImpl(StockService stockService, BonLivraisonRepo bonLivraisonRepo, ChantierService chantierService, EmployeService employeService, StockManagerServiceImpl stockManagerService) {
+		this.stockService = stockService;
+		this.bonLivraisonRepo = bonLivraisonRepo;
+		this.chantierService = chantierService;
 		this.employeService = employeService;
-        this.stockManagerService = stockManagerService;
-    }
+		this.stockManagerService = stockManagerService;
+	}
 
 	@Override
-	public BonLivraison add(BonLivraison bonLivraison) {
+	public BonLivraison add(BonLivraison bonLivraison1) {
 		try {
-			bonLivraison = bonLivraisonRepo.save(fill(bonLivraison));
+			BonLivraison bonLivraison = bonLivraisonRepo.save(fill(bonLivraison1));
 			insertStock_Livraison(bonLivraison);
             return bonLivraison;
 		} catch (DataIntegrityViolationException e) {
@@ -109,6 +111,8 @@ public class BonLivraisonServiceImpl implements BonLivraisonService {
 		else stock2.setStockC(chantier1.getStock() + bonLivraison.getQuantite());
 		stockService.add(stock);
         stockService.add(stock2);
+		stockManagerService.addStockMiseAjour(bonLivraison.getChantierDepart().getId(), bonLivraison.getChantierArrivee().getId(), stock, TypeBon.BL);
+
     }
 
 	@Override

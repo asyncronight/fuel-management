@@ -63,8 +63,21 @@ public class StockManagerServiceImpl {
         }
     }
 
-    public void addStock(Long idC, Stock stock) {
-
+    public void addStockMiseAjour(Long idC_travail, Long idC_gasoil, Stock stock, TypeBon type_bon) {
+        if (type_bon.equals(TypeBon.BE) && weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {
+            doMiseAjour(idC_travail, stock, false);
+        }
+        if (type_bon.equals(TypeBon.BF) && weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {
+            doMiseAjour(idC_travail, stock, true);
+        }
+        if (type_bon.equals(TypeBon.BL)) {
+            if (weHaveToDoMiseAjour(stock.getDate(), idC_gasoil)) {
+                doMiseAjour(idC_travail, stock, true);
+            }
+            if (weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {
+                doMiseAjour(idC_travail, stock, false);
+            }
+        }
     }
 
 
@@ -76,6 +89,7 @@ public class StockManagerServiceImpl {
     }
 
     private void doMiseAjour(Long idc, Stock stock, boolean signe) {
+        Optional<Stock> stockx = stockRepo.findLastStockReel(idc);
         List<Stock> list = stockRepo.findAllByChantierAndIdGreaterThan(chantierService.get(idc), stock.getId());
         list.forEach(stock1 -> stock1.setStockC(signe ? stock1.getStockC() + stock.getQuantite() : stock1.getStockC() - stock.getQuantite()));
         stockRepo.saveAll(list);

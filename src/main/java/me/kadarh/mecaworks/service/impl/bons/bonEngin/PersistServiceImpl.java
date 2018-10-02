@@ -90,7 +90,8 @@ public class PersistServiceImpl {
         Chantier chantier1 = chantierService.get(chantier.getId());
         chantier1.setStock(stock.getStockC());
         chantierService.update(chantier1);
-        stockService.add(stock);
+        stock = stockService.add(stock);
+        stockManagerService.addStockMiseAjour(bonEngin.getChantierTravail().getId(), bonEngin.getChantierGazoil().getId(), stock, TypeBon.BE);
     }
 
 

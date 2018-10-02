@@ -79,7 +79,8 @@ public class BonFournisseurServiceImpl implements BonFournisseurService {
         if (stockService.getLastStock(chantier) != null)
             stock.setStockC(stockService.getLastStock(chantier).getStockC() + bonFournisseur.getQuantite());
         else stock.setStockC(bonFournisseur.getChantier().getStock() + bonFournisseur.getQuantite());
-        stockService.add(stock);
+        stock = stockService.add(stock);
+        stockManagerService.addStockMiseAjour(bonFournisseur.getChantier().getId(), null, stock, TypeBon.BF);
     }
 
     @Override
