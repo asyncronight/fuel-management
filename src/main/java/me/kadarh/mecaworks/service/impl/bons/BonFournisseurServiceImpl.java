@@ -80,7 +80,7 @@ public class BonFournisseurServiceImpl implements BonFournisseurService {
             stock.setStockC(stockService.getLastStock(chantier).getStockC() + bonFournisseur.getQuantite());
         else stock.setStockC(bonFournisseur.getChantier().getStock() + bonFournisseur.getQuantite());
         stock = stockService.add(stock);
-        stockManagerService.addStockMiseAjour(bonFournisseur.getChantier().getId(), null, stock, TypeBon.BF);
+        stockManagerService.addStockUpdate(bonFournisseur.getChantier().getId(), null, stock, TypeBon.BF);
     }
 
     @Override

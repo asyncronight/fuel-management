@@ -95,8 +95,8 @@ public class BonLivraisonServiceImpl implements BonLivraisonService {
         stock.setTypeBon(TypeBon.BL);
         if (stockService.getLastStock(chantier) != null)
 			stock.setStockC(stockService.getLastStock(chantier).getStockC() - bonLivraison.getQuantite());
-		else stock.setStockC(bonLivraison.getChantierDepart().getStock() - bonLivraison.getQuantite());
-        //Entréé livraison
+		else stock.setStockC(chantier.getStock() - bonLivraison.getQuantite());
+		//Entréé livraison
         Stock stock2 = new Stock();
 		Chantier chantier1 = bonLivraison.getChantierArrivee();
 		stock2.setChantier(chantier1);
@@ -110,7 +110,7 @@ public class BonLivraisonServiceImpl implements BonLivraisonService {
 		else stock2.setStockC(chantier1.getStock() + bonLivraison.getQuantite());
 		stockService.add(stock);
         stockService.add(stock2);
-		stockManagerService.addStockMiseAjour(bonLivraison.getChantierDepart().getId(), bonLivraison.getChantierArrivee().getId(), stock, TypeBon.BL);
+		stockManagerService.addStockUpdate(bonLivraison.getChantierDepart().getId(), bonLivraison.getChantierArrivee().getId(), stock, TypeBon.BL);
 
     }
 

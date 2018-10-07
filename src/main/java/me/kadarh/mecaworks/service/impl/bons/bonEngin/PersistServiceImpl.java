@@ -64,7 +64,7 @@ public class PersistServiceImpl {
         // FIXME: 20/05/18 : add alerte ( compteur reparé )
     }
 
-    public void insertAlerte(BonEngin bonEngin, String msg, TypeAlerte type, Severity severity) {
+    private void insertAlerte(BonEngin bonEngin, String msg, TypeAlerte type, Severity severity) {
         Alerte alerte = new Alerte();
         alerte.setDate(LocalDate.now());
         alerte.setBonEngin(bonEngin);
@@ -87,15 +87,11 @@ public class PersistServiceImpl {
         if (stockService.getLastStock(chantier) != null)
             stock.setStockC(stockService.getLastStock(chantier).getStockC() - bonEngin.getQuantite());
         else stock.setStockC(bonEngin.getChantierGazoil().getStock() - bonEngin.getQuantite());
-        Chantier chantier1 = chantierService.get(chantier.getId());
-        chantier1.setStock(stock.getStockC());
-        chantierService.update(chantier1);
         stock = stockService.add(stock);
-        stockManagerService.addStockMiseAjour(bonEngin.getChantierTravail().getId(), bonEngin.getChantierGazoil().getId(), stock, TypeBon.BE);
+        stockManagerService.addStockUpdate(bonEngin.getChantierTravail().getId(), bonEngin.getChantierGazoil().getId(), stock, TypeBon.BE);
     }
 
-
-    public int whichCompteurIsDown(BonEngin bonEngin) {
+    private int whichCompteurIsDown(BonEngin bonEngin) {
         boolean cmpHenPanne = bonEngin.getCompteurHenPanne();
         boolean cmpKmenPanne = bonEngin.getCompteurKmenPanne();
         if (cmpHenPanne && cmpKmenPanne)

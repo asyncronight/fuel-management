@@ -84,6 +84,7 @@ public class BonEnginServiceImpl implements BonEnginService {
             Long idGasoil = bonEngin.getChantierGazoil().getId();
             stockManagerService.deleteStock(idGasoil, idChantier, id, TypeBon.BE);
             alerteRepo.deleteAllByBonEngin_Id(id);
+
             bonEnginRepo.deleteById(id);
         } catch (Exception e) {
             throw new OperationFailedException("Probleme lors de la suppression du bon, ce bon ne peut pas être supprimer", e);
