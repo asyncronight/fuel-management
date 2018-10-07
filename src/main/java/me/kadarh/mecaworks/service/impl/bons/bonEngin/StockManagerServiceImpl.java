@@ -43,7 +43,6 @@ public class StockManagerServiceImpl {
         List<Stock> list = stockRepo.findAllById_Bon(id_bon);
         stockRepo.deleteAll(list);
         stock.ifPresent(stock1 -> update(idC_travail, idC_gasoil, stock1, type_bon, false));
-
     }
 
 

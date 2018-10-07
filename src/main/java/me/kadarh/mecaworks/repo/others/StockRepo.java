@@ -14,7 +14,7 @@ import java.util.Optional;
 @Repository
 public interface StockRepo extends JpaRepository<Stock, Long> {
 
-    @Query(nativeQuery = true, value = "select * from stock where chantier_id =?1 order by id DESC limit 1")
+    @Query(nativeQuery = true, value = "select * from stock where chantier_id =?1 order by date DESC , id DESC limit 1")
     Optional<Stock> findLastStock(Long id_chantier);
 
     @Query(nativeQuery = true, value = "select * from stock where chantier_id =?1 and stock_reel <> 0 order by id DESC limit 1")
