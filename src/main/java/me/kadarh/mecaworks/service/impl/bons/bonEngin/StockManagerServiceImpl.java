@@ -46,18 +46,22 @@ public class StockManagerServiceImpl {
     }
 
 
-    public void addStockUpdate(Long idC_gasoil, Long idC_travail, Stock stock, TypeBon type_bon) {
+    public void addStockUpdate(Long idC_travail, Long idC_gasoil, Stock stock, TypeBon type_bon) {
         update(idC_travail, idC_gasoil, stock, type_bon, true);
     }
 
     private void update(Long idC_travail, Long idC_gasoil, Stock stock, TypeBon type_bon, boolean signe) {
         if (type_bon.equals(TypeBon.BE)) {
-            if (!idC_gasoil.equals(idC_travail) && weHaveToDoMiseAjour(stock.getDate(), idC_gasoil)) {
-                doMiseAjour(idC_gasoil, stock, signe);
-                updateStockChantier(idC_gasoil, stock.getQuantite(), !signe);
-            } else if (weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {
-                doMiseAjour(idC_travail, stock, !signe);
-                updateStockChantier(idC_travail, stock.getQuantite(), !signe);
+            if (!idC_gasoil.equals(idC_travail)) {
+                if (weHaveToDoMiseAjour(stock.getDate(), idC_gasoil))
+                    doMiseAjour(idC_gasoil, stock, signe);
+                if (weHaveToDoMiseAjour(stock.getDate(), idC_travail))
+                    doMiseAjour(idC_travail, stock, !signe);
+            } else {
+                if (weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {
+                    doMiseAjour(idC_travail, stock, !signe);
+                    updateStockChantier(idC_travail, stock.getQuantite(), !signe);
+                }
             }
         }
         if (type_bon.equals(TypeBon.BF) && weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {

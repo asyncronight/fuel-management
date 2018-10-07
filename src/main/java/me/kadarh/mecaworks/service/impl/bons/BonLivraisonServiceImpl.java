@@ -110,7 +110,7 @@ public class BonLivraisonServiceImpl implements BonLivraisonService {
 		else stock2.setStockC(chantier1.getStock() + bonLivraison.getQuantite());
 		stockService.add(stock);
         stockService.add(stock2);
-		stockManagerService.addStockUpdate(bonLivraison.getChantierDepart().getId(), bonLivraison.getChantierArrivee().getId(), stock, TypeBon.BL);
+		stockManagerService.addStockUpdate(bonLivraison.getChantierArrivee().getId(), bonLivraison.getChantierDepart().getId(), stock2, TypeBon.BL);
 
     }
 
