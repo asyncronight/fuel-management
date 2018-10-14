@@ -80,7 +80,7 @@ public class StockManagerServiceImpl {
             }
         }
         if (type_bon.equals(TypeBon.BF) && weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {
-            doMiseAjour(idC_travail, stock, signe);
+            doMiseAjour(idC_gasoil, stock, signe);
             updateStockChantier(idC_gasoil, stock.getQuantite(), signe);
         }
         if (type_bon.equals(TypeBon.BL)) {
