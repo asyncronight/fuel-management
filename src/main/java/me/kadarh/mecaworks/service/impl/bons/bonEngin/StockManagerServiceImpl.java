@@ -1,12 +1,14 @@
 package me.kadarh.mecaworks.service.impl.bons.bonEngin;
 
 import lombok.extern.slf4j.Slf4j;
+import me.kadarh.mecaworks.domain.bons.BonEngin;
 import me.kadarh.mecaworks.domain.others.Chantier;
 import me.kadarh.mecaworks.domain.others.Stock;
 import me.kadarh.mecaworks.domain.others.TypeBon;
 import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
 import me.kadarh.mecaworks.repo.others.StockRepo;
 import me.kadarh.mecaworks.service.ChantierService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,10 +32,17 @@ public class StockManagerServiceImpl {
     private final ChantierService chantierService;
     private final BonEnginRepo bonEnginRepo;
 
+    private BetweenStockAndBonLivraisonService betweenService;
+
     public StockManagerServiceImpl(StockRepo stockRepo, ChantierService chantierService, BonEnginRepo bonEnginRepo) {
         this.stockRepo = stockRepo;
         this.chantierService = chantierService;
         this.bonEnginRepo = bonEnginRepo;
+    }
+
+    @Autowired
+    public void setBetweenService(BetweenStockAndBonLivraisonService betweenService) {
+        this.betweenService = betweenService;
     }
 
     public void deleteStock(Long idC_gasoil, Long idC_travail, Long id_bon, TypeBon type_bon) {
@@ -56,28 +65,40 @@ public class StockManagerServiceImpl {
     private void update(Long idC_travail, Long idC_gasoil, Stock stock, TypeBon type_bon, boolean signe) {
         if (type_bon.equals(TypeBon.BE)) {
             if (!idC_gasoil.equals(idC_travail)) {
+                if (!signe) insertLivraison(stock.getId_Bon());
                 if (weHaveToDoMiseAjour(stock.getDate(), idC_gasoil))
                     doMiseAjour(idC_gasoil, stock, signe);
-                if (weHaveToDoMiseAjour(stock.getDate(), idC_travail))
+                if (weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {
                     doMiseAjour(idC_travail, stock, !signe);
+                    updateStockChantier(idC_travail, stock.getQuantite(), !signe);
+                }
             } else {
-                if (weHaveToDoMiseAjour(stock.getDate(), idC_travail))
+                if (weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {
                     doMiseAjour(idC_travail, stock, !signe);
+                    updateStockChantier(idC_travail, stock.getQuantite(), !signe);
+                }
             }
-            updateStockChantier(idC_travail, stock.getQuantite(), !signe);
         }
         if (type_bon.equals(TypeBon.BF) && weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {
             doMiseAjour(idC_travail, stock, signe);
-            updateStockChantier(idC_travail, stock.getQuantite(), signe);
+            updateStockChantier(idC_gasoil, stock.getQuantite(), signe);
         }
         if (type_bon.equals(TypeBon.BL)) {
-            if (weHaveToDoMiseAjour(stock.getDate(), idC_gasoil))
+            if (weHaveToDoMiseAjour(stock.getDate(), idC_gasoil)) {
                 doMiseAjour(idC_gasoil, stock, !signe);
-            if (weHaveToDoMiseAjour(stock.getDate(), idC_travail))
+                updateStockChantier(idC_gasoil, stock.getQuantite(), !signe);
+            }
+            if (weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {
                 doMiseAjour(idC_travail, stock, signe);
-            updateStockChantier(idC_gasoil, stock.getQuantite(), !signe);
-            updateStockChantier(idC_travail, stock.getQuantite(), signe);
+                updateStockChantier(idC_travail, stock.getQuantite(), signe);
+            }
         }
+    }
+
+    private void insertLivraison(Long id_bon) {
+        BonEngin bonEngin = bonEnginRepo.getOne(id_bon);
+        bonEngin.setQuantite((-1) * bonEngin.getQuantite());
+        betweenService.insertBonLivraison(bonEngin);
     }
 
     private boolean weHaveToDoMiseAjour(LocalDate dateStock, Long idC) {

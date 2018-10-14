@@ -15,6 +15,7 @@ import me.kadarh.mecaworks.service.bons.BonLivraisonService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
 import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
 import me.kadarh.mecaworks.service.impl.bons.bonEngin.StockManagerServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -39,15 +40,19 @@ public class BonLivraisonServiceImpl implements BonLivraisonService {
 
 	private final ChantierService chantierService;
 	private final EmployeService employeService;
-    private final StockManagerServiceImpl stockManagerService;
+    private StockManagerServiceImpl stockManagerService;
 
-	public BonLivraisonServiceImpl(StockService stockService, BonLivraisonRepo bonLivraisonRepo, ChantierService chantierService, EmployeService employeService, StockManagerServiceImpl stockManagerService) {
-		this.stockService = stockService;
-		this.bonLivraisonRepo = bonLivraisonRepo;
-		this.chantierService = chantierService;
-		this.employeService = employeService;
-		this.stockManagerService = stockManagerService;
-	}
+    public BonLivraisonServiceImpl(StockService stockService, BonLivraisonRepo bonLivraisonRepo, ChantierService chantierService, EmployeService employeService) {
+        this.stockService = stockService;
+        this.bonLivraisonRepo = bonLivraisonRepo;
+        this.chantierService = chantierService;
+        this.employeService = employeService;
+    }
+
+    @Autowired
+    public void setStockManagerService(StockManagerServiceImpl stockManagerService) {
+        this.stockManagerService = stockManagerService;
+    }
 
 	@Override
 	public BonLivraison add(BonLivraison bonLivraison1) {
@@ -111,7 +116,6 @@ public class BonLivraisonServiceImpl implements BonLivraisonService {
 		stockService.add(stock);
         stockService.add(stock2);
 		stockManagerService.addStockUpdate(bonLivraison.getChantierArrivee().getId(), bonLivraison.getChantierDepart().getId(), stock2, TypeBon.BL);
-
     }
 
 	@Override
