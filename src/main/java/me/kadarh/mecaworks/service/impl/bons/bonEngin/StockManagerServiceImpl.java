@@ -55,6 +55,8 @@ public class StockManagerServiceImpl {
         List<Stock> list = stockRepo.findAllById_Bon(id_bon);
         stockRepo.deleteAll(list);
         stock.ifPresent(stock1 -> update(idC_travail, idC_gasoil, stock1, type_bon, false));
+        if (!stock.isPresent())
+            updateStockChantier(idC_travail, list.get(0) != null ? list.get(0).getQuantite() : 0, false);
     }
 
 
@@ -80,8 +82,8 @@ public class StockManagerServiceImpl {
             }
         }
         if (type_bon.equals(TypeBon.BF) && weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {
-            doMiseAjour(idC_gasoil, stock, signe);
-            updateStockChantier(idC_gasoil, stock.getQuantite(), signe);
+            doMiseAjour(idC_travail, stock, signe);
+            updateStockChantier(idC_travail, stock.getQuantite(), signe);
         }
         if (type_bon.equals(TypeBon.BL)) {
             if (weHaveToDoMiseAjour(stock.getDate(), idC_gasoil)) {
