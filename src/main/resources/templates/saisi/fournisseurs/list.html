@@ -88,7 +88,7 @@
 								<i class="material-icons">more_vert</i>
 							</button>
 							<div class="dropdown-menu dropdown-menu-left" aria-labelledby="ex3">
-								<form th:action="@{'/saisi/livraisons/' + ${bon.id} +'/delete'}" method="post">
+								<form th:action="@{'/saisi/fournisseurs/' + ${bon.id} +'/delete'}" method="post">
 									<button type="submit" class="dropdown-item">
 										<i class="material-icons">delete</i> [[#{delete}]]
 									</button>
