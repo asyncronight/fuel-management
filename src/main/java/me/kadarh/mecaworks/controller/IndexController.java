@@ -21,4 +21,9 @@ public class IndexController {
     public String login() {
         return "login";
     }
+
+    @GetMapping("formation")
+    public String formation() {
+        return "formation/home";
+    }
 }

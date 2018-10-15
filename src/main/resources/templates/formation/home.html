@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="fragments :: head"></head>
+
+<body style="background-image: url('http://www.bruna.cat/imgdownload/full/12/121134/simple-dark-wallpaper.jpg')">
+<div class="bmd-layout-container bmd-drawer-f-l  bmd-drawer-overlay-md-down text-center">
+
+    <div th:replace="fragments :: menu('formation')" class="bg-dark"></div>
+    <hr>
+    <h1 class="m-2 text-light font-italic">Formations de saisie des bons</h1>
+    <hr style="display: block;
+    height: 1px;
+    border-top: 1px solid #ccc;" class="col-8">
+    <div class="row m-4">
+
+        <!-- Grid column -->
+        <div class="col-lg-4 col-md-12 mb-4">
+
+            <!--Modal: Name-->
+            <div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+
+                    <!--Content-->
+                    <div class="modal-content">
+
+                        <!--Body-->
+                        <div class="modal-body mb-0 p-0">
+
+                            <div class="embed-responsive embed-responsive-16by9 z-depth-1-half">
+                                <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/fIuURsoy1aI"
+                                        allowfullscreen></iframe>
+                            </div>
+                        </div>
+
+                        <!--Footer-->
+                        <div class="modal-footer justify-content-center">
+                            <span class="mr-4">Mecaworks vous presente ses formations!</span>
+
+                            <button type="button" class="btn btn-outline-primary btn-rounded btn-md ml-4"
+                                    data-dismiss="modal">Close
+                            </button>
+
+                        </div>
+
+                    </div>
+                    <!--/.Content-->
+
+                </div>
+            </div>
+            <!--Modal: Name-->
+
+            <a><img class="img-fluid z-depth-1"
+                    src="https://www.ifmeree.ma/sites/default/files/gbb-uploads/GPMSE-Formation-f%C3%AAte-son-premier-anniversaire-600x351-1t3ou9.jpg"
+                    alt="video"
+                    data-toggle="modal" data-target="#modal1"></a>
+            <div class="text-light">
+
+                <h4 class="mt-3">Comprendre le système de bons</h4>
+            </div>
+        </div>
+        <!-- Grid column -->
+
+        <!-- Grid column -->
+        <div class="col-lg-4 col-md-6 mb-4">
+
+            <!--Modal: Name-->
+            <div class="modal fade" id="modal6" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+
+                    <!--Content-->
+                    <div class="modal-content">
+
+                        <!--Body-->
+                        <div class="modal-body mb-0 p-0">
+
+                            <div class="embed-responsive embed-responsive-16by9 z-depth-1-half">
+                                <iframe class="embed-responsive-item"
+                                        src="#"
+                                        allowfullscreen></iframe>
+                            </div>
+
+                        </div>
+
+                        <!--Footer-->
+                        <div class="modal-footer justify-content-center">
+                            <span class="mr-4">Spread the word!</span>
+                            <a type="button" class="btn-floating btn-sm btn-fb"><i class="fa fa-facebook"></i></a>
+                            <!--Twitter-->
+                            <a type="button" class="btn-floating btn-sm btn-tw"><i class="fa fa-twitter"></i></a>
+                            <!--Google +-->
+                            <a type="button" class="btn-floating btn-sm btn-gplus"><i class="fa fa-google-plus"></i></a>
+                            <!--Linkedin-->
+                            <a type="button" class="btn-floating btn-sm btn-ins"><i class="fa fa-linkedin"></i></a>
+
+                            <button type="button" class="btn btn-outline-primary btn-rounded btn-md ml-4"
+                                    data-dismiss="modal">Close
+                            </button>
+
+                        </div>
+
+                    </div>
+                    <!--/.Content-->
+
+                </div>
+            </div>
+            <!--Modal: Name-->
+
+            <a><img class="img-fluid z-depth-1"
+                    src="http://eticeo.com/wp-content/uploads/2016/11/SERVICE-FORMATION-2-1030x617.jpg"
+                    alt="video"
+                    data-toggle="modal" data-target="#modal6"></a>
+            <div class="text-light">
+                <h4 class="mt-3">Maitriser la saisie des bons</h4>
+            </div>
+        </div>
+        <!-- Grid column -->
+
+    </div>
+    <hr style="display: block;
+    height: 1px;
+    border-top: 1px solid #ccc;" class="col-8">
+
+    <!-- Grid row -->
+</div>
+<div th:replace="fragments :: footer"></div>
+</body>
+</html>
