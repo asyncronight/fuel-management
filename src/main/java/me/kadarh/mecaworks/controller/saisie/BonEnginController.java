@@ -3,6 +3,7 @@ package me.kadarh.mecaworks.controller.saisie;
 import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.bons.BonEngin;
 import me.kadarh.mecaworks.domain.bons.Carburant;
+import me.kadarh.mecaworks.service.BonEnginConfirmation;
 import me.kadarh.mecaworks.service.ChantierService;
 import me.kadarh.mecaworks.service.EmployeService;
 import me.kadarh.mecaworks.service.EnginService;
@@ -27,13 +28,15 @@ public class BonEnginController {
 	private final EmployeService employeService;
 	private final ChantierService chantierService;
 	private final EnginService enginService;
+	private final BonEnginConfirmation bonEnginConfirmation;
 
-    public BonEnginController(BonEnginService bonEnginService, EmployeService employeService, ChantierService chantierService, EnginService enginService) {
+    public BonEnginController(BonEnginService bonEnginService, EmployeService employeService, ChantierService chantierService, EnginService enginService, BonEnginConfirmation bonEnginConfirmation) {
         this.bonEnginService = bonEnginService;
         this.employeService = employeService;
 		this.chantierService = chantierService;
 		this.enginService = enginService;
-    }
+		this.bonEnginConfirmation = bonEnginConfirmation;
+	}
 
 	@GetMapping("")
 	public String list(Model model, Pageable pageable, @RequestParam(defaultValue = "") String search) {
@@ -71,11 +74,17 @@ public class BonEnginController {
 	}
 
 	@PostMapping("/confirm")
-	public String confirm(@Valid BonEngin bonEngin, BindingResult result) {
+	public String confirm(@RequestParam Integer confirmCode, Model model,
+						  @Valid BonEngin bonEngin, BindingResult result) {
 		if (result.hasErrors()) {
 			return "saisi/engins/confirm";
 		}
+		if (!bonEnginConfirmation.isCorrect(confirmCode)) {
+			model.addAttribute("error", true);
+			return "saisi/engins/confirm";
+		}
 		bonEnginService.add(bonEngin);
+		bonEnginConfirmation.generateNewCode();
 		return "redirect:/saisi/engins";
 	}
 

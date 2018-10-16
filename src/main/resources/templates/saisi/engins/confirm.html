@@ -23,6 +23,9 @@
 					<hr>
 					<p th:text="#{bon.hasAttention.msg1}"></p>
 				</div>
+				<div class="alert alert-danger" th:if="${error}">
+					<p class="m-0" th:text="#{bon.hasAttention.msg2}"></p>
+				</div>
 				<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
 					<h4 class="alert-heading" th:text="#{formError}"></h4>
 					<ul>
@@ -44,7 +47,11 @@
 				<input type="hidden" th:field="*{compteurHenPanne}">
 				<input type="hidden" th:field="*{compteurKmenPanne}">
 				<input type="hidden" th:field="*{plein}">
-
+				<div class="form-group">
+					<label class="bmd-label-floating" for="confirmCode" th:text="#{bonEngin.confirmCode}"></label>
+					<input type="number" max="9999" id="confirmCode"
+						   class="form-control" name="confirmCode"/>
+				</div>
 				<button type="submit" class="btn btn-success btn-raised">
 					[[#{saisie.engin.confirm}]]
 				</button>
