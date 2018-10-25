@@ -152,6 +152,19 @@ public class BonFilterServiceImpl implements BonFilterService {
     }
 
     @Override
+    public List<BonEngin> filterBonEngin(boolean groupbyEngin) {
+        try {
+            //Todo @salah : implement this method ( 22 / 10 / 2018 )
+            //Todo : mal9itch kifach ndir findAll group by ou ndwzliha Example
+            //Filters dirhom b datatable() rah zebdawiyin
+            return bonEnginRepo.findAllGroupByEngin();
+        } catch (Exception e) {
+            log.debug("Failed retrieving list of bons Engins");
+            throw new OperationFailedException("Operation échouée", e);
+        }
+    }
+
+    @Override
     public List<BonLivraison> filterBonLivraison(BonLivraisonDto bonLivraisonDto) {
         try {
             String chantier_Depart = bonLivraisonDto.getChantierDepart().equals("") ? null : bonLivraisonDto.getChantierDepart();

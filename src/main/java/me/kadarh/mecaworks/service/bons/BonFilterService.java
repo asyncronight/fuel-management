@@ -19,6 +19,8 @@ public interface BonFilterService {
 
     List<BonEngin> filterBonEngin(BonEnginDto bonEnginDto);
 
+    List<BonEngin> filterBonEngin(boolean groupbyEngin);
+
     List<BonLivraison> filterBonLivraison(BonLivraisonDto bonLivraisonDto);
 
     List<BonFournisseur> filterBonFournisseur(BonFournisseurDto bonFournisseurDto);
