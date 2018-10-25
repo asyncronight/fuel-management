@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
@@ -27,7 +28,7 @@ public class BonLivraison extends AbstractDomain {
 	private LocalDate date;
 
 	@Column(unique = true)
-	@NotNull
+	@NotEmpty
 	private String code;
 
 	@NotNull

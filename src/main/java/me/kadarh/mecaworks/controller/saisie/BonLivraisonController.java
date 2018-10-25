@@ -48,9 +48,12 @@ public class BonLivraisonController {
 
 	@PostMapping("/add")
 	public String add(Model model, @Valid BonLivraison bonLivraison, BindingResult result) {
-		if (result.hasErrors()) {
+		boolean error = false;
+		if (result.hasErrors() ||
+			(error = bonLivraison.getChantierDepart().getId().equals(bonLivraison.getChantierArrivee().getId()))) {
 			model.addAttribute("chantiers", chantierService.getList());
 			model.addAttribute("employes", employeService.getList());
+			model.addAttribute("errorChantier", error);
 			return "saisi/livraisons/add";
 		}
 		service.add(bonLivraison);
