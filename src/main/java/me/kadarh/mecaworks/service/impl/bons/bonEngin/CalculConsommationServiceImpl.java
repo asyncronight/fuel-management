@@ -29,7 +29,6 @@ public class CalculConsommationServiceImpl {
         TypeCompteur typeCompteur = bonEngin.getEngin().getSousFamille().getTypeCompteur();
         BonEngin lastBon, lastBon2;
         long som_Q = 0;
-        long som_Q_2 = 0;
         List<BonEngin> list = new ArrayList<>();
         if (typeCompteur.equals(TypeCompteur.H)) {
             lastBon = bonEnginRepo.findLastBonEnginH_toConsommation(bonEngin.getEngin().getId());
@@ -62,6 +61,7 @@ public class CalculConsommationServiceImpl {
                 bonEngin.setConsommationKm(0f);
         }
         if (typeCompteur.equals(TypeCompteur.KM_H)) {
+            long som_Q_2 = 0;
             lastBon = bonEnginRepo.findLastBonEnginKm_toConsommation(bonEngin.getEngin().getId());
             lastBon2 = bonEnginRepo.findLastBonEnginH_toConsommation(bonEngin.getEngin().getId());
             if (lastBon != null) {

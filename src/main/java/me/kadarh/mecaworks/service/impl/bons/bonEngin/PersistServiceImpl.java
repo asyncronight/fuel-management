@@ -61,7 +61,6 @@ public class PersistServiceImpl {
         //verify quantité
         if (bonEngin.getQuantite() > bonEngin.getEngin().getSousFamille().getCapaciteReservoir())
             insertAlerte(bonEngin, "Quantité de gazoil depasse la capacité de reservoir", TypeAlerte.QUANTITE_MORE_THAN_RESERVOIR, Severity.CRITIQUE);
-        // FIXME: 20/05/18 : add alerte ( compteur reparé )
     }
 
     private void insertAlerte(BonEngin bonEngin, String msg, TypeAlerte type, Severity severity) {

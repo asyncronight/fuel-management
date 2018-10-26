@@ -8,6 +8,7 @@ import me.kadarh.mecaworks.domain.others.TypeBon;
 import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
 import me.kadarh.mecaworks.repo.others.StockRepo;
 import me.kadarh.mecaworks.service.ChantierService;
+import me.kadarh.mecaworks.service.bons.BetweenStockAndBonLivraisonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
