@@ -69,29 +69,29 @@ public class StockManagerServiceImpl {
             if (!idC_gasoil.equals(idC_travail)) {
                 if (!signe) insertLivraison(stock.getId_Bon());
                 if (weHaveToDoMiseAjour(stock.getDate(), idC_gasoil))
-                    doMiseAjour(idC_gasoil, stock, signe);
+                    doMiseAjour(idC_gasoil, stock);
                 if (weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {
-                    doMiseAjour(idC_travail, stock, !signe);
+                    doMiseAjour(idC_travail, stock);
                     updateStockChantier(idC_travail, stock.getQuantite(), !signe);
                 }
             } else {
                 if (weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {
-                    doMiseAjour(idC_travail, stock, !signe);
+                    doMiseAjour(idC_travail, stock);
                     updateStockChantier(idC_travail, stock.getQuantite(), !signe);
                 }
             }
         }
         if (type_bon.equals(TypeBon.BF) && weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {
-            doMiseAjour(idC_travail, stock, signe);
+            doMiseAjour(idC_travail, stock);
             updateStockChantier(idC_travail, stock.getQuantite(), signe);
         }
         if (type_bon.equals(TypeBon.BL)) {
             if (weHaveToDoMiseAjour(stock.getDate(), idC_gasoil)) {
-                doMiseAjour(idC_gasoil, stock, !signe);
+                doMiseAjour(idC_gasoil, stock);
                 updateStockChantier(idC_gasoil, stock.getQuantite(), !signe);
             }
             if (weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {
-                doMiseAjour(idC_travail, stock, signe);
+                doMiseAjour(idC_travail, stock);
                 updateStockChantier(idC_travail, stock.getQuantite(), signe);
             }
         }
@@ -110,7 +110,7 @@ public class StockManagerServiceImpl {
         return stock.isPresent() && stock.get().getDate().isBefore(dateStock);
     }
 
-    private void doMiseAjour(Long idc, Stock stock, boolean signe) {
+    private void doMiseAjour(Long idc, Stock stock) {
         List<Stock> list = stockRepo.findAllByChantierAfterStockReel(idc, stockRepo.findLastStockReel(stock.getChantier().getId()).get().getDate());
         //Au debut ce stock = stock reel
         Stock stockInitial = stockRepo.findLastStockReel(idc).get();
