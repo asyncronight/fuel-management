@@ -58,6 +58,7 @@ public class CalculAbsoluServiceImpl {
             bonEngin = setCompteurAbsoluKm_ifCmpBonInfCmptLastBon(bonEngin, bonEngin1);
         } else {
             bonEngin.setNbrHeures(0L);
+            bonEngin.setNbrKm(0L);
             bonEngin.setCompteurAbsoluH(bonEngin.getCompteurH());
             bonEngin.setCompteurAbsoluKm(bonEngin.getCompteurKm());
         }
@@ -79,8 +80,10 @@ public class CalculAbsoluServiceImpl {
         if (bonEngin1 != null) {
             bonEngin = verifyBon_ifCompteurKm_EnPanne(bonEngin, bonEngin1);
             setCompteurAbsoluKm_ifCmpBonInfCmptLastBon(bonEngin, bonEngin1);
-        } else
+        } else {
             bonEngin.setCompteurAbsoluKm(bonEngin.getCompteurKm());
+            bonEngin.setNbrKm(0L);
+        }
         return bonEngin;
     }
 
@@ -100,9 +103,11 @@ public class CalculAbsoluServiceImpl {
         if (bonEngin.getCompteurKmenPanne()) {
             bonEngin.setCompteurKm(bonEngin1.getCompteurKm());
             bonEngin.setCompteurAbsoluKm(bonEngin1.getCompteurAbsoluKm());
-        } else
+            bonEngin.setNbrKm(0L);
+        } else {
             bonEngin.setCompteurAbsoluKm(bonEngin1.getCompteurAbsoluKm() + bonEngin.getCompteurKm() - bonEngin1.getCompteurKm());
-
+            bonEngin.setNbrKm(bonEngin.getCompteurKm() - bonEngin1.getCompteurKm());
+        }
         return bonEngin;
     }
 
@@ -125,9 +130,12 @@ public class CalculAbsoluServiceImpl {
             if (bonEngin.getCompteurKmenPanne()) {
                 bonEngin.setCompteurAbsoluKm(bonEngin1.getCompteurAbsoluKm());
                 bonEngin.setCompteurKm(bonEngin1.getCompteurKm());
+                bonEngin.setNbrKm(bonEngin1.getCompteurKm());
             } else
                 bonEngin.setCompteurAbsoluKm(bonEngin1.getCompteurAbsoluKm() + bonEngin.getCompteurKm());
-        }
+            bonEngin.setNbrKm(bonEngin.getCompteurKm());
+            {
+            }
         return bonEngin;
     }
 }

@@ -1,6 +1,5 @@
 package me.kadarh.mecaworks.repo.others;
 
-import me.kadarh.mecaworks.domain.others.Chantier;
 import me.kadarh.mecaworks.domain.others.Stock;
 import me.kadarh.mecaworks.domain.others.TypeBon;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,8 +31,6 @@ public interface StockRepo extends JpaRepository<Stock, Long> {
     @Query(nativeQuery = true, value = "select * from stock where id_bon =?1 order by id")
     List<Stock> findAllById_Bon(Long id_bon);
 
-    List<Stock> findAllByChantierAndDateGreaterThan(Chantier chantier, LocalDate date);
-
-    @Query(nativeQuery = true, value = "select * from stock where chantier_id =?1 and DATE >= ?2 ORDER BY DATE ASC")
+    @Query(nativeQuery = true, value = "select * from stock where chantier_id =?1 and DATE > ?2 ORDER BY DATE ASC")
     List<Stock> findAllByChantierAfterStockReel(Long idc, LocalDate date);
 }
