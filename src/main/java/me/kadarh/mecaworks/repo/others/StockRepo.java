@@ -17,6 +17,9 @@ public interface StockRepo extends JpaRepository<Stock, Long> {
     @Query(nativeQuery = true, value = "select * from stock where chantier_id =?1 order by date DESC , id DESC limit 1")
     Optional<Stock> findLastStock(Long id_chantier);
 
+    @Query(nativeQuery = true, value = "select * from stock where chantier_id =?1 and date <=?2 order by date DESC , id DESC limit 1")
+    Optional<Stock> findLastStockByDate(Long id_chantier, LocalDate date);
+
     @Query(nativeQuery = true, value = "select * from stock where chantier_id =?1 and stock_reel <> 0 order by id DESC limit 1")
     Optional<Stock> findLastStockReel(Long id_chantier);
 
@@ -29,6 +32,8 @@ public interface StockRepo extends JpaRepository<Stock, Long> {
     @Query(nativeQuery = true, value = "select * from stock where id_bon =?1 order by id")
     List<Stock> findAllById_Bon(Long id_bon);
 
-    List<Stock> findAllByChantierAndIdGreaterThan(Chantier chantier, Long idStockInventaire);
+    List<Stock> findAllByChantierAndDateGreaterThan(Chantier chantier, LocalDate date);
 
+    @Query(nativeQuery = true, value = "select * from stock where chantier_id =?1 and DATE >= ?2 ORDER BY DATE ASC")
+    List<Stock> findAllByChantierAfterStockReel(Long idc, LocalDate date);
 }

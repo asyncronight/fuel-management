@@ -111,8 +111,28 @@ public class StockManagerServiceImpl {
     }
 
     private void doMiseAjour(Long idc, Stock stock, boolean signe) {
-        List<Stock> list = stockRepo.findAllByChantierAndIdGreaterThan(chantierService.get(idc), stock.getId());
-        list.forEach(stock1 -> stock1.setStockC(signe ? stock1.getStockC() + stock.getQuantite() : stock1.getStockC() - stock.getQuantite()));
+        List<Stock> list = stockRepo.findAllByChantierAfterStockReel(idc, stockRepo.findLastStockReel(stock.getChantier().getId()).get().getDate());
+        //Au debut ce stock = stock reel
+        Stock stockInitial = stockRepo.findLastStockReel(idc).get();
+        list.remove(stockInitial);
+
+        Stock stock2;
+        // On boucle, pour chaque stock on remplace le
+        for (int i = 0; i < list.size(); i++) {
+            stock2 = stockRepo.getOne(list.get(i).getId());
+            if (stock.getTypeBon().equals(TypeBon.BE))
+                stock2.setStockC(stockInitial.getStockC() - list.get(i).getQuantite());
+            if (stock.getTypeBon().equals(TypeBon.BF))
+                stock2.setStockC(stockInitial.getStockC() + list.get(i).getQuantite());
+            if (stock.getTypeBon().equals(TypeBon.BL)) {
+                if (stock.getSortieL() != 0 && stock.getSortieL() != null)
+                    stock2.setStockC(stockInitial.getStockC() + list.get(i).getQuantite());
+                if (stock.getEntreeL() != 0 && stock.getEntreeL() != null)
+                    stock2.setStockC(stockInitial.getStockC() + list.get(i).getQuantite());
+            }
+            list.set(i, stock2);
+            stockInitial = list.get(i);
+        }
         stockRepo.saveAll(list);
     }
 
