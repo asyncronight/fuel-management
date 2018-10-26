@@ -143,7 +143,6 @@ public class CalculAbsoluServiceImpl {
             } else
                 bonEngin.setCompteurAbsoluKm(bonEngin1.getCompteurAbsoluKm() + bonEngin.getCompteurKm());
             bonEngin.setNbrKm(bonEngin.getCompteurKm());
-            {
             }
         return bonEngin;
     }
