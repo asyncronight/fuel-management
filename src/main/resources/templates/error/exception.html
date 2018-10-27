@@ -5,19 +5,19 @@
 <div th:replace="fragments :: menu('')"></div>
 <div class="middle-box text-center animated fadeInDown">
 	<br>
-	<h1>Error</h1>
+	<h1>Error Message :</h1>
 	<div class="error-desc">
 		<!--/*@thymesVar id="causes" type="java.util.List<java.lang.String>"*/-->
 		<div>
 			<p>
-				Message: [[${exception.message}]]
-				<a href="#causes" class="btn btn-default" data-toggle="collapse">
-					<span th:if="!${#lists.isEmpty(causes)}" class="fa fa-plus"></span>
+				[[${exception.message}]]
+				<a href="#causes" class="btn active bmd-btn-icon py-1" data-toggle="collapse">
+					<i th:if="!${#lists.isEmpty(causes)}" class="material-icons">add</i>
 				</a>
 			</p>
 		</div>
 		<div id="causes" class="collapse">
-			<p>Causes :</p>
+			<h4>Causes :</h4>
 			<p th:each="cause,i : ${causes}" th:text="${i.size-i.count+1}+' - '+${cause}"></p>
 		</div>
 

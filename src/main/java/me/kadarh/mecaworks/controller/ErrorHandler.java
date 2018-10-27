@@ -29,10 +29,11 @@ public class ErrorHandler {
 			e = new Exception("Image upload échouée, vérifier la taille du fichier (max = 5MB)", e);
 		mav.addObject("exception", e);
 		List<String> causes = new ArrayList<>();
-		while (e.getCause() instanceof ApplicationException) {
+		while (e.getCause() != null) {
 			e = (Exception) e.getCause();
 			causes.add(e.getMessage());
 		}
+		mav.addObject("causes", causes);
 		mav.setViewName("error/exception");
 		log.warn("Application exception thrown - url : [" + request.getMethod() + "]" + request.getRequestURI(), e);
 		return mav;
