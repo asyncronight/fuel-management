@@ -75,6 +75,7 @@ public class BonFilterServiceImpl implements BonFilterService {
             bonEngin.setCompteurHenPanne(null);
             bonEngin.setCompteurKmenPanne(null);
             bonEngin.setNbrHeures(null);
+            bonEngin.setNbrKm(null);
             bonEngin.setConsommationPrevu(null);
             bonEngin.setChargeHoraire(null);
 
