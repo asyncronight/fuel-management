@@ -8,6 +8,7 @@ import me.kadarh.mecaworks.domain.others.TypeBon;
 import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
 import me.kadarh.mecaworks.repo.others.StockRepo;
 import me.kadarh.mecaworks.service.ChantierService;
+import me.kadarh.mecaworks.service.bons.BetweenStockAndBonLivraisonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,29 +70,29 @@ public class StockManagerServiceImpl {
             if (!idC_gasoil.equals(idC_travail)) {
                 if (!signe) insertLivraison(stock.getId_Bon());
                 if (weHaveToDoMiseAjour(stock.getDate(), idC_gasoil))
-                    doMiseAjour(idC_gasoil, stock, signe);
+                    doMiseAjour(idC_gasoil, stock);
                 if (weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {
-                    doMiseAjour(idC_travail, stock, !signe);
+                    doMiseAjour(idC_travail, stock);
                     updateStockChantier(idC_travail, stock.getQuantite(), !signe);
                 }
             } else {
                 if (weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {
-                    doMiseAjour(idC_travail, stock, !signe);
+                    doMiseAjour(idC_travail, stock);
                     updateStockChantier(idC_travail, stock.getQuantite(), !signe);
                 }
             }
         }
         if (type_bon.equals(TypeBon.BF) && weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {
-            doMiseAjour(idC_travail, stock, signe);
+            doMiseAjour(idC_travail, stock);
             updateStockChantier(idC_travail, stock.getQuantite(), signe);
         }
         if (type_bon.equals(TypeBon.BL)) {
             if (weHaveToDoMiseAjour(stock.getDate(), idC_gasoil)) {
-                doMiseAjour(idC_gasoil, stock, !signe);
+                doMiseAjour(idC_gasoil, stock);
                 updateStockChantier(idC_gasoil, stock.getQuantite(), !signe);
             }
             if (weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {
-                doMiseAjour(idC_travail, stock, signe);
+                doMiseAjour(idC_travail, stock);
                 updateStockChantier(idC_travail, stock.getQuantite(), signe);
             }
         }
@@ -110,9 +111,29 @@ public class StockManagerServiceImpl {
         return stock.isPresent() && stock.get().getDate().isBefore(dateStock);
     }
 
-    private void doMiseAjour(Long idc, Stock stock, boolean signe) {
-        List<Stock> list = stockRepo.findAllByChantierAndIdGreaterThan(chantierService.get(idc), stock.getId());
-        list.forEach(stock1 -> stock1.setStockC(signe ? stock1.getStockC() + stock.getQuantite() : stock1.getStockC() - stock.getQuantite()));
+    private void doMiseAjour(Long idc, Stock stock) {
+        List<Stock> list = stockRepo.findAllByChantierAfterStockReel(idc, stockRepo.findLastStockReel(stock.getChantier().getId()).get().getDate());
+        //Au debut ce stock = stock reel
+        Stock stockInitial = stockRepo.findLastStockReel(idc).get();
+        list.remove(stockInitial);
+
+        Stock stock2;
+        // On boucle, pour chaque stock on remplace le
+        for (int i = 0; i < list.size(); i++) {
+            stock2 = stockRepo.getOne(list.get(i).getId());
+            if (stock.getTypeBon().equals(TypeBon.BE))
+                stock2.setStockC(stockInitial.getStockC() - list.get(i).getQuantite());
+            if (stock.getTypeBon().equals(TypeBon.BF))
+                stock2.setStockC(stockInitial.getStockC() + list.get(i).getQuantite());
+            if (stock.getTypeBon().equals(TypeBon.BL)) {
+                if (stock.getSortieL() != 0 && stock.getSortieL() != null)
+                    stock2.setStockC(stockInitial.getStockC() + list.get(i).getQuantite());
+                if (stock.getEntreeL() != 0 && stock.getEntreeL() != null)
+                    stock2.setStockC(stockInitial.getStockC() + list.get(i).getQuantite());
+            }
+            list.set(i, stock2);
+            stockInitial = list.get(i);
+        }
         stockRepo.saveAll(list);
     }
 

@@ -6,6 +6,12 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
+/**
+ * PROJECT mecaworks
+ *
+ * @author kadarH
+ * Created at 24/06/18
+ */
 public interface BonFournisseurService {
 
 	BonFournisseur add(BonFournisseur bonFournisseur);

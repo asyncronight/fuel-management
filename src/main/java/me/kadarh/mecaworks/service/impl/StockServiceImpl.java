@@ -10,6 +10,7 @@ import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.NoSuchElementException;
 
 /**
@@ -69,6 +70,21 @@ public class StockServiceImpl implements StockService {
             throw new OperationFailedException("Problème lors de la recherche du Stock", e);
         }
     }
+
+    @Override
+    public Stock getLastStockByDate(Chantier chantier, LocalDate date) {
+        log.info("Service-StockServiceImpl Calling getLastStock  :");
+        try {
+            return stockRepo.findLastStockByDate(chantier.getId(), date).get();
+        } catch (NoSuchElementException e) {
+            log.info("Problem , cannot find last Stock");
+            return null;
+        } catch (Exception e) {
+            log.info("Problem , cannot get last Stock");
+            throw new OperationFailedException("Problème lors de la recherche du Stock", e);
+        }
+    }
+
 
 
 }

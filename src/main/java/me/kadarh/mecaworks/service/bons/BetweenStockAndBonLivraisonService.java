@@ -1,4 +1,4 @@
-package me.kadarh.mecaworks.service.impl.bons.bonEngin;
+package me.kadarh.mecaworks.service.bons;
 
 import me.kadarh.mecaworks.domain.bons.BonEngin;
 

@@ -61,12 +61,16 @@ public class BonEnginServiceImpl implements BonEnginService {
             if (bonEngin.getPlein())
                 bonEngin = calculService.calculConsommation(bonEngin);
             if (bonEngin.getChantierGazoil() != bonEngin.getChantierTravail()) {
+                log.info("Service= BonEnginServiceImpl - Il faut inserer un bon de livraison virtuel");
                 bonLivraisonService.insertBonLivraison(bonEngin);
             }
             bonEngin = bonEnginRepo.save(bonEngin);
             persistService.insertAlertes(bonEngin);
+            log.info("Alertes Bon Engin inserted");
             persistService.insertStock(bonEngin);
+            log.info("Stock Bon Engin inserted");
             persistService.insertAlerteConsommation(bonEngin);
+            log.info("Alertes Bon Engin Consomation inserted");
             return bonEngin;
         } catch (DataIntegrityViolationException e) {
             log.debug("cannot add bonEngin , failed operation");
@@ -79,14 +83,22 @@ public class BonEnginServiceImpl implements BonEnginService {
 
     @Override
     public void delete(Long id) {
+        log.info("Service= BonEnginServiceImpl - calling methode delete");
         try {
             BonEngin bonEngin = bonEnginRepo.getOne(id);
-            Long idChantier = bonEngin.getChantierTravail().getId();
-            Long idGasoil = bonEngin.getChantierGazoil().getId();
-            stockManagerService.deleteStock(idGasoil, idChantier, id, TypeBon.BE);
-            alerteRepo.deleteAllByBonEngin_Id(id);
+            BonEngin bonEngin1 = bonEnginRepo.findLastBonEngin(bonEngin.getEngin().getId());
 
-            bonEnginRepo.deleteById(id);
+            if (bonEngin1.getCode().equals(bonEngin.getCode())) {
+                log.info("Suppression du dernier bon");
+                Long idChantier = bonEngin.getChantierTravail().getId();
+                Long idGasoil = bonEngin.getChantierGazoil().getId();
+                stockManagerService.deleteStock(idGasoil, idChantier, id, TypeBon.BE);
+                alerteRepo.deleteAllByBonEngin_Id(id);
+                bonEnginRepo.deleteById(id);
+            } else {
+                log.info("Operation echouée ,ce n'est pas le dernier bon");
+                throw new OperationFailedException("Impossible de supprimer ce bon, verifier est ce que c'est le dernier bon");
+            }
         } catch (Exception e) {
             throw new OperationFailedException("Probleme lors de la suppression du bon, ce bon ne peut pas être supprimer", e);
         }

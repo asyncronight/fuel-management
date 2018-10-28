@@ -47,5 +47,5 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               echo "StrictHostKeyChecking no" > ~/.ssh/config
               scp -r target/*.jar root@setrat.mecaworks.com:./app.jar
-              ssh -T root@mecaworks.kadarh.me "systemctl restart springboot"
+              ssh -T root@setrat.mecaworks.com "systemctl restart springboot"
             fi

@@ -4,6 +4,12 @@ import me.kadarh.mecaworks.domain.bons.BonEngin;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+/**
+ * PROJECT mecaworks
+ *
+ * @author kadarH
+ * Created at 24/06/18
+ */
 public interface BonEnginService {
 
 	BonEngin add(BonEngin bonEngin);
@@ -14,5 +20,5 @@ public interface BonEnginService {
 
 	boolean hasErrors(BonEngin bon);
 
-    boolean hasErrorsAttention(BonEngin bonEngin);
+	boolean hasErrorsAttention(BonEngin bonEngin);
 }
