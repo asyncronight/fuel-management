@@ -39,8 +39,10 @@ public class CalculAbsoluServiceImpl {
         BonEngin bonEngin1 = lastBon;
         if (typeCompteur.equals(TypeCompteur.H.name())) {
             bonEngin = calculCompteurAbsoluH(bonEngin, bonEngin1);
+            bonEngin.setCompteurKm(0L);
         } else if (typeCompteur.equals(TypeCompteur.KM.name())) {
             bonEngin = calculCompteurAbsoluKm(bonEngin, bonEngin1);
+            bonEngin.setCompteurH(0L);
         } else if (typeCompteur.equals(TypeCompteur.KM_H.name())) {
             bonEngin = calculCompteurAbsoluH_Km(bonEngin, bonEngin1);
         }
