@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
  * PROJECT mecaworks
  *
  * @author kadarH
+ * @author salah3x
  * Created at 24/06/18
  */
 
@@ -173,7 +174,7 @@ public class BonFilterServiceImpl implements BonFilterService {
                 return bonEngins;
             List<BonEngin> list = new ArrayList<>();
 
-            BonEngin help = bonEngins.get(0);
+            BonEngin help = new BonEngin(bonEngins.get(0));
             float consommationKmMoyenne = 0;
             float consommationHMoyenne = 0;
             int totalH = 0;
@@ -203,7 +204,7 @@ public class BonFilterServiceImpl implements BonFilterService {
                     nbH = bonEngin.getNbrHeures();
                     nbKm = bonEngin.getNbrKm();
                 }
-                help = bonEngin;
+                help = new BonEngin(bonEngin);
             }
             help.setChargeHoraire((long) (consommationHMoyenne / totalH));
             help.setConsommationPrevu((long) (consommationKmMoyenne / totalKm));
