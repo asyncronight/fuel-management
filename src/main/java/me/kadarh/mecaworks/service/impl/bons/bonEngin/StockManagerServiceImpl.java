@@ -52,7 +52,7 @@ public class StockManagerServiceImpl {
         //then doUpdateStocks + doUpdateChantierStock
         //else don't do anything
         //always do : delete stock with id bon = id_bon and type bon = type_bon
-        Optional<Stock> stock = stockRepo.findByTypeBonAndId_Bon(type_bon, id_bon);
+        Optional<Stock> stock = stockRepo.findByTypeBonAndId_Bon(type_bon.ordinal(), id_bon);
         List<Stock> list = stockRepo.findAllById_Bon(id_bon);
         stockRepo.deleteAll(list);
         stock.ifPresent(stock1 -> update(idC_travail, idC_gasoil, stock1, type_bon, false));
@@ -112,7 +112,7 @@ public class StockManagerServiceImpl {
     }
 
     private void doMiseAjour(Long idc, Stock stock) {
-        List<Stock> list = stockRepo.findAllByChantierAfterStockReel(idc, stockRepo.findLastStockReel(stock.getChantier().getId()).get().getDate());
+        List<Stock> list = stockRepo.findAllByChantierAfterStockReel(idc, stockRepo.findLastStockReel(idc).get().getDate());
         //Au debut ce stock = stock reel
         Stock stockInitial = stockRepo.findLastStockReel(idc).get();
         list.remove(stockInitial);
@@ -126,9 +126,9 @@ public class StockManagerServiceImpl {
             if (stock.getTypeBon().equals(TypeBon.BF))
                 stock2.setStockC(stockInitial.getStockC() + list.get(i).getQuantite());
             if (stock.getTypeBon().equals(TypeBon.BL)) {
-                if (stock.getSortieL() != 0 && stock.getSortieL() != null)
-                    stock2.setStockC(stockInitial.getStockC() + list.get(i).getQuantite());
-                if (stock.getEntreeL() != 0 && stock.getEntreeL() != null)
+                if (list.get(i).getSortieL() != 0 && list.get(i).getSortieL() != null)
+                    stock2.setStockC(stockInitial.getStockC() - list.get(i).getQuantite());
+                if (list.get(i).getEntreeL() != 0 && list.get(i).getEntreeL() != null)
                     stock2.setStockC(stockInitial.getStockC() + list.get(i).getQuantite());
             }
             list.set(i, stock2);
