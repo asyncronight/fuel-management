@@ -68,14 +68,6 @@
                     </div>
                     <div class="form-row">
                         <div class="col py-2">
-                            <select th:field="*{chantierDepart}" class="js-example-basic-single" id="chantierD">
-                                <option value="" selected="selected" th:text="#{chantierDepart}"> --</option>
-                                <option th:each="chantierD : ${chantiers}" th:value="${chantierD.nom}"
-                                        th:text="${chantierD.nom}">cc
-                                </option>
-                            </select>
-                        </div>
-                        <div class="col py-2">
                             <select th:field="*{chantierArrivee}" class="js-example-basic-single" id="chantierA">
                                 <option value="" selected="selected" th:text="#{chantierArrivee}"> --</option>
                                 <option th:each="chantierA : ${chantiers}" th:value="${chantierA.nom}"

@@ -23,7 +23,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -173,38 +172,41 @@ public class BonFilterServiceImpl implements BonFilterService {
             if (bonEngins.size() == 0 )
                 return bonEngins;
             List<BonEngin> list = new ArrayList<>();
-            List<BonEngin> originalList = Collections.unmodifiableList(bonEngins);
 
             BonEngin help = bonEngins.get(0);
             float consommationKmMoyenne = 0;
             float consommationHMoyenne = 0;
-            int total = 0;
+            int totalH = 0;
+            int totalKm = 0;
             long nbH = 0;
             long nbKm = 0;
             for (BonEngin bonEngin : bonEngins) {
                 if (help.getEngin().getCode().equals(bonEngin.getEngin().getCode())) {
                     consommationHMoyenne += bonEngin.getConsommationH();
                     consommationKmMoyenne += bonEngin.getConsommationKm();
-                    total ++;
+                    if (bonEngin.getConsommationH() != 0 )
+                        totalH++;
+                    if (bonEngin.getConsommationKm() != 0 )
+                        totalKm++;
                     nbH += bonEngin.getNbrHeures();
                     nbKm += bonEngin.getNbrKm();
                 } else {
-                    help.setChargeHoraire((long) (consommationHMoyenne / total));
-                    help.setConsommationPrevu((long) (consommationKmMoyenne / total));
+                    help.setChargeHoraire((long) (consommationHMoyenne / totalH));
+                    help.setConsommationPrevu((long) (consommationKmMoyenne / totalKm));
                     help.setNbrKm(nbKm);
                     help.setNbrHeures(nbH);
                     list.add(help);
-                    list = new ArrayList<>(list);
                     consommationHMoyenne = bonEngin.getConsommationH();
                     consommationKmMoyenne = bonEngin.getConsommationKm();
-                    total = 1;
+                    totalH = 1;
+                    totalKm = 1;
                     nbH = bonEngin.getNbrHeures();
                     nbKm = bonEngin.getNbrKm();
                 }
                 help = bonEngin;
             }
-            help.setChargeHoraire((long) (consommationHMoyenne / total));
-            help.setConsommationPrevu((long) (consommationKmMoyenne / total));
+            help.setChargeHoraire((long) (consommationHMoyenne / totalH));
+            help.setConsommationPrevu((long) (consommationKmMoyenne / totalKm));
             help.setNbrKm(nbKm);
             help.setNbrHeures(nbH);
             list.add(help);
