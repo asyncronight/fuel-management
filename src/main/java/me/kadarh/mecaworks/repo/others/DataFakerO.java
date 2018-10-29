@@ -265,6 +265,7 @@ public class DataFakerO implements CommandLineRunner {
             bonEngin.setCompteurAbsoluH(i + 502L);
             bonEngin.setCompteurAbsoluKm(i + 600L);
             bonEngin.setNbrHeures(i + 2L);
+            bonEngin.setNbrKm(i + 4L);
             bonEngin.setEngin(enginRepo.getOne(i / 26 + 1L));
             bonEngin.setChargeHoraire(bonEngin.getNbrHeures() * bonEngin.getEngin().getPrixLocationJournalier() / bonEngin.getEngin().getObjectif());
             bonEngin.setConsommationPrevu(bonEngin.getEngin().getConsommationMoyenne().longValue() * bonEngin.getNbrHeures());

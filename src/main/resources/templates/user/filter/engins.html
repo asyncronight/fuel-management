@@ -6,7 +6,7 @@
 <div th:replace="fragments :: menu('user')"></div>
 <div th:replace="fragments :: loader"></div>
 <div class="bmd-layout-container bmd-drawer-f-l  bmd-drawer-overlay-md-down">
-    <div th:replace="user/fragment :: menu('be')"></div>
+    <div th:replace="user/fragment :: menu('e')"></div>
 
     <main class="bmd-layout-content">
         <div class="container-fluid" style="display:none;" id="myDiv">
@@ -17,7 +17,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{'/'}" th:text="#{home}"></a></li>
                 <li class="breadcrumb-item"><a th:href="@{'/user'}" th:text="#{user}"></a></li>
-                <li class="breadcrumb-item" th:text="#{bonEngins}"></li>
+                <li class="breadcrumb-item" th:text="#{enginsFilter}"></li>
             </ol>
             <div class="row">
                 <div class="col-1"></div>
@@ -140,54 +140,6 @@
             <div class="jumbotron alert alert-primary" th:if="${#lists.isEmpty(page)}">
                 <h1 class="text-center alert-heading" th:text="#{empty}"></h1>
             </div>
-            <div class="table-responsive card container-fluid pt-3" th:if="!${#lists.isEmpty(page)}">
-                <table id="myTableFilterTotal" class="display table table-striped table-bordered">
-                    <thead class="bg-dark">
-                    <tr>
-                        <th class="text-light">
-                            Nombre de bons
-                        </th>
-                        <th class="text-light">
-                            Consommation H Moyenne
-                        </th>
-                        <th class="text-light">
-                            Consommation Km Moyenne
-                        </th>
-                        <th class="text-light">
-                            Quantité Totale (L)
-                        </th>
-                        <th class="text-light">
-                            Nombre d'heures Total (H)
-                        </th>
-                        <th class="text-light">
-                            Prix Total Total (MAD) [ prix unitaire = 8.5 DH/L ]
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>
-                            <span th:text="${#lists.size(page)}"></span>
-                        </td>
-                        <td>
-                            <span th:text="${consommationH_avg}"></span>
-                        </td>
-                        <td>
-                            <span th:text="${consommationKm_avg}"></span>
-                        </td>
-                        <td>
-                            <span th:text="${#aggregates.sum(page.![quantite])}"></span>
-                        </td>
-                        <td>
-                            <span th:text="${#aggregates.sum(page.![nbrHeures])}"></span>
-                        </td>
-                        <td>
-                            <span th:text="${#aggregates.sum(page.![quantite])}*8.5 +' DH'"></span>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
             <br>
             <div class="table-responsive card container-fluid py-3" th:if="!${#lists.isEmpty(page)}">
                 <table id="myTableFilter" class="display table table-striped table-bordered">
@@ -197,25 +149,28 @@
                             [[#{bonEngin.date}]]
                         </th>
                         <th class="text-light">
+                            [[#{bonEngin.chantierTravail}]]
+                        </th>
+                        <th class="text-light">
                             [[#{bonEngin.engin}]]
                         </th>
                         <th class="text-light">
                             [[#{engin.sousFamille}]]
                         </th>
                         <th class="text-light">
-                            [[#{bonEngin.chantierTravail}]]
+                            [[#{engin.groupe}]]
                         </th>
                         <th class="text-light">
-                            [[#{bonEngin.chantierGazoil}]]
+                            Dernière [[#{bonEngin.consommationH}]]
                         </th>
                         <th class="text-light">
-                            [[#{bonEngin.quantite}]]
+                            [[#{bonEngin.consommationH}]] moyenne
                         </th>
                         <th class="text-light">
-                            [[#{bonEngin.consommationH}]]
+                            Dernière [[#{bonEngin.consommationKm}]]
                         </th>
                         <th class="text-light">
-                            [[#{bonEngin.consommationKm}]]
+                            [[#{bonEngin.consommationKm}]] moyenne
                         </th>
                         <th class="text-light">
                             [[#{bonEngin.nbrHeures}]]
@@ -224,73 +179,40 @@
                             [[#{bonEngin.nbrKm}]]
                         </th>
                         <th class="text-light">
-                            [[#{bonEngin.code}]]
-                        </th>
-                        <th class="text-light">
-                            [[#{bonEngin.pompiste}]]
-                        </th>
-                        <th class="text-light">
                             [[#{bonEngin.chauffeur}]]
-                        </th>
-                        <th class="text-light">
-                            [[#{bonEngin.carburant}]]
-                        </th>
-                        <th class="text-light">
-                            [[#{bonEngin.compteurKm}]]
                         </th>
                         <th class="text-light">
                             [[#{bonEngin.compteurH}]]
                         </th>
                         <th class="text-light">
-                            [[#{bonEngin.compteurPompe}]]
+                            [[#{bonEngin.compteurAbsoluH}]]
                         </th>
                         <th class="text-light">
-                            [[#{bonEngin.compteurKmenPanne}]]
-                        </th>
-                        <th class="text-light">
-                            [[#{bonEngin.compteurHenPanne}]]
-                        </th>
-                        <th class="text-light">
-                            [[#{bonEngin.plein}]]
+                            [[#{bonEngin.compteurKm}]]
                         </th>
                         <th class="text-light">
                             [[#{bonEngin.compteurAbsoluKm}]]
-                        </th>
-                        <th class="text-light">
-                            [[#{bonEngin.compteurAbsoluH}]]
                         </th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="bon : ${page}">
                         <td th:text="${bon.date}"></td>
+                        <td th:text="${bon.chantierTravail?.nom}"></td>
                         <td th:text="${bon.engin?.code}"></td>
                         <td th:text="${bon.engin?.sousFamille?.nom}"></td>
-                        <td th:text="${bon.chantierTravail?.nom}"></td>
-                        <td th:text="${bon.chantierGazoil?.nom}"></td>
-                        <td th:text="${bon.quantite}"></td>
+                        <td th:text="${bon.engin?.groupe?.nom}"></td>
                         <td th:text="${bon.consommationH}"></td>
+                        <td th:text="${bon.chargeHoraire}"></td>
                         <td th:text="${bon.consommationKm}"></td>
+                        <td th:text="${bon.consommationPrevu}"></td>
                         <td th:text="${bon.nbrHeures}"></td>
                         <td th:text="${bon.nbrKm}"></td>
-                        <td th:text="${bon.code}"></td>
-                        <td th:text="${bon.pompiste?.nom}"></td>
                         <td th:text="${bon.chauffeur?.nom}"></td>
-                        <td th:text="${bon.carburant}"></td>
-                        <td th:text="${bon.compteurKm}"></td>
                         <td th:text="${bon.compteurH}"></td>
-                        <td th:text="${bon.compteurPompe}"></td>
-                        <td>
-                            <i class="material-icons" th:text="${bon.compteurKmenPanne}?'done':'close'"></i>
-                        </td>
-                        <td>
-                            <i class="material-icons" th:text="${bon.compteurHenPanne}?'done':'close'"></i>
-                        </td>
-                        <td>
-                            <i class="material-icons" th:text="${bon.plein}?'done':'close'"></i>
-                        </td>
-                        <td th:text="${bon.compteurAbsoluKm}"></td>
                         <td th:text="${bon.compteurAbsoluH}"></td>
+                        <td th:text="${bon.compteurKm}"></td>
+                        <td th:text="${bon.compteurAbsoluKm}"></td>
                     </tr>
                     </tbody>
                 </table>

@@ -21,6 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -153,14 +156,61 @@ public class BonFilterServiceImpl implements BonFilterService {
     }
 
     @Override
-    public List<BonEngin> filterBonEngin(boolean groupbyEngin) {
+    public List<BonEngin> filterEngins(BonEnginDto bonEnginDto) {
         try {
-            //Todo @salah : implement this method ( 22 / 10 / 2018 )
-            //Todo : mal9itch kifach ndir findAll group by ou ndwzliha Example
-            //Filters dirhom b datatable() rah zebdawiyin
-            return bonEnginRepo.findAllGroupByEngin();
+            // if dateFrom and dateTo was not set, get bons for the past week.
+            if (bonEnginDto.getDateFrom().equals("") && bonEnginDto.getDateTo().equals("")) {
+                bonEnginDto.setDateFrom((LocalDate.now().minus(6, ChronoUnit.DAYS)).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                bonEnginDto.setDateTo(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            }
+            List<BonEngin> bonEngins = filterBonEngin(bonEnginDto);
+            //sort by engin & date
+            bonEngins.sort((o1, o2) -> {
+                if (o1.getEngin().getCode().equals(o2.getEngin().getCode()))
+                    return o1.getDate().compareTo(o2.getDate());
+                return o1.getEngin().getCode().compareTo(o2.getEngin().getCode());
+            });
+            if (bonEngins.size() == 0 )
+                return bonEngins;
+            List<BonEngin> list = new ArrayList<>();
+            List<BonEngin> originalList = Collections.unmodifiableList(bonEngins);
+
+            BonEngin help = bonEngins.get(0);
+            float consommationKmMoyenne = 0;
+            float consommationHMoyenne = 0;
+            int total = 0;
+            long nbH = 0;
+            long nbKm = 0;
+            for (BonEngin bonEngin : bonEngins) {
+                if (help.getEngin().getCode().equals(bonEngin.getEngin().getCode())) {
+                    consommationHMoyenne += bonEngin.getConsommationH();
+                    consommationKmMoyenne += bonEngin.getConsommationKm();
+                    total ++;
+                    nbH += bonEngin.getNbrHeures();
+                    nbKm += bonEngin.getNbrKm();
+                } else {
+                    help.setChargeHoraire((long) (consommationHMoyenne / total));
+                    help.setConsommationPrevu((long) (consommationKmMoyenne / total));
+                    help.setNbrKm(nbKm);
+                    help.setNbrHeures(nbH);
+                    list.add(help);
+                    list = new ArrayList<>(list);
+                    consommationHMoyenne = bonEngin.getConsommationH();
+                    consommationKmMoyenne = bonEngin.getConsommationKm();
+                    total = 1;
+                    nbH = bonEngin.getNbrHeures();
+                    nbKm = bonEngin.getNbrKm();
+                }
+                help = bonEngin;
+            }
+            help.setChargeHoraire((long) (consommationHMoyenne / total));
+            help.setConsommationPrevu((long) (consommationKmMoyenne / total));
+            help.setNbrKm(nbKm);
+            help.setNbrHeures(nbH);
+            list.add(help);
+            return list;
         } catch (Exception e) {
-            log.debug("Failed retrieving list of bons Engins");
+            log.debug("Failed retrieving list of Engins");
             throw new OperationFailedException("Operation échouée", e);
         }
     }
