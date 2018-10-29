@@ -170,10 +170,10 @@
                             <span th:text="${#lists.size(page)}"></span>
                         </td>
                         <td>
-                            <span th:text="${consommationH_avg}"></span>
+                            <span th:text="${#numbers.formatDecimal(consommationH_avg,1,2)}"></span>
                         </td>
                         <td>
-                            <span th:text="${consommationKm_avg}"></span>
+                            <span th:text="${#numbers.formatDecimal(consommationKm_avg,1,2)}"></span>
                         </td>
                         <td>
                             <span th:text="${#aggregates.sum(page.![quantite])}"></span>

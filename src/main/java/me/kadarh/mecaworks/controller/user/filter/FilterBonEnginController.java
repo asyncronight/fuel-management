@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.OptionalDouble;
 
 /**
  * PROJECT mecaworks
@@ -59,15 +58,14 @@ public class FilterBonEnginController {
         model.addAttribute("employes", employeService.getList());
 
         BonEnginDto bonEnginDto = new BonEnginDto();
-
         bonEnginDto.setChantierDepart(list.size() != 0 ? list.get(0).getNom() : "");
 
         List<BonEngin> bonEngins = bonFilterService.filterBonEngin(bonEnginDto);
         model.addAttribute("page", bonEngins);
-        OptionalDouble conH = bonEngins.stream().filter(bonEngin -> bonEngin.getConsommationH() != 0).mapToDouble(BonEngin::getConsommationH).average();
-        OptionalDouble conKm = bonEngins.stream().filter(bonEngin -> bonEngin.getConsommationKm() != 0).mapToDouble(BonEngin::getConsommationKm).average();
-        model.addAttribute("consommationH_avg", conH.isPresent() ? conH : "0.00");
-        model.addAttribute("consommationKm_avg", conKm.isPresent() ? conKm : "0.00");
+        double conH = bonEngins.stream().filter(bonEngin -> bonEngin.getConsommationH() != 0).mapToDouble(BonEngin::getConsommationH).average().orElse(0);
+        double conKm = bonEngins.stream().filter(bonEngin -> bonEngin.getConsommationKm() != 0).mapToDouble(BonEngin::getConsommationKm).average().orElse(0);
+        model.addAttribute("consommationH_avg", conH);
+        model.addAttribute("consommationKm_avg", conKm);
         model.addAttribute("bonEnginDto", bonEnginDto);
         return "user/filter/bonEngins";
     }
@@ -86,10 +84,10 @@ public class FilterBonEnginController {
         List<BonEngin> bonEngins = bonFilterService.filterBonEngin(bonEnginDto);
         model.addAttribute("page", bonEngins);
 
-        OptionalDouble conH = bonEngins.stream().filter(bonEngin -> bonEngin.getConsommationH() != 0).mapToDouble(BonEngin::getConsommationH).average();
-        OptionalDouble conKm = bonEngins.stream().filter(bonEngin -> bonEngin.getConsommationKm() != 0).mapToDouble(BonEngin::getConsommationKm).average();
-        model.addAttribute("consommationH_avg", conH.isPresent() ? conH : "0.00");
-        model.addAttribute("consommationKm_avg", conKm.isPresent() ? conKm : "0.00");
+        double conH = bonEngins.stream().filter(bonEngin -> bonEngin.getConsommationH() != 0).mapToDouble(BonEngin::getConsommationH).average().orElse(0);
+        double conKm = bonEngins.stream().filter(bonEngin -> bonEngin.getConsommationKm() != 0).mapToDouble(BonEngin::getConsommationKm).average().orElse(0);
+        model.addAttribute("consommationH_avg", conH);
+        model.addAttribute("consommationKm_avg", conKm);
         model.addAttribute("bonEnginDto", bonEnginDto);
         return "user/filter/bonEngins";
     }
