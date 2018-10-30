@@ -135,6 +135,7 @@ public class BonEnginServiceImpl implements BonEnginService {
 				bonEngin.setCompteurHenPanne(null);
 				bonEngin.setCompteurKmenPanne(null);
                 bonEngin.setNbrHeures(null);
+                bonEngin.setNbrKm(null);
                 bonEngin.setConsommationPrevu(null);
                 bonEngin.setChargeHoraire(null);
                 Employe employe = new Employe();
