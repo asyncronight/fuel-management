@@ -147,6 +147,9 @@
                             [[#{bonEngin.engin}]]
                         </th>
                         <th class="text-light">
+                            [[#{sousFamille.famille}]]
+                        </th>
+                        <th class="text-light">
                             [[#{engin.sousFamille}]]
                         </th>
                         <th class="text-light">
@@ -193,6 +196,7 @@
                         <td th:text="${bon.chantierTravail?.nom}"></td>
                         <td th:text="${bon.engin?.code}"></td>
                         <td th:text="${bon.engin?.sousFamille?.nom}"></td>
+                        <td th:text="${bon.engin.sousFamille.famille.nom}"></td>
                         <td th:text="${bon.engin?.groupe?.nom}"></td>
                         <td th:text="${bon.consommationH}"></td>
                         <td th:text="${bon.chargeHoraire}"></td>
