@@ -30,6 +30,7 @@ jobs: # a collection of steps
           name: deploy to test server.
           command: |
             apk add openssh
+            mkdir ~/.ssh
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               echo "StrictHostKeyChecking no" > ~/.ssh/config
               scp -r target/*.jar root@setrat.mecaworks.com:./app.jar
