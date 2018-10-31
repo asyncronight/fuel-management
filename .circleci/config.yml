@@ -25,15 +25,12 @@ jobs: # a collection of steps
       
       - store_test_results: # uploads the test metadata from the `target/surefire-reports` directory so that it can show up in the CircleCI dashboard. 
           path: target/surefire-reports
-      
-      - store_artifacts: # store the uberjar as an artifact
-          path: target/app.jar
           
       - deploy: # deploy the artifact
           name: deploy to test server.
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               echo "StrictHostKeyChecking no" > ~/.ssh/config
-              scp -r target/app.jar root@setrat.mecaworks.com:./app.jar
+              scp -r target/*.jar root@setrat.mecaworks.com:./app.jar
               ssh -T root@setrat.mecaworks.com "systemctl restart springboot"
             fi
