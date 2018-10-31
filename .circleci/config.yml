@@ -29,8 +29,9 @@ jobs: # a collection of steps
       - deploy: # deploy the artifact
           name: deploy to test server.
           command: |
+            apt-get install -y ssh-client
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              #echo "StrictHostKeyChecking no" > ~/.ssh/config
+              echo "StrictHostKeyChecking no" > ~/.ssh/config
               scp -r target/*.jar root@setrat.mecaworks.com:./app.jar
               ssh -T root@setrat.mecaworks.com "systemctl restart springboot"
             fi
