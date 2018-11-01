@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.others.Chantier;
 import me.kadarh.mecaworks.domain.others.Stock;
 import me.kadarh.mecaworks.domain.others.TypeBon;
+import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
 import me.kadarh.mecaworks.repo.others.StockRepo;
 import me.kadarh.mecaworks.service.ChantierService;
 import org.springframework.stereotype.Service;
@@ -27,10 +28,12 @@ public class StockManagerServiceImpl {
 
     private final StockRepo stockRepo;
     private final ChantierService chantierService;
+    private final BonEnginRepo bonEnginRepo;
 
-    public StockManagerServiceImpl(StockRepo stockRepo, ChantierService chantierService) {
+    public StockManagerServiceImpl(StockRepo stockRepo, ChantierService chantierService, BonEnginRepo bonEnginRepo) {
         this.stockRepo = stockRepo;
         this.chantierService = chantierService;
+        this.bonEnginRepo = bonEnginRepo;
     }
 
     public void deleteStock(Long idC_gasoil, Long idC_travail, Long id_bon, TypeBon type_bon) {
@@ -58,11 +61,10 @@ public class StockManagerServiceImpl {
                 if (weHaveToDoMiseAjour(stock.getDate(), idC_travail))
                     doMiseAjour(idC_travail, stock, !signe);
             } else {
-                if (weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {
+                if (weHaveToDoMiseAjour(stock.getDate(), idC_travail))
                     doMiseAjour(idC_travail, stock, !signe);
-                    updateStockChantier(idC_travail, stock.getQuantite(), !signe);
-                }
             }
+            updateStockChantier(idC_travail, stock.getQuantite(), !signe);
         }
         if (type_bon.equals(TypeBon.BF) && weHaveToDoMiseAjour(stock.getDate(), idC_travail)) {
             doMiseAjour(idC_travail, stock, signe);

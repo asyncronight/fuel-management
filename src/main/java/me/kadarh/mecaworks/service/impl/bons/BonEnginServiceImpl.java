@@ -62,7 +62,6 @@ public class BonEnginServiceImpl implements BonEnginService {
                 bonEngin = calculService.calculConsommation(bonEngin);
             if (bonEngin.getChantierGazoil() != bonEngin.getChantierTravail()) {
                 bonLivraisonService.insertBonLivraison(bonEngin);
-                bonEngin.setChantierGazoil(bonEngin.getChantierTravail());
             }
             bonEngin = bonEnginRepo.save(bonEngin);
             persistService.insertAlertes(bonEngin);

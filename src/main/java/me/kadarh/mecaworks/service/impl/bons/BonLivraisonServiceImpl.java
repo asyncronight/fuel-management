@@ -62,7 +62,7 @@ public class BonLivraisonServiceImpl implements BonLivraisonService {
 		}
 	}
 
-	private BonLivraison fill(BonLivraison bonLivraison) {
+	public BonLivraison fill(BonLivraison bonLivraison) {
 		bonLivraison.setTransporteur(employeService.get(bonLivraison.getTransporteur().getId()));
 		bonLivraison.setPompiste(employeService.get(bonLivraison.getPompiste().getId()));
 		bonLivraison.setChantierDepart(chantierService.get(bonLivraison.getChantierDepart().getId()));
