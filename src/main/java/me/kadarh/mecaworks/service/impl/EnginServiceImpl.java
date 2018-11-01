@@ -151,7 +151,8 @@ public class EnginServiceImpl implements EnginService {
     public void delete(Long id) {
         log.info("Service= EnginServiceImpl - calling methode delete with id = " + id);
         try {
-            enginRepo.deleteById(id);
+            throw new OperationFailedException("La suppression du bon est desactivée pour le moment");
+            //enginRepo.deleteById(id);
         } catch (Exception e) {
             log.debug("cannot delete engin , failed operation");
             throw new OperationFailedException("La suppression de l'engin a echouée ", e);

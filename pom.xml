@@ -9,7 +9,7 @@
 	<packaging>jar</packaging>
 
 	<name>mecaworks</name>
-    <description>Gérer tous ce qui est mécanique.</description>
+    <description>Gestion Gasoil</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -74,7 +74,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
