@@ -199,8 +199,8 @@ public class BonFilterServiceImpl implements BonFilterService {
                     list.add(help);
                     consommationHMoyenne = bonEngin.getConsommationH();
                     consommationKmMoyenne = bonEngin.getConsommationKm();
-                    totalH = 1;
-                    totalKm = 1;
+                    totalH = bonEngin.getConsommationH() != 0 ? 1 : 0;
+                    totalKm = bonEngin.getConsommationKm() != 0 ? 1 : 0;
                     nbH = bonEngin.getNbrHeures();
                     nbKm = bonEngin.getNbrKm();
                 }
