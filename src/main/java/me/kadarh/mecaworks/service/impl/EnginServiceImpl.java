@@ -1,13 +1,16 @@
 package me.kadarh.mecaworks.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import me.kadarh.mecaworks.domain.bons.BonEngin;
 import me.kadarh.mecaworks.domain.others.Engin;
 import me.kadarh.mecaworks.domain.others.Groupe;
 import me.kadarh.mecaworks.domain.others.SousFamille;
+import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
 import me.kadarh.mecaworks.repo.others.EnginRepo;
 import me.kadarh.mecaworks.service.EnginService;
 import me.kadarh.mecaworks.service.GroupeService;
 import me.kadarh.mecaworks.service.SousFamilleService;
+import me.kadarh.mecaworks.service.bons.BonEnginService;
 import me.kadarh.mecaworks.service.exceptions.OperationFailedException;
 import me.kadarh.mecaworks.service.exceptions.ResourceNotFoundException;
 import org.springframework.data.domain.Example;
@@ -32,14 +35,16 @@ public class EnginServiceImpl implements EnginService {
 	private final EnginRepo enginRepo;
 	private final SousFamilleService sousFamilleService;
 	private final GroupeService groupeService;
+	private final BonEnginRepo bonEnginRepo;
 
-	public EnginServiceImpl(EnginRepo enginRepo, SousFamilleService sousFamilleService, GroupeService groupeService) {
-		this.enginRepo = enginRepo;
-		this.sousFamilleService = sousFamilleService;
-		this.groupeService = groupeService;
-	}
+    public EnginServiceImpl(EnginRepo enginRepo, SousFamilleService sousFamilleService, GroupeService groupeService, BonEnginRepo bonEnginRepo) {
+        this.enginRepo = enginRepo;
+        this.sousFamilleService = sousFamilleService;
+        this.groupeService = groupeService;
+        this.bonEnginRepo = bonEnginRepo;
+    }
 
-	/**
+    /**
 	 * @param engin to add
 	 * @return the engin
 	 */
@@ -151,8 +156,10 @@ public class EnginServiceImpl implements EnginService {
     public void delete(Long id) {
         log.info("Service= EnginServiceImpl - calling methode delete with id = " + id);
         try {
-            throw new OperationFailedException("La suppression du bon est desactivée pour le moment");
-            //enginRepo.deleteById(id);
+            List<BonEngin> list = bonEnginRepo.findAllByEnginId(id);
+            for (BonEngin b : list){
+                bonEnginRepo.delete(b);
+            }
         } catch (Exception e) {
             log.debug("cannot delete engin , failed operation");
             throw new OperationFailedException("La suppression de l'engin a echouée ", e);

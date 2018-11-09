@@ -34,4 +34,7 @@ public interface BonEnginRepo extends JpaRepository<BonEngin, Long> {
 
     @Query(nativeQuery = true, value = "select * from bon_engin group by engin_id")
     List<BonEngin> findAllGroupByEngin();
+
+    @Query(nativeQuery = true, value = "select * from bon_engin where engin_id = ?1")
+    List<BonEngin> findAllByEnginId(Long id);
 }

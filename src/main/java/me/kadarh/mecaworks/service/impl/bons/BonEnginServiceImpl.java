@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 /**
  * @author kadarH
@@ -81,13 +82,13 @@ public class BonEnginServiceImpl implements BonEnginService {
         }
     }
 
+
     @Override
     public void delete(Long id) {
         log.info("Service= BonEnginServiceImpl - calling methode delete");
         try {
             BonEngin bonEngin = bonEnginRepo.getOne(id);
             BonEngin bonEngin1 = bonEnginRepo.findLastBonEngin(bonEngin.getEngin().getId());
-
             if (bonEngin1.getCode().equals(bonEngin.getCode())) {
                 log.info("Suppression du dernier bon");
                 Long idChantier = bonEngin.getChantierTravail().getId();
@@ -95,6 +96,7 @@ public class BonEnginServiceImpl implements BonEnginService {
                 stockManagerService.deleteStock(idGasoil, idChantier, id, TypeBon.BE);
                 alerteRepo.deleteAllByBonEngin_Id(id);
                 bonEnginRepo.deleteById(id);
+                alerteRepo.findAllByIdBonEngin(bonEngin.getId()).forEach(alerteRepo::delete);
             } else {
                 log.info("Operation echouée ,ce n'est pas le dernier bon");
                 throw new OperationFailedException("Impossible de supprimer ce bon, verifier est ce que c'est le dernier bon");
