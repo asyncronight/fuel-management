@@ -61,6 +61,7 @@ public class CheckServiceImpl {
                 return ((bonEngin.getCompteurAbsoluH() - lastBonEngin.getCompteurAbsoluH()) < days * 24);
             return false;
         } else if (typeCompteur.equals(TypeCompteur.KM.name())) {
+            if (bonEngin.getCompteurKmenPanne() || bonEngin.getCompteurKm() < lastBonEngin.getCompteurKm()) return true;
             if (bonEngin.getCompteurKm() > lastBonEngin.getCompteurKm())
                 return ((bonEngin.getCompteurAbsoluKm() - lastBonEngin.getCompteurAbsoluKm()) < days * 2200);
             return false;
