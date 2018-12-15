@@ -36,6 +36,15 @@
                             [[#{alerte.message}]]
                         </th>
                         <th>
+                            [[#{alerte.consommationH}]]
+                        </th>
+                        <th>
+                            [[#{alerte.consommationKm}]]
+                        </th>
+                        <th>
+                            [[#{alerte.quantite}]]
+                        </th>
+                        <th>
                             [[#{bonEngin.chauffeur}]]
                         </th>
                         <th>
@@ -75,6 +84,9 @@
                         <td class="py-3" th:text="${alerte.date}"></td>
                         <td class="py-3" th:text="${alerte.typeAlerte}"></td>
                         <td class="py-3" th:text="${alerte.message}"></td>
+                        <td class="py-3" th:text="${alerte?.bonEngin?.consommationH}"></td>
+                        <td class="py-3" th:text="${alerte?.bonEngin?.consommationKm}"></td>
+                        <td class="py-3" th:text="${alerte?.bonEngin?.quantite}"></td>
                         <td class="py-3" th:text="${alerte?.bonEngin?.chauffeur?.nom}"></td>
                         <td class="py-3" th:text="${alerte?.bonEngin?.engin?.code}"></td>
                         <td class="py-3" th:text="${alerte?.bonEngin?.engin?.groupe?.nom}"></td>
