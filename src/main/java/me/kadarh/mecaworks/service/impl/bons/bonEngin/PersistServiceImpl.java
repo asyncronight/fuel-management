@@ -42,7 +42,7 @@ public class PersistServiceImpl {
     }
 
     public void insertAlertes(BonEngin bonEngin) {
-        BonEngin lastBonEngin = getLastBonEngin(bonEngin.getEngin());
+        BonEngin lastBonEngin = getLastBonEngin(bonEngin.getEngin(),bonEngin.getDate());
         boolean okey = false;
         if (lastBonEngin != null) okey = true;
         // Verify if chauffeur is changed.
@@ -103,9 +103,9 @@ public class PersistServiceImpl {
             return 0;
     }
 
-    public BonEngin getLastBonEngin(Engin engin) {
+    public BonEngin getLastBonEngin(Engin engin,LocalDate date) {
         try {
-            return bonEnginRepo.findLastBonEngin(engin.getId());
+            return bonEnginRepo.findLastBonEngin(engin.getId(),date);
         } catch (NoSuchElementException e) {
             log.info("Problem , cannot find last BonEngin with id = :" + engin.getId());
             throw new ResourceNotFoundException("BonEngin introuvable, c'est le premier bon de cette engin", e);

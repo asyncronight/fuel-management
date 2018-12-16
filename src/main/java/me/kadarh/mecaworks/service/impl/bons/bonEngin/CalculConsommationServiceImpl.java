@@ -31,7 +31,7 @@ public class CalculConsommationServiceImpl {
         long som_Q = 0;
         List<BonEngin> list = new ArrayList<>();
         if (typeCompteur.equals(TypeCompteur.H)) {
-            lastBon = bonEnginRepo.findLastBonEnginH_toConsommation(bonEngin.getEngin().getId());
+            lastBon = bonEnginRepo.findLastBonEnginH_toConsommation(bonEngin.getEngin().getId(),bonEngin.getDate());
             if (lastBon != null) {
                 list = bonEnginRepo.findAllBetweenLastBonAndCurrentBon_H(bonEngin.getEngin().getId(), lastBon.getCompteurAbsoluH());
                 list.remove(lastBon);
@@ -46,7 +46,7 @@ public class CalculConsommationServiceImpl {
                 bonEngin.setConsommationH(0f);
         }
         if (typeCompteur.equals(TypeCompteur.KM)) {
-            lastBon = bonEnginRepo.findLastBonEnginKm_toConsommation(bonEngin.getEngin().getId());
+            lastBon = bonEnginRepo.findLastBonEnginKm_toConsommation(bonEngin.getEngin().getId(),bonEngin.getDate());
             if (lastBon != null) {
                 list = bonEnginRepo.findAllBetweenLastBonAndCurrentBon_Km(bonEngin.getEngin().getId(), lastBon.getCompteurAbsoluKm());
                 list.remove(lastBon);
@@ -62,8 +62,8 @@ public class CalculConsommationServiceImpl {
         }
         if (typeCompteur.equals(TypeCompteur.KM_H)) {
             long som_Q_2 = 0;
-            lastBon = bonEnginRepo.findLastBonEnginKm_toConsommation(bonEngin.getEngin().getId());
-            lastBon2 = bonEnginRepo.findLastBonEnginH_toConsommation(bonEngin.getEngin().getId());
+            lastBon = bonEnginRepo.findLastBonEnginKm_toConsommation(bonEngin.getEngin().getId(),bonEngin.getDate());
+            lastBon2 = bonEnginRepo.findLastBonEnginH_toConsommation(bonEngin.getEngin().getId(),bonEngin.getDate());
             if (lastBon != null) {
                 list = bonEnginRepo.findAllBetweenLastBonAndCurrentBon_Km(bonEngin.getEngin().getId(), lastBon.getCompteurAbsoluKm());
                 list.remove(lastBon);

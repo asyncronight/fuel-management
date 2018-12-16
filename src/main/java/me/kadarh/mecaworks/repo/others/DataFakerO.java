@@ -97,7 +97,7 @@ public class DataFakerO implements CommandLineRunner {
         for (int i = 0; i < n; i++) {
             Alerte alerte = new Alerte();
             alerte.setDate(LocalDate.now());
-            alerte.setBonEngin(bonEnginRepo.findLastBonEngin(1L));
+            alerte.setBonEngin(bonEnginRepo.findLastBonEngin(1L,alerte.getDate()));
             if (i % 2 == 0) {
                 alerte.setMessage("Le compteur est reparé");
                 alerte.setTypeAlerte(TypeAlerte.COMPTEUR_H_REPARE);

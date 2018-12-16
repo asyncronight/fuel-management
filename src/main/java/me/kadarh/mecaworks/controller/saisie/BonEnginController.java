@@ -3,6 +3,8 @@ package me.kadarh.mecaworks.controller.saisie;
 import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.bons.BonEngin;
 import me.kadarh.mecaworks.domain.bons.Carburant;
+import me.kadarh.mecaworks.domain.others.TypeBon;
+import me.kadarh.mecaworks.domain.others.TypeCompteur;
 import me.kadarh.mecaworks.service.BonEnginConfirmation;
 import me.kadarh.mecaworks.service.ChantierService;
 import me.kadarh.mecaworks.service.EmployeService;
@@ -57,19 +59,51 @@ public class BonEnginController {
 
 	@PostMapping("/add")
 	public String add(Model model, @Valid BonEngin bonEngin, BindingResult result) {
-        boolean error = false;
-        if (result.hasErrors() || (error = bonEnginService.hasErrors(bonEngin))) {
-            model.addAttribute("hasError", error);
+        /*if dateBon < dateDernierBon
+			- verifier la quantité
+				si Q non logique ?
+					return formulaire
+				sinon
+					return page confirmation ancien bon
+		  sinon
+		  	bon 3adi
+		*/
+		boolean x = false;
+		boolean error = false;
+		if (result.hasErrors()) {
+			x = true;
+		}
+		if(bonEnginService.isAncienBon(bonEngin)){
+			if(bonEnginService.checkQuantite(bonEngin)){
+				model.addAttribute("bonEngin",bonEngin);
+				return "saisi/engins/confirm";
+			}else {
+				x = true;
+				model.addAttribute("hasError", true);
+			}
+		}else {
+			if (error = bonEnginService.hasErrors(bonEngin)) {
+				model.addAttribute("hasError", error);
+				x = true;
+			} else if (bonEnginService.hasErrorsAttention(bonEngin)) {
+					model.addAttribute("bonEngin", bonEngin);
+					return "saisi/engins/confirm";
+				}
+		}
+		if(x){
 			model.addAttribute("chantiers", chantierService.getList());
 			model.addAttribute("engins", enginService.getList());
 			model.addAttribute("employes", employeService.getList());
 			model.addAttribute("carburants", Carburant.values());
 			return "saisi/engins/add";
-		} else if (bonEnginService.hasErrorsAttention(bonEngin)) {
-			model.addAttribute("bonEngin", bonEngin);
-			return "saisi/engins/confirm";
 		}
 		bonEnginService.add(bonEngin);
+		return "redirect:/saisi/engins";
+	}
+
+	@PostMapping("/confirmAncienBon")
+	public String confirmAncienBon(Model model,@Valid BonEngin bonEngin, BindingResult result) {
+		bonEnginService.add(bonEnginService.setCmpEnpanneAndChangeCode(bonEngin));
 		return "redirect:/saisi/engins";
 	}
 

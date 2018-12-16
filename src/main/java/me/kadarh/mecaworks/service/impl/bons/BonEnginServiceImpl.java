@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 /**
  * @author kadarH
@@ -38,8 +37,9 @@ public class BonEnginServiceImpl implements BonEnginService {
     private final CalculAbsoluServiceImpl calculAbsoluService;
     private final AlerteRepo alerteRepo;
     private final StockManagerServiceImpl stockManagerService;
+    private final MiseAjourBonsServiceImpl miseAjourBonsService;
 
-    public BonEnginServiceImpl(BonEnginRepo bonEnginRepo, CalculConsommationServiceImpl calculService, CheckServiceImpl checkService, PersistServiceImpl persistService, BonLivraisonService bonLivraisonService, CalculAbsoluServiceImpl calculAbsoluService, AlerteRepo alerteRepo, StockManagerServiceImpl stockManagerService) {
+    public BonEnginServiceImpl(BonEnginRepo bonEnginRepo, CalculConsommationServiceImpl calculService, CheckServiceImpl checkService, PersistServiceImpl persistService, BonLivraisonService bonLivraisonService, CalculAbsoluServiceImpl calculAbsoluService, AlerteRepo alerteRepo, StockManagerServiceImpl stockManagerService, MiseAjourBonsServiceImpl miseAjourBonsService) {
         this.bonEnginRepo = bonEnginRepo;
         this.calculService = calculService;
         this.checkService = checkService;
@@ -48,6 +48,7 @@ public class BonEnginServiceImpl implements BonEnginService {
         this.calculAbsoluService = calculAbsoluService;
         this.alerteRepo = alerteRepo;
         this.stockManagerService = stockManagerService;
+        this.miseAjourBonsService = miseAjourBonsService;
     }
 
     /*--------------------------------------------------------------------------- */
@@ -66,6 +67,7 @@ public class BonEnginServiceImpl implements BonEnginService {
                 bonLivraisonService.insertBonLivraison(bonEngin);
             }
             bonEngin = bonEnginRepo.save(bonEngin);
+            miseAjourBonsService.doMiseAjour(bonEngin);
             persistService.insertAlertes(bonEngin);
             log.info("Alertes Bon Engin inserted");
             persistService.insertStock(bonEngin);
@@ -88,7 +90,7 @@ public class BonEnginServiceImpl implements BonEnginService {
         log.info("Service= BonEnginServiceImpl - calling methode delete");
         try {
             BonEngin bonEngin = bonEnginRepo.getOne(id);
-            BonEngin bonEngin1 = bonEnginRepo.findLastBonEngin(bonEngin.getEngin().getId());
+            BonEngin bonEngin1 = bonEnginRepo.findLastBonEngin(bonEngin.getEngin().getId(),bonEngin.getDate());
             if (bonEngin1.getCode().equals(bonEngin.getCode())) {
                 log.info("Suppression du dernier bon");
                 Long idChantier = bonEngin.getChantierTravail().getId();
@@ -96,6 +98,7 @@ public class BonEnginServiceImpl implements BonEnginService {
                 stockManagerService.deleteStock(idGasoil, idChantier, id, TypeBon.BE);
                 alerteRepo.deleteAllByBonEngin_Id(id);
                 bonEnginRepo.deleteById(id);
+                miseAjourBonsService.doMiseAjour(bonEngin);
                 alerteRepo.findAllByIdBonEngin(bonEngin.getId()).forEach(alerteRepo::delete);
             } else {
                 log.info("Operation echouée ,ce n'est pas le dernier bon");
@@ -189,11 +192,33 @@ public class BonEnginServiceImpl implements BonEnginService {
     @Override
     public boolean hasErrors(BonEngin bon) {
         calculAbsoluService.fillBon(bon);
-        BonEngin lastBonEngin = persistService.getLastBonEngin(bon.getEngin());
+        BonEngin lastBonEngin = persistService.getLastBonEngin(bon.getEngin(),bon.getDate());
         if (lastBonEngin != null)
             return !(checkService.hasLogicQuantite(bon) && checkService.hasLogicCompteur(bon, lastBonEngin) && checkService.hasLogicDate(bon, lastBonEngin) && checkService.hasLogicDateAndCompteur(bon, lastBonEngin));
         else
             return !checkService.hasLogicQuantite(bon);
+    }
+
+    @Override
+    public boolean checkQuantite(BonEngin bonEngin){
+        calculAbsoluService.fillBon(bonEngin);
+        return checkService.hasLogicQuantite(bonEngin);
+    }
+
+    @Override
+    public BonEngin setCmpEnpanneAndChangeCode(BonEngin bonEngin) {
+        calculAbsoluService.fillBon(bonEngin);
+        TypeCompteur typeCompteur = bonEngin.getEngin().getSousFamille().getTypeCompteur();
+        if(typeCompteur.equals(TypeCompteur.H))
+            bonEngin.setCompteurHenPanne(true);
+        else if (typeCompteur.equals(TypeCompteur.KM))
+            bonEngin.setCompteurKmenPanne(true);
+        else if (typeCompteur.equals(TypeCompteur.KM_H)) {
+            bonEngin.setCompteurKmenPanne(true);
+            bonEngin.setCompteurHenPanne(true);
+        }
+        bonEngin.setCode(bonEngin.getCode().concat("-Anc"));
+        return bonEngin;
     }
 
     /**
@@ -205,7 +230,7 @@ public class BonEnginServiceImpl implements BonEnginService {
     @Override
     public boolean hasErrorsAttention(BonEngin bon) {
         calculAbsoluService.fillBon(bon);
-        BonEngin bonEngin = persistService.getLastBonEngin(bon.getEngin());
+        BonEngin bonEngin = persistService.getLastBonEngin(bon.getEngin(),bon.getDate());
         if (bonEngin == null) return false;
         if (bon.getEngin().getSousFamille().getTypeCompteur().equals(TypeCompteur.H))
             return (bon.getCompteurH() < bonEngin.getCompteurH() && !bon.getCompteurHenPanne());
@@ -216,5 +241,10 @@ public class BonEnginServiceImpl implements BonEnginService {
         return false;
     }
 
+    @Override
+    public boolean isAncienBon(BonEngin bonEngin) {
+        BonEngin lastBon = bonEnginRepo.findLastBonEngin(bonEngin.getEngin().getId());
+        return (!lastBon.getDate().isBefore(bonEngin.getDate()));
+    }
 
 }

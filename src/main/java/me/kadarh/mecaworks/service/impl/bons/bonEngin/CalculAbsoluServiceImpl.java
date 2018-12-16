@@ -3,7 +3,6 @@ package me.kadarh.mecaworks.service.impl.bons.bonEngin;
 import lombok.extern.slf4j.Slf4j;
 import me.kadarh.mecaworks.domain.bons.BonEngin;
 import me.kadarh.mecaworks.domain.others.TypeCompteur;
-import me.kadarh.mecaworks.repo.bons.BonEnginRepo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,19 +15,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class CalculAbsoluServiceImpl {
 
-    private final BonEnginRepo bonEnginRepo;
     private final FillServiceImpl fillService;
     private PersistServiceImpl persistService;
 
-    public CalculAbsoluServiceImpl(BonEnginRepo bonEnginRepo, PersistServiceImpl persistService, FillServiceImpl fillService) {
-        this.bonEnginRepo = bonEnginRepo;
+    public CalculAbsoluServiceImpl(PersistServiceImpl persistService, FillServiceImpl fillService) {
         this.persistService = persistService;
         this.fillService = fillService;
     }
 
     public BonEngin fillBon(BonEngin bon) {
         bon = fillService.fillBonEnginPart1(bon);
-        bon = calculCompteursAbsolu(bon, persistService.getLastBonEngin(bon.getEngin()));
+        bon = calculCompteursAbsolu(bon, persistService.getLastBonEngin(bon.getEngin(),bon.getDate()));
         bon = fillService.fillBonEnginPart2(bon);
         return bon;
     }

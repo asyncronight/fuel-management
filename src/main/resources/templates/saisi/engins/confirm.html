@@ -59,6 +59,32 @@
 					[[#{cancel}]]
 				</a>
 			</form>
+			<form action="/saisi/engins/confirmAncienBon" class="card p-5" method="post" th:object="${bonEngin}">
+				<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+					<h4 class="alert-heading" th:text="#{formError}"></h4>
+					<ul>
+						<li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+					</ul>
+				</div>
+				<input type="hidden" th:field="*{date}">
+				<input type="hidden" th:field="*{code}">
+				<input type="hidden" th:field="*{chantierGazoil.id}">
+				<input type="hidden" th:field="*{chantierTravail.id}">
+				<input type="hidden" th:field="*{engin.id}">
+				<input type="hidden" th:field="*{pompiste.id}">
+				<input type="hidden" th:field="*{chauffeur.id}">
+				<input type="hidden" th:field="*{carburant}">
+				<input type="hidden" th:field="*{quantite}">
+				<input type="hidden" th:field="*{compteurKm}">
+				<input type="hidden" th:field="*{compteurH}">
+				<input type="hidden" th:field="*{compteurPompe}">
+				<input type="hidden" th:field="*{compteurHenPanne}">
+				<input type="hidden" th:field="*{compteurKmenPanne}">
+				<input type="hidden" th:field="*{plein}">
+				<button type="submit" class="btn btn-success btn-info">
+					[[#{saisie.engin.confirmAncienBon}]]
+				</button>
+			</form>
 		</div>
 	</main>
 </div>

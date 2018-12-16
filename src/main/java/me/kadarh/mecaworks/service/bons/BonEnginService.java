@@ -4,6 +4,8 @@ import me.kadarh.mecaworks.domain.bons.BonEngin;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import javax.validation.Valid;
+
 /**
  * PROJECT mecaworks
  *
@@ -21,4 +23,10 @@ public interface BonEnginService {
 	boolean hasErrors(BonEngin bon);
 
 	boolean hasErrorsAttention(BonEngin bonEngin);
+
+    boolean isAncienBon(BonEngin bonEngin);
+
+    boolean checkQuantite(BonEngin bonEngin);
+
+	BonEngin setCmpEnpanneAndChangeCode(BonEngin bonEngin);
 }
