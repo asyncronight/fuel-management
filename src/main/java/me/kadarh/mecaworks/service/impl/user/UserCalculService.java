@@ -110,8 +110,9 @@ public class UserCalculService {
     public Quantite getMonthsWithQuantities(Chantier chantier, int month, int year) {
         log.info("calling method getListChantierWithQuantities(month,year) in UserCalculService -- ");
         LocalDate from = LocalDate.of(year, Month.of(month).getValue(), 1);
-        LocalDate to = LocalDate.of(year+1, Month.of(month).plus(1).getValue(), 1);
-
+        LocalDate to = LocalDate.of(year, Month.of(month).plus(1).getValue(), 1);
+        if(month==12)
+            to = LocalDate.of(year+1, Month.of(month).plus(1).getValue(), 1);
         List<BonEngin> bonEngins = bonEnginRepo.findAllByChantier(chantier.getId(), from, to);
         List<BonLivraison> bonLivraisons = bonLivraisonRepo.findAllByChantier(chantier.getId(), from, to);
         List<BonFournisseur> bonFournisseurs = bonFournisseurRepo.findAllByChantier(chantier.getId(), from, to);
@@ -133,6 +134,8 @@ public class UserCalculService {
         List<Quantite> quantites = new ArrayList<>();
         LocalDate from = LocalDate.of(year, Month.of(month).getValue(), 1);
         LocalDate to = LocalDate.of(year, Month.of(month).plus(1).getValue(), 1);
+        if(month==12)
+            to = LocalDate.of(year+1, Month.of(month).plus(1).getValue(), 1);
         List<BonEngin> bonEngins = bonEnginRepo.findAllByChantier(chantier.getId(), from, to);
         List<BonLivraison> bonLivraisons = bonLivraisonRepo.findAllByChantier(chantier.getId(), from, to);
         List<BonFournisseur> bonFournisseurs = bonFournisseurRepo.findAllByChantier(chantier.getId(), from, to);
@@ -186,7 +189,9 @@ public class UserCalculService {
 
     public List<Stock> getListChantierStockDays(Chantier chantier, int month, int year) {
         LocalDate from = LocalDate.of(year, Month.of(month).getValue(), 1);
-        LocalDate to = LocalDate.of(year+1, Month.of(month).plus(1).getValue(), 1);
+        LocalDate to = LocalDate.of(year, Month.of(month).plus(1).getValue(), 1);
+        if(from.getMonth().getValue()==12)
+            to = LocalDate.of(year+1, Month.of(month).plus(1).getValue(), 1);
         List<Stock> list = new ArrayList<>();
         List<Stock> stocks = stockRepo.findAllByChantier(chantier.getId(), from, to);
         Stock stock;
