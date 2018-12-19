@@ -21,8 +21,8 @@ public interface BonEnginRepo extends JpaRepository<BonEngin, Long> {
             " order by compteur_absoluh asc")
     List<BonEngin> findListBonEnginH_toConsommation(Long id,Long cmpAbsH);
 
-    @Query(nativeQuery = true, value = "select * from bon_engin where engin_id=?1 and compteur_absolukm>?2" +
-            " order by compteur_absoluKm asc")
+    @Query(nativeQuery = true, value = "select * from bon_engin where engin_id=?1 and compteur_absolu_km>?2" +
+            " order by compteur_absolu_km asc")
     List<BonEngin> findListBonEnginKm_toConsommation(Long id,Long cmpAbsKm);
 
     @Query(nativeQuery = true, value = "select * from bon_engin where engin_id=?1 and compteur_hen_panne=false and plein=true " +
@@ -30,7 +30,7 @@ public interface BonEnginRepo extends JpaRepository<BonEngin, Long> {
     BonEngin findLastBonEnginH_toConsommation(Long id,LocalDate dateBon);
 
     @Query(nativeQuery = true, value = "select * from bon_engin where engin_id=?1 and compteur_kmen_panne=false and plein=true " +
-            " and DATE_BON <= ?2 order by compteur_absoluh desc limit 1")
+            " and DATE_BON <= ?2 order by compteur_absolu_km desc limit 1")
     BonEngin findLastBonEnginKm_toConsommation(Long id,LocalDate dateBon);
 
     @Query(nativeQuery = true, value = "select * from bon_engin where engin_id=?1 and compteur_absoluh>=?2")

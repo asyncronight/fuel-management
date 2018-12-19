@@ -90,20 +90,15 @@ public class BonEnginServiceImpl implements BonEnginService {
         log.info("Service= BonEnginServiceImpl - calling methode delete");
         try {
             BonEngin bonEngin = bonEnginRepo.getOne(id);
-            BonEngin bonEngin1 = bonEnginRepo.findLastBonEngin(bonEngin.getEngin().getId(),bonEngin.getDate());
-            if (bonEngin1.getCode().equals(bonEngin.getCode())) {
-                log.info("Suppression du dernier bon");
-                Long idChantier = bonEngin.getChantierTravail().getId();
-                Long idGasoil = bonEngin.getChantierGazoil().getId();
-                stockManagerService.deleteStock(idGasoil, idChantier, id, TypeBon.BE);
-                alerteRepo.deleteAllByBonEngin_Id(id);
-                bonEnginRepo.deleteById(id);
-                miseAjourBonsService.doMiseAjour(bonEngin);
-                alerteRepo.findAllByIdBonEngin(bonEngin.getId()).forEach(alerteRepo::delete);
-            } else {
-                log.info("Operation echouée ,ce n'est pas le dernier bon");
-                throw new OperationFailedException("Impossible de supprimer ce bon, verifier est ce que c'est le dernier bon");
-            }
+            log.info("Suppression du dernier bon");
+            Long idChantier = bonEngin.getChantierTravail().getId();
+            Long idGasoil = bonEngin.getChantierGazoil().getId();
+            stockManagerService.deleteStock(idGasoil, idChantier, id, TypeBon.BE);
+            alerteRepo.deleteAllByBonEngin_Id(id);
+            bonEnginRepo.deleteById(id);
+            miseAjourBonsService.doMiseAjour(bonEngin);
+            alerteRepo.findAllByIdBonEngin(bonEngin.getId()).forEach(alerteRepo::delete);
+
         } catch (Exception e) {
             throw new OperationFailedException("Probleme lors de la suppression du bon, ce bon ne peut pas être supprimer", e);
         }
