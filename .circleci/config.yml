@@ -33,6 +33,6 @@ jobs: # a collection of steps
             mkdir ~/.ssh
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               echo "StrictHostKeyChecking no" > ~/.ssh/config
-              scp -r target/*.jar root@setrat.mecaworks.com:./app.jar
-              ssh -T root@setrat.mecaworks.com "systemctl restart springboot"
+              scp -r target/*.jar root@mecaworks.com:./app.jar
+              ssh -T root@mecaworks.com "systemctl restart mecaworks"
             fi
