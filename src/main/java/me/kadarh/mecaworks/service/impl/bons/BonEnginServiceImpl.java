@@ -239,6 +239,7 @@ public class BonEnginServiceImpl implements BonEnginService {
     @Override
     public boolean isAncienBon(BonEngin bonEngin) {
         BonEngin lastBon = bonEnginRepo.findLastBonEngin(bonEngin.getEngin().getId());
+        if(lastBon == null) return false;
         return (!lastBon.getDate().isBefore(bonEngin.getDate()));
     }
 
