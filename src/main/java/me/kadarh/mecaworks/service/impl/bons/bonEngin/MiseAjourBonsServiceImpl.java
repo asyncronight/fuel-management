@@ -68,7 +68,12 @@ public class MiseAjourBonsServiceImpl {
 
     private BonEngin miseAjourBonEngin(BonEngin bonEngin){
         bonEngin = calculAbsoluService.fillBon(bonEngin);
-        bonEngin = calculConsommationService.calculConsommation(bonEngin);
+        if(bonEngin.getPlein())
+            bonEngin = calculConsommationService.calculConsommation(bonEngin);
+        else{
+            bonEngin.setConsommationH(0f);
+            bonEngin.setConsommationKm(0f);
+        }
         return bonEngin;
     }
 
