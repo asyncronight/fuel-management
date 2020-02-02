@@ -1,57 +1,25 @@
-## Mecaworks :
+# Fuel Management
+### Abstract:
+La flotte des camions et matériel lourd dans les différents chantiers consomment chaque jour plus que 30 Tonne de gasoil.
 
-Ce projet est une application web qui a pour but la gestion de Gasoil des entreprises BTP.
+La gestion des bons de livraison et suivi des stocks citernes se fait manuellement et par excel, ce qui rend le travail difficile et onéreux. De ce fait, nous avons créé une application web « Fuel Management » qui :
+-	Gère le stock dans les différents chantiers
+-	Calcule la consommation horaire et Kilométrique de chaque engin
+-	Donne des statistiques et comparaison du parc  et chantiers
 
-> **This project is no longer maintained**
+### Description:
+- Conception, Modélisation, Exécution, Suivi, Optimisation, Réingénierie du processus de gestion du fuel/gasoil ( 6 000 000 $ annuellement)
+- Création d'un logiciel de gestion du gasoil qui :
+  * Calcule la Consommation des équipements ( BTP, camions, véhicule légères)
+  * Gestion du stock des chantiers et détection des ruptures de stocks à temps
+  * Tableau de bord opérationnel et décisionnel
+  * Comparaison ( analytique et graphique ) des consommations [par marque, par chantiers, par....+ 10 autres critères]
+  * Génération des rapports de maintenance préventive sans intervention humaine
+  * Autres...
 
----
-
-Here is the list of supported services and features in v0.1.0 :
-
-## Services :
-
-### **Admin**
-
-CRUD operations for these entities :
-
-- Chantier
-- Engin
-- Employe
-- Fournisseur
-- SousFamille
-- Famille
-- Groupe
-- Marque
-- Classe
-
-### **User/Inspection**
-
-- Gazoil dashboard (onglet 1 & 2) & chantier dashboard (onglet 1, 2 & 3)
-- Bons filters (engin - fournisseur - livraison)
-- BonEngin filter (grouped by engin)
-- Alerts filter
-
-### **Saisi**
-
-CRUD operations for :
-
-- BonEngin
-- BonLivraison
-- BonFournisseur
-
-**Formation**
-
-Provide instructional videos about the business model, the application and how to work with it.
-
-## Features :
-
-**Security**
-
-- Login/logout
-- Users management (admin section)
-- Admin confirmation code to proceed adding BonEngin in `saisi` section
-
-**i18n**
-
-- auto mode depending on `accept-language` http header.
-- only french is supported in this version
+### Technologie utilisée :
+- Modélisation : WireframeSketcher - StarUML
+- Back end : Java - Spring - MySQL
+- Front end : Thymeleaf - HTML - CSS - JavaScript
+- Project managment: GitHub projects, milestones and releases
+- Deployment: CirecleCI - VM instance in the cloud
